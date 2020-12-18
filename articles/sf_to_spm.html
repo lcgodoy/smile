@@ -5,13 +5,13 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Converting sf objects to spm • spmismo</title>
+<title>1. Converting sf objects to spm • spmismo</title>
 <!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/yeti/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="../bootstrap-toc.css">
 <script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
-<script src="../pkgdown.js"></script><meta property="og:title" content="Converting sf objects to spm">
+<script src="../pkgdown.js"></script><meta property="og:title" content="1. Converting sf objects to spm">
 <meta property="og:description" content="spmismo">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
@@ -54,7 +54,10 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
-      <a href="../articles/sf_to_spm.html">Converting sf objects to spm</a>
+      <a href="../articles/sf_to_spm.html">1. Converting sf objects to spm</a>
+    </li>
+    <li>
+      <a href="../articles/sp-cov-functions.html">2. Spatial covariance functions</a>
     </li>
   </ul>
 </li>
@@ -79,7 +82,7 @@
       </header><script src="sf_to_spm_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
-      <h1 data-toc-skip>Converting sf objects to spm</h1>
+      <h1 data-toc-skip>1. Converting sf objects to spm</h1>
             
       
       <small class="dont-index">Source: <a href="https://github.com/lcgodoy/spmismo/blob/master/vignettes/sf_to_spm.Rmd"><code>vignettes/sf_to_spm.Rmd</code></a></small>
@@ -96,7 +99,7 @@
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://r-spatial.github.io/sf/">sf</a></span><span class="op">)</span>
 <span class="co">#&gt; Linking to GEOS 3.8.1, GDAL 3.1.4, PROJ 6.3.1</span></code></pre></div>
 <p>The data used here are the datasets provided by <span class="citation">Johnson, Diggle, and Giorgi (2020)</span> about the Life Expectancy at Birth and Index of Multiple Deprivation. These two variables were observed into different paritions of Liverpool, the LSOA and MSOA<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>, respectively.</p>
-<p>The methods developed in this package are heavily based on the theory developed in <span class="citation">Johnson, Diggle, and Giorgi (2020)</span>. The main assumption is that continuous random variables observed in polygons (like administrative regios) are composed by the average of an stationary and isotropic underlying Gaussian Random Field <span class="citation">(<span class="citeproc-not-found" data-reference-id="hue2005gaussian"><strong>???</strong></span>)</span> plus a Gaussian “Residual”. In practice, there exists an identifiability when estimating some variance parameters, which can be seen either as small scale variation (nugget effect) or measurement errors.</p>
+<p>The methods developed in this package are heavily based on the theory developed in <span class="citation">Johnson, Diggle, and Giorgi (2020)</span>. The main assumption is that continuous random variables observed in polygons (like administrative regios) are composed by the average of an stationary and isotropic underlying Gaussian Random Field <span class="citation">(Rue and Held 2005)</span> plus a Gaussian “Residual”. In practice, there exists an identifiability when estimating some variance parameters, which can be seen either as small scale variation (nugget effect) or measurement errors.</p>
 <p>To illustrate how this work, consider the case on which we do observe a random variable in a partition of a study region. In our example, this random variable is the estimated LEB<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a> in Liverpool observed in the MSOA’s. We can load and visualize the data by using the command below.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="va">liv_msoa</span><span class="op">)</span>
@@ -112,6 +115,43 @@
 \Sigma_{12} = Cov(A_1, A_2) = \frac{1}{\lvert A_1 \rvert \lvert A_2 \rvert}
 \int_{A_1} \int_{A_2} C(\lVert x - y \rVert; \theta) \, dy \, dx.
 \]</span> In order to approximate the continuous surface on which these covariances have to be computed, we generate a fine grid over the whole study region (or a fine grid within each MSOA) and approximate such covariance by numerical integration.</p>
+<p>This is were we use the <code>sf_to_spm</code> function. This functions is enhanced by the <code>st_sample</code> function from the <code>sf</code> package. This function allows us to input either a single <code>sf</code> (POLYGON) object or two <code>sf</code> objects. The former only makes sense if the two <code>sf</code> objects form different partitions of the same region.</p>
+<p>Firstly, we are going to show how does it work with a single <code>sf</code> object. Besides the <code>sf</code> objects, this function has 5 additional arguments. The first one, called <code>n_pts</code>, controls the number of points we are going to generate to create a grid within the study region. We can input either a single (integer) value or a vector with length equal to the number of rows of the <code>sf</code> objected being analyzed. The next parameter is called <code>type</code>. This one is string scalar that assumes either <code>"random"</code>, <code>"regular"</code>, or <code>"hexagonal"</code>. Finally, the parameter <code>by_polygon</code> is a logical that if set to <code>TRUE</code>, will generate <code>n_pts</code> for each polygon within the study region<a href="#fn3" class="footnote-ref" id="fnref3"><sup>3</sup></a>. The last two parameters are <code>poly_ids</code> and <code>var_ids</code>. Both are strings, the first one is a scalar representing the variable that uniquely identify each polygon within the study region, while the second one indicates which (numerical) variables we want to analyze. For example, in the code chunk below, we are transforming the <code>sf</code> object <code>liv_msoa</code> into a <code>spmismo</code> compatible object. We are going to generate a grid of 1000 points within the study region, with <code>type = "regular"</code>, and <code>by_polygon = FALSE</code>. The id variable is called <code>"msoa11cd"</code> and the numerical variable that we are interested in is called <code>"leb_est"</code>. The object returned by the function is of class <code>"sspm"</code><a href="#fn4" class="footnote-ref" id="fnref4"><sup>4</sup></a>. Under the hood, this object is a 5 positions named list. The first position is called <code>"var"</code> and stores the numerical variable (or variables) to be analyzed. The second position is named <code>"dists"</code> and stores the pairwise distances between points belonging to different polygons, this object is important to calculate the covariance matrix associated with the polygons. The third positions stores the name of the id variable, while the fourth and fifth positions contain the grid of points generated and the polygon associated with the data. All these objects are used in functions that will be explained further in other vignettes.</p>
+<p>The code of chunk below displays the generated grid coloring each point belonging to this grid accordign to the polygon they “belong to”.</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">msoa_spm</span> <span class="op">&lt;-</span>
+    <span class="fu"><a href="../reference/sf_to_spm.html">sf_to_spm</a></span><span class="op">(</span>sf_obj1 <span class="op">=</span> <span class="va">liv_msoa</span>, n_pts <span class="op">=</span> <span class="fl">1000</span>,
+              type <span class="op">=</span> <span class="st">"regular"</span>, by_polygon <span class="op">=</span> <span class="cn">FALSE</span>,
+              poly_ids <span class="op">=</span> <span class="st">"msoa11cd"</span>, var_ids <span class="op">=</span> <span class="st">"leb_est"</span><span class="op">)</span>
+
+<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">msoa_spm</span><span class="op">$</span><span class="va">grid</span>,
+       <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>color <span class="op">=</span> <span class="va">msoa11cd</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html">geom_sf</a></span><span class="op">(</span>pch <span class="op">=</span> <span class="fl">15</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/guides.html">guides</a></span><span class="op">(</span>color <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_minimal</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<p><img src="sf_to_spm_files/figure-html/sf-to-spm1-1.png" width="700"></p>
+<p>Next, we illustrate how do different values of <code>type</code> and <code>by_polygon</code> affect the final result of the <code>sf_to_spm</code> call. In all examples we are going to use a grid of 732 points (multiple of the number of polygons observed). The “sparsity” of the points forming the grid helps to see the differences caused by the different inputs for the function. The panel below displays every possible combination of the parameters <code>type</code> and <code>by_polygon</code>. Although there is no “right” choice for these parameters, we advise using <code>type</code> as <code>"regular"</code> or <code>"hexagonal"</code> with by <code>by_polygon = FALSE</code>. Also, it is import to make sure that, after generating the grid, your grid is in a finer resolution than your smallest polygon, that is, to make sure that there exists no points lying in more than one polygon.</p>
+<pre><code>#&gt;           used (Mb) gc trigger  (Mb) limit (Mb) max used  (Mb)
+#&gt; Ncells  985335 52.7    1996871 106.7         NA  1996871 106.7
+#&gt; Vcells 1970829 15.1    8388608  64.0      16384  5803189  44.3</code></pre>
+<p><img src="sf_to_spm_files/figure-html/sf-to-spm2-1.png" width="700"></p>
+<p>Lastly, we show two additional examples of usage of the <code>sf_to_spm</code> function. The first one, using the IMD data at the LSOA level, we show how to proceed when analysing more than one random variable. In the code chunk below, we load the data and convert it to an <code>spmismo</code> compatible object using a regular grid of 1500 points. We also inform the software that we are interested in analyzing two variables within this dataset, the variables <code>"imdscore"</code> and <code>"male"</code>, respectively<a href="#fn5" class="footnote-ref" id="fnref5"><sup>5</sup></a>.</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="va">liv_lsoa</span><span class="op">)</span>
+
+<span class="va">msoa_spm</span> <span class="op">&lt;-</span>
+    <span class="fu"><a href="../reference/sf_to_spm.html">sf_to_spm</a></span><span class="op">(</span>sf_obj1 <span class="op">=</span> <span class="va">liv_lsoa</span>, n_pts <span class="op">=</span> <span class="fl">1500</span>,
+              type <span class="op">=</span> <span class="st">"regular"</span>, by_polygon <span class="op">=</span> <span class="cn">FALSE</span>,
+              poly_ids <span class="op">=</span> <span class="st">"lsoa11cd"</span>,
+              var_ids <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"imdscore"</span>, <span class="st">"male"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<p>Finally, to code chunk below displays the situation on which we input two <code>sf</code> objects, representing two partitions of the same space, to the <code>sf_to_spm</code> function. There are some key changes in here, parameters that were scalars before, now turn into vectors or lists. For instance, <code>n_pts</code> now is a list such that its first position is about the <code>sf_obj1</code> and its second position stores information about the grid of points to be generated for <code>sf_obj2</code>. Yes, we can generate two different grids in here. This is useful especially when the two datasets analysed are in very different scales, allowing us to use a more sparse grid for the dataset with “smaller” resolution. This brings computational improvements because we end up dealing with covariance matrices of lower dimensions. Please, refer to the documentation of the function for further details.</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">mult_spm</span> <span class="op">&lt;-</span>
+    <span class="fu"><a href="../reference/sf_to_spm.html">sf_to_spm</a></span><span class="op">(</span>sf_obj1 <span class="op">=</span> <span class="va">liv_msoa</span>, sf_obj2 <span class="op">=</span> <span class="va">liv_lsoa</span>,
+              n_pts <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="fl">750</span>, <span class="fl">1500</span><span class="op">)</span>,
+              type <span class="op">=</span> <span class="st">"regular"</span>, by_polygon <span class="op">=</span> <span class="cn">FALSE</span>,
+              poly_ids <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"msoa11cd"</span>, <span class="st">"lsoa11cd"</span><span class="op">)</span>,
+              var_ids <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="st">"leb_est"</span>, <span class="st">"imdscore"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <div id="references" class="section level1 unnumbered">
 <h1 class="hasAnchor">
 <a href="#references" class="anchor"></a>References</h1>
@@ -121,6 +161,9 @@
 </div>
 <div id="ref-pebesma2018simple">
 <p>Pebesma, Edzer. 2018. “Simple Features for R: Standardized Support for Spatial Vector Data.” <em>The R Journal</em> 10 (1): 439–46. <a href="https://doi.org/10.32614/RJ-2018-009">https://doi.org/10.32614/RJ-2018-009</a>.</p>
+</div>
+<div id="ref-rue2005gaussian">
+<p>Rue, Havard, and Leonhard Held. 2005. “Gaussian Markov Random Fields: Theory and Applications.” In, 32–42. CRC press.</p>
 </div>
 <div id="ref-wickham2011ggplot2">
 <p>Wickham, Hadley. 2011. “Ggplot2.” <em>Wiley Interdisciplinary Reviews: Computational Statistics</em> 3 (2): 180–85.</p>
@@ -132,6 +175,9 @@
 <ol>
 <li id="fn1"><p><em>Lower Super Output Areas</em> and <em>Middle Supper Output Areas</em><a href="#fnref1" class="footnote-back">↩︎</a></p></li>
 <li id="fn2"><p>Life Expectancy at Birth<a href="#fnref2" class="footnote-back">↩︎</a></p></li>
+<li id="fn3"><p>This parameter has to be set to <code>TRUE</code> when <code>n_pts</code> is a vector.<a href="#fnref3" class="footnote-back">↩︎</a></p></li>
+<li id="fn4"><p>when we use more than one partition, the resulting class is <code>"mspm"</code><a href="#fnref4" class="footnote-back">↩︎</a></p></li>
+<li id="fn5"><p>This is just an illustrative example.<a href="#fnref5" class="footnote-back">↩︎</a></p></li>
 </ol>
 </div>
   </div>
