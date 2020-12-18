@@ -24,6 +24,6 @@ Imports:
     stats,
     utils
 Depends: 
-    R (>= 2.10)
-URL: https://github.com/lcgodoy/spmismo
+    R (>= 3.2)
+URL: https://lcgodoy.me/spmismo, https://github.com/lcgodoy/spmismo
 BugReports: https://github.com/lcgodoy/spmismo/issues
