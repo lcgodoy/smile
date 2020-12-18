@@ -47,3 +47,4 @@ docs
 ## usethis setup
 
 setup-usethis.R
+inst/doc
