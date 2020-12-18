@@ -1,0 +1,22 @@
+# navbar:
+#   # title: "sparklyr"
+#   # type: inverse
+#   left:
+#     - text: "Reference"
+#       icon: fa-book fa-lg
+#       href: "reference/index.html"
+#   right:
+#     - icon: fa-github fa-lg
+#       href: https://github.com/lcgodoy
+#     - icon: fa-twitter fa-lg
+#       href: https://twitter.com/ldcgodoy
+#     - icon: fa-linkedin fa-lg
+#       href: https://www.linkedin.com/in/godoy-lucas/
+#     - icon: fa-stack-overflow fa-lg
+#       href: https://stackoverflow.com/users/9220758/lcgodoy
+
+#---- template style ----
+
+template:
+  params:
+   bootswatch: yeti
