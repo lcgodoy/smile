@@ -27,6 +27,6 @@ The package have not been submitted to [CRAN](https://CRAN.R-project.org)
 yet. Therefore, only the development version from [GitHub](https://github.com/)
 is available. If you are interested, you can installed using:
 ``` r
-# install.packages("remotes")
-remotes::install_github("lcgodoy/spmismo")
+# install.packages("devtools")
+devtools::install_github("lcgodoy/spmismo")
 ```

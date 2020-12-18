@@ -59,13 +59,16 @@ We consider, in a first moment, that this random variable is normally
 distributed with a constant mean and a certain (spatial) covariance matrix. Now,
 let $A_1$ and $A_2$ be two distinct MSOA's. Under the before mentioned
 assumption that the observed random variable is driven by an underlying gaussian
-random field with isotropic covariance function $C(\lVert \bm{x} - \bm{y} \rVert
+random field with isotropic covariance function $C(\lVert x - y \rVert
 \, ; \, \theta)$, where $\lVert x - y \rVert$ is the distance between two points
-in the coordinates $\bm{x}$ and $\bm{y}$, respectively. Then, the covariance
+in the coordinates $x$ and $y$, respectively. Then, the covariance
 between the (averaged) variable observed at $A_1$ and $A_2$ is define as
 \[
 \Sigma_{12} = Cov(A_1, A_2) = \frac{1}{\lvert A_1 \rvert \lvert A_2 \rvert}
-\int_{A_1} \int_{A_2} C(\lVert \bm{x} - \bm{y} \rVert; \theta).
+\int_{A_1} \int_{A_2} C(\lVert x - y \rVert; \theta) \, dy \, dx.
 \]
+In order to approximate the continuous surface on which these covariances have
+to be computed, we generate a fine grid over the whole study region (or a fine
+grid within each MSOA) and approximate such covariance by numerical integration.
 
 # References
