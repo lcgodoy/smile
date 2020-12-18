@@ -140,21 +140,24 @@ mult_log_lik <- function(theta, .dt, dists, model, kappa = NULL,
     ## dealing with possible inconsistencies during the numerical optimization
     inv_u2 <- tryCatch(
         chol2inv(chol(varcov_u2)),
-        error = tryCatch(
-            solve(varcov_u2),
-            error = chol2inv(chol(sigsq*Matrix::nearPD(varcov_u2/sigsq)$mat))
-        )
+        error = function(e)
+            tryCatch(
+                solve(varcov_u2),
+                error = function(e)
+                    chol2inv(chol(sigsq*Matrix::nearPD(varcov_u2/sigsq)$mat))
+            )
     )
 
     if(NCOL(.dt[[1]]) == 1) {
+        c_inv_u2 <- crossprod(crossv_yx, inv_u2)
         mu_y_x <- matrix(rep(alpha, .n[[1]]), ncol = 1) +
-            crossprod(crossv_yx, inv_u2) %*% matrix(.dt[[2]] - rep(mu_x, .n[[2]]), ncol = 1)
-        varcov_y_x <- varcov_y - tcrossprod(crossv_yx %*% inv_u2, crossv_yx)
+            c_inv_u2 %*% matrix(.dt[[2]] - rep(mu_x, .n[[2]]), ncol = 1)
+        varcov_y_x <- varcov_y - ( c_inv_u2 %*% crossv_yx )
     } else {
         c_inv_u2 <- crossprod(crossv_yx, inv_u2)
         mu_y_x <- kronecker(matrix(alpha, ncol = 1), rep(1, NROW(.dt[[1]]))) +
             c_inv_u2 %*% matrix(.dt[[2]] - rep(mu_x, .n[[2]]), ncol = 1)
-        varcov_y_x <- varcov_y - c_inv_u2 %*% crossv_yx
+        varcov_y_x <- varcov_y - ( c_inv_u2 %*% crossv_yx )
     }
 
     log_lik_x <- mvtnorm::dmvnorm(x = matrix(.dt[[2]], nrow = 1),

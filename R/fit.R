@@ -67,7 +67,7 @@ fit_spm.sspm <- function(x, model, theta_st,
     p <- NCOL(x$var)
     npar <- length(theta_st) 
     
-    stopifnot(npar == (3 + (.5 * p * (p + 1))))
+    stopifnot(npar == (p + 2 + (.5 * p * (p + 1))))
     
     op_val <-
         stats::optim(par = theta_st,
@@ -126,7 +126,7 @@ fit_spm.mspm <- function(x, model, theta_st,
     npar <- length(theta_st) 
 
     stopifnot(.q == 1)
-    stopifnot(npar == (4 + (.5 * p * (p + 1))))
+    stopifnot(npar == (2 * p + 4 + (.5 * p * (p + 1))))
     
     op_val <-
         stats::optim(par = theta_st,
@@ -134,8 +134,8 @@ fit_spm.mspm <- function(x, model, theta_st,
                      method  = opt_method,
                      control = control_opt,
                      hessian = TRUE,
-                     .dt     = x$var,
-                     dists   = x$dists,
+                     .dt     = list(x$y$var, x$x$var),
+                     dists   = list(x$y$dists, x$x$dists, x$cdist),
                      model   = model,
                      kappa   = kappa,
                      apply_exp = apply_exp,

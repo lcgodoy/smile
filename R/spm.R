@@ -163,7 +163,7 @@ sf_to_spm <- function(sf_obj1,
                              var_ids = var_ids[[1]])
 
         x <-
-            single_sf_to_spm(sf_obj1,
+            single_sf_to_spm(sf_obj2,
                              n_pts = ifelse(length(n_pts) == 1,
                                             n_pts, n_pts[[2]]),
                              type = ifelse(length(type) == 1,
@@ -176,8 +176,10 @@ sf_to_spm <- function(sf_obj1,
         output <-
             list(
                 y = y,
-                x = x
+                x = x,
+                cdist = mult_dist_from_grids(y$grid, x$grid, poly_ids)
             )
+        
         class(output) <- append(class(output), "mspm")
     }
 

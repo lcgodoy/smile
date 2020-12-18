@@ -6,6 +6,7 @@
 \alias{mult_dists}
 \alias{pred_cdist}
 \alias{get_grid_list}
+\alias{mult_dist_from_grids}
 \title{Internal use only}
 \usage{
 single_dists(mat_list)
@@ -15,6 +16,8 @@ mult_dists(mat_list1, mat_list2, return_single = FALSE)
 pred_cdist(mat_list, pred_mat)
 
 get_grid_list(x_to_list, by)
+
+mult_dist_from_grids(y_grid, x_grid, by)
 }
 \arguments{
 \item{mat_list}{internal use}
