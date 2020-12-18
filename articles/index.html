@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>sf to spm — sf_to_spm • spmismo</title>
+<title>Articles • spmismo</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,7 @@
 
 
 
-<meta property="og:title" content="sf to spm — sf_to_spm" />
-<meta property="og:description" content="Transforming one (or two) sf objects into a sspm (or mspm) object" />
+<meta property="og:title" content="Articles" />
 
 
 
@@ -59,7 +58,7 @@
   </head>
 
   <body data-spy="scroll" data-target="#toc">
-    <div class="container template-reference-topic">
+    <div class="container template-article-index">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -120,90 +119,18 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1><code>sf</code> to <code>spm</code></h1>
-    <small class="dont-index">Source: <a href='https://github.com/lcgodoy/spmismo/blob/master/R/spm.R'><code>R/spm.R</code></a></small>
-    <div class="hidden name"><code>sf_to_spm.Rd</code></div>
+      <h1>Articles</h1>
     </div>
 
-    <div class="ref-description">
-    <p>Transforming one (or two) <code>sf</code> objects into a <code>sspm</code> (or <code>mspm</code>) object</p>
+    <div class="section ">
+      <h3>All vignettes</h3>
+      <p class="section-desc"></p>
+
+      <dl>
+        <dt><a href="sf_to_spm.html">Converting sf objects to spm</a></dt>
+        <dd></dt>
+      </dl>
     </div>
-
-    <pre class="usage"><span class='fu'>sf_to_spm</span><span class='op'>(</span>
-  <span class='va'>sf_obj1</span>,
-  <span class='va'>sf_obj2</span>,
-  <span class='va'>n_pts</span>,
-  type <span class='op'>=</span> <span class='st'>"regular"</span>,
-  by_polygon <span class='op'>=</span> <span class='cn'>FALSE</span>,
-  poly_ids <span class='op'>=</span> <span class='cn'>NULL</span>,
-  <span class='va'>var_ids</span>
-<span class='op'>)</span></pre>
-
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
-    <table class="ref-arguments">
-    <colgroup><col class="name" /><col class="desc" /></colgroup>
-    <tr>
-      <th>sf_obj1</th>
-      <td><p>a <code>sf</code> object s.t. its geometries are polygons.</p></td>
-    </tr>
-    <tr>
-      <th>sf_obj2</th>
-      <td><p>a <code>sf</code> object s.t. its geometries are polygons.</p></td>
-    </tr>
-    <tr>
-      <th>n_pts</th>
-      <td><p>a <code>numeric</code> scalar representing the number of points to
-create a grid in the study region on which the polygons in <code>sf_obj</code>
-is observed.  Alternatively, it can be a vector of the same length as
-<code><a href='https://rdrr.io/r/base/nrow.html'>nrow(sf_obj)</a></code>.  In this case, it generates the given number of
-points for each polygon in <code>sf_obj</code>. Considering the scenario on
-which you also input a <code>sf_obj2</code>, this argument can be set to be a
-list with two positions such that the first position contains the
-<code>n_pts</code> argument for <code>sf_obj1</code>, and the second position
-contains informations about the same parameter but for the
-<code>sf_obj2</code>.</p></td>
-    </tr>
-    <tr>
-      <th>type</th>
-      <td><p>a <code>character</code> indicating the type of grid to be generated.
-The options are <code><a href='https://rdrr.io/r/base/c.html'>c("random", "regular", "hexagonal")</a></code>. For more
-details, see <code><a href='https://r-spatial.github.io/sf/reference/st_sample.html'>st_sample</a></code>. Similarly to <code>n_pts</code>, you
-can input a two positions list in here too.</p></td>
-    </tr>
-    <tr>
-      <th>by_polygon</th>
-      <td><p>a <code>logical</code> indicating wheter we should generate
-<code>n_pts</code> by polygon or for the <code>n_pts</code> for the whole study
-region. Similarly to <code>n_pts</code> (and <code>by_polygon</code>), you can input
-a two positions list in here too.</p></td>
-    </tr>
-    <tr>
-      <th>poly_ids</th>
-      <td><p>a <code>list</code> with two positions, being the first and the
-second one a <code>character</code> vector informing the name of the variable
-in <code>sf_obj</code> and <code>sf_obj2</code>, respectively, that represents the
-polygons unique identifiers. In case this is not informed, we assume the
-id of the polygons are given by their row numbers. Note that, if this is
-informed, it must be a two positions list.</p></td>
-    </tr>
-    <tr>
-      <th>var_ids</th>
-      <td><p>a two positions <code>list</code> containing in each position
-either a scalar or vector of type <code>character</code>, indicating the
-(numerical) variables that are going to be analyzed for <code>sf_obj1</code>
-and <code>sf_obj2</code>, respectively.</p></td>
-    </tr>
-    </table>
-
-    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
-
-    <p>a <code>sspm</code> or <code>mspm</code> object.</p>
-
-  </div>
-  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
-    <nav id="toc" data-toggle="toc" class="sticky-top">
-      <h2 data-toc-skip>Contents</h2>
-    </nav>
   </div>
 </div>
 
