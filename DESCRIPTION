@@ -1,5 +1,5 @@
 Package: spmismo
-Title: What the Package Does (One Line, Title Case)
+Title: An R package to analyze spatially misaligned data.
 Version: 0.0.0.9000
 Authors@R: 
     person(given = "Lucas",
@@ -7,7 +7,7 @@ Authors@R:
            role = c("aut", "cre"),
            email = "lucasdac.godoy@gmail.com",
            comment = c(ORCID = "0000-0003-4265-972X"))
-Description: What the package does (one paragraph).
+Description: The package provides Maximum Likelihood estimates for the estimation of underlying random fields for lattice (polygon data) allowing to deal with spatially misaligment.
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
