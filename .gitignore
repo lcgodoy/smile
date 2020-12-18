@@ -41,3 +41,6 @@ tramp
 ## Outputs
 *.html
 *.pdf
+
+## Readme rmd
+README.Rmd
