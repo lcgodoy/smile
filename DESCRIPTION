@@ -27,3 +27,8 @@ Depends:
     R (>= 3.5)
 URL: https://lcgodoy.me/spmismo, https://github.com/lcgodoy/spmismo
 BugReports: https://github.com/lcgodoy/spmismo/issues
+Suggests: 
+    knitr,
+    rmarkdown,
+    ggplot2
+VignetteBuilder: knitr

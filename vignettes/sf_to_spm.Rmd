@@ -1,0 +1,71 @@
+---
+title: "Converting sf objects to spm"
+output: rmarkdown::html_vignette
+bibliography: biblio.bib
+vignette: >
+  %\VignetteIndexEntry{Converting sf objects to spm}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+The purpose of this vignette is to illustrate how to convert
+`sf`[@pebesma2018simple] objects to objects support by the `spmismo`
+package. Besides the `sf` and `spmismo` packages, the
+`ggplot2`[@wickham2011ggplot2] package will be used for the data visualizations.
+
+```{r setup}
+library(spmismo)
+library(ggplot2)
+library(sf)
+```
+
+The data used here are the datasets provided by @johnson2020dealing about the
+Life Expectancy at Birth and Index of Multiple Deprivation. These two variables
+were observed into different paritions of Liverpool, the LSOA and MSOA^[_Lower
+Super Output Areas_ and _Middle Supper Output Areas_],
+respectively.  
+
+The methods developed in this package are heavily based on the theory developed
+in @johnson2020dealing. The main assumption is that continuous random variables
+observed in polygons (like administrative regios) are composed by the average of
+an stationary and isotropic underlying Gaussian Random Field [@hue2005gaussian]
+plus a Gaussian "Residual". In practice, there exists an identifiability when
+estimating some variance parameters, which can be seen either as small scale
+variation (nugget effect) or measurement errors.  
+
+To illustrate how this work, consider the case on which we do observe a random
+variable in a partition of a study region. In our example, this random variable
+is the estimated LEB^[Life Expectancy at Birth] in Liverpool observed in the
+MSOA's. We can load and visualize the data by using the command below.
+```{R read-data}
+data(liv_msoa)
+
+ggplot(data = liv_msoa,
+       aes(fill = leb_est)) +
+    geom_sf(color = "black",
+            lwd   = .1) +
+    scale_fill_viridis_b() +
+    theme_minimal()
+```
+
+We consider, in a first moment, that this random variable is normally
+distributed with a constant mean and a certain (spatial) covariance matrix. Now,
+let $A_1$ and $A_2$ be two distinct MSOA's. Under the before mentioned
+assumption that the observed random variable is driven by an underlying gaussian
+random field with isotropic covariance function $C(\lVert \bm{x} - \bm{y} \rVert
+\, ; \, \theta)$, where $\lVert x - y \rVert$ is the distance between two points
+in the coordinates $\bm{x}$ and $\bm{y}$, respectively. Then, the covariance
+between the (averaged) variable observed at $A_1$ and $A_2$ is define as
+\[
+\Sigma_{12} = Cov(A_1, A_2) = \frac{1}{\lvert A_1 \rvert \lvert A_2 \rvert}
+\int_{A_1} \int_{A_2} C(\lVert \bm{x} - \bm{y} \rVert; \theta).
+\]
+
+# References
