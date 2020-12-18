@@ -43,3 +43,7 @@ tramp
 *.pdf
 
 docs
+
+## usethis setup
+
+setup-usethis.R
