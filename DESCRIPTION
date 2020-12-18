@@ -21,4 +21,7 @@ Imports:
     sf,
     mvtnorm,
     Matrix,
-    stats
+    stats,
+    utils
+Depends: 
+    R (>= 2.10)

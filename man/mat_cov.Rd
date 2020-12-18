@@ -2,9 +2,7 @@
 % Please edit documentation in R/RcppExports.R
 \name{mat_cov}
 \alias{mat_cov}
-\title{Matern covariance function for a given distance matrix.
-
-Computing the Matern covariance function for a matrix of distances.}
+\title{Matern covariance function for a given distance matrix.}
 \usage{
 mat_cov(dists, sigsq, phi, kappa)
 }
@@ -27,9 +25,8 @@ process) associated with the provided distances (\code{dists}) and the
 given set of parameters.
 }
 \description{
-Matern covariance function for a given distance matrix.
-
-Computing the Matern covariance function for a matrix of distances.
+Computing the Matern covariance function for a matrix of
+distances.
 }
 \seealso{
 \code{\link{single_exp}}, \code{\link{single_matern}}

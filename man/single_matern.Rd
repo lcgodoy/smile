@@ -2,10 +2,7 @@
 % Please edit documentation in R/RcppExports.R
 \name{single_matern}
 \alias{single_matern}
-\title{Matern covariance function (scalar - generic)
-
-Computing the Matern covariance function for a single distance measure,
-addapted from \code{\link[geoR]{matern}}.}
+\title{Matern covariance function (scalar - generic)}
 \usage{
 single_matern(d, sigsq, phi, kappa)
 }
@@ -27,10 +24,8 @@ a scalar representing the (matern) covariance between two
 observations \code{d} apart of each other.
 }
 \description{
-Matern covariance function (scalar - generic)
-
-Computing the Matern covariance function for a single distance measure,
-addapted from \code{\link[geoR]{matern}}.
+Computing the Matern covariance function for a single distance
+measure, addapted from \code{\link[geoR]{matern}}.
 }
 \seealso{
 \code{\link{single_matern}}, \code{\link{single_matern5}}

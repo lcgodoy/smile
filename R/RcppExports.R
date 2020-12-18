@@ -3,9 +3,9 @@
 
 #' @title Mean of a matrix (Internal use)
 #'
-#' This is an auxilliary function for internal use. It helps to numerically
-#' integrate a covariance function evaluated at a grid of points within a
-#' polyigon.
+#' @description This is an auxilliary function for internal use. It helps to
+#'   numerically integrate a covariance function evaluated at a grid of points
+#'   within a polyigon.
 #'
 #' @param mat_aux a numeric matrix.
 #' @return The mean of \code{mat_aux}.
@@ -13,9 +13,9 @@ NULL
 
 #' @title Mean of a (Matern) covariance function (Internal use)
 #'
-#' This is an auxilliary function for internal use. It helps to numerically
-#' integrate a covariance function evaluated at a grid of points within a
-#' polyigon and speed-up the computations.
+#' @description This is an auxilliary function for internal use. It helps to
+#'   numerically integrate a covariance function evaluated at a grid of points
+#'   within a polyigon and speed-up the computations.
 #'
 #' @param dists a numeric matrix representing the distance between spatial
 #'   entities.
@@ -31,9 +31,9 @@ NULL
 
 #' @title Mean of a (Powered Exponential) covariance function (Internal use)
 #'
-#' This is an auxilliary function for internal use. It helps to numerically
-#' integrate a covariance function evaluated at a grid of points within a
-#' polyigon and speed-up the computations.
+#' @description This is an auxilliary function for internal use. It helps to
+#'   numerically integrate a covariance function evaluated at a grid of points
+#'   within a polyigon and speed-up the computations.
 #'
 #' @param dists a numeric matrix representing the distance between spatial
 #'   entities.
@@ -50,9 +50,9 @@ NULL
 
 #' @title Mean of a (Gaussian) covariance function (Internal use)
 #'
-#' This is an auxilliary function for internal use. It helps to numerically
-#' integrate a covariance function evaluated at a grid of points within a
-#' polyigon and speed-up the computations.
+#' @description This is an auxilliary function for internal use. It helps to
+#'   numerically integrate a covariance function evaluated at a grid of points
+#'   within a polyigon and speed-up the computations.
 #'
 #' @param dists a numeric matrix representing the distance between spatial
 #'   entities.
@@ -66,9 +66,9 @@ NULL
 
 #' @title Mean of a (Spherical) covariance function (Internal use)
 #'
-#' This is an auxilliary function for internal use. It helps to numerically
-#' integrate a covariance function evaluated at a grid of points within a
-#' polyigon and speed-up the computations.
+#' @description This is an auxilliary function for internal use. It helps to
+#'   numerically integrate a covariance function evaluated at a grid of points
+#'   within a polyigon and speed-up the computations.
 #'
 #' @param dists a numeric matrix representing the distance between spatial
 #'   entities.
@@ -82,7 +82,7 @@ NULL
 
 #' @title Pairwise distances between matrices
 #' 
-#' Internal use.
+#' @description Internal use.
 #'
 #' @param m1 a matrix representing a grid of points within a polygon.
 #' @param m2 a matrix representing a grid of points within a polygon.
@@ -94,8 +94,8 @@ crossdist <- function(m1, m2) {
 
 #' @title Matern covariance function (scalar - generic)
 #'
-#' Computing the Matern covariance function for a single distance measure,
-#' addapted from \code{\link[geoR]{matern}}.
+#' @description Computing the Matern covariance function for a single distance
+#'   measure, addapted from \code{\link[geoR]{matern}}.
 #'
 #' @param d a scalar representing the distance on which it is desired to
 #'   evaluate the covariance function.
@@ -119,8 +119,8 @@ single_matern <- function(d, sigsq, phi, kappa) {
 
 #' @title Matern covariance function (scalar - kappa = 3/2)
 #'
-#' Computing the Matern covariance function for a single distance measure,
-#' with \eqn{\kappa = 3/2}.
+#' @description Computing the Matern covariance function for a single distance
+#'   measure, with \eqn{\kappa = 3/2}.
 #'
 #' @param d a scalar representing the distance on which it is desired to
 #'   evaluate the covariance function.
@@ -142,8 +142,8 @@ single_matern3 <- function(d, sigsq, phi) {
 
 #' @title Matern covariance function (scalar - kappa = 5/2)
 #'
-#' Computing the Matern covariance function for a single distance measure,
-#' with \eqn{\kappa = 5/2}.
+#' @description Computing the Matern covariance function for a single distance
+#'   measure, with \eqn{\kappa = 5/2}.
 #'
 #' @param d a scalar representing the distance on which it is desired to
 #'   evaluate the covariance function.
@@ -166,7 +166,8 @@ single_matern5 <- function(d, sigsq, phi) {
 
 #' @title Exponential covariance function (scalar)
 #'
-#' Computing the Exponential covariance function for a single distance measure.
+#' @description Computing the Exponential covariance function for a single
+#'   distance measure.
 #'
 #' @param d a scalar representing the distance on which it is desired to
 #'   evaluate the covariance function.
@@ -190,7 +191,8 @@ single_exp <- function(d, sigsq, phi) {
 
 #' @title Matern covariance function for a given distance matrix.
 #'
-#' Computing the Matern covariance function for a matrix of distances.
+#' @description Computing the Matern covariance function for a matrix of
+#'   distances.
 #'
 #' @param dists a numeric matrix representing the distance between spatial
 #'   entities.
@@ -214,7 +216,7 @@ mat_cov <- function(dists, sigsq, phi, kappa) {
 
 #' @title Matern covariance function for a polygons.
 #'
-#' Computing the Matern covariance function between polygons.
+#' @description Computing the Matern covariance function between polygons.
 #'
 #' @param cross_dists a \code{list} such that each position contains the cross
 #'   distances between points within different polygons.
@@ -244,7 +246,8 @@ comp_mat_cov <- function(cross_dists, n, n2, sigsq, phi, kappa) {
 
 #' @title Powered Exponential covariance function (scalar)
 #'
-#' Computing the Powered Exponential covariance function for a single distance measure.
+#' @description Computing the Powered Exponential covariance function for a
+#'   single distance measure.
 #'
 #' @param d a scalar representing the distance on which it is desired to
 #'   evaluate the covariance function.
@@ -268,7 +271,8 @@ single_pexp <- function(d, sigsq, phi, kappa) {
 
 #' @title Powered Exponential covariance function for a given distance matrix.
 #'
-#' Computing the Matern covariance function for a matrix of distances.
+#' @description Computing the Matern covariance function for a matrix of
+#'   distances.
 #'
 #' @param dists a numeric matrix representing the distance between spatial
 #'   entities.
@@ -291,7 +295,8 @@ pexp_cov <- function(dists, sigsq, phi, kappa) {
 
 #' @title Powered Exponential covariance function for a polygons.
 #'
-#' Computing the Powered Exponential covariance function between polygons.
+#' @description Computing the Powered Exponential covariance function between
+#'   polygons.
 #'
 #' @param cross_dists a \code{list} such that each position contains the cross
 #'   distances between points within different polygons.
@@ -319,7 +324,8 @@ comp_pexp_cov <- function(cross_dists, n, n2, sigsq, phi, kappa) {
 
 #' @title Gaussian covariance function (scalar)
 #'
-#' Computing the Gaussian covariance function for a single distance measure.
+#' @description Computing the Gaussian covariance function for a single
+#'   distance measure.
 #'
 #' @param d a scalar representing the distance on which it is desired to
 #'   evaluate the covariance function.
@@ -340,7 +346,8 @@ single_gauss <- function(d, sigsq, phi) {
     .Call(`_spmismo_single_gauss`, d, sigsq, phi)
 }
 
-#' @title Computing the Gaussian covariance function for a single distance measure.
+#' @title Computing the Gaussian covariance function for a single distance
+#'   measure.
 #'
 #' @param dists a numeric matrix representing the distance between spatial
 #'   entities.
@@ -362,7 +369,7 @@ gauss_cov <- function(dists, sigsq, phi) {
 
 #' @title Gaussian covariance function for a polygons.
 #'
-#' Computing the Gaussian covariance function between polygons.
+#' @description Computing the Gaussian covariance function between polygons.
 #'
 #' @param cross_dists a \code{list} such that each position contains the cross
 #'   distances between points within different polygons.
@@ -389,7 +396,8 @@ comp_gauss_cov <- function(cross_dists, n, n2, sigsq, phi) {
 
 #' @title Spherical covariance function (scalar)
 #'
-#' Computing the Spherical covariance function for a single distance measure.
+#' @description Computing the Spherical covariance function for a single
+#'   distance measure.
 #'
 #' @param d a scalar representing the distance on which it is desired to
 #'   evaluate the covariance function.
@@ -410,7 +418,8 @@ single_spher <- function(d, sigsq, phi) {
     .Call(`_spmismo_single_spher`, d, sigsq, phi)
 }
 
-#' @title Computing the Spherical covariance function for a single distance measure.
+#' @title Computing the Spherical covariance function for a single distance
+#'   measure.
 #'
 #' @param dists a numeric matrix representing the distance between spatial
 #'   entities.
@@ -432,7 +441,7 @@ spher_cov <- function(dists, sigsq, phi) {
 
 #' @title Spherical covariance function for a polygons.
 #'
-#' Computing the Spherical covariance function between polygons.
+#' @description Computing the Spherical covariance function between polygons.
 #'
 #' @param cross_dists a \code{list} such that each position contains the cross
 #'   distances between points within different polygons.

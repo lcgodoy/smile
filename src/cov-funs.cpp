@@ -3,8 +3,6 @@
 #include <numeric>
 #include <algorithm>
 
-static double const log2pi = std::log(2.0 * M_PI);
-
 // [[Rcpp::depends(RcppArmadillo)]]
 
 // [[Rcpp::plugins(openmp)]]
@@ -13,7 +11,7 @@ using namespace Rcpp;
 
 //' @title Pairwise distances between matrices
 //' 
-//' Internal use.
+//' @description Internal use.
 //'
 //' @param m1 a matrix representing a grid of points within a polygon.
 //' @param m2 a matrix representing a grid of points within a polygon.
@@ -44,9 +42,9 @@ arma::mat crossdist(const arma::mat& m1, const arma::mat& m2) {
 
 //' @title Mean of a matrix (Internal use)
 //'
-//' This is an auxilliary function for internal use. It helps to numerically
-//' integrate a covariance function evaluated at a grid of points within a
-//' polyigon.
+//' @description This is an auxilliary function for internal use. It helps to
+//'   numerically integrate a covariance function evaluated at a grid of points
+//'   within a polyigon.
 //'
 //' @param mat_aux a numeric matrix.
 //' @return The mean of \code{mat_aux}.
@@ -57,8 +55,8 @@ double mean_mat(arma::mat mat_aux) {
 
 //' @title Matern covariance function (scalar - generic)
 //'
-//' Computing the Matern covariance function for a single distance measure,
-//' addapted from \code{\link[geoR]{matern}}.
+//' @description Computing the Matern covariance function for a single distance
+//'   measure, addapted from \code{\link[geoR]{matern}}.
 //'
 //' @param d a scalar representing the distance on which it is desired to
 //'   evaluate the covariance function.
@@ -91,8 +89,8 @@ double single_matern(double d, double sigsq,
 
 //' @title Matern covariance function (scalar - kappa = 3/2)
 //'
-//' Computing the Matern covariance function for a single distance measure,
-//' with \eqn{\kappa = 3/2}.
+//' @description Computing the Matern covariance function for a single distance
+//'   measure, with \eqn{\kappa = 3/2}.
 //'
 //' @param d a scalar representing the distance on which it is desired to
 //'   evaluate the covariance function.
@@ -121,8 +119,8 @@ double single_matern3(double d, double sigsq,
 
 //' @title Matern covariance function (scalar - kappa = 5/2)
 //'
-//' Computing the Matern covariance function for a single distance measure,
-//' with \eqn{\kappa = 5/2}.
+//' @description Computing the Matern covariance function for a single distance
+//'   measure, with \eqn{\kappa = 5/2}.
 //'
 //' @param d a scalar representing the distance on which it is desired to
 //'   evaluate the covariance function.
@@ -153,7 +151,8 @@ double single_matern5(double d, double sigsq,
 
 //' @title Exponential covariance function (scalar)
 //'
-//' Computing the Exponential covariance function for a single distance measure.
+//' @description Computing the Exponential covariance function for a single
+//'   distance measure.
 //'
 //' @param d a scalar representing the distance on which it is desired to
 //'   evaluate the covariance function.
@@ -182,7 +181,8 @@ double single_exp(double d, double sigsq, double phi) {
 
 //' @title Matern covariance function for a given distance matrix.
 //'
-//' Computing the Matern covariance function for a matrix of distances.
+//' @description Computing the Matern covariance function for a matrix of
+//'   distances.
 //'
 //' @param dists a numeric matrix representing the distance between spatial
 //'   entities.
@@ -241,9 +241,9 @@ arma::mat mat_cov(const arma::mat& dists, double sigsq,
 
 //' @title Mean of a (Matern) covariance function (Internal use)
 //'
-//' This is an auxilliary function for internal use. It helps to numerically
-//' integrate a covariance function evaluated at a grid of points within a
-//' polyigon and speed-up the computations.
+//' @description This is an auxilliary function for internal use. It helps to
+//'   numerically integrate a covariance function evaluated at a grid of points
+//'   within a polyigon and speed-up the computations.
 //'
 //' @param dists a numeric matrix representing the distance between spatial
 //'   entities.
@@ -262,7 +262,7 @@ double aux_matern(arma::mat dist, double sigsq,
 
 //' @title Matern covariance function for a polygons.
 //'
-//' Computing the Matern covariance function between polygons.
+//' @description Computing the Matern covariance function between polygons.
 //'
 //' @param cross_dists a \code{list} such that each position contains the cross
 //'   distances between points within different polygons.
@@ -313,7 +313,8 @@ arma::mat comp_mat_cov(const List& cross_dists, int n,
 
 //' @title Powered Exponential covariance function (scalar)
 //'
-//' Computing the Powered Exponential covariance function for a single distance measure.
+//' @description Computing the Powered Exponential covariance function for a
+//'   single distance measure.
 //'
 //' @param d a scalar representing the distance on which it is desired to
 //'   evaluate the covariance function.
@@ -342,7 +343,8 @@ double single_pexp(double d, double sigsq, double phi, double kappa) {
 
 //' @title Powered Exponential covariance function for a given distance matrix.
 //'
-//' Computing the Matern covariance function for a matrix of distances.
+//' @description Computing the Matern covariance function for a matrix of
+//'   distances.
 //'
 //' @param dists a numeric matrix representing the distance between spatial
 //'   entities.
@@ -372,9 +374,9 @@ arma::mat pexp_cov(const arma::mat& dists, double sigsq,
 
 //' @title Mean of a (Powered Exponential) covariance function (Internal use)
 //'
-//' This is an auxilliary function for internal use. It helps to numerically
-//' integrate a covariance function evaluated at a grid of points within a
-//' polyigon and speed-up the computations.
+//' @description This is an auxilliary function for internal use. It helps to
+//'   numerically integrate a covariance function evaluated at a grid of points
+//'   within a polyigon and speed-up the computations.
 //'
 //' @param dists a numeric matrix representing the distance between spatial
 //'   entities.
@@ -394,7 +396,8 @@ double aux_pexp(arma::mat dist, double sigsq,
 
 //' @title Powered Exponential covariance function for a polygons.
 //'
-//' Computing the Powered Exponential covariance function between polygons.
+//' @description Computing the Powered Exponential covariance function between
+//'   polygons.
 //'
 //' @param cross_dists a \code{list} such that each position contains the cross
 //'   distances between points within different polygons.
@@ -443,7 +446,8 @@ arma::mat comp_pexp_cov(const List& cross_dists, int n,
 
 //' @title Gaussian covariance function (scalar)
 //'
-//' Computing the Gaussian covariance function for a single distance measure.
+//' @description Computing the Gaussian covariance function for a single
+//'   distance measure.
 //'
 //' @param d a scalar representing the distance on which it is desired to
 //'   evaluate the covariance function.
@@ -469,7 +473,8 @@ double single_gauss(double d, double sigsq, double phi) {
   return out;
 }
 
-//' @title Computing the Gaussian covariance function for a single distance measure.
+//' @title Computing the Gaussian covariance function for a single distance
+//'   measure.
 //'
 //' @param dists a numeric matrix representing the distance between spatial
 //'   entities.
@@ -498,9 +503,9 @@ arma::mat gauss_cov(const arma::mat& dists, double sigsq, double phi) {
 
 //' @title Mean of a (Gaussian) covariance function (Internal use)
 //'
-//' This is an auxilliary function for internal use. It helps to numerically
-//' integrate a covariance function evaluated at a grid of points within a
-//' polyigon and speed-up the computations.
+//' @description This is an auxilliary function for internal use. It helps to
+//'   numerically integrate a covariance function evaluated at a grid of points
+//'   within a polyigon and speed-up the computations.
 //'
 //' @param dists a numeric matrix representing the distance between spatial
 //'   entities.
@@ -516,7 +521,7 @@ double aux_gauss(arma::mat dist, double sigsq, double phi) {
 
 //' @title Gaussian covariance function for a polygons.
 //'
-//' Computing the Gaussian covariance function between polygons.
+//' @description Computing the Gaussian covariance function between polygons.
 //'
 //' @param cross_dists a \code{list} such that each position contains the cross
 //'   distances between points within different polygons.
@@ -563,7 +568,8 @@ arma::mat comp_gauss_cov(const List& cross_dists, int n,
 
 //' @title Spherical covariance function (scalar)
 //'
-//' Computing the Spherical covariance function for a single distance measure.
+//' @description Computing the Spherical covariance function for a single
+//'   distance measure.
 //'
 //' @param d a scalar representing the distance on which it is desired to
 //'   evaluate the covariance function.
@@ -592,7 +598,8 @@ double single_spher(double d, double sigsq, double phi) {
   return out;
 }
 
-//' @title Computing the Spherical covariance function for a single distance measure.
+//' @title Computing the Spherical covariance function for a single distance
+//'   measure.
 //'
 //' @param dists a numeric matrix representing the distance between spatial
 //'   entities.
@@ -621,9 +628,9 @@ arma::mat spher_cov(const arma::mat& dists, double sigsq, double phi) {
 
 //' @title Mean of a (Spherical) covariance function (Internal use)
 //'
-//' This is an auxilliary function for internal use. It helps to numerically
-//' integrate a covariance function evaluated at a grid of points within a
-//' polyigon and speed-up the computations.
+//' @description This is an auxilliary function for internal use. It helps to
+//'   numerically integrate a covariance function evaluated at a grid of points
+//'   within a polyigon and speed-up the computations.
 //'
 //' @param dists a numeric matrix representing the distance between spatial
 //'   entities.
@@ -639,7 +646,7 @@ double aux_spher(arma::mat dist, double sigsq, double phi) {
 
 //' @title Spherical covariance function for a polygons.
 //'
-//' Computing the Spherical covariance function between polygons.
+//' @description Computing the Spherical covariance function between polygons.
 //'
 //' @param cross_dists a \code{list} such that each position contains the cross
 //'   distances between points within different polygons.

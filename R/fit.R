@@ -53,7 +53,8 @@ fit_spm <- function(x, ...) UseMethod("fit_spm")
 ##'     \code{\link[stats]{optim}}.
 ##' @param ... additionnal parameters, either passed to \code{optim}.
 ##' 
-##' @return
+##' @return a \code{sspm_fit} or a \code{mspm_fit} object.
+##' 
 ##' @export
 fit_spm.sspm <- function(x, model, theta_st,
                          kappa = NULL,

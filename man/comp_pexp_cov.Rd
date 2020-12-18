@@ -2,9 +2,7 @@
 % Please edit documentation in R/RcppExports.R
 \name{comp_pexp_cov}
 \alias{comp_pexp_cov}
-\title{Powered Exponential covariance function for a polygons.
-
-Computing the Powered Exponential covariance function between polygons.}
+\title{Powered Exponential covariance function for a polygons.}
 \usage{
 comp_pexp_cov(cross_dists, n, n2, sigsq, phi, kappa)
 }
@@ -32,9 +30,8 @@ The powered exponential covariance matrix associated with a set of
 polygons.
 }
 \description{
-Powered Exponential covariance function for a polygons.
-
-Computing the Powered Exponential covariance function between polygons.
+Computing the Powered Exponential covariance function between
+polygons.
 }
 \seealso{
 \code{\link{single_exp}}, \code{\link{single_matern}},

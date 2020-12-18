@@ -2,9 +2,7 @@
 % Please edit documentation in R/RcppExports.R
 \name{pexp_cov}
 \alias{pexp_cov}
-\title{Powered Exponential covariance function for a given distance matrix.
-
-Computing the Matern covariance function for a matrix of distances.}
+\title{Powered Exponential covariance function for a given distance matrix.}
 \usage{
 pexp_cov(dists, sigsq, phi, kappa)
 }
@@ -26,9 +24,8 @@ isotropic process) associated with the provided distances (\code{dists})
 and the given set of parameters.
 }
 \description{
-Powered Exponential covariance function for a given distance matrix.
-
-Computing the Matern covariance function for a matrix of distances.
+Computing the Matern covariance function for a matrix of
+distances.
 }
 \seealso{
 \code{\link{single_exp}}, \code{\link{single_matern}}

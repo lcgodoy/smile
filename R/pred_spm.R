@@ -121,10 +121,10 @@ predict_spm.sspm_fit <- function(x, .aggregate = TRUE, ...) {
                                se_pred = se_pred_y)
 
         if(.aggregate) {
-            out_poly <- sf:::aggregate.sf(x = pred_grid[c("mu_pred", "se_pred")],
-                                          by = x$call_data$sf_poly,
-                                          FUN = mean,
-                                          join = sf::st_intersects)
+            out_poly <- aggregate_aux(x = pred_grid[c("mu_pred", "se_pred")],
+                                      by = x$call_data$sf_poly,
+                                      FUN = mean,
+                                      join = sf::st_intersects)
             
             output <-
                 list(
@@ -284,7 +284,7 @@ predict_spm.sf <- function(x, spm_obj, .aggregate = TRUE,
                                      sigsq = spm_obj$estimate["sigsq"])
            },
            "spherical" = {
-               sig_y <- comp_spher_cov(spm_obj$call_data$dists, n = n_obs,
+               sig_y <- comp_spher_cov(spm_obj$call_data$dists, 
                                        n = n_obs, n2 = n_obs,
                                        phi   = spm_obj$estimate["phi"],
                                        sigsq = spm_obj$estimate["sigsq"])
@@ -329,10 +329,10 @@ predict_spm.sf <- function(x, spm_obj, .aggregate = TRUE,
                            se_pred = se_pred_y)
     
     if(.aggregate) {
-        out_poly <- sf:::aggregate.sf(x = pred_grid[c("mu_pred", "se_pred")],
-                                      by = sf::st_geometry(x),
-                                      FUN = mean,
-                                      join = sf::st_intersects)
+        out_poly <- aggregate_aux(x = pred_grid[c("mu_pred", "se_pred")],
+                                  by = sf::st_geometry(x),
+                                  FUN = mean,
+                                  join = sf::st_intersects)
         
         output <-
             list(
@@ -361,3 +361,14 @@ predict_spm.sf <- function(x, spm_obj, .aggregate = TRUE,
 predict_spm.matrix <- function(x, ...) {
     stop("yet to be implemented.")
 }
+
+##' @title Internal use only
+##' @param x internal use
+##' @param by internal use
+##' @param FUN internal use
+##' @param ... internal use
+##' @param do_union internal use
+##' @param simplify internal use
+##' @param join internal use
+##' @description taken from \code{\link[sf]{aggregate.sf}}.
+aggregate_aux <- utils::getFromNamespace("aggregate.sf", "sf")

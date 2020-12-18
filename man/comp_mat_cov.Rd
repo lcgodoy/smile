@@ -2,9 +2,7 @@
 % Please edit documentation in R/RcppExports.R
 \name{comp_mat_cov}
 \alias{comp_mat_cov}
-\title{Matern covariance function for a polygons.
-
-Computing the Matern covariance function between polygons.}
+\title{Matern covariance function for a polygons.}
 \usage{
 comp_mat_cov(cross_dists, n, n2, sigsq, phi, kappa)
 }
@@ -34,8 +32,6 @@ covariance function.}
 The matern covariance matrix associated with a set of polygons.
 }
 \description{
-Matern covariance function for a polygons.
-
 Computing the Matern covariance function between polygons.
 }
 \seealso{

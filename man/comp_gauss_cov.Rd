@@ -2,9 +2,7 @@
 % Please edit documentation in R/RcppExports.R
 \name{comp_gauss_cov}
 \alias{comp_gauss_cov}
-\title{Gaussian covariance function for a polygons.
-
-Computing the Gaussian covariance function between polygons.}
+\title{Gaussian covariance function for a polygons.}
 \usage{
 comp_gauss_cov(cross_dists, n, n2, sigsq, phi)
 }
@@ -30,8 +28,6 @@ The gaussian covariance matrix associated with a set of
 polygons.
 }
 \description{
-Gaussian covariance function for a polygons.
-
 Computing the Gaussian covariance function between polygons.
 }
 \seealso{

@@ -2,9 +2,7 @@
 % Please edit documentation in R/RcppExports.R
 \name{single_pexp}
 \alias{single_pexp}
-\title{Powered Exponential covariance function (scalar)
-
-Computing the Powered Exponential covariance function for a single distance measure.}
+\title{Powered Exponential covariance function (scalar)}
 \usage{
 single_pexp(d, sigsq, phi, kappa)
 }
@@ -25,9 +23,8 @@ a scalar representing the (exponential) covariance between two
 observations \code{d} apart of each other.
 }
 \description{
-Powered Exponential covariance function (scalar)
-
-Computing the Powered Exponential covariance function for a single distance measure.
+Computing the Powered Exponential covariance function for a
+single distance measure.
 }
 \seealso{
 \code{\link{single_exp}}, \code{\link{single_matern}},

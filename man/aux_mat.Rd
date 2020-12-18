@@ -33,6 +33,10 @@ mult_dist_from_grids(y_grid, x_grid, by)
 \item{x_to_list}{internal use}
 
 \item{by}{internal use}
+
+\item{y_grid}{internal use}
+
+\item{x_grid}{internal use}
 }
 \description{
 Internal use only

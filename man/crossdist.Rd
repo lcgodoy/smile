@@ -2,9 +2,7 @@
 % Please edit documentation in R/RcppExports.R
 \name{crossdist}
 \alias{crossdist}
-\title{Pairwise distances between matrices
-
-Internal use.}
+\title{Pairwise distances between matrices}
 \usage{
 crossdist(m1, m2)
 }
@@ -14,7 +12,5 @@ crossdist(m1, m2)
 \item{m2}{a matrix representing a grid of points within a polygon.}
 }
 \description{
-Pairwise distances between matrices
-
 Internal use.
 }

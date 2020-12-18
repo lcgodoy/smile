@@ -2,7 +2,8 @@
 % Please edit documentation in R/RcppExports.R
 \name{gauss_cov}
 \alias{gauss_cov}
-\title{Computing the Gaussian covariance function for a single distance measure.}
+\title{Computing the Gaussian covariance function for a single distance
+measure.}
 \usage{
 gauss_cov(dists, sigsq, phi)
 }
@@ -22,7 +23,8 @@ isotropic process) associated with the provided distances (\code{dists})
 and the given set of parameters.
 }
 \description{
-Computing the Gaussian covariance function for a single distance measure.
+Computing the Gaussian covariance function for a single distance
+measure.
 }
 \seealso{
 \code{\link{single_exp}}, \code{\link{single_matern}}

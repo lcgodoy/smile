@@ -2,9 +2,7 @@
 % Please edit documentation in R/RcppExports.R
 \name{comp_spher_cov}
 \alias{comp_spher_cov}
-\title{Spherical covariance function for a polygons.
-
-Computing the Spherical covariance function between polygons.}
+\title{Spherical covariance function for a polygons.}
 \usage{
 comp_spher_cov(cross_dists, n, n2, sigsq, phi)
 }
@@ -30,8 +28,6 @@ The spherical covariance matrix associated with a set of
 polygons.
 }
 \description{
-Spherical covariance function for a polygons.
-
 Computing the Spherical covariance function between polygons.
 }
 \seealso{

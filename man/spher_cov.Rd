@@ -2,7 +2,8 @@
 % Please edit documentation in R/RcppExports.R
 \name{spher_cov}
 \alias{spher_cov}
-\title{Computing the Spherical covariance function for a single distance measure.}
+\title{Computing the Spherical covariance function for a single distance
+measure.}
 \usage{
 spher_cov(dists, sigsq, phi)
 }
@@ -23,7 +24,8 @@ isotropic process) associated with the provided distances (\code{dists})
 and the given set of parameters.
 }
 \description{
-Computing the Spherical covariance function for a single distance measure.
+Computing the Spherical covariance function for a single distance
+measure.
 }
 \seealso{
 \code{\link{single_exp}}, \code{\link{single_matern}}

@@ -67,7 +67,7 @@ the optimization algorithm to be used. For details, see
 \code{\link[stats]{optim}}.}
 }
 \value{
-
+a \code{sspm_fit} or a \code{mspm_fit} object.
 }
 \description{
 Fit a model adapted from

@@ -6,6 +6,8 @@
 ##' @param pred_mat internal use
 ##' @param x_to_list internal use
 ##' @param by internal use
+##' @param y_grid internal use
+##' @param x_grid internal use
 ##' @name aux_mat
 single_dists <- function(mat_list) {
     n_out <- length(mat_list)

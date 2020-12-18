@@ -2,9 +2,7 @@
 % Please edit documentation in R/RcppExports.R
 \name{single_spher}
 \alias{single_spher}
-\title{Spherical covariance function (scalar)
-
-Computing the Spherical covariance function for a single distance measure.}
+\title{Spherical covariance function (scalar)}
 \usage{
 single_spher(d, sigsq, phi)
 }
@@ -23,9 +21,8 @@ a scalar representing the (gaussian) covariance between two
 observations \code{d} apart of each other.
 }
 \description{
-Spherical covariance function (scalar)
-
-Computing the Spherical covariance function for a single distance measure.
+Computing the Spherical covariance function for a single
+distance measure.
 }
 \seealso{
 \code{\link{single_exp}}, \code{\link{single_matern}},

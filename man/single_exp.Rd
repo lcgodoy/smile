@@ -2,9 +2,7 @@
 % Please edit documentation in R/RcppExports.R
 \name{single_exp}
 \alias{single_exp}
-\title{Exponential covariance function (scalar)
-
-Computing the Exponential covariance function for a single distance measure.}
+\title{Exponential covariance function (scalar)}
 \usage{
 single_exp(d, sigsq, phi)
 }
@@ -23,9 +21,8 @@ a scalar representing the (exponential) covariance between two
 observations \code{d} apart of each other.
 }
 \description{
-Exponential covariance function (scalar)
-
-Computing the Exponential covariance function for a single distance measure.
+Computing the Exponential covariance function for a single
+distance measure.
 }
 \seealso{
 \code{\link{single_pexp}}, \code{\link{single_matern}},

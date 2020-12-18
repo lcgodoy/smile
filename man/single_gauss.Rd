@@ -2,9 +2,7 @@
 % Please edit documentation in R/RcppExports.R
 \name{single_gauss}
 \alias{single_gauss}
-\title{Gaussian covariance function (scalar)
-
-Computing the Gaussian covariance function for a single distance measure.}
+\title{Gaussian covariance function (scalar)}
 \usage{
 single_gauss(d, sigsq, phi)
 }
@@ -23,9 +21,8 @@ a scalar representing the (gaussian) covariance between two
 observations \code{d} apart of each other.
 }
 \description{
-Gaussian covariance function (scalar)
-
-Computing the Gaussian covariance function for a single distance measure.
+Computing the Gaussian covariance function for a single
+distance measure.
 }
 \seealso{
 \code{\link{single_exp}}, \code{\link{single_matern}},
