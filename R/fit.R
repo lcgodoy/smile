@@ -54,6 +54,7 @@ fit_spm <- function(x, ...) UseMethod("fit_spm")
 ##' @param ... additionnal parameters, either passed to \code{optim}.
 ##' 
 ##' @return
+##' @export
 fit_spm.sspm <- function(x, model, theta_st,
                          kappa = NULL,
                          apply_exp = FALSE,
@@ -194,7 +195,7 @@ summary_sspm_fit <- function(x, sig = .05) {
         )
     }
 
-    cat(sprintf("\n optimization algorithm converged: %s", x$converged))
+    cat(sprintf("\n optimization algorithm converged: %s \n \n", x$converged))
     
     return(tbl)
 }

@@ -222,28 +222,28 @@ singl_log_lik <- function(theta, .dt, dists, model, kappa = NULL,
 
     switch(model,
            "matern" = {
-               varcov_u1 <- comp_mat_cov(cross_dists = dists[[1]],
-                                         n = .n[[1]], n2 = .n[[1]],
+               varcov_u1 <- comp_mat_cov(cross_dists = dists,
+                                         n = .n, n2 = .n,
                                          phi = phi,
                                          sigsq = sigsq,
                                          kappa = kappa)
            },
            "pexp" = {
-               varcov_u1 <- comp_pexp_cov(cross_dists = dists[[1]],
-                                          n = .n[[1]], n2 = .n[[1]],
+               varcov_u1 <- comp_pexp_cov(cross_dists = dists,
+                                          n = .n, n2 = .n,
                                           phi = phi,
                                           sigsq = sigsq,
                                           kappa = kappa)
            },
            "gaussian" = {
-               varcov_u1 <- comp_gauss_cov(cross_dists = dists[[1]],
-                                           n = .n[[1]], n2 = .n[[1]],
+               varcov_u1 <- comp_gauss_cov(cross_dists = dists,
+                                           n = .n, n2 = .n,
                                            phi = phi,
                                            sigsq = sigsq)
            },
            "spherical" = {
-               varcov_u1 <- comp_spher_cov(cross_dists = dists[[1]],
-                                           n = .n[[1]], n2 = .n[[1]],
+               varcov_u1 <- comp_spher_cov(cross_dists = dists,
+                                           n = .n, n2 = .n,
                                            phi = phi,
                                            sigsq = sigsq)
            })
