@@ -33,3 +33,4 @@ Suggests:
     ggplot2,
     graphics
 VignetteBuilder: knitr
+Language: en-US

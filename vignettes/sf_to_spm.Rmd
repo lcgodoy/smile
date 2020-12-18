@@ -122,7 +122,7 @@ ggplot(data = msoa_spm$grid,
 
 Next, we illustrate how do different values of `type` and `by_polygon` affect
 the final result of the `sf_to_spm` call. In all examples we are going to use a
-grid of 732 points (multiple of the number of polygons observed). The "sparsity"
+grid of 305 points (multiple of the number of polygons observed). The "sparsity"
 of the points forming the grid helps to see the differences caused by the
 different inputs for the function. The panel below displays every possible
 combination of the parameters `type` and `by_polygon`. Although there is no
@@ -131,36 +131,36 @@ combination of the parameters `type` and `by_polygon`. Although there is no
 that, after generating the grid, your grid is in a finer resolution than your
 smallest polygon, that is, to make sure that there exists no points lying in
 more than one polygon.
-```{R sf-to-spm2, echo = FALSE}
+```{R sf-to-spm2, echo = FALSE, warning = FALSE, message = FALSE}
 set.seed(123)
 
 msoa_spm1 <-
-    sf_to_spm(sf_obj1 = liv_msoa, n_pts = 732,
+    sf_to_spm(sf_obj1 = liv_msoa, n_pts = 305,
               type = "random", by_polygon = FALSE,
               poly_ids = "msoa11cd", var_ids = "leb_est")
 
 msoa_spm2 <-
-    sf_to_spm(sf_obj1 = liv_msoa, n_pts = 732,
+    sf_to_spm(sf_obj1 = liv_msoa, n_pts = 305,
               type = "regular", by_polygon = FALSE,
               poly_ids = "msoa11cd", var_ids = "leb_est")
 
 msoa_spm3 <-
-    sf_to_spm(sf_obj1 = liv_msoa, n_pts = 732,
+    sf_to_spm(sf_obj1 = liv_msoa, n_pts = 305,
               type = "hexagonal", by_polygon = FALSE,
               poly_ids = "msoa11cd", var_ids = "leb_est")
 
 msoa_spm4 <-
-    sf_to_spm(sf_obj1 = liv_msoa, n_pts = 732/61,
+    sf_to_spm(sf_obj1 = liv_msoa, n_pts = 305/61,
               type = "random", by_polygon = TRUE,
               poly_ids = "msoa11cd", var_ids = "leb_est")
 
 msoa_spm5 <-
-    sf_to_spm(sf_obj1 = liv_msoa, n_pts = 732/61,
+    sf_to_spm(sf_obj1 = liv_msoa, n_pts = 305/61,
               type = "regular", by_polygon = TRUE,
               poly_ids = "msoa11cd", var_ids = "leb_est")
 
 msoa_spm6 <-
-    sf_to_spm(sf_obj1 = liv_msoa, n_pts = 732/61,
+    sf_to_spm(sf_obj1 = liv_msoa, n_pts = 305/61,
               type = "hexagonal", by_polygon = TRUE,
               poly_ids = "msoa11cd", var_ids = "leb_est")
 
@@ -174,7 +174,7 @@ to_plot <- rbind(
     deparse.level = 1
     )
 
-rm(list = ls(pattern = "^msoa_spm")); gc(verbose = FALSE, full = TRUE)
+rm(list = ls(pattern = "^msoa_spm")); invisible(gc(verbose = FALSE, full = TRUE))
 
 ggplot(data = to_plot,
        aes(color = msoa11cd)) +

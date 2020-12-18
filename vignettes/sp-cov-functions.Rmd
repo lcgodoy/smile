@@ -14,7 +14,72 @@ knitr::opts_chunk$set(
   comment = "#>"
 )
 ```
+<!-- To exemplify the covariance functions, we are going to use the data from -->
+<!-- @johnson2020dealing again^[for more details about the data, take a look at the -->
+<!-- vignette -->
+<!-- [sf-to-spm](https://lcgodoy.me/spmismo/articles/sf_to_spm.html)]. First, in the -->
+<!-- code cunk below, we load the data and convert it to a `spmismo` compatible -->
+<!-- class. Since this is a toy example, we are going to generate a 500 points grid -->
+<!-- for the data. -->
 
-```{r setup}
-library(spmismo)
-```
+in this short vignette, we illustrate the family of spatial covariance functions
+implemented in this package. Note that, all of them are based on the assumptions
+of stationarity and isotropy of the underlying Gaussian Random Field
+(GRF). Also, the implementations (and definitions) are based on the families of
+spatial _correlation_ functions presented in @diggle2007model. The implemtations
+make use of the `RcppArmadillo` [@eddelbuettel2014rcpparmadillo] package and the
+STL library algorithms (C++ 11)^[during my experiences, the implementation using
+the sequencial algorithms of the STL library was more effitient than using the
+`RcppParallel` package].
+
+The first spatial covariance family implemented is the so-called Mat\'ern
+Covariance function, it is of form
+\[
+C(h; \sigma^2, \phi, \kappa) = \sigma^2 frac{(h / \phi)^{\kappa} K_{\kappa}( h / \phi )}
+{ 2^{\kappa - 1} \Gamma(\kappa) },
+\]
+where $h$ is the distance between two points, $\sigma^2$ is analogous to a
+variance parameter, $\phi$ is the scale parameter that controls the rech of the
+spatial dependence, and $\kappa$ is a shape parameter that controls the
+differentiability of the process. The function $K_{\kappa}(\cdot)$ is the
+$\kappa$-order Modified Bessel function of Second-Kind There are special cases
+of the Mat\'er family implemented on the package, when setting $\kappa$ to
+$1/2$, $3/2$, $5/2$, or $\infty$ the expression simplifies. The first and the
+last cases yields to the Exponential and Gaussian family, respectively.  
+
+The second spatial covariance family implemented is the Powered Exponential
+Covariance function, it is defined as
+\[
+C(h; \sigma^2, \phi, \kappa) = \sigma^2 \exp \{ - (h / \phi)^{\kappa} \},
+\]
+where $h$ is the distance between two points, $\sigma^2$ is analogous to a
+variance parameter, $\phi$ is the scale parameter that controls the rech of the
+spatial dependence, and $\kappa$ is a shape parameter that controls the
+differentiability of the process.  
+
+The penultimate option is the Gaussian family of covariance functions, they are
+defined as
+\[
+C(h; \sigma^2, \phi) = \sigma^2 \exp \left\{ - \frac{h ^ 2}{2 \phi ^ 2} \right\},
+\]
+the parameters are analogous to those defined by the previous two families. Note
+that, this family has one less parameter as the previously defined ones.
+
+Lastly, we have implemented the Spherical family of covariance functions,
+defined as
+\[
+C(h; \sigma^2, \phi) = 
+\sigma^2 
+\begin{cases}
+1 - \frac{3}{2} (h / \phi) + \frac{1}{2} (h / \phi) ^ 3 & , \,
+0 \geq h \geq \phi \\
+0 & , \, h > \phi,
+\end{cases}
+\]
+where, again, $\sigma^2$ is a variance parameter, while $\phi > 0 $ is a
+parameter with the same magnitude as the distances on which the function is
+being evaluated at.  
+
+All this functions will be useful in the upcoming vignette.
+
+# Reference
