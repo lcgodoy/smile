@@ -92,13 +92,59 @@
 
     
     
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://lcgodoy.me/spmismo">spmismo</a></span><span class="op">)</span></code></pre></div>
+<!-- To exemplify the covariance functions, we are going to use the data from -->
+<!-- @johnson2020dealing again^[for more details about the data, take a look at the -->
+<!-- vignette -->
+<!-- [sf-to-spm](https://lcgodoy.me/spmismo/articles/sf_to_spm.html)]. First, in the -->
+<!-- code cunk below, we load the data and convert it to a `spmismo` compatible -->
+<!-- class. Since this is a toy example, we are going to generate a 500 points grid -->
+<!-- for the data. -->
+<p>in this short vignette, we illustrate the family of spatial covariance functions implemented in this package. Note that, all of them are based on the assumptions of stationarity and isotropy of the underlying Gaussian Random Field (GRF). Also, the implementations (and definitions) are based on the families of spatial <em>correlation</em> functions presented in <span class="citation">Diggle and Ribeiro (2007)</span>. The implemtations make use of the <code>RcppArmadillo</code> <span class="citation">(Eddelbuettel and Sanderson 2014)</span> package and the STL library algorithms (C++ 11)<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>.</p>
+<p>The first spatial covariance family implemented is the so-called Mat'ern Covariance function, it is of form <span class="math display">\[
+C(h; \sigma^2, \phi, \kappa) = \sigma^2 frac{(h / \phi)^{\kappa} K_{\kappa}( h / \phi )}
+{ 2^{\kappa - 1} \Gamma(\kappa) },
+\]</span> where <span class="math inline">\(h\)</span> is the distance between two points, <span class="math inline">\(\sigma^2\)</span> is analogous to a variance parameter, <span class="math inline">\(\phi\)</span> is the scale parameter that controls the rech of the spatial dependence, and <span class="math inline">\(\kappa\)</span> is a shape parameter that controls the differentiability of the process. The function <span class="math inline">\(K_{\kappa}(\cdot)\)</span> is the <span class="math inline">\(\kappa\)</span>-order Modified Bessel function of Second-Kind There are special cases of the Mat'er family implemented on the package, when setting <span class="math inline">\(\kappa\)</span> to <span class="math inline">\(1/2\)</span>, <span class="math inline">\(3/2\)</span>, <span class="math inline">\(5/2\)</span>, or <span class="math inline">\(\infty\)</span> the expression simplifies. The first and the last cases yields to the Exponential and Gaussian family, respectively.</p>
+<p>The second spatial covariance family implemented is the Powered Exponential Covariance function, it is defined as <span class="math display">\[
+C(h; \sigma^2, \phi, \kappa) = \sigma^2 \exp \{ - (h / \phi)^{\kappa} \},
+\]</span> where <span class="math inline">\(h\)</span> is the distance between two points, <span class="math inline">\(\sigma^2\)</span> is analogous to a variance parameter, <span class="math inline">\(\phi\)</span> is the scale parameter that controls the rech of the spatial dependence, and <span class="math inline">\(\kappa\)</span> is a shape parameter that controls the differentiability of the process.</p>
+<p>The penultimate option is the Gaussian family of covariance functions, they are defined as <span class="math display">\[
+C(h; \sigma^2, \phi) = \sigma^2 \exp \left\{ - \frac{h ^ 2}{2 \phi ^ 2} \right\},
+\]</span> the parameters are analogous to those defined by the previous two families. Note that, this family has one less parameter as the previously defined ones.</p>
+<p>Lastly, we have implemented the Spherical family of covariance functions, defined as <span class="math display">\[
+C(h; \sigma^2, \phi) = 
+\sigma^2 
+\begin{cases}
+1 - \frac{3}{2} (h / \phi) + \frac{1}{2} (h / \phi) ^ 3 &amp; , \,
+0 \geq h \geq \phi \\
+0 &amp; , \, h &gt; \phi,
+\end{cases}
+\]</span> where, again, <span class="math inline">\(\sigma^2\)</span> is a variance parameter, while $&gt; 0 $ is a parameter with the same magnitude as the distances on which the function is being evaluated at.</p>
+<p>All this functions will be useful in the upcoming vignette.</p>
+<div id="reference" class="section level1 unnumbered">
+<h1 class="hasAnchor">
+<a href="#reference" class="anchor"></a>Reference</h1>
+<div id="refs" class="references">
+<div id="ref-diggle2007model">
+<p>Diggle, PJ, and Paulo Justiniano Ribeiro. 2007. “Model-Based Geostatistics (Springer Series in Statistics).” In, 51–56. Springer.</p>
+</div>
+<div id="ref-eddelbuettel2014rcpparmadillo">
+<p>Eddelbuettel, Dirk, and Conrad Sanderson. 2014. “RcppArmadillo: Accelerating R with High-Performance C++ Linear Algebra.” <em>Computational Statistics &amp; Data Analysis</em> 71: 1054–63.</p>
+</div>
+</div>
+</div>
+<div class="footnotes">
+<hr>
+<ol>
+<li id="fn1"><p>during my experiences, the implementation using the sequencial algorithms of the STL library was more effitient than using the <code>RcppParallel</code> package<a href="#fnref1" class="footnote-back">↩︎</a></p></li>
+</ol>
+</div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
 
-      </div>
+        <nav id="toc" data-toggle="toc"><h2 data-toc-skip>Contents</h2>
+    </nav>
+</div>
 
 </div>
 
