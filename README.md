@@ -7,7 +7,6 @@
 
 [![Lifecycle:
 experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
-<https://img.shields.io/github/downloads/lcgodoy/spmismo/total.svg>
 <!-- badges: end -->
 
 The goal of spmismo is to …
