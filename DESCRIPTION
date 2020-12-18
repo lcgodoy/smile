@@ -30,5 +30,6 @@ BugReports: https://github.com/lcgodoy/spmismo/issues
 Suggests: 
     knitr,
     rmarkdown,
-    ggplot2
+    ggplot2,
+    graphics
 VignetteBuilder: knitr

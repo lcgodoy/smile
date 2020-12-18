@@ -1,0 +1,20 @@
+---
+title: "2. Spatial covariance functions"
+output: rmarkdown::html_vignette
+bibliography: biblio.bib
+vignette: >
+  %\VignetteIndexEntry{2. Spatial covariance functions}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(spmismo)
+```

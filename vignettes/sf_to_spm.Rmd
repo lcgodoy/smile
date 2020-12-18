@@ -1,5 +1,5 @@
 ---
-title: "Converting sf objects to spm"
+title: "1. Converting sf objects to spm"
 output: rmarkdown::html_vignette
 bibliography: biblio.bib
 vignette: >
@@ -35,7 +35,7 @@ respectively.
 The methods developed in this package are heavily based on the theory developed
 in @johnson2020dealing. The main assumption is that continuous random variables
 observed in polygons (like administrative regios) are composed by the average of
-an stationary and isotropic underlying Gaussian Random Field [@hue2005gaussian]
+an stationary and isotropic underlying Gaussian Random Field [@rue2005gaussian]
 plus a Gaussian "Residual". In practice, there exists an identifiability when
 estimating some variance parameters, which can be seen either as small scale
 variation (nugget effect) or measurement errors.  
@@ -69,6 +69,157 @@ between the (averaged) variable observed at $A_1$ and $A_2$ is define as
 \]
 In order to approximate the continuous surface on which these covariances have
 to be computed, we generate a fine grid over the whole study region (or a fine
-grid within each MSOA) and approximate such covariance by numerical integration.
+grid within each MSOA) and approximate such covariance by numerical integration.  
+
+This is were we use the `sf_to_spm` function. This functions is enhanced by the
+`st_sample` function from the `sf` package. This function allows us to input
+either a single `sf` (POLYGON) object or two `sf` objects. The former only makes
+sense if the two `sf` objects form different partitions of the same region.  
+
+Firstly, we are going to show how does it work with a single `sf`
+object. Besides the `sf` objects, this function has 5 additional arguments. The
+first one, called `n_pts`, controls the number of points we are going to
+generate to create a grid within the study region. We can input either a single
+(integer) value or a vector with length equal to the number of rows of the `sf`
+objected being analyzed. The next parameter is called `type`. This one is string
+scalar that assumes either `"random"`, `"regular"`, or `"hexagonal"`. Finally,
+the parameter `by_polygon` is a logical that if set to `TRUE`, will generate
+`n_pts` for each polygon within the study region^[This parameter has to be set
+to `TRUE` when `n_pts` is a vector.]. The last two parameters are `poly_ids` and
+`var_ids`. Both are strings, the first one is a scalar representing the variable
+that uniquely identify each polygon within the study region, while the second
+one indicates which (numerical) variables we want to analyze. For example, in
+the code chunk below, we are transforming the `sf` object `liv_msoa` into a
+`spmismo` compatible object. We are going to generate a grid of 1000 points
+within the study region, with `type = "regular"`, and `by_polygon = FALSE`. The
+id variable is called `"msoa11cd"` and the numerical variable that we are
+interested in is called `"leb_est"`. The object returned by the function is of
+class `"sspm"`^[when we use more than one partition, the resulting class is
+`"mspm"`]. Under the hood, this object is a 5 positions named list. The first
+position is called `"var"` and stores the numerical variable (or variables) to
+be analyzed. The second position is named `"dists"` and stores the pairwise
+distances between points belonging to different polygons, this object is
+important to calculate the covariance matrix associated with the polygons. The
+third positions stores the name of the id variable, while the fourth and fifth
+positions contain the grid of points generated and the polygon associated with
+the data. All these objects are used in functions that will be explained further
+in other vignettes.  
+
+The code of chunk below displays the generated grid coloring each point
+belonging to this grid accordign to the polygon they "belong to".
+```{R sf-to-spm1}
+msoa_spm <-
+    sf_to_spm(sf_obj1 = liv_msoa, n_pts = 1000,
+              type = "regular", by_polygon = FALSE,
+              poly_ids = "msoa11cd", var_ids = "leb_est")
+
+ggplot(data = msoa_spm$grid,
+       aes(color = msoa11cd)) +
+    geom_sf(pch = 15) +
+    guides(color = FALSE) +
+    theme_minimal()
+```
+
+Next, we illustrate how do different values of `type` and `by_polygon` affect
+the final result of the `sf_to_spm` call. In all examples we are going to use a
+grid of 732 points (multiple of the number of polygons observed). The "sparsity"
+of the points forming the grid helps to see the differences caused by the
+different inputs for the function. The panel below displays every possible
+combination of the parameters `type` and `by_polygon`. Although there is no
+"right" choice for these parameters, we advise using `type` as `"regular"` or
+`"hexagonal"` with by `by_polygon = FALSE`. Also, it is import to make sure
+that, after generating the grid, your grid is in a finer resolution than your
+smallest polygon, that is, to make sure that there exists no points lying in
+more than one polygon.
+```{R sf-to-spm2, echo = FALSE}
+set.seed(123)
+
+msoa_spm1 <-
+    sf_to_spm(sf_obj1 = liv_msoa, n_pts = 732,
+              type = "random", by_polygon = FALSE,
+              poly_ids = "msoa11cd", var_ids = "leb_est")
+
+msoa_spm2 <-
+    sf_to_spm(sf_obj1 = liv_msoa, n_pts = 732,
+              type = "regular", by_polygon = FALSE,
+              poly_ids = "msoa11cd", var_ids = "leb_est")
+
+msoa_spm3 <-
+    sf_to_spm(sf_obj1 = liv_msoa, n_pts = 732,
+              type = "hexagonal", by_polygon = FALSE,
+              poly_ids = "msoa11cd", var_ids = "leb_est")
+
+msoa_spm4 <-
+    sf_to_spm(sf_obj1 = liv_msoa, n_pts = 732/61,
+              type = "random", by_polygon = TRUE,
+              poly_ids = "msoa11cd", var_ids = "leb_est")
+
+msoa_spm5 <-
+    sf_to_spm(sf_obj1 = liv_msoa, n_pts = 732/61,
+              type = "regular", by_polygon = TRUE,
+              poly_ids = "msoa11cd", var_ids = "leb_est")
+
+msoa_spm6 <-
+    sf_to_spm(sf_obj1 = liv_msoa, n_pts = 732/61,
+              type = "hexagonal", by_polygon = TRUE,
+              poly_ids = "msoa11cd", var_ids = "leb_est")
+
+to_plot <- rbind(
+    transform(msoa_spm1$grid, type = "random", by_polygon = FALSE),
+    transform(msoa_spm2$grid, type = "regular", by_polygon = FALSE),
+    transform(msoa_spm3$grid, type = "hexagonal", by_polygon = FALSE),
+    transform(msoa_spm4$grid, type = "random", by_polygon = TRUE),
+    transform(msoa_spm5$grid, type = "regular", by_polygon = TRUE),
+    transform(msoa_spm6$grid, type = "hexagonal", by_polygon = TRUE),
+    deparse.level = 1
+    )
+
+rm(list = ls(pattern = "^msoa_spm")); gc(verbose = FALSE, full = TRUE)
+
+ggplot(data = to_plot,
+       aes(color = msoa11cd)) +
+    guides(color = FALSE) +
+    geom_sf(pch = 15) +
+    facet_grid(by_polygon ~ type, labeller = label_both) +
+    theme_bw()
+```
+
+Lastly, we show two additional examples of usage of the `sf_to_spm`
+function. The first one, using the IMD data at the LSOA level, we show how to
+proceed when analysing more than one random variable. In the code chunk below,
+we load the data and convert it to an `spmismo` compatible object using a
+regular grid of 1500 points. We also inform the software that we are interested
+in analyzing two variables within this dataset, the variables `"imdscore"` and
+`"male"`, respectively^[This is just an illustrative example.].
+```{R sf-to-spm3, eval = FALSE}
+data(liv_lsoa)
+
+msoa_spm <-
+    sf_to_spm(sf_obj1 = liv_lsoa, n_pts = 1500,
+              type = "regular", by_polygon = FALSE,
+              poly_ids = "lsoa11cd",
+              var_ids = c("imdscore", "male"))
+```
+
+Finally, to code chunk below displays the situation on which we input two `sf`
+objects, representing two partitions of the same space, to the `sf_to_spm`
+function. There are some key changes in here, parameters that were scalars
+before, now turn into vectors or lists. For instance, `n_pts` now is a list such
+that its first position is about the `sf_obj1` and its second position stores
+information about the grid of points to be generated for `sf_obj2`. Yes, we can
+generate two different grids in here. This is useful especially when the two
+datasets analysed are in very different scales, allowing us to use a more sparse
+grid for the dataset with "smaller" resolution. This brings computational
+improvements because we end up dealing with covariance matrices of lower
+dimensions. Please, refer to the documentation of the function for further
+details.
+```{R sf-to-spm4, eval = FALSE}
+mult_spm <-
+    sf_to_spm(sf_obj1 = liv_msoa, sf_obj2 = liv_lsoa,
+              n_pts = list(750, 1500),
+              type = "regular", by_polygon = FALSE,
+              poly_ids = c("msoa11cd", "lsoa11cd"),
+              var_ids = list("leb_est", "imdscore"))
+```
 
 # References

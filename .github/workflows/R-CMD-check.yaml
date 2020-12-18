@@ -72,6 +72,11 @@ jobs:
             eval sudo $cmd
           done < <(Rscript -e 'writeLines(remotes::system_requirements("ubuntu", "16.04"))')
 
+      - name: Install spatial dependencies
+        if: runner.os == 'Linux'
+        run: |
+	  apt-get install libudunits2-dev libgdal-dev libgeos-dev libproj-dev 
+	  
       - name: Install dependencies
         run: |
           remotes::install_deps(dependencies = TRUE)
