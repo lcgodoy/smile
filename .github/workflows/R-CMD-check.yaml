@@ -86,7 +86,7 @@ jobs:
 
       - name: Install system dependencies
         if: runner.os == 'Linux'
-	env:
+        env:
           RHUB_PLATFORM: linux-x86_64-ubuntu-gcc
         run: |
           Rscript -e "remotes::install_github('r-hub/sysreqs')"
