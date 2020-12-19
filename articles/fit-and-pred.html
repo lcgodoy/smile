@@ -168,10 +168,10 @@
 <span class="co">#&gt;  optimization algorithm converged: yes </span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt;     par  estimate        se               ci</span>
-<span class="co">#&gt; 1 alpha 75.944881 0.6759939 [74.620; 77.270]</span>
-<span class="co">#&gt; 2 omega  3.192379 0.3791221   [2.449; 3.935]</span>
-<span class="co">#&gt; 3 sigsq  9.374515 0.6117531  [8.176; 10.574]</span>
-<span class="co">#&gt; 4   phi  1.676646 0.1858894   [1.312; 2.041]</span></code></pre></div>
+<span class="co">#&gt; 1 alpha 75.953167 0.7107775 [74.560; 77.346]</span>
+<span class="co">#&gt; 2 omega  2.975281 0.2950354   [2.397; 3.554]</span>
+<span class="co">#&gt; 3 sigsq  9.707002 0.5058599  [8.716; 10.698]</span>
+<span class="co">#&gt; 4   phi  1.712900 0.1495296   [1.420; 2.006]</span></code></pre></div>
 <p>Finally, now we are going to perform predictions of the LEB at the LSOA level. To do so, we use the function <code>predict_spm</code>. The <code>x</code> argument gives the sf on which we want to make the predictions according to the <code>sbm_obj</code>, which represents the estimated parameters. Now, take a look at the remaining arguments. The last two, are analogous to what we have seen for the function <code>sf_to_spm</code>. They are concerning the grid generated over the study region, now we going to make predicitons over this grid. I set it to 2500 to “approximate” a continuous region<a href="#fn4" class="footnote-ref" id="fnref4"><sup>4</sup></a>. The argument <code>.aggregate</code> if set to <code>TRUE</code>, computes the predictions over the polygons from the input <code>x</code> (in this case <code>liv_lsoa</code>). This function also works if the input is a <code>sf</code> object with POINT geometries. The objects returned by the function <code>pred_lsoa</code> are lists with the following elements: 1) <code>mu_pred</code> - a vector with the predicted average for each location in the generated grid; 2) <code>sig_pred</code> the variance covariance matrix associated with the same grid; 3) the predictions (and standard errors) organized in an <code>sf</code> object to facilitate the visualization of the predictions over a (almost) continuous space; and 4) <code>pred_agg</code> which is returned only if we set <code>.aggregate = TRUE</code>. The last one contains the predictions and their standard erros integrated over the “new regions”.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">pred_lsoa</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/predict_spm.html">predict_spm</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">liv_lsoa</span>, spm_obj <span class="op">=</span> <span class="va">fit_msoa</span>,
@@ -255,11 +255,11 @@
 <span class="co">#&gt; </span>
 <span class="co">#&gt;  optimization algorithm converged: yes </span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt;     par   estimate         se                 ci</span>
-<span class="co">#&gt; 1 alpha  38.869954 23.8771694   [-7.928; 85.668]</span>
-<span class="co">#&gt; 2 omega  79.512335  0.1549711   [79.209; 79.816]</span>
-<span class="co">#&gt; 3 sigsq 345.844268  2.8314723 [340.295; 351.394]</span>
-<span class="co">#&gt; 4   phi   1.532056  0.1139309     [1.309; 1.755]</span></code></pre></div>
+<span class="co">#&gt;     par   estimate          se                 ci</span>
+<span class="co">#&gt; 1 alpha  39.189350 24.50294468   [-8.836; 87.214]</span>
+<span class="co">#&gt; 2 omega  78.732607  0.15734313   [78.424; 79.041]</span>
+<span class="co">#&gt; 3 sigsq 348.092013  2.36701550 [343.453; 352.731]</span>
+<span class="co">#&gt; 4   phi   1.556284  0.08539799     [1.389; 1.724]</span></code></pre></div>
 <p>Now we are going to perform predictions of the IMD at the MSOA level. Since from now on the process is pretty much the exam, the explanation will be shorter.</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">pred_msoa</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/predict_spm.html">predict_spm</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">liv_msoa</span>, spm_obj <span class="op">=</span> <span class="va">fit_lsoa</span>,
