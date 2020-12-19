@@ -1,5 +1,5 @@
 Package: spmismo
-Title: An R package to analyze spatially misaligned data.
+Title: An R package to analyze spatially misaligned data
 Version: 0.0.0.9000
 Authors@R: 
     person(given = "Lucas",

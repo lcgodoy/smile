@@ -33,7 +33,6 @@ First, in the code chunk below, we load the data and convert it to `spmismo`
 compatible classes. Since this is a toy example, we are going to generate a 500 
 points grid for the MSOA data and 5 points by polygon for the LSOA data.
 
-
 ```{R load-data}
 data(liv_msoa)
 data(liv_lsoa)
@@ -45,107 +44,278 @@ spm_msoa <-
               type    = "regular",
               by_polygon = FALSE,
               poly_ids = "msoa11cd",
-              var_ids  = "MLE")
+              var_ids  = "leb_est")
 
 ## lsoa to spm
 spm_lsoa <-
-    sf_to_spm(sf_obj1 = sf_b,
+    sf_to_spm(sf_obj1 = liv_lsoa,
               n_pts   = 5,
               type    = "regular",
               by_polygon = TRUE,
               poly_ids = "lsoa11cd",
-              var_ids  = "IMDScore")
+              var_ids  = "imdscore")
+```
+
+The map below shows the LEB observed at the MSOAs.
+```{R leb-msoa1}
+ggplot(data = liv_msoa,
+       aes(fill = leb_est)) +
+    geom_sf(color = 1, lwd = .1) +
+    scale_fill_viridis_c() +
+    theme_minimal()
+```
+
+The map below displays the IMD observed at the LSOAs.
+```{R imd-lsoa1}
+ggplot(data = liv_lsoa,
+       aes(fill = imdscore)) +
+    geom_sf(color = 1, lwd = .1) +
+    scale_fill_viridis_c() +
+    theme_minimal()
 ```
 
 ## Fit at MSOA, prediction at LSOA
 
-
+Using as starting parameters $\alpha = 70$ (average of $Y$), $\omega = 1$ (can
+be seen as a nugget effect), $\sigma^2$ (variance parameter for the powered
+exponential family), and $\phi = 1$ (paramter that controls the range os spatial
+dependence, 1 here represents 1_km_). We are going to compute the Maximum
+Likelihood estimates considering a Powered Exponential covariance function to
+the data, with $\kappa = 1.5$^[This parameter is known to be hard to be
+estimated in the literature of geostatistics.].  Note that, it is important for
+this inputing vector to be a named vector, because some functions track the
+parameters by their names. 
 ```{R fit-pred-1}
-theta_st_lsoa <-
+theta_st_msoa <-
     c("alpha" = 70, "omega" = 1,
       "sigsq" = 1, "phi" = 1)
 
 fit_msoa <-
-    fit_spm(x = spm_lsoa,
-            theta_st = theta_st_lsoa,
+    fit_spm(x = spm_msoa,
+            theta_st = theta_st_msoa,
             model = "pexp",
             kappa = 1.5,
             apply_exp = TRUE,
             control   = list(maxit = 500))
+```
 
-summary_sspm_fit(fit_y)
+After a few seconds, we get the Results. Now, we can use the function
+`summary_sspm_fit` to get the summary of the results. The function prints a
+table containing the estimates, their standard errors, and `1 - sig` confidence
+interval based on the asymptotic normality of the MLEs. The function also prints
+a message indicating if the optimization algorithm has converged^[The default
+algorithm used by the package is the Nelder-Mead, this can easily be changed by
+setting the parameter `opt_method = "L-BFGS-B"`, for example.].
+```{R summary-fit1}
+summary_sspm_fit(fit_msoa, sig = .05)
+```
 
-pred_y <- predict_spm(x = fit_y)
+Finally, now we are going to perform predictions of the LEB at the LSOA
+level. To do so, we use the function `predict_spm`. The `x` argument gives the
+sf on which we want to make the predictions according to the `sbm_obj`, which
+represents the estimated parameters. Now, take a look at the remaining
+arguments. The last two, are analogous to what we have seen for the function
+`sf_to_spm`. They are concerning the grid generated over the study region, now
+we going to make predicitons over this grid. I set it to 2500 to "approximate" a
+continuous region^[Be careful here, a very large number of points can result in
+intractable covariance matrices]. The argument `.aggregate` if set to `TRUE`,
+computes the predictions over the polygons from the input `x` (in this case
+`liv_lsoa`). This function also works if the input is a `sf` object with POINT
+geometries. The objects returned by the function `pred_lsoa` are lists with the
+following elements: 1) `mu_pred` - a vector with the predicted average for each
+location in the generated grid; 2) `sig_pred` the variance covariance matrix
+associated with the same grid; 3) the predictions (and standard errors)
+organized in an `sf` object to facilitate the visualization of the predictions
+over a (almost) continuous space; and 4) `pred_agg` which is returned only if we
+set `.aggregate = TRUE`. The last one contains the predictions and their
+standard erros integrated over the "new regions".
+```{R predict-fit1}
+pred_lsoa <- predict_spm(x = liv_lsoa, spm_obj = fit_msoa,
+                         .aggregate = TRUE, n_pts = 2500,
+                         type = "regular")
+```
 
-plot(pred_y$pred_grid[c("mu_pred", "se_pred")],
-     pch = 19)
+Now, let's make some data manipulation to make the visualization look nicer. We
+are going to stack all the data to make it easier to plot them all together
+using ggplot2. The next map whos the predictions.
+```{R manip-pred-1}
+aux_viz1 <- vector(mode   = "list",
+                   length = 4)
 
-pred_y <- predict_spm(x = sf_b, spm_obj = fit_y,
-                      .aggregate = TRUE, n_pts = 5000,
-                      type = "hexagonal")
+aux_viz1[[1]] <- transform(pred_lsoa$pred_grid["mu_pred"],
+                           surface  = "continuous",
+                           variable = "prediction")
+names(aux_viz1[[1]])[1] <- "value"
+aux_viz1[[2]] <- transform(pred_lsoa$pred_grid["se_pred"],
+                           surface  = "continuous",
+                           variable = "se")
+names(aux_viz1[[2]])[1] <- "value"
+aux_viz1[[3]] <- transform(pred_lsoa$pred_agg["mu_pred"],
+                           surface  = "aggregated",
+                           variable = "prediction")
+names(aux_viz1[[3]])[1] <- "value"
+aux_viz1[[4]] <- transform(pred_lsoa$pred_agg["se_pred"],
+                           surface  = "aggregated",
+                           variable = "se")
+names(aux_viz1[[4]])[1] <- "value"
 
-plot(pred_y$pred_agg, pch = 15)
+aux_viz1 <- do.call("rbind", aux_viz1)
 
-##--- testing x ----
+ggplot(data = aux_viz1[aux_viz1$variable == "prediction",],
+       aes(fill  = value,
+           color = value)) +
+    geom_sf(data = st_geometry(pred_lsoa$pred_agg), color = 1,
+            lwd = .1, inherit.aes = FALSE) +
+    geom_sf(pch = 15) +
+    scale_fill_viridis_c() +
+    scale_color_viridis_c() +
+    guides(color = FALSE) +
+    facet_wrap(surface ~ .) +
+    theme_bw()
+```
 
+The next one displays the standard errors for the predictions. Clearly, we have
+less variability in the neighborhoods on which we have small polygons.
+```{R se-ggplot1}
+ggplot(data = aux_viz1[aux_viz1$variable == "se",],
+       aes(fill  = value,
+           color = value)) +
+    geom_sf(data = st_geometry(pred_lsoa$pred_agg), color = 1,
+            lwd = .1, inherit.aes = FALSE) +
+    geom_sf(pch = 15) +
+    scale_fill_viridis_c() +
+    scale_color_viridis_c() +
+    guides(color = FALSE) +
+    facet_wrap(surface ~ .) +
+    theme_bw()
+```
 
+```{R rm-obj1, echo = TRUE}
+rm(aux_viz1, pred_lsoa, fit_msoa)
+invisible(gc(full = TRUE))
+```
 
-plot(spm_x$grid, pch = 15)
+## Fit at LSOA, predict at MSOA
 
-fit_x <-
-    fit_spm(x = spm_x,
-            theta_st  = c("alpha" = 25, "omega" = 1,
-                          "sigsq" = 1, "phi" = 1),
+Using as starting parameters $\alpha = 25$ (average of $Y$), $\omega = 1$ (can
+be seen as a nugget effect), $\sigma^2$ (variance parameter for the powered
+exponential family), and $\phi = 1$ (paramter that controls the range os spatial
+dependence, 1 here represents 1_km_). We are going to compute the Maximum
+Likelihood estimates considering a Matern covariance function to the data, with
+$\kappa = 2.5$.
+
+```{R fit-pred-2}
+theta_st_lsoa <-
+    c("alpha" = 25, "omega" = 1,
+      "sigsq" = 1, "phi" = 1)
+
+fit_lsoa <-
+    fit_spm(x = spm_lsoa,
+            theta_st = theta_st_lsoa,
             model = "matern",
-            kappa = .5,
+            kappa = 2.5,
             apply_exp = TRUE,
             control   = list(maxit = 500))
+```
 
-summary_sspm_fit(fit_x)
+After a few seconds, we get the Results. Now, we can use the function
+`summary_sspm_fit` again to summarise the estimated parameters. 
+```{R summary-fit2}
+summary_sspm_fit(fit_lsoa, sig = .05)
+```
 
-pred_x <- predict_spm(x = fit_x)
+Now we are going to perform predictions of the IMD at the MSOA level. Since from
+now on the process is pretty much the exam, the explanation will be shorter.
+```{R predict-fit2}
+pred_msoa <- predict_spm(x = liv_msoa, spm_obj = fit_lsoa,
+                         .aggregate = TRUE, n_pts = 2500,
+                         type = "regular")
+```
 
-plot(pred_x$pred_grid[c("mu_pred", "se_pred")],
-     pch = 19)
+Now, let's make some data manipulation to again. Note that, the predictions for
+this variable have more
+```{R manip-pred-2}
+aux_viz2 <- vector(mode   = "list",
+                   length = 4)
 
-pred_x <- predict_spm(x = sf_a, spm_obj = fit_x,
-                      .aggregate = TRUE, n_pts = 5000,
-                      type = "regular")
+aux_viz2[[1]] <- transform(pred_msoa$pred_grid["mu_pred"],
+                           surface  = "continuous",
+                           variable = "prediction")
+names(aux_viz2[[1]])[1] <- "value"
+aux_viz2[[2]] <- transform(pred_msoa$pred_grid["se_pred"],
+                           surface  = "continuous",
+                           variable = "se")
+names(aux_viz2[[2]])[1] <- "value"
+aux_viz2[[3]] <- transform(pred_msoa$pred_agg["mu_pred"],
+                           surface  = "aggregated",
+                           variable = "prediction")
+names(aux_viz2[[3]])[1] <- "value"
+aux_viz2[[4]] <- transform(pred_msoa$pred_agg["se_pred"],
+                           surface  = "aggregated",
+                           variable = "se")
+names(aux_viz2[[4]])[1] <- "value"
 
-plot(pred_x$pred_grid[c("mu_pred", "se_pred")], pch = 15)
+aux_viz2 <- do.call("rbind", aux_viz2)
 
-plot(pred_x$pred_agg)
+ggplot(data = aux_viz2[aux_viz2$variable == "prediction",],
+       aes(fill  = value,
+           color = value)) +
+    geom_sf(data = st_geometry(pred_msoa$pred_agg), color = 1,
+            lwd = .1, inherit.aes = FALSE) +
+    geom_sf(pch = 15) +
+    scale_fill_viridis_c() +
+    scale_color_viridis_c() +
+    guides(color = FALSE) +
+    facet_wrap(surface ~ .) +
+    theme_bw()
+```
 
-##--- testing  x, y ----
+The next one displays the standard errors for the predictions. 
+```{R se-ggplot2}
+ggplot(data = aux_viz2[aux_viz2$variable == "se",],
+       aes(fill  = value,
+           color = value)) +
+    geom_sf(data = st_geometry(pred_msoa$pred_agg), color = 1,
+            lwd = .1, inherit.aes = FALSE) +
+    geom_sf(pch = 15) +
+    scale_fill_viridis_c() +
+    scale_color_viridis_c() +
+    guides(color = FALSE) +
+    facet_wrap(surface ~ .) +
+    theme_bw()
+```
 
-plot(spm_xy$x$grid, pch = 15)
+## "Joint" model
 
-plot(spm_xy$y$grid, pch = 15)
+For more details see this [link](lcgodoy.me/spmismo/theory.html).  
 
+No we are going to model the two variables together. Besides an additional
+variance parameter, for this model we have an additional intercept and a $\beta$
+parameter that measures how associated the two variables are (at the continuous
+process scale). First, we create a `spm` object contaning the info about both
+variables, as described in this [vignette](lcgodoy.me/spmismo/theory.html).
+```{R spm-msoa-lsoa, eval = FALSE}
+## joint spm object
+spm_xy <-
+    sf_to_spm(sf_obj1 = liv_msoa,
+              sf_obj2 = liv_lsoa,
+              n_pts   = list(500, 5),
+              type    = "regular",
+              by_polygon = c(FALSE, TRUE),
+              poly_ids = list("msoa11cd", "lsoa11cd"),
+              var_ids  = list("leb_est", "imdscore"))
+```
+
+Now, we can fit the model using the same `fit_spm` function. Here, we are using
+the Exponential covariance function. Also, pay attention the the different
+starting parameters forthe vector `theta_xy`.
+
+```{R mult-fit, eval = FALSE}
 theta_xy <-
-    c("alpha" = 60, "beta" = -1,
-      "gamma" = 30, "omega" = 50,
-      ## "omega2" = .5, "omega3" = 1,
-      "sigsq" = 5, "phi" = 2,
-      "nusq" = 100)
-
-debugonce(spmismo:::mult_log_lik)
-
-aa <-
-    spmismo:::mult_log_lik(theta = theta_xy,
-                           .dt = list(spm_xy$y$var,
-                                      spm_xy$x$var),
-                           dists = list(spm_xy$y$dists,
-                                        spm_xy$x$dists,
-                                        spm_xy$cdist),
-                           model = "pexp",
-                           kappa = 1.5,
-                           apply_exp = TRUE)
-
-
-p <- 1
-(2 * p + 4 + (0.5 * p * (p + 1)))
-length(theta_xy)
+    c("alpha" = 60, "beta" = 2,
+      "gamma" = 30, "omega" = 10,
+      "sigsq" = 1, "phi" = 3,
+      "nusq" = 10)
 
 fit_xy <-
     fit_spm(x = spm_xy,
@@ -153,22 +323,24 @@ fit_xy <-
             model = "matern",
             kappa = .5,
             apply_exp = TRUE,
-            control   = list(maxit = 700))
+            control   = list(maxit = 1000))
 ```
 
-
-## Y | X
-
-```{R spm-msoa-lsoa}
-## both to spm
-spm_xy <-
-    sf_to_spm(sf_obj1 = sf_a,
-              sf_obj2 = sf_b,
-              n_pts   = list(1700, 5),
-              type    = "regular",
-              by_polygon = c(FALSE, TRUE),
-              poly_ids = list("msoa11cd", "lsoa11cd"),
-              var_ids  = list("MLE", "IMDScore"))
+Now, we use the same summary function to verify the results as follows.
+```{R summary-mult, eval = FALSE}
+summary_sspm_fit(fit_xy, sig = .05)
 ```
+
+Note that, for this scenario the optimization algorithm has not converged. For
+this reason, I set, temporarily, the `eval` option to `FALSE` for the three last
+chunks of code. 
+
+This needs to be further investigated.
+
+> P.S.: For all estimation problems we have used the parameter `apply_exp =
+> TRUE`, which implies that the parameters that cannot assume negative values
+> have to be exponentiated. This makes the optimization process easier. The only
+> care that we need to take is that we need to use the Delta Method to Transform
+> the Information Matrix accordingly.
 
 # Reference

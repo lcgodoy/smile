@@ -324,7 +324,7 @@ predict_spm.sf <- function(x, spm_obj, .aggregate = TRUE,
         se_pred_y <- sqrt(diag(sig_pred_y))
     }
     
-    pred_grid <- transform(sf::st_sf(pred_grid),
+    pred_grid <- transform(sf::st_sf(geometry = pred_grid),
                            mu_pred = mean_pred_y,
                            se_pred = se_pred_y)
     

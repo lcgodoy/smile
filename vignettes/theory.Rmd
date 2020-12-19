@@ -15,6 +15,8 @@ knitr::opts_chunk$set(
 )
 ```
 
+> What I did for this package was based on the work from @johnson2020dealing.
+
 # Theoretical Background
 
 ## Univariate $Y$ and no $X$
@@ -180,5 +182,17 @@ D^{\top} \Sigma^{-1}_X ( \mathbf{x} - \gamma \cdot \mathbf{1}_m) \\
 \end{align*}
 come from standard theoremos involving the multivariate normal
 [@ravishanker2020first].
+
+# Limitations and Further Work
+
+It is known from the literature of geostatistics, that the small scale variance
+parameters are hard to be estimated due to identifiability problems, unless the
+researcher knows, for example, the ratio of the variance and this effect. This
+parameters, for the considered models, are $\omega$, $\tau^2$, and
+$\Omega$. This last one is not properly a nugget effect, since it can also
+includes terms of covariance between variables.  
+
+Different methods of estimation need to be implemented and the problem needs to
+be further examined.
 
 # Reference

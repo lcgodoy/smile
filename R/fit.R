@@ -231,6 +231,6 @@ summary_sspm_fit <- function(x, sig = .05) {
 
 ##' @export
 print.mspm_fit <- function(x, ...) {
-    cat(summary_sspm_fit(x, ...))
+    summary_sspm_fit(x, ...)
 }
 

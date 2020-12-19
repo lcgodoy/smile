@@ -28,9 +28,9 @@ of stationarity and isotropy of the underlying Gaussian Random Field
 (GRF). Also, the implementations (and definitions) are based on the families of
 spatial _correlation_ functions presented in @diggle2007model. The implemtations
 make use of the `RcppArmadillo` [@eddelbuettel2014rcpparmadillo] package and the
-STL library algorithms (C++ 11)^[during my experiences, the implementation using
-the sequencial algorithms of the STL library was more effitient than using the
-`RcppParallel` package].
+STL library algorithms (C++ 11)^[for this problem, the implementation using the
+sequencial algorithms of the STL library were more effitient than those using
+the `RcppParallel` package].
 
 The first spatial covariance family implemented is the so-called Mat\'ern
 Covariance function, it is of form
