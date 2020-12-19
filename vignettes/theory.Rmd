@@ -85,7 +85,7 @@ where $\Omega$ is a covariance matrix (not necessarily a diagonal matrix).
 Then, using similar calculations, we have
 \[
 Y \sim N( \mathbf{1}_n \otimes \mathbf{\alpha}, 
-\mathbf{J}_p \otimes \Sigma{A} + \mathbf{I}_n \otimes \Omega \),
+\mathbf{J}_p \otimes \Sigma{A} + \mathbf{I}_n \otimes \Omega ),
 \]
 where $\Sigma_{A}$ is defined analogously as the variance and covariance matrix
 of the univariate $Y$, $\mathbf{1}_n$ is a vector of ones, $\mathbf{J}_p$ is a
