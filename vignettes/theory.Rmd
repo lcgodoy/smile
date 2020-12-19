@@ -1,0 +1,184 @@
+---
+title: "4. Theory"
+output: rmarkdown::html_vignette
+bibliography: biblio.bib
+vignette: >
+  %\VignetteIndexEntry{4. Theory}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+# Theoretical Background
+
+## Univariate $Y$ and no $X$
+
+Let $\{ U(\mathbf{x}) \,:\, x \in D \subset \mathbb{R}^2 \}$ (being $D$ the
+whole region of study, tipically a city) be a stationary and isotropic Gaussian
+Random Field [@rue2005gaussian] with mean constant and equal to zero over the
+space and covariance function $C(h; \mathbf{\theta})$, where $h$ is the
+euclidean distance between two given points within $D$, and $\mathbf{\theta}$ is
+the vector of parameters controling the spatial covariance structure of
+$U(\mathbf{x})$. Now, let $\mathbf{Y}$ to be a random variable observed at a
+partition of $D$ defined as $A = \{A_1, \dots, A_n \}$. Then, we define
+\[
+Y( A_i ) = \alpha + U( A_i ) + \epsilon_i, \, i = 1, ..., n,
+\]
+where
+\[
+U ( A_i ) = \frac{ 1 }{ \lvert A_i \rvert } \int_{A_i} U ( x ) \, dx,
+\]
+and $\epsilon_i \overset{iid}{\sim} N(0, \omega)$. Also, we assume $\epsilon
+\perp U$.  Therefore
+\[
+E[ Y ( A_i  )  ] = \alpha,
+\]
+and
+\begin{align*}
+Cov[ Y ( A_i ), Y ( A_j ) ] & = Cov[\alpha + U( A_i ) + \epsilon_i, \alpha + U(
+A_j ) + \epsilon_j] \\
+& = Cov[ U( A_i ), U( A_j ) ] 
+= Cov \left[ \frac{1}{\lvert A_i \rvert} \int_{A_i} U ( x ) \, dx,
+\frac{1}{\lvert A_j \rvert} \int_{A_j} U ( y ) \, dy \right] \\
+& =
+\frac{1}{\lvert A_i \rvert \lvert A_j \rvert} \int_{A_j} \int_{A_i}
+Cov \left[ U ( x ),
+U ( y )  \right]
+\, dx \, dy \\
+& = 
+\frac{1}{\lvert A_i \rvert \lvert A_j \rvert} \int_{A_j} \int_{A_i}
+C( \lVert x - y \rVert ; \theta) dx \, dy = f(A_i, A_j ; \theta).
+\end{align*}
+First, note that the Covariance function is a integral. Implying that, in the
+manipulations above, we are simply switching the order of the integrals. This is
+valid as long as the integrals are well defined (not equal to infinity). Also,
+when $i = j$, we have
+\[
+Var[ Y ( A_i ) ] = Cov[ Y ( A_i ), Y ( A_i ) ] = ... = \omega + \frac{1}{\lvert
+A_i \rvert \lvert A_i \rvert} \int_{A_i} \int_{A_i} C( \lVert x - y \rVert ;
+\theta) dx \, dy.
+\]
+
+## Multivariate $Y$ and no $X$
+
+Consider the process $\{ U(\mathbf{x}) \,:\, x \in D \subset \mathbb{R}^2 \}$
+having the same process as the one defined in the previous section, and a region
+of study $D$. Now, let $\mathbf{Y}$ to be a _p_-dimensional random variable
+observed at a partition of $D$ defined as $A = \{A_1, \dots, A_n \}$. Then, we
+define
+\[
+Y ( A_i )_k = \alpha_k + U( A_i ) + V_k, \, i = 1, \ldots, n, k = 1, \ldots, p,
+\]
+with $U \perp V$, and
+\[
+V_k \overset{iid}{\sim} N\left(\mathbf{0}, \Omega \right),
+\]
+where $\Omega$ is a covariance matrix (not necessarily a diagonal matrix).
+Then, using similar calculations, we have
+\[
+Y \sim N( \mathbf{1}_n \otimes \mathbf{\alpha}, 
+\mathbf{J}_p \otimes \Sigma{A} + \mathbf{I}_n \Omega \),
+\]
+where $\Sigma_{A}$ is defined analogously as the variance and covariance matrix
+of the univariate $Y$, $\mathbf{1}_n$ is a vector of ones, $\mathbf{J}_p$ is a
+matrix of ones, and $\mathbf{I}_n$ is a identity matrix.
+
+## General $Y$ and univariate $X$
+
+Let $\{ U(\mathbf{x}) \,:\, x \in D \subset \mathbb{R}^2 \}$ (being $D$ the
+whole region of study) be a stationary and isotropic Gaussian Random Field with
+covariance function $C(h; \mathbf{\theta})$, where $h$ is the euclidean distance
+between any two points within $D$, and $\mathbf{\theta}$ is the vector of
+parameters controling the spatial structure of $U(\mathbf{x})$. Now, let
+$\mathbf{Y}$ to be a $p$-dimensional random variable observed at a partition of
+$D$ defined as $A = \{A_1, \dots, A_n \}$ and $\mathbf{X}$ to be a random
+variable observed at a different partition of the same space denoted by $B =
+\{B_1, \dots, B_m \}$. We define each of these variables as follows
+\begin{equation}
+\label{eq:model_1}
+\left \{
+\begin{array}{l}
+Y_{ij} = \alpha_j + \beta_j U( A_i ) + V_{ij}, \, i = 1, \dots, n; \, j = 1, \dots, p \\
+X_{k} = \gamma + U( B_k ) + T_{k}, \, k = 1, \dots, m;
+\end{array} \right.
+\end{equation}
+where
+\[
+\begin{array}{l}
+U( A_i ) = \lvert A_i \rvert ^ {-1} \int_{A_i} U(\mathbf{s}) \, d \mathbf{s} \\
+U( B_k ) = \lvert B_k \rvert ^ {-1} \int_{B_k} U(\mathbf{s}) \, d \mathbf{s} \\
+V_{i} = (V_{i1}, \dots, V_{ip})' \overset{iid}{\sim} N(\mathbf{0}, \Omega) \\
+T_{k} = \overset{iid}{\sim} N(\mathbf{0}, \tau^2) \\
+T_{ij} \perp V_{kl} , \quad T_{ij} \perp U, \quad V_{kl} \perp U,
+\end{array}
+\]
+where $\Omega$ is a $p \times p$ matrix with entries $\omega_{ij}$, and $T$ ,
+$V$, and $U$ all independent of each other.
+
+Now, we have that the covariance structure of the underlying process on the
+observed polygons belonging to the partition $A$ is defined as
+\[
+( \Sigma_A )_{ij} = \frac{1}{\lvert A_i \rvert \lvert A_j \rvert} \int_{A_i}
+\int_{A_j} C(\Vert \mathbf{s}_1 - \mathbf{s}_1 \Vert) \, d \mathbf{s}_2 d
+\mathbf{s}_2 = f(A_i, A_j ; \theta),
+\]
+while the entries of the covariance matrix for the same process over the regions
+belonging to $B$ are given by
+\[
+( \Sigma_B )_{kl} =  f(B_k, B_l ; \theta),
+\]
+with $f( \cdot ; \theta)$ defined similarly.
+
+The covariance between $Y_{ij}$ and $Y_{i'j}$ is
+\[
+Cov(Y_{ij}, Y_{i'j}) = \beta^2_j f(A_i, A_{i'} ; \theta),
+\]
+Therefore, the covariance matrix associated with the random variable $\mathbf{Y}$ is
+\[
+\Sigma_Y = \mathbf{\beta} \mathbf{\beta}^{\top} \otimes \Sigma_A +
+\Omega \otimes \mathbf{I}_n,
+\]
+and
+\[
+\Sigma_X = \Sigma_B + \tau^2 \cdot \mathbf{I}_n.
+\]
+
+Moreover, the following "cross" covariance relationship between $Y_{j}$ and
+$X$ has entries
+\[
+(D_j)_{ik} = Cov(Y_{ij}, X_{k}) = \beta_j f(A_i, B_k ; \theta),
+\]
+with $D_j$ being $m \times n$.
+Thus, we define the "cross" covariance as
+\[
+D = \begin{pmatrix}
+D_1 & \cdots & D_p
+\end{pmatrix}^{\top} \in R^{m \times (p \cdot n)}
+\]
+
+Therefore, we can write the joint log-likelihood as
+\[
+l_{\mathbf{Y}\mathbf{X}}(\theta) = 
+l_{\mathbf{Y}|\mathbf{X}}(\theta) +
+l_{\mathbf{X}}(\theta),
+\]
+being here $\theta$ the vector of unknown parameters. With
+\[
+(\mathbf{Y} | \mathbf{X} = \mathbf{x}) \sim N(\mu_{Y|X}, \Sigma_{Y|X}),
+\]
+where
+\begin{align*}
+& \mu_{Y|X} = \mathbf{1}_n \otimes \mathbf{\alpha} + 
+D^{\top} \Sigma^{-1}_X ( \mathbf{x} - \gamma \cdot \mathbf{1}_m) \\
+& \Sigma_{Y|X} = \Sigma_Y - D^{\top} \Sigma^{-1}_X D,
+\end{align*}
+come from standard theoremos involving the multivariate normal
+[@ravishanker2020first].
+
+# Reference

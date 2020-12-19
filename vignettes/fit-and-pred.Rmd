@@ -1,0 +1,174 @@
+---
+title: "3. Fitting models and making predictions"
+output: rmarkdown::html_vignette
+bibliography: biblio.bib
+vignette: >
+  %\VignetteIndexEntry{3. Fitting models and making predictions}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(spmismo)
+library(ggplot2)
+library(sf)
+```
+
+If interested in the theory involving this calculations, take a look at this
+[vignette](https://lcgodoy.me/spmismo/articles/theory.html).
+
+# Application
+
+To exemplify the fitting and predicting functions, we are going to use the data
+from @johnson2020dealing again^[for more details about the data, take a look at
+the vignette [sf-to-spm](https://lcgodoy.me/spmismo/articles/sf-to-spm.html)]. 
+First, in the code chunk below, we load the data and convert it to `spmismo` 
+compatible classes. Since this is a toy example, we are going to generate a 500 
+points grid for the MSOA data and 5 points by polygon for the LSOA data.
+
+
+```{R load-data}
+data(liv_msoa)
+data(liv_lsoa)
+
+## msoa to spm
+spm_msoa <-
+    sf_to_spm(sf_obj1 = liv_msoa,
+              n_pts   = 500,
+              type    = "regular",
+              by_polygon = FALSE,
+              poly_ids = "msoa11cd",
+              var_ids  = "MLE")
+
+## lsoa to spm
+spm_lsoa <-
+    sf_to_spm(sf_obj1 = sf_b,
+              n_pts   = 5,
+              type    = "regular",
+              by_polygon = TRUE,
+              poly_ids = "lsoa11cd",
+              var_ids  = "IMDScore")
+```
+
+## Fit at MSOA, prediction at LSOA
+
+
+```{R fit-pred-1}
+theta_st_lsoa <-
+    c("alpha" = 70, "omega" = 1,
+      "sigsq" = 1, "phi" = 1)
+
+fit_msoa <-
+    fit_spm(x = spm_lsoa,
+            theta_st = theta_st_lsoa,
+            model = "pexp",
+            kappa = 1.5,
+            apply_exp = TRUE,
+            control   = list(maxit = 500))
+
+summary_sspm_fit(fit_y)
+
+pred_y <- predict_spm(x = fit_y)
+
+plot(pred_y$pred_grid[c("mu_pred", "se_pred")],
+     pch = 19)
+
+pred_y <- predict_spm(x = sf_b, spm_obj = fit_y,
+                      .aggregate = TRUE, n_pts = 5000,
+                      type = "hexagonal")
+
+plot(pred_y$pred_agg, pch = 15)
+
+##--- testing x ----
+
+
+
+plot(spm_x$grid, pch = 15)
+
+fit_x <-
+    fit_spm(x = spm_x,
+            theta_st  = c("alpha" = 25, "omega" = 1,
+                          "sigsq" = 1, "phi" = 1),
+            model = "matern",
+            kappa = .5,
+            apply_exp = TRUE,
+            control   = list(maxit = 500))
+
+summary_sspm_fit(fit_x)
+
+pred_x <- predict_spm(x = fit_x)
+
+plot(pred_x$pred_grid[c("mu_pred", "se_pred")],
+     pch = 19)
+
+pred_x <- predict_spm(x = sf_a, spm_obj = fit_x,
+                      .aggregate = TRUE, n_pts = 5000,
+                      type = "regular")
+
+plot(pred_x$pred_grid[c("mu_pred", "se_pred")], pch = 15)
+
+plot(pred_x$pred_agg)
+
+##--- testing  x, y ----
+
+plot(spm_xy$x$grid, pch = 15)
+
+plot(spm_xy$y$grid, pch = 15)
+
+theta_xy <-
+    c("alpha" = 60, "beta" = -1,
+      "gamma" = 30, "omega" = 50,
+      ## "omega2" = .5, "omega3" = 1,
+      "sigsq" = 5, "phi" = 2,
+      "nusq" = 100)
+
+debugonce(spmismo:::mult_log_lik)
+
+aa <-
+    spmismo:::mult_log_lik(theta = theta_xy,
+                           .dt = list(spm_xy$y$var,
+                                      spm_xy$x$var),
+                           dists = list(spm_xy$y$dists,
+                                        spm_xy$x$dists,
+                                        spm_xy$cdist),
+                           model = "pexp",
+                           kappa = 1.5,
+                           apply_exp = TRUE)
+
+
+p <- 1
+(2 * p + 4 + (0.5 * p * (p + 1)))
+length(theta_xy)
+
+fit_xy <-
+    fit_spm(x = spm_xy,
+            theta_st  = theta_xy,
+            model = "matern",
+            kappa = .5,
+            apply_exp = TRUE,
+            control   = list(maxit = 700))
+```
+
+
+## Y | X
+
+```{R spm-msoa-lsoa}
+## both to spm
+spm_xy <-
+    sf_to_spm(sf_obj1 = sf_a,
+              sf_obj2 = sf_b,
+              n_pts   = list(1700, 5),
+              type    = "regular",
+              by_polygon = c(FALSE, TRUE),
+              poly_ids = list("msoa11cd", "lsoa11cd"),
+              var_ids  = list("MLE", "IMDScore"))
+```
+
+# Reference
