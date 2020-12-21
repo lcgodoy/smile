@@ -110,6 +110,10 @@
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="va">liv_msoa</span><span class="op">)</span>
 
+<span class="co">## workaround for compatibility with different PROJ versions</span>
+<span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_crs.html">st_crs</a></span><span class="op">(</span><span class="va">liv_msoa</span><span class="op">)</span> <span class="op">&lt;-</span>
+    <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_crs.html">st_crs</a></span><span class="op">(</span><span class="va">liv_msoa</span><span class="op">)</span><span class="op">$</span><span class="va">input</span>
+
 <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">liv_msoa</span>,
        <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="va">leb_est</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
     <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html">geom_sf</a></span><span class="op">(</span>color <span class="op">=</span> <span class="st">"black"</span>,
@@ -140,6 +144,9 @@
 <p>Lastly, we show two additional examples of usage of the <code>sf_to_spm</code> function. The first one, using the IMD data at the LSOA level, we show how to proceed when analysing more than one random variable. In the code chunk below, we load the data and convert it to an <code>spmismo</code> compatible object using a regular grid of 1500 points. We also inform the software that we are interested in analyzing two variables within this dataset, the variables <code>"imdscore"</code> and <code>"male"</code>, respectively<a href="#fn5" class="footnote-ref" id="fnref5"><sup>5</sup></a>.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="va">liv_lsoa</span><span class="op">)</span>
+
+<span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_crs.html">st_crs</a></span><span class="op">(</span><span class="va">liv_lsoa</span><span class="op">)</span> <span class="op">&lt;-</span>
+    <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_crs.html">st_crs</a></span><span class="op">(</span><span class="va">liv_lsoa</span><span class="op">)</span><span class="op">$</span><span class="va">input</span>
 
 <span class="va">msoa_spm</span> <span class="op">&lt;-</span>
     <span class="fu"><a href="../reference/sf_to_spm.html">sf_to_spm</a></span><span class="op">(</span>sf_obj1 <span class="op">=</span> <span class="va">liv_lsoa</span>, n_pts <span class="op">=</span> <span class="fl">1500</span>,
