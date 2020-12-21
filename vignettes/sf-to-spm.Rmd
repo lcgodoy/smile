@@ -47,6 +47,10 @@ MSOA's. We can load and visualize the data by using the command below.
 ```{R read-data}
 data(liv_msoa)
 
+## workaround for compatibility with different PROJ versions
+st_crs(liv_msoa) <-
+    st_crs(liv_msoa)$input
+
 ggplot(data = liv_msoa,
        aes(fill = leb_est)) +
     geom_sf(color = "black",
@@ -193,6 +197,9 @@ in analyzing two variables within this dataset, the variables `"imdscore"` and
 `"male"`, respectively^[This is just an illustrative example.].
 ```{R sf-to-spm3, eval = FALSE}
 data(liv_lsoa)
+
+st_crs(liv_lsoa) <-
+    st_crs(liv_lsoa)$input
 
 msoa_spm <-
     sf_to_spm(sf_obj1 = liv_lsoa, n_pts = 1500,

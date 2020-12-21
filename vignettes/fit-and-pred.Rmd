@@ -37,6 +37,13 @@ points grid for the MSOA data and 5 points by polygon for the LSOA data.
 data(liv_msoa)
 data(liv_lsoa)
 
+## workaround for compatibility with different PROJ versions
+st_crs(liv_msoa) <-
+    st_crs(liv_msoa)$input
+
+st_crs(liv_lsoa) <-
+    st_crs(liv_lsoa)$input
+
 ## msoa to spm
 spm_msoa <-
     sf_to_spm(sf_obj1 = liv_msoa,
