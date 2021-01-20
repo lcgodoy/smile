@@ -55,6 +55,7 @@ jobs:
         run: |
           brew install pkg-config
           brew install udunits
+          brew install gfortran
           brew install gdal
           cat <<EOT >> .Renviron
           PKG_CONFIG_PATH=/usr/local/lib/pkgconfig/
