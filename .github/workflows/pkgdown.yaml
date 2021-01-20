@@ -23,8 +23,8 @@ jobs:
       - uses: r-lib/actions/setup-pandoc@v1
 
       - name: Install Fortran
-      run: |
-      brew install gfortran
+        run: |
+          brew install gfortran
 
       - name: Query dependencies
         run: |
