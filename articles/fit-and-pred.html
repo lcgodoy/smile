@@ -100,7 +100,7 @@
     
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://lcgodoy.me/spmismo">spmismo</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://ggplot2.tidyverse.org">ggplot2</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org">ggplot2</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://r-spatial.github.io/sf/">sf</a></span><span class="op">)</span>
 <span class="co">#&gt; Linking to GEOS 3.8.1, GDAL 3.1.4, PROJ 6.3.1</span></code></pre></div>
 <p>If interested in the theory involving this calculations, take a look at this <a href="https://lcgodoy.me/spmismo/articles/theory.html">vignette</a>.</p>
@@ -175,10 +175,10 @@
 <span class="co">#&gt;  optimization algorithm converged: yes </span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt;     par  estimate        se               ci</span>
-<span class="co">#&gt; 1 alpha 75.935300 0.6884985 [74.586; 77.285]</span>
-<span class="co">#&gt; 2 omega  2.630458 0.4224543   [1.802; 3.458]</span>
-<span class="co">#&gt; 3 sigsq 10.410821 0.5970988  [9.241; 11.581]</span>
-<span class="co">#&gt; 4   phi  1.620282 0.1669460   [1.293; 1.947]</span></code></pre></div>
+<span class="co">#&gt; 1 alpha 75.972879 0.6603753 [74.679; 77.267]</span>
+<span class="co">#&gt; 2 omega  3.040124 0.4873360   [2.085; 3.995]</span>
+<span class="co">#&gt; 3 sigsq  9.814224 0.7325706  [8.378; 11.250]</span>
+<span class="co">#&gt; 4   phi  1.604698 0.2369458   [1.140; 2.069]</span></code></pre></div>
 <p>Finally, now we are going to perform predictions of the LEB at the LSOA level. To do so, we use the function <code>predict_spm</code>. The <code>x</code> argument gives the sf on which we want to make the predictions according to the <code>sbm_obj</code>, which represents the estimated parameters. Now, take a look at the remaining arguments. The last two, are analogous to what we have seen for the function <code>sf_to_spm</code>. They are concerning the grid generated over the study region, now we going to make predicitons over this grid. I set it to 2500 to “approximate” a continuous region<a href="#fn4" class="footnote-ref" id="fnref4"><sup>4</sup></a>. The argument <code>.aggregate</code> if set to <code>TRUE</code>, computes the predictions over the polygons from the input <code>x</code> (in this case <code>liv_lsoa</code>). This function also works if the input is a <code>sf</code> object with POINT geometries. The objects returned by the function <code>pred_lsoa</code> are lists with the following elements: 1) <code>mu_pred</code> - a vector with the predicted average for each location in the generated grid; 2) <code>sig_pred</code> the variance covariance matrix associated with the same grid; 3) the predictions (and standard errors) organized in an <code>sf</code> object to facilitate the visualization of the predictions over a (almost) continuous space; and 4) <code>pred_agg</code> which is returned only if we set <code>.aggregate = TRUE</code>. The last one contains the predictions and their standard erros integrated over the “new regions”.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">pred_lsoa</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/predict_spm.html">predict_spm</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">liv_lsoa</span>, spm_obj <span class="op">=</span> <span class="va">fit_msoa</span>,
@@ -263,10 +263,10 @@
 <span class="co">#&gt;  optimization algorithm converged: yes </span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt;     par   estimate          se                 ci</span>
-<span class="co">#&gt; 1 alpha  38.846231 22.66726452   [-5.581; 83.273]</span>
-<span class="co">#&gt; 2 omega  76.206931  0.18138499   [75.851; 76.562]</span>
-<span class="co">#&gt; 3 sigsq 349.364184  2.17048011 [345.110; 353.618]</span>
-<span class="co">#&gt; 4   phi   1.470151  0.08062188     [1.312; 1.628]</span></code></pre></div>
+<span class="co">#&gt; 1 alpha  39.242316 23.66198004   [-7.134; 85.619]</span>
+<span class="co">#&gt; 2 omega  80.242478  0.16512603   [79.919; 80.566]</span>
+<span class="co">#&gt; 3 sigsq 345.531176  2.27220900 [341.078; 349.985]</span>
+<span class="co">#&gt; 4   phi   1.525385  0.08561017     [1.358; 1.693]</span></code></pre></div>
 <p>Now we are going to perform predictions of the IMD at the MSOA level. Since from now on the process is pretty much the exam, the explanation will be shorter.</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">pred_msoa</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/predict_spm.html">predict_spm</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">liv_msoa</span>, spm_obj <span class="op">=</span> <span class="va">fit_lsoa</span>,
