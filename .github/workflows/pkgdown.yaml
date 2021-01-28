@@ -50,7 +50,10 @@ jobs:
             libudunits2-dev \
             libgdal-dev \
             libgeos-dev \
-            libproj-dev  
+            libproj-dev \
+            libharfbuzz-dev \
+            libfribidi-dev \
+            libtiff-dev
 
       - name: Cache R packages
         uses: actions/cache@v2
