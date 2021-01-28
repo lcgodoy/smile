@@ -75,8 +75,8 @@ jobs:
 
       - name: Install package
         run: |
-	  curl -OL http://r.research.att.com/libs/gfortran-4.8.2-darwin13.tar.bz2
-	  R CMD INSTALL .
+          curl -OL http://r.research.att.com/libs/gfortran-4.8.2-darwin13.tar.bz2
+          R CMD INSTALL .
 
       - name: Deploy package
         run: |
