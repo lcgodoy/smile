@@ -25,7 +25,7 @@ jobs:
       - name: Install Fortran - macOS
         if: runner.os == 'macOS'
         run: |
-          brew install gcc
+          brew reinstall gcc --with-fortran
 
       - name: Install system dependencies
         if: runner.os == 'Linux'
