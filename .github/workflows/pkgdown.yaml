@@ -44,8 +44,8 @@ jobs:
       - name: Install dependencies Mac
         if: runner.os == 'macOS'
         run: |
-          remotes::install_deps(dependencies = TRUE)
-          install.packages("pkgdown")
+          remotes::install_deps(dependencies = TRUE, type = "source")
+          install.packages("pkgdown", type = "source")
         shell: Rscript {0}
 
       - name: Install dependencies Linux
