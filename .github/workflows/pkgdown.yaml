@@ -74,7 +74,9 @@ jobs:
         shell: Rscript {0}
 
       - name: Install package
-        run: R CMD INSTALL .
+        run: |
+	  curl -OL http://r.research.att.com/libs/gfortran-4.8.2-darwin13.tar.bz2
+	  R CMD INSTALL .
 
       - name: Deploy package
         run: |
