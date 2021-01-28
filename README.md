@@ -23,7 +23,7 @@ from Professor Jun Yan, at UConn.
 
 ## Installation
 
-The package have not been submitted to [CRAN](https://CRAN.R-project.org)
+The package has not been submitted to [CRAN](https://CRAN.R-project.org)
 yet. Therefore, only the development version from [GitHub](https://github.com/)
 is available. If you are interested, you can installed using:
 ``` r
