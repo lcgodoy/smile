@@ -108,30 +108,31 @@
 <h2 class="hasAnchor">
 <a href="#univariate-y-and-no-x" class="anchor"></a>Univariate <span class="math inline">\(Y\)</span> and no <span class="math inline">\(X\)</span>
 </h2>
-<p>Let <span class="math inline">\(\{ U(\mathbf{x}) \,:\, x \in D \subset \mathbb{R}^2 \}\)</span> (being <span class="math inline">\(D\)</span> the whole region of study, tipically a city) be a stationary and isotropic Gaussian Random Field <span class="citation">(Rue and Held 2005)</span> with mean constant and equal to zero over the space and covariance function <span class="math inline">\(C(h; \mathbf{\theta})\)</span>, where <span class="math inline">\(h\)</span> is the euclidean distance between two given points within <span class="math inline">\(D\)</span>, and <span class="math inline">\(\mathbf{\theta}\)</span> is the vector of parameters controling the spatial covariance structure of <span class="math inline">\(U(\mathbf{x})\)</span>. Now, let <span class="math inline">\(\mathbf{Y}\)</span> to be a random variable observed at a partition of <span class="math inline">\(D\)</span> defined as <span class="math inline">\(A = \{A_1, \dots, A_n \}\)</span>. Then, we define <span class="math display">\[
+<p>Let <span class="math inline">\(\{ U(\mathbf{x}) \,:\, x \in D \subset \mathbb{R}^2 \}\)</span> (being <span class="math inline">\(D\)</span> the whole region of study, tipically a city) be a stationary and isotropic Gaussian Random Field <span class="citation">(Rue and Held 2005)</span> with mean constant and equal to zero over the space and covariance function <span class="math inline">\(C(h; \mathbf{\theta})\)</span>, where <span class="math inline">\(h\)</span> is the euclidean distance between two given points within <span class="math inline">\(D\)</span>, and <span class="math inline">\(\mathbf{\theta}\)</span> is the vector of parameters controling the spatial covariance structure of such process. Now, let <span class="math inline">\(\mathbf{Y}\)</span> to be a random variable observed at a partition of <span class="math inline">\(D\)</span> defined as <span class="math inline">\(A = \{A_1, \dots, A_n \}\)</span>. Then, we define <span class="math display">\[
 Y( A_i ) = \alpha + U( A_i ) + \epsilon_i, \, i = 1, ..., n,
 \]</span> where <span class="math display">\[
 U ( A_i ) = \frac{ 1 }{ \lvert A_i \rvert } \int_{A_i} U ( x ) \, dx,
-\]</span> and <span class="math inline">\(\epsilon_i \overset{iid}{\sim} N(0, \omega)\)</span>. Also, we assume <span class="math inline">\(\epsilon \perp U\)</span>. Therefore <span class="math display">\[
+\]</span> and <span class="math inline">\(\epsilon_i \overset{iid}{\sim} N(0, \omega)\)</span>. Also, we assume <span class="math inline">\(\epsilon \perp U\)</span>. The expected value for <span class="math inline">\(Y( A_i )\)</span> is <span class="math display">\[
 E[ Y ( A_i  )  ] = \alpha,
-\]</span> and <span class="math display">\[\begin{align*}
+\]</span> while its variance/covarianca matrix is given as follows <span class="math display">\[\begin{align*}
 Cov[ Y ( A_i ), Y ( A_j ) ] &amp; = Cov[\alpha + U( A_i ) + \epsilon_i, \alpha + U(
 A_j ) + \epsilon_j] \\
 &amp; = Cov[ U( A_i ), U( A_j ) ] 
-= Cov \left[ \frac{1}{\lvert A_i \rvert} \int_{A_i} U ( x ) \, dx,
-\frac{1}{\lvert A_j \rvert} \int_{A_j} U ( y ) \, dy \right] \\
+= Cov \left[ \frac{1}{\lvert A_i \rvert} \int_{A_i} U ( \mathbf{s}_1 ) \, d\mathbf{s}_1,
+\frac{1}{\lvert A_j \rvert} \int_{A_j} U ( \mathbf{s}_2 ) \, d\mathbf{s}_2 \right] \\
 &amp; =
 \frac{1}{\lvert A_i \rvert \lvert A_j \rvert} \int_{A_j} \int_{A_i}
-Cov \left[ U ( x ),
-U ( y )  \right]
-\, dx \, dy \\
+Cov \left[ U ( \mathbf{s}_2 ),
+U ( \mathbf{s}_2 )  \right]
+\, d\mathbf{s}_1 \, d\mathbf{s}_2 \\
 &amp; = 
 \frac{1}{\lvert A_i \rvert \lvert A_j \rvert} \int_{A_j} \int_{A_i}
-C( \lVert x - y \rVert ; \theta) dx \, dy = f(A_i, A_j ; \theta).
-\end{align*}\]</span> First, note that the Covariance function is a integral. Implying that, in the manipulations above, we are simply switching the order of the integrals. This is valid as long as the integrals are well defined (not equal to infinity). Also, when <span class="math inline">\(i = j\)</span>, we have <span class="math display">\[
+C( \lVert \mathbf{s}_1 - \mathbf{s}_2 \rVert ; \theta) d\mathbf{s}_1 \, d\mathbf{s}_2 
+= f(A_i, A_j ; \theta).
+\end{align*}\]</span> First, note that the Covariance function is a integral. Implying that, in the manipulations above, we are simply switching the order of the integrals. This is valid as long as the integrals are well defined (not equal to infinity). Additionally, when <span class="math inline">\(i = j\)</span>, the variance at the region <span class="math inline">\(A_i\)</span> is <span class="math display">\[
 Var[ Y ( A_i ) ] = Cov[ Y ( A_i ), Y ( A_i ) ] = ... = \omega + \frac{1}{\lvert
-A_i \rvert \lvert A_i \rvert} \int_{A_i} \int_{A_i} C( \lVert x - y \rVert ;
-\theta) dx \, dy.
+A_i \rvert^2} \int_{A_i} \int_{A_i} C( \lVert \mathbf{s}_1 - \mathbf{s}_2 \rVert
+; \theta) d\mathbf{s}_1 \, d\mathbf{s}_2.
 \]</span></p>
 </div>
 <div id="multivariate-y-and-no-x" class="section level2">
@@ -144,12 +145,12 @@ Y ( A_i )_k = \alpha_k + U( A_i ) + V_k, \, i = 1, \ldots, n, k = 1, \ldots, p,
 V_k \overset{iid}{\sim} N\left(\mathbf{0}, \Omega \right),
 \]</span> where <span class="math inline">\(\Omega\)</span> is a covariance matrix (not necessarily a diagonal matrix). Then, using similar calculations, we have <span class="math display">\[
 Y \sim N( \mathbf{1}_n \otimes \mathbf{\alpha}, 
-\mathbf{J}_p \otimes \Sigma{A} + \mathbf{I}_n \otimes \Omega ),
+\mathbf{J}_p \otimes \Sigma_{A} + \mathbf{I}_n \otimes \Omega ),
 \]</span> where <span class="math inline">\(\Sigma_{A}\)</span> is defined analogously as the variance and covariance matrix of the univariate <span class="math inline">\(Y\)</span>, <span class="math inline">\(\mathbf{1}_n\)</span> is a vector of ones, <span class="math inline">\(\mathbf{J}_p\)</span> is a matrix of ones, and <span class="math inline">\(\mathbf{I}_n\)</span> is a identity matrix.</p>
 </div>
-<div id="general-y-and-univariate-x" class="section level2">
+<div id="p-dimensional-y-and-univariate-x" class="section level2">
 <h2 class="hasAnchor">
-<a href="#general-y-and-univariate-x" class="anchor"></a>General <span class="math inline">\(Y\)</span> and univariate <span class="math inline">\(X\)</span>
+<a href="#p-dimensional-y-and-univariate-x" class="anchor"></a><span class="math inline">\(p\)</span>-dimensional <span class="math inline">\(Y\)</span> and univariate <span class="math inline">\(X\)</span>
 </h2>
 <p>Let <span class="math inline">\(\{ U(\mathbf{x}) \,:\, x \in D \subset \mathbb{R}^2 \}\)</span> (being <span class="math inline">\(D\)</span> the whole region of study) be a stationary and isotropic Gaussian Random Field with covariance function <span class="math inline">\(C(h; \mathbf{\theta})\)</span>, where <span class="math inline">\(h\)</span> is the euclidean distance between any two points within <span class="math inline">\(D\)</span>, and <span class="math inline">\(\mathbf{\theta}\)</span> is the vector of parameters controling the spatial structure of <span class="math inline">\(U(\mathbf{x})\)</span>. Now, let <span class="math inline">\(\mathbf{Y}\)</span> to be a <span class="math inline">\(p\)</span>-dimensional random variable observed at a partition of <span class="math inline">\(D\)</span> defined as <span class="math inline">\(A = \{A_1, \dots, A_n \}\)</span> and <span class="math inline">\(\mathbf{X}\)</span> to be a random variable observed at a different partition of the same space denoted by <span class="math inline">\(B = \{B_1, \dots, B_m \}\)</span>. We define each of these variables as follows <span class="math display">\[\begin{equation}
 \label{eq:model_1}
@@ -164,32 +165,37 @@ U( A_i ) = \lvert A_i \rvert ^ {-1} \int_{A_i} U(\mathbf{s}) \, d \mathbf{s} \\
 U( B_k ) = \lvert B_k \rvert ^ {-1} \int_{B_k} U(\mathbf{s}) \, d \mathbf{s} \\
 V_{i} = (V_{i1}, \dots, V_{ip})' \overset{iid}{\sim} N(\mathbf{0}, \Omega) \\
 T_{k} = \overset{iid}{\sim} N(0, \tau^2) \\
-T_{ij} \perp V_{kl} , \quad T_{ij} \perp U, \quad V_{kl} \perp U,
+T_{k} \perp V_{i} , \quad T_{k} \perp U, \quad V_{i} \perp U, \; 
+\forall \, i = 1, \dots, n, \, j = 1, \dots , m
 \end{array}
-\]</span> where <span class="math inline">\(\Omega\)</span> is a <span class="math inline">\(p \times p\)</span> matrix with entries <span class="math inline">\(\omega_{ij}\)</span>, and <span class="math inline">\(T\)</span> , <span class="math inline">\(V\)</span>, and <span class="math inline">\(U\)</span> all independent of each other.</p>
+\]</span> where <span class="math inline">\(\Omega\)</span> is a <span class="math inline">\(p \times p\)</span> matrix with entries <span class="math inline">\(\omega_{ij}\)</span>.</p>
 <p>Now, we have that the covariance structure of the underlying process on the observed polygons belonging to the partition <span class="math inline">\(A\)</span> is defined as <span class="math display">\[
 ( \Sigma_A )_{ij} = \frac{1}{\lvert A_i \rvert \lvert A_j \rvert} \int_{A_i}
 \int_{A_j} C(\Vert \mathbf{s}_1 - \mathbf{s}_1 \Vert) \, d \mathbf{s}_2 d
 \mathbf{s}_2 = f(A_i, A_j ; \theta),
 \]</span> while the entries of the covariance matrix for the same process over the regions belonging to <span class="math inline">\(B\)</span> are given by <span class="math display">\[
-( \Sigma_B )_{kl} =  f(B_k, B_l ; \theta),
+( \Sigma_B )_{kl} = \frac{1}{\lvert B_k \rvert \lvert B_l \rvert} \int_{B_k}
+\int_{B_l} C(\Vert \mathbf{s}_1 - \mathbf{s}_1 \Vert) \, d \mathbf{s}_2 d
+\mathbf{s}_2 = f(B_k, B_l ; \theta),
 \]</span> with <span class="math inline">\(f( \cdot ; \theta)\)</span> defined similarly.</p>
-<p>The covariance between <span class="math inline">\(Y_{ij}\)</span> and <span class="math inline">\(Y_{i'j}\)</span> is <span class="math display">\[
-Cov(Y_{ij}, Y_{i'j}) = \beta^2_j f(A_i, A_{i'} ; \theta),
+<p>The covariance between <span class="math inline">\(Y_{ij}\)</span> and <span class="math inline">\(Y_{i'j'}\)</span> is <span class="math display">\[
+Cov(Y_{ij}, Y_{i'j'}) = \beta_j \beta_{j'} f(A_i, A_{i'} ; \theta),
 \]</span> Therefore, the covariance matrix associated with the random variable <span class="math inline">\(\mathbf{Y}\)</span> is <span class="math display">\[
 \Sigma_Y = \mathbf{\beta} \mathbf{\beta}^{\top} \otimes \Sigma_A +
-\Omega \otimes \mathbf{I}_n,
+\Omega \otimes \mathbf{I}_n \, \in \, 
+\mathbb{R}^{(p \cdot n) \times (p \cdot n)},
 \]</span> and <span class="math display">\[
-\Sigma_X = \Sigma_B + \tau^2 \cdot \mathbf{I}_n.
+\Sigma_X = \Sigma_B + \tau^2 \cdot \mathbf{I}_n \, \in \, 
+\mathbb{R}^{(p \cdot n) \times (p \cdot n)}.
 \]</span></p>
 <p>Moreover, the following “cross” covariance relationship between <span class="math inline">\(Y_{j}\)</span> and <span class="math inline">\(X\)</span> has entries <span class="math display">\[
 (D_j)_{ik} = Cov(Y_{ij}, X_{k}) = \beta_j f(A_i, B_k ; \theta),
-\]</span> with <span class="math inline">\(D_j\)</span> being <span class="math inline">\(m \times n\)</span>. Thus, we define the “cross” covariance as <span class="math display">\[
+\]</span> where <span class="math inline">\(D_j\)</span> is <span class="math inline">\(n \times m\)</span>. Thus, we define the “cross”-covariance as <span class="math display">\[
 D = \begin{pmatrix}
 D_1 &amp; \cdots &amp; D_p
-\end{pmatrix}^{\top} \in R^{m \times (p \cdot n)}
+\end{pmatrix}^{\top} \, \in \, \mathbb{R}^{ (p \cdot n) \times m}
 \]</span></p>
-<p>Therefore, we can write the joint log-likelihood as <span class="math display">\[
+<p>We can write the joint log-likelihood as <span class="math display">\[
 l_{\mathbf{Y}\mathbf{X}}(\theta) = 
 l_{\mathbf{Y}|\mathbf{X}}(\theta) +
 l_{\mathbf{X}}(\theta),
@@ -197,8 +203,10 @@ l_{\mathbf{X}}(\theta),
 (\mathbf{Y} | \mathbf{X} = \mathbf{x}) \sim N(\mu_{Y|X}, \Sigma_{Y|X}),
 \]</span> where <span class="math display">\[\begin{align*}
 &amp; \mu_{Y|X} = \mathbf{1}_n \otimes \mathbf{\alpha} + 
-D^{\top} \Sigma^{-1}_X ( \mathbf{x} - \gamma \cdot \mathbf{1}_m) \\
-&amp; \Sigma_{Y|X} = \Sigma_Y - D^{\top} \Sigma^{-1}_X D,
+D \Sigma^{-1}_X ( \mathbf{x} - \gamma \cdot \mathbf{1}_m)  \, \in \, 
+\mathbb{R}^{p \cdot } \\
+&amp; \Sigma_{Y|X} = \Sigma_Y - D \Sigma^{-1}_X D^{\top}  \, \in \, 
+\mathbb{R}^{(p \cdot n) \times (p \cdot n)},
 \end{align*}\]</span> come from standard theoremos involving the multivariate normal <span class="citation">(Ravishanker and Dey 2020)</span>.</p>
 </div>
 </div>
