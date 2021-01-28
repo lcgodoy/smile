@@ -12,7 +12,7 @@ name: pkgdown
 
 jobs:
   pkgdown:
-    runs-on: macOS-latest ## ubuntu-latest
+    runs-on: ubuntu-latest ## macOS-latest 
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
     steps:
@@ -75,7 +75,6 @@ jobs:
 
       - name: Install package
         run: |
-          curl -OL http://r.research.att.com/libs/gfortran-4.8.2-darwin13.tar.bz2
           R CMD INSTALL .
 
       - name: Deploy package
