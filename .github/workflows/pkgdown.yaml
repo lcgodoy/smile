@@ -19,9 +19,8 @@ jobs:
       - name: Install Fortran - macOS
         if: runner.os == 'macOS'
         run: |
-          brew reinstall gcc
+          ## brew reinstall gcc
           brew install gfortran
-          xcode-select --install
 
       - uses: actions/checkout@v2
 
