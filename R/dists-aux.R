@@ -88,6 +88,18 @@ get_grid_list <- function(x_to_list, by) {
 }
 
 ##' @name aux_mat
+dist_from_grids <- function(y_grid,  by) {
+    out_list <- split(x = sf::st_set_geometry(y_grid, NULL),
+                      f = as.character(y_grid[[by]]))
+    return(
+        single_dists(
+            lapply(out_list,
+                   function(x) as.matrix(x[ ,c(2, 3)]))
+        )
+    )
+}
+
+##' @name aux_mat
 mult_dist_from_grids <- function(y_grid, x_grid, by) {
     y_list <- sf::st_coordinates(y_grid)
     
@@ -103,3 +115,4 @@ mult_dist_from_grids <- function(y_grid, x_grid, by) {
                       lapply(y_list, as.matrix),
                       FALSE))
 }
+

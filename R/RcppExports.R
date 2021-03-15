@@ -87,7 +87,6 @@ NULL
 #' @param m1 a matrix representing a grid of points within a polygon.
 #' @param m2 a matrix representing a grid of points within a polygon.
 #' 
-#' @export
 crossdist <- function(m1, m2) {
     .Call(`_spmismo_crossdist`, m1, m2)
 }
@@ -112,7 +111,6 @@ crossdist <- function(m1, m2) {
 #' @seealso \code{\link{single_matern}}, \code{\link{single_matern5}}
 #'   \code{\link{single_exp}}, \code{\link{mat_cov}}
 #' 
-#' @export
 single_matern <- function(d, sigsq, phi, kappa) {
     .Call(`_spmismo_single_matern`, d, sigsq, phi, kappa)
 }
@@ -135,7 +133,6 @@ single_matern <- function(d, sigsq, phi, kappa) {
 #' @seealso \code{\link{single_matern}}, \code{\link{single_matern5}}
 #'   \code{\link{single_exp}}, \code{\link{mat_cov}}
 #' 
-#' @export
 single_matern3 <- function(d, sigsq, phi) {
     .Call(`_spmismo_single_matern3`, d, sigsq, phi)
 }
@@ -159,7 +156,6 @@ single_matern3 <- function(d, sigsq, phi) {
 #' @seealso \code{\link{single_matern}}, \code{\link{single_matern3}}
 #'   \code{\link{single_exp}}, \code{\link{mat_cov}}
 #' 
-#' @export
 single_matern5 <- function(d, sigsq, phi) {
     .Call(`_spmismo_single_matern5`, d, sigsq, phi)
 }
@@ -184,7 +180,6 @@ single_matern5 <- function(d, sigsq, phi) {
 #'   \code{\link{single_matern3}}, \code{\link{single_matern5}},
 #'   \code{\link{mat_cov}}
 #' 
-#' @export
 single_exp <- function(d, sigsq, phi) {
     .Call(`_spmismo_single_exp`, d, sigsq, phi)
 }
@@ -209,7 +204,6 @@ single_exp <- function(d, sigsq, phi) {
 #'
 #' @seealso \code{\link{single_exp}}, \code{\link{single_matern}}
 #' 
-#' @export
 mat_cov <- function(dists, sigsq, phi, kappa) {
     .Call(`_spmismo_mat_cov`, dists, sigsq, phi, kappa)
 }
@@ -239,7 +233,6 @@ mat_cov <- function(dists, sigsq, phi, kappa) {
 #' @seealso \code{\link{single_exp}}, \code{\link{single_matern}},
 #'   \code{\link{mat_cov}}
 #' 
-#' @export
 comp_mat_cov <- function(cross_dists, n, n2, sigsq, phi, kappa) {
     .Call(`_spmismo_comp_mat_cov`, cross_dists, n, n2, sigsq, phi, kappa)
 }
@@ -264,7 +257,6 @@ comp_mat_cov <- function(cross_dists, n, n2, sigsq, phi, kappa) {
 #'   \code{\link{single_matern3}}, \code{\link{single_matern5}},
 #'   \code{\link{mat_cov}}
 #' 
-#' @export
 single_pexp <- function(d, sigsq, phi, kappa) {
     .Call(`_spmismo_single_pexp`, d, sigsq, phi, kappa)
 }
@@ -288,7 +280,6 @@ single_pexp <- function(d, sigsq, phi, kappa) {
 #'
 #' @seealso \code{\link{single_exp}}, \code{\link{single_matern}}
 #' 
-#' @export
 pexp_cov <- function(dists, sigsq, phi, kappa) {
     .Call(`_spmismo_pexp_cov`, dists, sigsq, phi, kappa)
 }
@@ -341,7 +332,6 @@ comp_pexp_cov <- function(cross_dists, n, n2, sigsq, phi, kappa) {
 #'   \code{\link{single_matern3}}, \code{\link{single_matern5}},
 #'   \code{\link{mat_cov}}
 #' 
-#' @export
 single_gauss <- function(d, sigsq, phi) {
     .Call(`_spmismo_single_gauss`, d, sigsq, phi)
 }
@@ -362,7 +352,6 @@ single_gauss <- function(d, sigsq, phi) {
 #'
 #' @seealso \code{\link{single_exp}}, \code{\link{single_matern}}
 #' 
-#' @export
 gauss_cov <- function(dists, sigsq, phi) {
     .Call(`_spmismo_gauss_cov`, dists, sigsq, phi)
 }
@@ -389,7 +378,6 @@ gauss_cov <- function(dists, sigsq, phi) {
 #' @seealso \code{\link{single_exp}}, \code{\link{single_matern}},
 #'   \code{\link{mat_cov}}
 #' 
-#' @export
 comp_gauss_cov <- function(cross_dists, n, n2, sigsq, phi) {
     .Call(`_spmismo_comp_gauss_cov`, cross_dists, n, n2, sigsq, phi)
 }
@@ -413,7 +401,6 @@ comp_gauss_cov <- function(cross_dists, n, n2, sigsq, phi) {
 #'   \code{\link{single_matern3}}, \code{\link{single_matern5}},
 #'   \code{\link{mat_cov}}
 #' 
-#' @export
 single_spher <- function(d, sigsq, phi) {
     .Call(`_spmismo_single_spher`, d, sigsq, phi)
 }
@@ -434,7 +421,6 @@ single_spher <- function(d, sigsq, phi) {
 #'
 #' @seealso \code{\link{single_exp}}, \code{\link{single_matern}}
 #' 
-#' @export
 spher_cov <- function(dists, sigsq, phi) {
     .Call(`_spmismo_spher_cov`, dists, sigsq, phi)
 }
@@ -461,7 +447,6 @@ spher_cov <- function(dists, sigsq, phi) {
 #' @seealso \code{\link{single_exp}}, \code{\link{single_matern}},
 #'   \code{\link{mat_cov}}
 #' 
-#' @export
 comp_spher_cov <- function(cross_dists, n, n2, sigsq, phi) {
     .Call(`_spmismo_comp_spher_cov`, cross_dists, n, n2, sigsq, phi)
 }

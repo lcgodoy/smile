@@ -36,7 +36,7 @@ fit_spm <- function(x, ...) UseMethod("fit_spm")
 ##'     "pexp", "gaussian", "spherical")}.
 ##' @param kappa a \code{numeric} value indicating either the \eqn{\kappa}
 ##'     paramater from the Matern covariance function (controlling the process
-##'     differentiability), or the "power" for the Powered Exponential
+##'     differentiability), or the "pexp" for the Powered Exponential
 ##'     family. If the \code{model} chosen by the user is Matern and
 ##'     \code{kappa} is not informed, it is automatically set to .5. On the
 ##'     other hand, if the user choses the Powered Exponential family and do not

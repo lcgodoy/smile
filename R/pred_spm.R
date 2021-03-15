@@ -205,10 +205,11 @@ predict_spm.sf <- function(x, spm_obj, .aggregate = TRUE,
 
     stopifnot(all(grepl("(POLYGON|POINT)", sf::st_geometry_type(x))))
 
-    if(all(grepl("POINT", sf::st_geometry_type(x)))) {
+    if( all(grepl("POINT", sf::st_geometry_type(x))) ) {
         coords_pred <- sf::st_coordinates(x)
         pred_grid   <- sf::st_geometry(x)
-        warning("The arguments `n_pts`, `type`, and `by_polygon` are ignored when the sf geometry type is POINT")
+        if( ! missing(n_pts) | ! missing(type) )
+            warning("The arguments 'n_pts' and 'type' are ignored when the sf geometry type is POINT.")
     } else {
         pred_grid   <- sf::st_sample(x    = sf::st_union(spm_obj$call_data$sf_poly),
                                      size = n_pts, 

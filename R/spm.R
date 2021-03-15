@@ -57,7 +57,6 @@ single_sf_to_spm <- function(sf_obj,
                           by_polygon = by_polygon)
     }
 
-    ## make a function to make this part cleaner
     out_grid_pt <-
         sf::st_join(x = sf::st_sf(out_grid),
                     y = sf_obj[poly_ids],
@@ -67,11 +66,7 @@ single_sf_to_spm <- function(sf_obj,
                              x = sf::st_coordinates(out_grid_pt)[, 1],
                              y = sf::st_coordinates(out_grid_pt)[, 2])
     
-    out_list <- split(x = sf::st_set_geometry(out_grid_pt, NULL),
-                     f = as.character(out_grid_pt[[poly_ids]]))
-    out_list <- lapply(out_list, function(x) as.matrix(x[ ,c(2, 3)]))
-
-    out_dists <- single_dists(out_list)
+    out_dists <- dist_from_grids(out_grid_pt, poly_ids)
 
     if(length(var_ids) == 1) {
         out_var <- sf_obj[[var_ids]]

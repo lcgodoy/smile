@@ -15,7 +15,6 @@ using namespace Rcpp;
 //' @param m1 a matrix representing a grid of points within a polygon.
 //' @param m2 a matrix representing a grid of points within a polygon.
 //' 
-//' @export
 // [[Rcpp::export]]
 arma::mat crossdist(const arma::mat& m1, const arma::mat& m2) {
 
@@ -72,7 +71,6 @@ double mean_mat(arma::mat mat_aux) {
 //' @seealso \code{\link{single_matern}}, \code{\link{single_matern5}}
 //'   \code{\link{single_exp}}, \code{\link{mat_cov}}
 //' 
-//' @export
 // [[Rcpp::export]]
 double single_matern(double d, double sigsq,
 		     double phi, double kappa) {
@@ -104,7 +102,6 @@ double single_matern(double d, double sigsq,
 //' @seealso \code{\link{single_matern}}, \code{\link{single_matern5}}
 //'   \code{\link{single_exp}}, \code{\link{mat_cov}}
 //' 
-//' @export
 // [[Rcpp::export]]
 double single_matern3(double d, double sigsq,
 		      double phi) {
@@ -135,7 +132,6 @@ double single_matern3(double d, double sigsq,
 //' @seealso \code{\link{single_matern}}, \code{\link{single_matern3}}
 //'   \code{\link{single_exp}}, \code{\link{mat_cov}}
 //' 
-//' @export
 // [[Rcpp::export]]
 double single_matern5(double d, double sigsq,
 		      double phi) {
@@ -168,7 +164,6 @@ double single_matern5(double d, double sigsq,
 //'   \code{\link{single_matern3}}, \code{\link{single_matern5}},
 //'   \code{\link{mat_cov}}
 //' 
-//' @export
 // [[Rcpp::export]]
 double single_exp(double d, double sigsq, double phi) {
   double out = sigsq;
@@ -198,7 +193,6 @@ double single_exp(double d, double sigsq, double phi) {
 //'
 //' @seealso \code{\link{single_exp}}, \code{\link{single_matern}}
 //' 
-//' @export
 // [[Rcpp::export]]
 arma::mat mat_cov(const arma::mat& dists, double sigsq,
 		  double phi, double kappa) {
@@ -284,7 +278,6 @@ double aux_matern(arma::mat dist, double sigsq,
 //' @seealso \code{\link{single_exp}}, \code{\link{single_matern}},
 //'   \code{\link{mat_cov}}
 //' 
-//' @export
 // [[Rcpp::export]]
 arma::mat comp_mat_cov(const List& cross_dists, int n,
 		       int n2, double sigsq, double phi, 
@@ -330,7 +323,6 @@ arma::mat comp_mat_cov(const List& cross_dists, int n,
 //'   \code{\link{single_matern3}}, \code{\link{single_matern5}},
 //'   \code{\link{mat_cov}}
 //' 
-//' @export
 // [[Rcpp::export]]
 double single_pexp(double d, double sigsq, double phi, double kappa) {
   double out = sigsq;
@@ -359,7 +351,6 @@ double single_pexp(double d, double sigsq, double phi, double kappa) {
 //'
 //' @seealso \code{\link{single_exp}}, \code{\link{single_matern}}
 //' 
-//' @export
 // [[Rcpp::export]]
 arma::mat pexp_cov(const arma::mat& dists, double sigsq,
 		   double phi, double kappa) {
@@ -462,7 +453,6 @@ arma::mat comp_pexp_cov(const List& cross_dists, int n,
 //'   \code{\link{single_matern3}}, \code{\link{single_matern5}},
 //'   \code{\link{mat_cov}}
 //' 
-//' @export
 // [[Rcpp::export]]
 double single_gauss(double d, double sigsq, double phi) {
   double out = sigsq;
@@ -488,7 +478,6 @@ double single_gauss(double d, double sigsq, double phi) {
 //'
 //' @seealso \code{\link{single_exp}}, \code{\link{single_matern}}
 //' 
-//' @export
 // [[Rcpp::export]]
 arma::mat gauss_cov(const arma::mat& dists, double sigsq, double phi) {
   int nr = dists.n_rows, nc = dists.n_cols;
@@ -540,7 +529,6 @@ double aux_gauss(arma::mat dist, double sigsq, double phi) {
 //' @seealso \code{\link{single_exp}}, \code{\link{single_matern}},
 //'   \code{\link{mat_cov}}
 //' 
-//' @export
 // [[Rcpp::export]]
 arma::mat comp_gauss_cov(const List& cross_dists, int n,
 			 int n2, double sigsq, double phi) {
@@ -584,7 +572,6 @@ arma::mat comp_gauss_cov(const List& cross_dists, int n,
 //'   \code{\link{single_matern3}}, \code{\link{single_matern5}},
 //'   \code{\link{mat_cov}}
 //' 
-//' @export
 // [[Rcpp::export]]
 double single_spher(double d, double sigsq, double phi) {
   double out = sigsq;
@@ -613,7 +600,6 @@ double single_spher(double d, double sigsq, double phi) {
 //'
 //' @seealso \code{\link{single_exp}}, \code{\link{single_matern}}
 //' 
-//' @export
 // [[Rcpp::export]]
 arma::mat spher_cov(const arma::mat& dists, double sigsq, double phi) {
   int nr = dists.n_rows, nc = dists.n_cols;
@@ -665,7 +651,6 @@ double aux_spher(arma::mat dist, double sigsq, double phi) {
 //' @seealso \code{\link{single_exp}}, \code{\link{single_matern}},
 //'   \code{\link{mat_cov}}
 //' 
-//' @export
 // [[Rcpp::export]]
 arma::mat comp_spher_cov(const List& cross_dists, int n,
 			 int n2, double sigsq, double phi) {
