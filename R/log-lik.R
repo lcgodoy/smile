@@ -26,7 +26,7 @@ mult_log_lik <- function(theta, .dt, dists, model, kappa = NULL,
 
     if(p == 1) {
         alpha <- theta[1]
-        .beta  <- theta[2]
+        .beta <- theta[2]
         omega <- theta[3]
         mu_x  <- theta[4]
         sigsq <- theta[5]
