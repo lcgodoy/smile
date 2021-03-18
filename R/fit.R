@@ -110,7 +110,6 @@ fit_spm.sspm <- function(x, model, theta_st,
     return(output)
 }
 
-
 ##' @name fit_spm
 ##' @export
 fit_spm.mspm <- function(x, model, theta_st,

@@ -39,15 +39,33 @@ single_sf_to_spm <- function(sf_obj,
                             poly_ids = seq_len(nrow(sf_obj)))
         poly_ids <- "poly_ids"
     }
-        
     
     if(by_polygon & length(n_pts) == 1) {
         out_grid <-
-            sf::st_sample(x    = sf::st_cast(sf::st_geometry(sf_obj),
-                                             "POLYGON"),
-                          size = rep(n_pts, nrow(sf_obj)), 
-                          type = type,
-                          by_polygon = TRUE)
+            lapply(sf::st_cast(sf::st_geometry(sf_obj),
+                               "POLYGON"),
+                   function(x, .sz, .tp) {
+                       sf::st_as_sf(
+                               sf::st_sample(x    = x,
+                                             size = .sz, 
+                                             type = .tp)
+                           )
+                   },
+                   .sz = n_pts, 
+                   .tp = type)
+    } else if(length(n_pts) > 1) {
+        out_grid <-
+            Map(function(x, .sz, .tp) {
+                sf::st_as_sf(
+                        sf::st_sample(x    = x,
+                                      size = .sz, 
+                                      type = .tp)
+                    )
+            },
+            x = sf::st_cast(sf::st_geometry(sf_obj),
+                            "POLYGON"),
+            .sz = n_pts, 
+            .tp = type)
     } else {
         out_grid <-
             sf::st_sample(x = sf::st_cast(sf::st_geometry(sf_obj),
@@ -57,6 +75,12 @@ single_sf_to_spm <- function(sf_obj,
                           by_polygon = by_polygon)
     }
 
+    if(by_polygon) {
+        out_grid <- st_set_crs(do.call("rbind", out_grid),
+                               st_crs(sf_obj))
+        
+    }
+    
     out_grid_pt <-
         sf::st_join(x = sf::st_sf(out_grid),
                     y = sf_obj[poly_ids],
@@ -85,6 +109,8 @@ single_sf_to_spm <- function(sf_obj,
         grid    = out_grid_pt[poly_ids],
         sf_poly = sf::st_geometry(sf_obj)
     )
+
+    return(output)
 }
 
 ##' Transforming one (or two) \code{sf} objects into a \code{sspm} (or \code{mspm}) object

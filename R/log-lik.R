@@ -217,8 +217,8 @@ singl_log_lik <- function(theta, .dt, dists, model, kappa = NULL,
         phi   <- theta[((p + 1) + .5*(p * ( p  + 1 )) + 1)]
     }
     if(apply_exp) {
-        ## omega <- exp(omega)
-        omega <- omega * omega
+        omega <- exp(omega)
+        ## omega <- omega * omega
         sigsq <- exp(sigsq)
         phi   <- exp(phi)
     }
