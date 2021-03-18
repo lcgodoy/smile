@@ -96,7 +96,7 @@ predict_spm.sspm_fit <- function(x, .aggregate = TRUE, ...) {
                                          sigsq = x$estimate["sigsq"])
                })
 
-        sig_y_inv <- chol(chol2inv(sig_y))
+        sig_y_inv <- chol2inv(chol(sig_y))
 
         mean_pred <- matrix(rep(x$estimate["alpha"], n_pred),
                             ncol = 1)
@@ -304,7 +304,7 @@ predict_spm.sf <- function(x, spm_obj, .aggregate = TRUE,
         warning("If you want to make predictions only for a set of locations, it does not make sense to use `.aggregate`.")
     }
     
-    sig_y_inv <- chol(chol2inv(sig_y))
+    sig_y_inv <- chol2inv(chol(sig_y))
     
     mean_y <- matrix(rep(spm_obj$estimate["alpha"], n_obs), ncol = 1)
             mean_pred <- matrix(rep(spm_obj$estimate["alpha"], n_pred),
