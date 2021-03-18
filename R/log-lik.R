@@ -45,7 +45,8 @@ mult_log_lik <- function(theta, .dt, dists, model, kappa = NULL,
         nusq  <- theta[((2 * p) + 4 + .5*(p * (p  + 1 )))]
     }
     if(apply_exp) {
-        omega <- exp(omega)
+        ## omega <- exp(omega)
+        omega <- omega * omega
         sigsq <- exp(sigsq)
         phi   <- exp(phi)
         nusq  <- exp(nusq)
@@ -216,7 +217,8 @@ singl_log_lik <- function(theta, .dt, dists, model, kappa = NULL,
         phi   <- theta[((p + 1) + .5*(p * ( p  + 1 )) + 1)]
     }
     if(apply_exp) {
-        omega <- exp(omega)
+        ## omega <- exp(omega)
+        omega <- omega * omega
         sigsq <- exp(sigsq)
         phi   <- exp(phi)
     }

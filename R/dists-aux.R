@@ -12,7 +12,8 @@
 single_dists <- function(mat_list) {
     n_out <- length(mat_list)
 
-    out_dists <- vector(mode = "list", length = length(mat_list))
+    out_dists <- vector(mode = "list",
+                        length = (n_out * (n_out + 1) * .5))
     
     k <- 0
     for(i in seq_len(n_out)) {
