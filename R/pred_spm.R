@@ -217,7 +217,8 @@ predict_spm.sf <- function(x, spm_obj, .aggregate = TRUE,
                                      type = type)
         coords_pred <- sf::st_coordinates(pred_grid)
     }
-    
+
+    ## this part can be improved
     u_pred <- as.matrix(stats::dist(coords_pred))
     n_pred <- nrow(coords_pred)  # number of locations to make predictions
 
@@ -237,11 +238,11 @@ predict_spm.sf <- function(x, spm_obj, .aggregate = TRUE,
                                      kappa = spm_obj$kappa)
 
 
-               d_mat <- t(comp_mat_cov(cross_dists = u_res_pred,
-                                       n = n_obs, n2 = n_pred,
-                                       phi   = spm_obj$estimate["phi"],
-                                       sigsq = spm_obj$estimate["sigsq"],
-                                       kappa = spm_obj$kappa))
+               d_mat <- comp_mat_cov(cross_dists = u_res_pred,
+                                     n = n_pred, n2 = n_obs,
+                                     phi   = spm_obj$estimate["phi"],
+                                     sigsq = spm_obj$estimate["sigsq"],
+                                     kappa = spm_obj$kappa)
                
                sig_pred <- mat_cov(dists = u_pred,
                                    phi   = spm_obj$estimate["phi"],
@@ -258,11 +259,11 @@ predict_spm.sf <- function(x, spm_obj, .aggregate = TRUE,
                                       sigsq = spm_obj$estimate["sigsq"],
                                       kappa = spm_obj$kappa)
                
-               d_mat <- t(comp_pexp_cov(cross_dists = u_res_pred,
-                                        n = n_obs, n2 = n_pred,
-                                        phi   = spm_obj$estimate["phi"],
-                                        sigsq = spm_obj$estimate["sigsq"],
-                                        kappa = spm_obj$kappa))
+               d_mat <- comp_pexp_cov(cross_dists = u_res_pred,
+                                      n = n_pred, n2 = n_obs,
+                                      phi   = spm_obj$estimate["phi"],
+                                      sigsq = spm_obj$estimate["sigsq"],
+                                      kappa = spm_obj$kappa)
                
                sig_pred <- pexp_cov(dists = u_pred,
                                     phi   = spm_obj$estimate["phi"],
@@ -275,10 +276,10 @@ predict_spm.sf <- function(x, spm_obj, .aggregate = TRUE,
                                        phi   = spm_obj$estimate["phi"],
                                        sigsq = spm_obj$estimate["sigsq"])
                
-               d_mat <- t(comp_gauss_cov(cross_dists = u_res_pred,
-                                         n = n_obs, n2 = n_pred,
-                                         phi   = spm_obj$estimate["phi"],
-                                         sigsq = spm_obj$estimate["sigsq"]))
+               d_mat <- comp_gauss_cov(cross_dists = u_res_pred,
+                                       n = n_pred, n2 = n_obs,
+                                       phi   = spm_obj$estimate["phi"],
+                                       sigsq = spm_obj$estimate["sigsq"])
                
                sig_pred <- gauss_cov(dists = u_pred,
                                      phi   = spm_obj$estimate["phi"],
@@ -290,10 +291,10 @@ predict_spm.sf <- function(x, spm_obj, .aggregate = TRUE,
                                        phi   = spm_obj$estimate["phi"],
                                        sigsq = spm_obj$estimate["sigsq"])
                
-               d_mat <- t(comp_spher_cov(cross_dists = u_res_pred,
-                                         n = n_obs, n2 = n_pred,
-                                         phi   = spm_obj$estimate["phi"],
-                                         sigsq = spm_obj$estimate["sigsq"]))
+               d_mat <- comp_spher_cov(cross_dists = u_res_pred,
+                                       n = n_pred, n2 = n_obs,
+                                       phi   = spm_obj$estimate["phi"],
+                                       sigsq = spm_obj$estimate["sigsq"])
                
                sig_pred <- spher_cov(dists = u_pred,
                                      phi   = spm_obj$estimate["phi"],
@@ -304,7 +305,8 @@ predict_spm.sf <- function(x, spm_obj, .aggregate = TRUE,
         warning("If you want to make predictions only for a set of locations, it does not make sense to use `.aggregate`.")
     }
     
-    sig_y_inv <- chol2inv(chol(sig_y))
+    ## sig_y_inv <- chol2inv(chol(sig_y))
+    sig_y_inv <- solve(sig_y)
     
     mean_y <- matrix(rep(spm_obj$estimate["alpha"], n_obs), ncol = 1)
             mean_pred <- matrix(rep(spm_obj$estimate["alpha"], n_pred),
