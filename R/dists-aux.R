@@ -38,8 +38,8 @@ mult_dists <- function(mat_list1, mat_list2,
                         length = n_1 * n_2)
     k <- 0
 
-    for(i in 1:n_1) {
-        for(j in 1:n_2) {
+    for(i in seq_len(n_1)) {
+        for(j in seq_len(n_2)) {
             k <- k + 1
             out_cross[[k]] <- crossdist(mat_list1[[i]], mat_list2[[j]])
         }
@@ -68,11 +68,11 @@ pred_cdist <- function(mat_list, pred_mat) {
                   length = n_1 * n_pd)
 
     k <- 0
-    for(i in 1:n_1) {
-        for(j in 1:n_pd) {
+    for(i in seq_len(n_pd)) {
+        for(j in seq_len(n_1)) {
             k <- k + 1
-            out[[k]] <- crossdist(pred_mat[j, , drop = FALSE],
-                                  mat_list[[i]])
+            out[[k]] <- crossdist(mat_list[[j]],
+                                  pred_mat[i, , drop = FALSE])
         }
     }
 

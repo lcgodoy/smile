@@ -91,7 +91,7 @@ fit_spm.sspm <- function(x, model, theta_st,
         ## Using Delta-Method
         ## https://stats.idre.ucla.edu/r/faq/how-can-i-estimate-the-standard-error-of-transformed-regression-parameters-in-r-using-the-delta-method/
         grad_mat <-
-            diag(c(1, estimates[2:npar]))
+            diag(c(1, exp(estimates[2]), estimates[3:npar]))
         info_mat <- crossprod(grad_mat, info_mat) %*% info_mat
     } 
 

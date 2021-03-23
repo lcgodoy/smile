@@ -282,7 +282,7 @@ double aux_matern(arma::mat dist, double sigsq,
 arma::mat comp_mat_cov(const List& cross_dists, int n,
 		       int n2, double sigsq, double phi, 
 		       double kappa) {
-  arma::mat out(n2, n, arma::fill::zeros);
+  arma::mat out(n, n2, arma::fill::zeros);
   if(n == n2) {
       arma::uvec lw_idx = arma::trimatl_ind( arma::size(out) );
       arma::vec aux(cross_dists.size(), arma::fill::zeros);
@@ -413,7 +413,7 @@ double aux_pexp(arma::mat dist, double sigsq,
 arma::mat comp_pexp_cov(const List& cross_dists, int n,
 			int n2, double sigsq, double phi, 
 			double kappa) {
-  arma::mat out(n2, n, arma::fill::zeros);
+  arma::mat out(n, n2, arma::fill::zeros);
   if(n == n2) {
       arma::uvec lw_idx = arma::trimatl_ind( arma::size(out) );
       arma::vec aux(cross_dists.size(), arma::fill::zeros);
@@ -532,7 +532,7 @@ double aux_gauss(arma::mat dist, double sigsq, double phi) {
 // [[Rcpp::export]]
 arma::mat comp_gauss_cov(const List& cross_dists, int n,
 			 int n2, double sigsq, double phi) {
-  arma::mat out(n2, n, arma::fill::zeros);
+  arma::mat out(n, n2, arma::fill::zeros);
   if(n == n2) {
       arma::uvec lw_idx = arma::trimatl_ind( arma::size(out) );
       arma::vec aux(cross_dists.size(), arma::fill::zeros);
@@ -654,7 +654,7 @@ double aux_spher(arma::mat dist, double sigsq, double phi) {
 // [[Rcpp::export]]
 arma::mat comp_spher_cov(const List& cross_dists, int n,
 			 int n2, double sigsq, double phi) {
-  arma::mat out(n2, n, arma::fill::zeros);
+  arma::mat out(n, n2, arma::fill::zeros);
   if(n == n2) {
       arma::uvec lw_idx = arma::trimatl_ind( arma::size(out) );
       arma::vec aux(cross_dists.size(), arma::fill::zeros);
