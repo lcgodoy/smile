@@ -76,8 +76,8 @@ single_sf_to_spm <- function(sf_obj,
     }
 
     if(by_polygon) {
-        out_grid <- st_set_crs(do.call("rbind", out_grid),
-                               st_crs(sf_obj))
+        out_grid <- sf::st_set_crs(do.call("rbind", out_grid),
+                                   sf::st_crs(sf_obj))
         
     }
     
