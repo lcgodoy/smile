@@ -68,11 +68,11 @@ pred_cdist <- function(mat_list, pred_mat) {
                   length = n_1 * n_pd)
 
     k <- 0
-    for(i in seq_len(n_pd)) {
-        for(j in seq_len(n_1)) {
+    for(i in seq_len(n_1)) {
+        for(j in seq_len(n_pd)) {
             k <- k + 1
-            out[[k]] <- crossdist(mat_list[[j]],
-                                  pred_mat[i, , drop = FALSE])
+            out[[k]] <- crossdist(mat_list[[i]],
+                                  pred_mat[j, , drop = FALSE])
         }
     }
 
