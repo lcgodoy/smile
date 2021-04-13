@@ -86,12 +86,15 @@ single_sf_to_spm <- function(sf_obj,
                     y = sf_obj[poly_ids],
                     join = sf::st_within)
 
+    sf_obj <- sf_obj[sf_obj[[poly_ids]] %in%
+                     unique(out_grid_pt[[poly_ids]]),]
+
     out_grid_pt <- transform(out_grid_pt,
                              x = sf::st_coordinates(out_grid_pt)[, 1],
                              y = sf::st_coordinates(out_grid_pt)[, 2])
-    
-    out_dists <- dist_from_grids(out_grid_pt, poly_ids)
 
+    out_dists <- dist_from_grids(out_grid_pt, poly_ids)
+    
     if(length(var_ids) == 1) {
         out_var <- sf_obj[[var_ids]]
     } else {
