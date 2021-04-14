@@ -80,17 +80,6 @@ NULL
 #' @return The mean of \code{spher_cov(dist, sigsq, phi)}.
 NULL
 
-#' @title Pairwise distances between matrices
-#' 
-#' @description Internal use.
-#'
-#' @param m1 a matrix representing a grid of points within a polygon.
-#' @param m2 a matrix representing a grid of points within a polygon.
-#' 
-crossdist <- function(m1, m2) {
-    .Call(`_spmismo_crossdist`, m1, m2)
-}
-
 #' @title Matern covariance function (scalar - generic)
 #'
 #' @description Computing the Matern covariance function for a single distance
@@ -449,5 +438,41 @@ spher_cov <- function(dists, sigsq, phi) {
 #' 
 comp_spher_cov <- function(cross_dists, n, n2, sigsq, phi) {
     .Call(`_spmismo_comp_spher_cov`, cross_dists, n, n2, sigsq, phi)
+}
+
+#' @title Pairwise distances between matrices
+#' 
+#' @description Internal use.
+#'
+#' @param m1 a matrix representing a grid of points within a polygon.
+#' @param m2 a matrix representing a grid of points within a polygon.
+#' 
+crossdist <- function(m1, m2) {
+    .Call(`_spmismo_crossdist`, m1, m2)
+}
+
+#' @title Internal use only
+#' @param mat_list internal use
+#' @param mat_list1 internal use
+#' @param mat_list2 internal use
+#' @param return_single internal use
+#' @param pred_mat internal use
+#' @param x_to_list internal use
+#' @param by internal use
+#' @param y_grid internal use
+#' @param x_grid internal use
+#' @name aux_mat
+single_dists <- function(mat_list) {
+    .Call(`_spmismo_single_dists`, mat_list)
+}
+
+#' @name aux_mat
+mult_dists <- function(mat_list1, mat_list2, return_single) {
+    .Call(`_spmismo_mult_dists`, mat_list1, mat_list2, return_single)
+}
+
+#' @name aux_mat
+pred_cdist <- function(mat_list, pred_mat) {
+    .Call(`_spmismo_pred_cdist`, mat_list, pred_mat)
 }
 

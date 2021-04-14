@@ -8,36 +8,6 @@
 // [[Rcpp::plugins(cpp11)]]
 using namespace Rcpp;
 
-//' @title Pairwise distances between matrices
-//' 
-//' @description Internal use.
-//'
-//' @param m1 a matrix representing a grid of points within a polygon.
-//' @param m2 a matrix representing a grid of points within a polygon.
-//' 
-// [[Rcpp::export]]
-arma::mat crossdist(const arma::mat& m1, const arma::mat& m2) {
-
-  int nrow1 = m1.n_rows, nrow2 = m2.n_rows, ncol = m1.n_cols;
- 
-  if (m1.n_cols != m2.n_cols) {
-    throw std::runtime_error("matrices with different number of columns");
-  }
- 
-  arma::mat out(nrow1, nrow2, arma::fill::zeros);
-
-  for (int r1 = 0; r1 < nrow1; r1++) {
-    for (int r2 = 0; r2 < nrow2; r2++) {
-      double total = 0;
-      for (int c12 = 0; c12 < ncol; c12++) {
-        total += pow(m1(r1, c12) - m2(r2, c12), 2);
-      }
-      out(r1, r2) = sqrt(total);
-    }
-  }
-  return out;
-}
-
 //' @title Mean of a matrix (Internal use)
 //'
 //' @description This is an auxilliary function for internal use. It helps to

@@ -6,18 +6,6 @@
 
 using namespace Rcpp;
 
-// crossdist
-arma::mat crossdist(const arma::mat& m1, const arma::mat& m2);
-RcppExport SEXP _spmismo_crossdist(SEXP m1SEXP, SEXP m2SEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const arma::mat& >::type m1(m1SEXP);
-    Rcpp::traits::input_parameter< const arma::mat& >::type m2(m2SEXP);
-    rcpp_result_gen = Rcpp::wrap(crossdist(m1, m2));
-    return rcpp_result_gen;
-END_RCPP
-}
 // single_matern
 double single_matern(double d, double sigsq, double phi, double kappa);
 RcppExport SEXP _spmismo_single_matern(SEXP dSEXP, SEXP sigsqSEXP, SEXP phiSEXP, SEXP kappaSEXP) {
@@ -227,9 +215,56 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// crossdist
+arma::mat crossdist(const arma::mat& m1, const arma::mat& m2);
+RcppExport SEXP _spmismo_crossdist(SEXP m1SEXP, SEXP m2SEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const arma::mat& >::type m1(m1SEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type m2(m2SEXP);
+    rcpp_result_gen = Rcpp::wrap(crossdist(m1, m2));
+    return rcpp_result_gen;
+END_RCPP
+}
+// single_dists
+List single_dists(const List& mat_list);
+RcppExport SEXP _spmismo_single_dists(SEXP mat_listSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const List& >::type mat_list(mat_listSEXP);
+    rcpp_result_gen = Rcpp::wrap(single_dists(mat_list));
+    return rcpp_result_gen;
+END_RCPP
+}
+// mult_dists
+List mult_dists(const List& mat_list1, const List& mat_list2, const bool& return_single);
+RcppExport SEXP _spmismo_mult_dists(SEXP mat_list1SEXP, SEXP mat_list2SEXP, SEXP return_singleSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const List& >::type mat_list1(mat_list1SEXP);
+    Rcpp::traits::input_parameter< const List& >::type mat_list2(mat_list2SEXP);
+    Rcpp::traits::input_parameter< const bool& >::type return_single(return_singleSEXP);
+    rcpp_result_gen = Rcpp::wrap(mult_dists(mat_list1, mat_list2, return_single));
+    return rcpp_result_gen;
+END_RCPP
+}
+// pred_cdist
+List pred_cdist(const List& mat_list, const arma::mat& pred_mat);
+RcppExport SEXP _spmismo_pred_cdist(SEXP mat_listSEXP, SEXP pred_matSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const List& >::type mat_list(mat_listSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type pred_mat(pred_matSEXP);
+    rcpp_result_gen = Rcpp::wrap(pred_cdist(mat_list, pred_mat));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_spmismo_crossdist", (DL_FUNC) &_spmismo_crossdist, 2},
     {"_spmismo_single_matern", (DL_FUNC) &_spmismo_single_matern, 4},
     {"_spmismo_single_matern3", (DL_FUNC) &_spmismo_single_matern3, 3},
     {"_spmismo_single_matern5", (DL_FUNC) &_spmismo_single_matern5, 3},
@@ -245,6 +280,10 @@ static const R_CallMethodDef CallEntries[] = {
     {"_spmismo_single_spher", (DL_FUNC) &_spmismo_single_spher, 3},
     {"_spmismo_spher_cov", (DL_FUNC) &_spmismo_spher_cov, 3},
     {"_spmismo_comp_spher_cov", (DL_FUNC) &_spmismo_comp_spher_cov, 5},
+    {"_spmismo_crossdist", (DL_FUNC) &_spmismo_crossdist, 2},
+    {"_spmismo_single_dists", (DL_FUNC) &_spmismo_single_dists, 1},
+    {"_spmismo_mult_dists", (DL_FUNC) &_spmismo_mult_dists, 3},
+    {"_spmismo_pred_cdist", (DL_FUNC) &_spmismo_pred_cdist, 2},
     {NULL, NULL, 0}
 };
 

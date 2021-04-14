@@ -54,46 +54,44 @@ List single_dists(const List& mat_list) {
   for(int i = 0; i < n_out; i++) {
     for(int j = i; j < n_out; j++) {
       out[k] = crossdist(mat_list[i], mat_list[j]);
-      k += k;
+      k += 1;
     }
   }
+  return out;
 }
 
 //' @name aux_mat
 // [[Rcpp::export]]
 List mult_dists(const List& mat_list1, const List& mat_list2,
 		const bool& return_single) {
-  int n1 = mat_list1.size(), n2 = mat_list2.size();
+  int n1 = mat_list1.size(), n2 = mat_list2.size(), k = 0;
   List out_cross( n1 * n2 );
   for(int i = 0; i < n1; i++) {
     for(int j = 0; j < n2; j++) {
       out_cross[k] = crossdist(mat_list1[i], mat_list2[j]);
-      k += k;
+      k += 1;
     }
   }
   if(return_single) {
-    return List::create(Rcpp::Named("dists_1") = single_dists(mat_list2),
-			Rcpp::Named("dists_2") = single_dists(mat_list2),
-			Rcpp::Named("cross")   = out_cross);
-  } else {
-    return out_cross;
+    out_cross =  List::create(Rcpp::Named("dists_1") = single_dists(mat_list2),
+			      Rcpp::Named("dists_2") = single_dists(mat_list2),
+			      Rcpp::Named("cross")   = out_cross);
   }
+
+  return out_cross;
 }
 
 //' @name aux_mat
 // [[Rcpp::export]]
 List pred_cdist(const List& mat_list, const arma::mat& pred_mat) {
 
-  int n1 = mat_list1.size(), n2 = pred_mat.n_rows();
+  int n1 = mat_list.size(), n2 = pred_mat.n_rows, k = 0;
   List out_cross( n1 * n2 );
 
-  mat::iterator it     = pred_mat.begin_rows();
-  mat::iterator it_end = pred_mat.end();
-  
   for(int i = 0; i < n1; i++) {
-    for( ; it != it_end; ++it) {
-      out_cross[k] = crossdist(mat_list[i], *it);
-      k += k;
+    for(int j = 0; j < n2; j++) {
+      out_cross[k] = crossdist(mat_list[i], pred_mat.row(j));
+      k += 1;
     }
   }
   return out_cross;
