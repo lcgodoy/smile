@@ -202,6 +202,10 @@ singl_log_lik <- function(theta, .dt, dists, model, kappa = NULL,
 
     p <- NCOL(.dt)
 
+    if(! apply_exp & any(theta[p:length(theta)] < 0 )) {
+        return(NA_real_)
+    }
+    
     if(p == 1) {
         alpha <- theta[1]
         omega <- theta[2]
@@ -218,8 +222,6 @@ singl_log_lik <- function(theta, .dt, dists, model, kappa = NULL,
     }
     if(apply_exp) {
         omega <- expm1(omega)
-        ## omega <- exp(omega)
-        ## omega <- omega * omega
         sigsq <- exp(sigsq)
         phi   <- exp(phi)
     }
