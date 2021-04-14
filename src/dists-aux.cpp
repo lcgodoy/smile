@@ -57,6 +57,7 @@ List single_dists(const List& mat_list) {
       k += 1;
     }
   }
+  
   return out;
 }
 
@@ -88,12 +89,13 @@ List pred_cdist(const List& mat_list, const arma::mat& pred_mat) {
   int n1 = mat_list.size(), n2 = pred_mat.n_rows, k = 0;
   List out_cross( n1 * n2 );
 
-  for(int i = 0; i < n1; i++) {
-    for(int j = 0; j < n2; j++) {
-      out_cross[k] = crossdist(mat_list[i], pred_mat.row(j));
+  for(int i = 0; i < n2; i++) {
+    for(int j = 0; j < n1; j++) {
+      out_cross[k] = crossdist(mat_list[j], pred_mat.row(i));
       k += 1;
     }
   }
+  
   return out_cross;
 }
 

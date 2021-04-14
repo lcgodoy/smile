@@ -1,4 +1,4 @@
----
+r---
 title: "3. Fitting models and making predictions"
 output: rmarkdown::html_vignette
 bibliography: biblio.bib
