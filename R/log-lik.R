@@ -202,7 +202,7 @@ singl_log_lik <- function(theta, .dt, dists, model, kappa = NULL,
 
     p <- NCOL(.dt)
 
-    if(! apply_exp & any(theta[p:length(theta)] < 0 )) {
+    if(! apply_exp & any(theta[(p + 1):length(theta)] < 0 )) {
         return(NA_real_)
     }
     
