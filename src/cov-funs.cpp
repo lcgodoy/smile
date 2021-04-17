@@ -77,8 +77,7 @@ double single_matern3(double d, double sigsq,
 		      double phi) {
   double out = sigsq;
   if(d > 0) {
-    out =
-      sigsq * (1 + (sqrt(3) * (d/phi))) * exp( - sqrt(3) * (d/phi));
+    out *= (1 + d/phi) * exp( - d / phi);
   } 
   return out;
 }
@@ -107,9 +106,7 @@ double single_matern5(double d, double sigsq,
 		      double phi) {
   double out = sigsq;
   if(d > 0) {
-    out =
-      sigsq * (1 + ( sqrt(5) * ( d/phi ) ) + ( (5 / 3) * pow( ( d / phi ), 2 )) ) *
-      exp( - sqrt(5) * (d/phi));
+    out *= (1 + (d/phi) + (pow(d / phi, 2)/3)) * exp( - d / phi);
   } 
   return out;
 }
