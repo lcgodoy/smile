@@ -1,5 +1,5 @@
-Package: spmismo
-Title: An R package to analyze spatially misaligned data
+Package: smile
+Title: Spatial MIsaLignment Estimation
 Version: 0.0.0.9000
 Authors@R: 
     person(given = "Lucas",
@@ -7,7 +7,10 @@ Authors@R:
            role = c("aut", "cre"),
            email = "lucasdac.godoy@gmail.com",
            comment = c(ORCID = "0000-0003-4265-972X"))
-Description: The package provides Maximum Likelihood estimates for the estimation of underlying random fields for lattice (polygon data) allowing to deal with spatially misaligment.
+Description: The package provides Maximum Likelihood estimates for the
+	estimation of underlying random fields for lattice (polygon data)
+	facilitating the estimation of an onbserved random variable in
+	different partitions of a region of study.
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
@@ -27,8 +30,8 @@ Imports:
     utils
 Depends: 
     R (>= 3.5)
-URL: https://lcgodoy.me/spmismo, https://github.com/lcgodoy/spmismo
-BugReports: https://github.com/lcgodoy/spmismo/issues
+URL: https://lcgodoy.me/spmismo, https://github.com/lcgodoy/smile
+BugReports: https://github.com/lcgodoy/smile/issues
 Suggests: 
     knitr,
     rmarkdown,
