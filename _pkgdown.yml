@@ -1,21 +1,37 @@
-# navbar:
-#   # title: "sparklyr"
-#   # type: inverse
-#   left:
-#     - text: "Reference"
-#       icon: fa-book fa-lg
-#       href: "reference/index.html"
-#   right:
-#     - icon: fa-github fa-lg
-#       href: https://github.com/lcgodoy
-#     - icon: fa-twitter fa-lg
-#       href: https://twitter.com/ldcgodoy
-#     - icon: fa-linkedin fa-lg
-#       href: https://www.linkedin.com/in/godoy-lucas/
-#     - icon: fa-stack-overflow fa-lg
-#       href: https://stackoverflow.com/users/9220758/lcgodoy
+##--- navbar ----
 
-#---- template style ----
+navbar:
+  left:
+    - icon: fa-home fa-lg
+      href: index.html
+    - text: "Vignettes"	
+      icon: fa-book fa-lg
+      menu:
+      - text: "1. Converting sf objects to spm"
+      	href: "articles/sf-to-spm.html"
+      - text: "2. Spatial covariance functions"
+      	href: "articles/sp-cov-functions.html"
+      - text: "3. Fitting models and making predictions"
+        href: "articles/sp-cov-functions.html"
+      - text: "4. Theory"
+        href: "articles/theory.html"
+    - text: "Reference"
+      icon: fa-search fa-lg
+      href: "reference/index.html"
+    ## - text: "News"
+    ##   icon: fa-refresh fa-lg
+    ##   href: "news/index.html"
+  right:
+    - icon: fa-github fa-lg
+      href: https://github.com/lcgodoy/
+    - icon: fa-twitter fa-lg
+      href: https://twitter.com/ldcgodoy
+    - icon: fa-linkedin fa-lg
+      href: https://www.linkedin.com/in/godoy-lucas/
+    - icon: fa-stack-overflow fa-lg
+      href: https://stackoverflow.com/users/9220758/lcgodoy
+
+##--- template style ----
 
 template:
   params:

@@ -6,7 +6,7 @@ output: github_document
 
 
 
-# spmismo
+# smile
 
 <!-- badges: start -->
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
@@ -14,7 +14,7 @@ output: github_document
 [![R-CMD-check](https://github.com/lcgodoy/spmismo/workflows/R-CMD-check/badge.svg)](https://github.com/lcgodoy/spmismo/actions)
 <!-- badges: end -->
 
-The goal of `spmismo` is to provide a tool to deal with spatially misaligned
+The goal of `smile` is to provide a tool to deal with spatially misaligned
 data. The package is based on the methodology presented in the paper 
 [Johnson et al. 2020](https://ij-healthgeographics.biomedcentral.com/articles/10.1186/s12942-020-00200-w)
 
