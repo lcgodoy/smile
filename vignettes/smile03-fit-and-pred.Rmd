@@ -1,4 +1,4 @@
-r---
+---
 title: "3. Fitting models and making predictions"
 output: rmarkdown::html_vignette
 bibliography: biblio.bib
@@ -16,20 +16,20 @@ knitr::opts_chunk$set(
 ```
 
 ```{r setup}
-library(spmismo)
+library(smile)
 library(ggplot2)
 library(sf)
 ```
 
 If interested in the theory involving this calculations, take a look at this
-[vignette](https://lcgodoy.me/spmismo/articles/theory.html).
+[vignette](https://lcgodoy.me/smile/articles/theory.html).
 
 # Application
 
 To exemplify the fitting and predicting functions, we are going to use the data
 from @johnson2020dealing again^[for more details about the data, take a look at
-the vignette [sf-to-spm](https://lcgodoy.me/spmismo/articles/sf-to-spm.html)]. 
-First, in the code chunk below, we load the data and convert it to `spmismo` 
+the vignette [sf-to-spm](https://lcgodoy.me/smile/articles/sf-to-spm.html)]. 
+First, in the code chunk below, we load the data and convert it to `smile` 
 compatible classes. Since this is a toy example, we are going to generate a 500 
 points grid for the MSOA data and 5 points by polygon for the LSOA data.
 
@@ -294,13 +294,13 @@ ggplot(data = aux_viz2[aux_viz2$variable == "se",],
 
 ## "Joint" model
 
-For more details see this [link](lcgodoy.me/spmismo/theory.html).  
+For more details see this [link](lcgodoy.me/smile/theory.html).  
 
 No we are going to model the two variables together. Besides an additional
 variance parameter, for this model we have an additional intercept and a $\beta$
 parameter that measures how associated the two variables are (at the continuous
 process scale). First, we create a `spm` object contaning the info about both
-variables, as described in this [vignette](lcgodoy.me/spmismo/theory.html).
+variables, as described in this [vignette](lcgodoy.me/smile/theory.html).
 ```{R spm-msoa-lsoa, eval = FALSE}
 ## joint spm object
 spm_xy <-

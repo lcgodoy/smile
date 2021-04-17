@@ -17,8 +17,8 @@ knitr::opts_chunk$set(
 <!-- To exemplify the covariance functions, we are going to use the data from -->
 <!-- @johnson2020dealing again^[for more details about the data, take a look at the -->
 <!-- vignette -->
-<!-- [sf-to-spm](https://lcgodoy.me/spmismo/articles/sf_to_spm.html)]. First, in the -->
-<!-- code cunk below, we load the data and convert it to a `spmismo` compatible -->
+<!-- [sf-to-spm](https://lcgodoy.me/smile/articles/sf_to_spm.html)]. First, in the -->
+<!-- code cunk below, we load the data and convert it to a `smile` compatible -->
 <!-- class. Since this is a toy example, we are going to generate a 500 points grid -->
 <!-- for the data. -->
 

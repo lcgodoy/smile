@@ -8,7 +8,7 @@ using namespace Rcpp;
 
 // single_matern
 double single_matern(double d, double sigsq, double phi, double kappa);
-RcppExport SEXP _spmismo_single_matern(SEXP dSEXP, SEXP sigsqSEXP, SEXP phiSEXP, SEXP kappaSEXP) {
+RcppExport SEXP _smile_single_matern(SEXP dSEXP, SEXP sigsqSEXP, SEXP phiSEXP, SEXP kappaSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -22,7 +22,7 @@ END_RCPP
 }
 // single_matern3
 double single_matern3(double d, double sigsq, double phi);
-RcppExport SEXP _spmismo_single_matern3(SEXP dSEXP, SEXP sigsqSEXP, SEXP phiSEXP) {
+RcppExport SEXP _smile_single_matern3(SEXP dSEXP, SEXP sigsqSEXP, SEXP phiSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -35,7 +35,7 @@ END_RCPP
 }
 // single_matern5
 double single_matern5(double d, double sigsq, double phi);
-RcppExport SEXP _spmismo_single_matern5(SEXP dSEXP, SEXP sigsqSEXP, SEXP phiSEXP) {
+RcppExport SEXP _smile_single_matern5(SEXP dSEXP, SEXP sigsqSEXP, SEXP phiSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -48,7 +48,7 @@ END_RCPP
 }
 // single_exp
 double single_exp(double d, double sigsq, double phi);
-RcppExport SEXP _spmismo_single_exp(SEXP dSEXP, SEXP sigsqSEXP, SEXP phiSEXP) {
+RcppExport SEXP _smile_single_exp(SEXP dSEXP, SEXP sigsqSEXP, SEXP phiSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -61,7 +61,7 @@ END_RCPP
 }
 // mat_cov
 arma::mat mat_cov(const arma::mat& dists, double sigsq, double phi, double kappa);
-RcppExport SEXP _spmismo_mat_cov(SEXP distsSEXP, SEXP sigsqSEXP, SEXP phiSEXP, SEXP kappaSEXP) {
+RcppExport SEXP _smile_mat_cov(SEXP distsSEXP, SEXP sigsqSEXP, SEXP phiSEXP, SEXP kappaSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -75,7 +75,7 @@ END_RCPP
 }
 // comp_mat_cov
 arma::mat comp_mat_cov(const List& cross_dists, int n, int n2, double sigsq, double phi, double kappa);
-RcppExport SEXP _spmismo_comp_mat_cov(SEXP cross_distsSEXP, SEXP nSEXP, SEXP n2SEXP, SEXP sigsqSEXP, SEXP phiSEXP, SEXP kappaSEXP) {
+RcppExport SEXP _smile_comp_mat_cov(SEXP cross_distsSEXP, SEXP nSEXP, SEXP n2SEXP, SEXP sigsqSEXP, SEXP phiSEXP, SEXP kappaSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -91,7 +91,7 @@ END_RCPP
 }
 // single_pexp
 double single_pexp(double d, double sigsq, double phi, double kappa);
-RcppExport SEXP _spmismo_single_pexp(SEXP dSEXP, SEXP sigsqSEXP, SEXP phiSEXP, SEXP kappaSEXP) {
+RcppExport SEXP _smile_single_pexp(SEXP dSEXP, SEXP sigsqSEXP, SEXP phiSEXP, SEXP kappaSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -105,7 +105,7 @@ END_RCPP
 }
 // pexp_cov
 arma::mat pexp_cov(const arma::mat& dists, double sigsq, double phi, double kappa);
-RcppExport SEXP _spmismo_pexp_cov(SEXP distsSEXP, SEXP sigsqSEXP, SEXP phiSEXP, SEXP kappaSEXP) {
+RcppExport SEXP _smile_pexp_cov(SEXP distsSEXP, SEXP sigsqSEXP, SEXP phiSEXP, SEXP kappaSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -119,7 +119,7 @@ END_RCPP
 }
 // comp_pexp_cov
 arma::mat comp_pexp_cov(const List& cross_dists, int n, int n2, double sigsq, double phi, double kappa);
-RcppExport SEXP _spmismo_comp_pexp_cov(SEXP cross_distsSEXP, SEXP nSEXP, SEXP n2SEXP, SEXP sigsqSEXP, SEXP phiSEXP, SEXP kappaSEXP) {
+RcppExport SEXP _smile_comp_pexp_cov(SEXP cross_distsSEXP, SEXP nSEXP, SEXP n2SEXP, SEXP sigsqSEXP, SEXP phiSEXP, SEXP kappaSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -135,7 +135,7 @@ END_RCPP
 }
 // single_gauss
 double single_gauss(double d, double sigsq, double phi);
-RcppExport SEXP _spmismo_single_gauss(SEXP dSEXP, SEXP sigsqSEXP, SEXP phiSEXP) {
+RcppExport SEXP _smile_single_gauss(SEXP dSEXP, SEXP sigsqSEXP, SEXP phiSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -148,7 +148,7 @@ END_RCPP
 }
 // gauss_cov
 arma::mat gauss_cov(const arma::mat& dists, double sigsq, double phi);
-RcppExport SEXP _spmismo_gauss_cov(SEXP distsSEXP, SEXP sigsqSEXP, SEXP phiSEXP) {
+RcppExport SEXP _smile_gauss_cov(SEXP distsSEXP, SEXP sigsqSEXP, SEXP phiSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -161,7 +161,7 @@ END_RCPP
 }
 // comp_gauss_cov
 arma::mat comp_gauss_cov(const List& cross_dists, int n, int n2, double sigsq, double phi);
-RcppExport SEXP _spmismo_comp_gauss_cov(SEXP cross_distsSEXP, SEXP nSEXP, SEXP n2SEXP, SEXP sigsqSEXP, SEXP phiSEXP) {
+RcppExport SEXP _smile_comp_gauss_cov(SEXP cross_distsSEXP, SEXP nSEXP, SEXP n2SEXP, SEXP sigsqSEXP, SEXP phiSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -176,7 +176,7 @@ END_RCPP
 }
 // single_spher
 double single_spher(double d, double sigsq, double phi);
-RcppExport SEXP _spmismo_single_spher(SEXP dSEXP, SEXP sigsqSEXP, SEXP phiSEXP) {
+RcppExport SEXP _smile_single_spher(SEXP dSEXP, SEXP sigsqSEXP, SEXP phiSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -189,7 +189,7 @@ END_RCPP
 }
 // spher_cov
 arma::mat spher_cov(const arma::mat& dists, double sigsq, double phi);
-RcppExport SEXP _spmismo_spher_cov(SEXP distsSEXP, SEXP sigsqSEXP, SEXP phiSEXP) {
+RcppExport SEXP _smile_spher_cov(SEXP distsSEXP, SEXP sigsqSEXP, SEXP phiSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -202,7 +202,7 @@ END_RCPP
 }
 // comp_spher_cov
 arma::mat comp_spher_cov(const List& cross_dists, int n, int n2, double sigsq, double phi);
-RcppExport SEXP _spmismo_comp_spher_cov(SEXP cross_distsSEXP, SEXP nSEXP, SEXP n2SEXP, SEXP sigsqSEXP, SEXP phiSEXP) {
+RcppExport SEXP _smile_comp_spher_cov(SEXP cross_distsSEXP, SEXP nSEXP, SEXP n2SEXP, SEXP sigsqSEXP, SEXP phiSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -217,7 +217,7 @@ END_RCPP
 }
 // crossdist
 arma::mat crossdist(const arma::mat& m1, const arma::mat& m2);
-RcppExport SEXP _spmismo_crossdist(SEXP m1SEXP, SEXP m2SEXP) {
+RcppExport SEXP _smile_crossdist(SEXP m1SEXP, SEXP m2SEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -229,7 +229,7 @@ END_RCPP
 }
 // single_dists
 List single_dists(const List& mat_list);
-RcppExport SEXP _spmismo_single_dists(SEXP mat_listSEXP) {
+RcppExport SEXP _smile_single_dists(SEXP mat_listSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -240,7 +240,7 @@ END_RCPP
 }
 // mult_dists
 List mult_dists(const List& mat_list1, const List& mat_list2, const bool& return_single);
-RcppExport SEXP _spmismo_mult_dists(SEXP mat_list1SEXP, SEXP mat_list2SEXP, SEXP return_singleSEXP) {
+RcppExport SEXP _smile_mult_dists(SEXP mat_list1SEXP, SEXP mat_list2SEXP, SEXP return_singleSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -253,7 +253,7 @@ END_RCPP
 }
 // pred_cdist
 List pred_cdist(const List& mat_list, const arma::mat& pred_mat);
-RcppExport SEXP _spmismo_pred_cdist(SEXP mat_listSEXP, SEXP pred_matSEXP) {
+RcppExport SEXP _smile_pred_cdist(SEXP mat_listSEXP, SEXP pred_matSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -265,29 +265,29 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_spmismo_single_matern", (DL_FUNC) &_spmismo_single_matern, 4},
-    {"_spmismo_single_matern3", (DL_FUNC) &_spmismo_single_matern3, 3},
-    {"_spmismo_single_matern5", (DL_FUNC) &_spmismo_single_matern5, 3},
-    {"_spmismo_single_exp", (DL_FUNC) &_spmismo_single_exp, 3},
-    {"_spmismo_mat_cov", (DL_FUNC) &_spmismo_mat_cov, 4},
-    {"_spmismo_comp_mat_cov", (DL_FUNC) &_spmismo_comp_mat_cov, 6},
-    {"_spmismo_single_pexp", (DL_FUNC) &_spmismo_single_pexp, 4},
-    {"_spmismo_pexp_cov", (DL_FUNC) &_spmismo_pexp_cov, 4},
-    {"_spmismo_comp_pexp_cov", (DL_FUNC) &_spmismo_comp_pexp_cov, 6},
-    {"_spmismo_single_gauss", (DL_FUNC) &_spmismo_single_gauss, 3},
-    {"_spmismo_gauss_cov", (DL_FUNC) &_spmismo_gauss_cov, 3},
-    {"_spmismo_comp_gauss_cov", (DL_FUNC) &_spmismo_comp_gauss_cov, 5},
-    {"_spmismo_single_spher", (DL_FUNC) &_spmismo_single_spher, 3},
-    {"_spmismo_spher_cov", (DL_FUNC) &_spmismo_spher_cov, 3},
-    {"_spmismo_comp_spher_cov", (DL_FUNC) &_spmismo_comp_spher_cov, 5},
-    {"_spmismo_crossdist", (DL_FUNC) &_spmismo_crossdist, 2},
-    {"_spmismo_single_dists", (DL_FUNC) &_spmismo_single_dists, 1},
-    {"_spmismo_mult_dists", (DL_FUNC) &_spmismo_mult_dists, 3},
-    {"_spmismo_pred_cdist", (DL_FUNC) &_spmismo_pred_cdist, 2},
+    {"_smile_single_matern", (DL_FUNC) &_smile_single_matern, 4},
+    {"_smile_single_matern3", (DL_FUNC) &_smile_single_matern3, 3},
+    {"_smile_single_matern5", (DL_FUNC) &_smile_single_matern5, 3},
+    {"_smile_single_exp", (DL_FUNC) &_smile_single_exp, 3},
+    {"_smile_mat_cov", (DL_FUNC) &_smile_mat_cov, 4},
+    {"_smile_comp_mat_cov", (DL_FUNC) &_smile_comp_mat_cov, 6},
+    {"_smile_single_pexp", (DL_FUNC) &_smile_single_pexp, 4},
+    {"_smile_pexp_cov", (DL_FUNC) &_smile_pexp_cov, 4},
+    {"_smile_comp_pexp_cov", (DL_FUNC) &_smile_comp_pexp_cov, 6},
+    {"_smile_single_gauss", (DL_FUNC) &_smile_single_gauss, 3},
+    {"_smile_gauss_cov", (DL_FUNC) &_smile_gauss_cov, 3},
+    {"_smile_comp_gauss_cov", (DL_FUNC) &_smile_comp_gauss_cov, 5},
+    {"_smile_single_spher", (DL_FUNC) &_smile_single_spher, 3},
+    {"_smile_spher_cov", (DL_FUNC) &_smile_spher_cov, 3},
+    {"_smile_comp_spher_cov", (DL_FUNC) &_smile_comp_spher_cov, 5},
+    {"_smile_crossdist", (DL_FUNC) &_smile_crossdist, 2},
+    {"_smile_single_dists", (DL_FUNC) &_smile_single_dists, 1},
+    {"_smile_mult_dists", (DL_FUNC) &_smile_mult_dists, 3},
+    {"_smile_pred_cdist", (DL_FUNC) &_smile_pred_cdist, 2},
     {NULL, NULL, 0}
 };
 
-RcppExport void R_init_spmismo(DllInfo *dll) {
+RcppExport void R_init_smile(DllInfo *dll) {
     R_registerRoutines(dll, NULL, CallEntries, NULL, NULL);
     R_useDynamicSymbols(dll, FALSE);
 }

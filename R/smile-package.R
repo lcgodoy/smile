@@ -1,4 +1,4 @@
-#' spmismo: A package for modelling spatially misaligned data
+#' smile: Spatial MIsaLignment Estimation
 #'
 #' ORGANIZE THE FUNCTIOSN IN SECTIONS
 #' The foo package provides three categories of important functions:
@@ -8,10 +8,10 @@
 #' The foo functions ...
 #'
 #' @docType package
-#' @name spmismo
+#' @name smile
 
 ## usethis namespace: start
-#' @useDynLib spmismo, .registration = TRUE
+#' @useDynLib smile, .registration = TRUE
 ## usethis namespace: end
 NULL
 

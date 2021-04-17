@@ -101,7 +101,7 @@ NULL
 #'   \code{\link{single_exp}}, \code{\link{mat_cov}}
 #' 
 single_matern <- function(d, sigsq, phi, kappa) {
-    .Call(`_spmismo_single_matern`, d, sigsq, phi, kappa)
+    .Call(`_smile_single_matern`, d, sigsq, phi, kappa)
 }
 
 #' @title Matern covariance function (scalar - kappa = 3/2)
@@ -123,7 +123,7 @@ single_matern <- function(d, sigsq, phi, kappa) {
 #'   \code{\link{single_exp}}, \code{\link{mat_cov}}
 #' 
 single_matern3 <- function(d, sigsq, phi) {
-    .Call(`_spmismo_single_matern3`, d, sigsq, phi)
+    .Call(`_smile_single_matern3`, d, sigsq, phi)
 }
 
 #' @title Matern covariance function (scalar - kappa = 5/2)
@@ -146,7 +146,7 @@ single_matern3 <- function(d, sigsq, phi) {
 #'   \code{\link{single_exp}}, \code{\link{mat_cov}}
 #' 
 single_matern5 <- function(d, sigsq, phi) {
-    .Call(`_spmismo_single_matern5`, d, sigsq, phi)
+    .Call(`_smile_single_matern5`, d, sigsq, phi)
 }
 
 #' @title Exponential covariance function (scalar)
@@ -170,7 +170,7 @@ single_matern5 <- function(d, sigsq, phi) {
 #'   \code{\link{mat_cov}}
 #' 
 single_exp <- function(d, sigsq, phi) {
-    .Call(`_spmismo_single_exp`, d, sigsq, phi)
+    .Call(`_smile_single_exp`, d, sigsq, phi)
 }
 
 #' @title Matern covariance function for a given distance matrix.
@@ -194,7 +194,7 @@ single_exp <- function(d, sigsq, phi) {
 #' @seealso \code{\link{single_exp}}, \code{\link{single_matern}}
 #' 
 mat_cov <- function(dists, sigsq, phi, kappa) {
-    .Call(`_spmismo_mat_cov`, dists, sigsq, phi, kappa)
+    .Call(`_smile_mat_cov`, dists, sigsq, phi, kappa)
 }
 
 #' @title Matern covariance function for a polygons.
@@ -223,7 +223,7 @@ mat_cov <- function(dists, sigsq, phi, kappa) {
 #'   \code{\link{mat_cov}}
 #' 
 comp_mat_cov <- function(cross_dists, n, n2, sigsq, phi, kappa) {
-    .Call(`_spmismo_comp_mat_cov`, cross_dists, n, n2, sigsq, phi, kappa)
+    .Call(`_smile_comp_mat_cov`, cross_dists, n, n2, sigsq, phi, kappa)
 }
 
 #' @title Powered Exponential covariance function (scalar)
@@ -247,7 +247,7 @@ comp_mat_cov <- function(cross_dists, n, n2, sigsq, phi, kappa) {
 #'   \code{\link{mat_cov}}
 #' 
 single_pexp <- function(d, sigsq, phi, kappa) {
-    .Call(`_spmismo_single_pexp`, d, sigsq, phi, kappa)
+    .Call(`_smile_single_pexp`, d, sigsq, phi, kappa)
 }
 
 #' @title Powered Exponential covariance function for a given distance matrix.
@@ -270,7 +270,7 @@ single_pexp <- function(d, sigsq, phi, kappa) {
 #' @seealso \code{\link{single_exp}}, \code{\link{single_matern}}
 #' 
 pexp_cov <- function(dists, sigsq, phi, kappa) {
-    .Call(`_spmismo_pexp_cov`, dists, sigsq, phi, kappa)
+    .Call(`_smile_pexp_cov`, dists, sigsq, phi, kappa)
 }
 
 #' @title Powered Exponential covariance function for a polygons.
@@ -299,7 +299,7 @@ pexp_cov <- function(dists, sigsq, phi, kappa) {
 #' 
 #' @export
 comp_pexp_cov <- function(cross_dists, n, n2, sigsq, phi, kappa) {
-    .Call(`_spmismo_comp_pexp_cov`, cross_dists, n, n2, sigsq, phi, kappa)
+    .Call(`_smile_comp_pexp_cov`, cross_dists, n, n2, sigsq, phi, kappa)
 }
 
 #' @title Gaussian covariance function (scalar)
@@ -322,7 +322,7 @@ comp_pexp_cov <- function(cross_dists, n, n2, sigsq, phi, kappa) {
 #'   \code{\link{mat_cov}}
 #' 
 single_gauss <- function(d, sigsq, phi) {
-    .Call(`_spmismo_single_gauss`, d, sigsq, phi)
+    .Call(`_smile_single_gauss`, d, sigsq, phi)
 }
 
 #' @title Computing the Gaussian covariance function for a single distance
@@ -342,7 +342,7 @@ single_gauss <- function(d, sigsq, phi) {
 #' @seealso \code{\link{single_exp}}, \code{\link{single_matern}}
 #' 
 gauss_cov <- function(dists, sigsq, phi) {
-    .Call(`_spmismo_gauss_cov`, dists, sigsq, phi)
+    .Call(`_smile_gauss_cov`, dists, sigsq, phi)
 }
 
 #' @title Gaussian covariance function for a polygons.
@@ -368,7 +368,7 @@ gauss_cov <- function(dists, sigsq, phi) {
 #'   \code{\link{mat_cov}}
 #' 
 comp_gauss_cov <- function(cross_dists, n, n2, sigsq, phi) {
-    .Call(`_spmismo_comp_gauss_cov`, cross_dists, n, n2, sigsq, phi)
+    .Call(`_smile_comp_gauss_cov`, cross_dists, n, n2, sigsq, phi)
 }
 
 #' @title Spherical covariance function (scalar)
@@ -391,7 +391,7 @@ comp_gauss_cov <- function(cross_dists, n, n2, sigsq, phi) {
 #'   \code{\link{mat_cov}}
 #' 
 single_spher <- function(d, sigsq, phi) {
-    .Call(`_spmismo_single_spher`, d, sigsq, phi)
+    .Call(`_smile_single_spher`, d, sigsq, phi)
 }
 
 #' @title Computing the Spherical covariance function for a single distance
@@ -411,7 +411,7 @@ single_spher <- function(d, sigsq, phi) {
 #' @seealso \code{\link{single_exp}}, \code{\link{single_matern}}
 #' 
 spher_cov <- function(dists, sigsq, phi) {
-    .Call(`_spmismo_spher_cov`, dists, sigsq, phi)
+    .Call(`_smile_spher_cov`, dists, sigsq, phi)
 }
 
 #' @title Spherical covariance function for a polygons.
@@ -437,7 +437,7 @@ spher_cov <- function(dists, sigsq, phi) {
 #'   \code{\link{mat_cov}}
 #' 
 comp_spher_cov <- function(cross_dists, n, n2, sigsq, phi) {
-    .Call(`_spmismo_comp_spher_cov`, cross_dists, n, n2, sigsq, phi)
+    .Call(`_smile_comp_spher_cov`, cross_dists, n, n2, sigsq, phi)
 }
 
 #' @title Pairwise distances between matrices
@@ -448,7 +448,7 @@ comp_spher_cov <- function(cross_dists, n, n2, sigsq, phi) {
 #' @param m2 a matrix representing a grid of points within a polygon.
 #' 
 crossdist <- function(m1, m2) {
-    .Call(`_spmismo_crossdist`, m1, m2)
+    .Call(`_smile_crossdist`, m1, m2)
 }
 
 #' @title Internal use only
@@ -463,16 +463,16 @@ crossdist <- function(m1, m2) {
 #' @param x_grid internal use
 #' @name aux_mat
 single_dists <- function(mat_list) {
-    .Call(`_spmismo_single_dists`, mat_list)
+    .Call(`_smile_single_dists`, mat_list)
 }
 
 #' @name aux_mat
 mult_dists <- function(mat_list1, mat_list2, return_single) {
-    .Call(`_spmismo_mult_dists`, mat_list1, mat_list2, return_single)
+    .Call(`_smile_mult_dists`, mat_list1, mat_list2, return_single)
 }
 
 #' @name aux_mat
 pred_cdist <- function(mat_list, pred_mat) {
-    .Call(`_spmismo_pred_cdist`, mat_list, pred_mat)
+    .Call(`_smile_pred_cdist`, mat_list, pred_mat)
 }
 

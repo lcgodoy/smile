@@ -16,12 +16,12 @@ knitr::opts_chunk$set(
 ```
 
 The purpose of this vignette is to illustrate how to convert
-`sf`[@pebesma2018simple] objects to objects support by the `spmismo`
-package. Besides the `sf` and `spmismo` packages, the
+`sf`[@pebesma2018simple] objects to objects support by the `smile`
+package. Besides the `sf` and `smile` packages, the
 `ggplot2`[@wickham2011ggplot2] package will be used for the data visualizations.
 
 ```{r setup}
-library(spmismo)
+library(smile)
 library(ggplot2)
 library(sf)
 ```
@@ -94,7 +94,7 @@ to `TRUE` when `n_pts` is a vector.]. The last two parameters are `poly_ids` and
 that uniquely identify each polygon within the study region, while the second
 one indicates which (numerical) variables we want to analyze. For example, in
 the code chunk below, we are transforming the `sf` object `liv_msoa` into a
-`spmismo` compatible object. We are going to generate a grid of 1000 points
+`smile` compatible object. We are going to generate a grid of 1000 points
 within the study region, with `type = "regular"`, and `by_polygon = FALSE`. The
 id variable is called `"msoa11cd"` and the numerical variable that we are
 interested in is called `"leb_est"`. The object returned by the function is of
@@ -191,7 +191,7 @@ ggplot(data = to_plot,
 Lastly, we show two additional examples of usage of the `sf_to_spm`
 function. The first one, using the IMD data at the LSOA level, we show how to
 proceed when analysing more than one random variable. In the code chunk below,
-we load the data and convert it to an `spmismo` compatible object using a
+we load the data and convert it to an `smile` compatible object using a
 regular grid of 1500 points. We also inform the software that we are interested
 in analyzing two variables within this dataset, the variables `"imdscore"` and
 `"male"`, respectively^[This is just an illustrative example.].
