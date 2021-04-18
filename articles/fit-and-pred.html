@@ -43,52 +43,58 @@
      
   </a>
 </li>
-<li>
-  <a href="../reference/index.html">Reference</a>
-</li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    Articles
+    <span class="fas fa-book fa-lg"></span>
+     
+    Vignettes
      
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
-      <a href="../articles/fit-and-pred.html">3. Fitting models and making predictions</a>
-    </li>
-    <li>
       <a href="../articles/sf-to-spm.html">1. Converting sf objects to spm</a>
     </li>
     <li>
       <a href="../articles/sp-cov-functions.html">2. Spatial covariance functions</a>
     </li>
     <li>
+      <a href="../articles/sp-cov-functions.html">3. Fitting models and making predictions</a>
+    </li>
+    <li>
       <a href="../articles/theory.html">4. Theory</a>
     </li>
   </ul>
 </li>
+<li>
+  <a href="../reference/index.html">
+    <span class="fas fa-search fa-lg"></span>
+     
+    Reference
+  </a>
+</li>
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/lcgodoy/">
-    <span class="fas fa-github fa-lg"></span>
-     
-  </a>
-</li>
-<li>
   <a href="https://twitter.com/ldcgodoy">
-    <span class="fas fa-twitter fa-lg"></span>
+    <span class="fas fa-twitter"></span>
      
   </a>
 </li>
 <li>
   <a href="https://www.linkedin.com/in/godoy-lucas/">
-    <span class="fas fa-linkedin fa-lg"></span>
+    <span class="fas fa-linkedin"></span>
      
   </a>
 </li>
 <li>
-  <a href="https://stackoverflow.com/users/9220758/lcgodoy">
+  <a href="https://github.com/lcgodoy">
+    <span class="fas fa-github"></span>
+     
+  </a>
+</li>
+<li>
+  <a href="https://stacksoverflow.com/users/9220758/lcgodoy">
     <span class="fas fa-stack-overflow fa-lg"></span>
      
   </a>
@@ -193,10 +199,10 @@
 <span class="co">#&gt;  optimization algorithm converged: yes </span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt;     par  estimate        se               ci</span>
-<span class="co">#&gt; 1 alpha 75.923201 0.6775124 [74.595; 77.251]</span>
-<span class="co">#&gt; 2 omega  8.211309 8.6791213 [-8.799; 25.222]</span>
-<span class="co">#&gt; 3 sigsq  9.211309 0.6071212  [8.021; 10.401]</span>
-<span class="co">#&gt; 4   phi  1.693539 0.1868967   [1.327; 2.060]</span></code></pre></div>
+<span class="co">#&gt; 1 alpha 75.938095 0.6988746 [74.568; 77.308]</span>
+<span class="co">#&gt; 2 omega  7.977770 7.0187113 [-5.779; 21.734]</span>
+<span class="co">#&gt; 3 sigsq  8.977770 0.6042741  [7.793; 10.162]</span>
+<span class="co">#&gt; 4   phi  1.751201 0.1840810   [1.390; 2.112]</span></code></pre></div>
 <p>Finally, now we are going to perform predictions of the LEB at the LSOA level. To do so, we use the function <code>predict_spm</code>. The <code>x</code> argument gives the sf on which we want to make the predictions according to the <code>sbm_obj</code>, which represents the estimated parameters. Now, take a look at the remaining arguments. The last two, are analogous to what we have seen for the function <code>sf_to_spm</code>. They are concerning the grid generated over the study region, now we going to make predicitons over this grid. I set it to 2500 to “approximate” a continuous region<a href="#fn4" class="footnote-ref" id="fnref4"><sup>4</sup></a>. The argument <code>.aggregate</code> if set to <code>TRUE</code>, computes the predictions over the polygons from the input <code>x</code> (in this case <code>liv_lsoa</code>). This function also works if the input is a <code>sf</code> object with POINT geometries. The objects returned by the function <code>pred_lsoa</code> are lists with the following elements: 1) <code>mu_pred</code> - a vector with the predicted average for each location in the generated grid; 2) <code>sig_pred</code> the variance covariance matrix associated with the same grid; 3) the predictions (and standard errors) organized in an <code>sf</code> object to facilitate the visualization of the predictions over a (almost) continuous space; and 4) <code>pred_agg</code> which is returned only if we set <code>.aggregate = TRUE</code>. The last one contains the predictions and their standard erros integrated over the “new regions”.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">pred_lsoa</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/predict_spm.html">predict_spm</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">liv_lsoa</span>, spm_obj <span class="op">=</span> <span class="va">fit_msoa</span>,
@@ -279,15 +285,15 @@
 <span class="co">#&gt;  optimization algorithm converged: yes </span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt;     par    estimate           se</span>
-<span class="co">#&gt; 1 alpha  39.2608465 1.957642e+01</span>
-<span class="co">#&gt; 2 omega 320.3624042 6.460125e+67</span>
-<span class="co">#&gt; 3 sigsq 321.3624042 1.679618e+00</span>
-<span class="co">#&gt; 4   phi   0.5736972 3.582329e-02</span>
-<span class="co">#&gt;                                                                                                                                                        ci</span>
-<span class="co">#&gt; 1                                                                                                                                         [0.892; 77.630]</span>
-<span class="co">#&gt; 2 [-126616118310703801967116683574876008632468745850150634986103008919552.000; 126616118310703801967116683574876008632468745850150634986103008919552.000]</span>
-<span class="co">#&gt; 3                                                                                                                                      [318.070; 324.654]</span>
-<span class="co">#&gt; 4                                                                                                                                          [0.503; 0.644]</span></code></pre></div>
+<span class="co">#&gt; 1 alpha  39.1505182 2.227935e+01</span>
+<span class="co">#&gt; 2 omega 335.0046532 9.253343e+70</span>
+<span class="co">#&gt; 3 sigsq 336.0046532 2.114536e+00</span>
+<span class="co">#&gt; 4   phi   0.6043619 4.158004e-02</span>
+<span class="co">#&gt;                                                                                                                                                              ci</span>
+<span class="co">#&gt; 1                                                                                                                                              [-4.516; 82.817]</span>
+<span class="co">#&gt; 2 [-181362188574556229437385443482066570999395238266496080334697784642895872.000; 181362188574556229437385443482066570999395238266496080334697784642895872.000]</span>
+<span class="co">#&gt; 3                                                                                                                                            [331.860; 340.149]</span>
+<span class="co">#&gt; 4                                                                                                                                                [0.523; 0.686]</span></code></pre></div>
 <p>Now we are going to perform predictions of the IMD at the MSOA level. Since from now on the process is pretty much the exam, the explanation will be shorter.</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">pred_msoa</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/predict_spm.html">predict_spm</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">liv_msoa</span>, spm_obj <span class="op">=</span> <span class="va">fit_lsoa</span>,
