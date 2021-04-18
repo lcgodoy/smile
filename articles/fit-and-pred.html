@@ -5,14 +5,14 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title> • spmismo</title>
+<title>3. Fitting models and making predictions • smile</title>
 <!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/yeti/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="../bootstrap-toc.css">
 <script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
-<script src="../pkgdown.js"></script><meta property="og:title" content="">
-<meta property="og:description" content="spmismo">
+<script src="../pkgdown.js"></script><meta property="og:title" content="3. Fitting models and making predictions">
+<meta property="og:description" content="smile">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
@@ -30,7 +30,7 @@
         <span class="icon-bar"></span>
       </button>
       <span class="navbar-brand">
-        <a class="navbar-link" href="../index.html">spmismo</a>
+        <a class="navbar-link" href="../index.html">smile</a>
         <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9000</span>
       </span>
     </div>
@@ -54,7 +54,7 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
-      <a href="../articles/fit-and-pred.html">UNKNOWN TITLE</a>
+      <a href="../articles/fit-and-pred.html">3. Fitting models and making predictions</a>
     </li>
     <li>
       <a href="../articles/sf-to-spm.html">1. Converting sf objects to spm</a>
@@ -70,8 +70,26 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/lcgodoy/spmismo/">
-    <span class="fab fa-github fa-lg"></span>
+  <a href="https://github.com/lcgodoy/">
+    <span class="fas fa-github fa-lg"></span>
+     
+  </a>
+</li>
+<li>
+  <a href="https://twitter.com/ldcgodoy">
+    <span class="fas fa-twitter fa-lg"></span>
+     
+  </a>
+</li>
+<li>
+  <a href="https://www.linkedin.com/in/godoy-lucas/">
+    <span class="fas fa-linkedin fa-lg"></span>
+     
+  </a>
+</li>
+<li>
+  <a href="https://stackoverflow.com/users/9220758/lcgodoy">
+    <span class="fas fa-stack-overflow fa-lg"></span>
      
   </a>
 </li>
@@ -88,27 +106,26 @@
       </header><script src="fit-and-pred_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
-      <h1 data-toc-skip></h1>
+      <h1 data-toc-skip>3. Fitting models and making predictions</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/lcgodoy/spmismo/blob/master/vignettes/fit-and-pred.Rmd"><code>vignettes/fit-and-pred.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/lcgodoy/smile/blob/master/vignettes/fit-and-pred.Rmd"><code>vignettes/fit-and-pred.Rmd</code></a></small>
       <div class="hidden name"><code>fit-and-pred.Rmd</code></div>
 
     </div>
 
     
     
-<p>r— title: “3. Fitting models and making predictions” output: rmarkdown::html_vignette bibliography: biblio.bib vignette: &gt; % % % —</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://lcgodoy.me/spmismo">spmismo</a></span><span class="op">)</span>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://lcgodoy.me/spmismo">smile</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org">ggplot2</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://r-spatial.github.io/sf/">sf</a></span><span class="op">)</span>
 <span class="co">#&gt; Linking to GEOS 3.8.0, GDAL 3.0.4, PROJ 6.3.1</span></code></pre></div>
-<p>If interested in the theory involving this calculations, take a look at this <a href="https://lcgodoy.me/spmismo/articles/theory.html">vignette</a>.</p>
+<p>If interested in the theory involving this calculations, take a look at this <a href="https://lcgodoy.me/smile/articles/theory.html">vignette</a>.</p>
 <div id="application" class="section level1">
 <h1 class="hasAnchor">
 <a href="#application" class="anchor"></a>Application</h1>
-<p>To exemplify the fitting and predicting functions, we are going to use the data from <span class="citation">@johnson2020dealing</span> again<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>. First, in the code chunk below, we load the data and convert it to <code>spmismo</code> compatible classes. Since this is a toy example, we are going to generate a 500 points grid for the MSOA data and 5 points by polygon for the LSOA data.</p>
+<p>To exemplify the fitting and predicting functions, we are going to use the data from <span class="citation">Johnson, Diggle, and Giorgi (2020)</span> again<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>. First, in the code chunk below, we load the data and convert it to <code>smile</code> compatible classes. Since this is a toy example, we are going to generate a 500 points grid for the MSOA data and 5 points by polygon for the LSOA data.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="va">liv_msoa</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="va">liv_lsoa</span><span class="op">)</span>
@@ -176,10 +193,10 @@
 <span class="co">#&gt;  optimization algorithm converged: yes </span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt;     par  estimate        se               ci</span>
-<span class="co">#&gt; 1 alpha 75.959907 0.7506835 [74.489; 77.431]</span>
-<span class="co">#&gt; 2 omega  8.322755 7.4290294 [-6.238; 22.883]</span>
-<span class="co">#&gt; 3 sigsq  9.322755 0.5744461  [8.197; 10.449]</span>
-<span class="co">#&gt; 4   phi  1.794935 0.1566100   [1.488; 2.102]</span></code></pre></div>
+<span class="co">#&gt; 1 alpha 75.923201 0.6775124 [74.595; 77.251]</span>
+<span class="co">#&gt; 2 omega  8.211309 8.6791213 [-8.799; 25.222]</span>
+<span class="co">#&gt; 3 sigsq  9.211309 0.6071212  [8.021; 10.401]</span>
+<span class="co">#&gt; 4   phi  1.693539 0.1868967   [1.327; 2.060]</span></code></pre></div>
 <p>Finally, now we are going to perform predictions of the LEB at the LSOA level. To do so, we use the function <code>predict_spm</code>. The <code>x</code> argument gives the sf on which we want to make the predictions according to the <code>sbm_obj</code>, which represents the estimated parameters. Now, take a look at the remaining arguments. The last two, are analogous to what we have seen for the function <code>sf_to_spm</code>. They are concerning the grid generated over the study region, now we going to make predicitons over this grid. I set it to 2500 to “approximate” a continuous region<a href="#fn4" class="footnote-ref" id="fnref4"><sup>4</sup></a>. The argument <code>.aggregate</code> if set to <code>TRUE</code>, computes the predictions over the polygons from the input <code>x</code> (in this case <code>liv_lsoa</code>). This function also works if the input is a <code>sf</code> object with POINT geometries. The objects returned by the function <code>pred_lsoa</code> are lists with the following elements: 1) <code>mu_pred</code> - a vector with the predicted average for each location in the generated grid; 2) <code>sig_pred</code> the variance covariance matrix associated with the same grid; 3) the predictions (and standard errors) organized in an <code>sf</code> object to facilitate the visualization of the predictions over a (almost) continuous space; and 4) <code>pred_agg</code> which is returned only if we set <code>.aggregate = TRUE</code>. The last one contains the predictions and their standard erros integrated over the “new regions”.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">pred_lsoa</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/predict_spm.html">predict_spm</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">liv_lsoa</span>, spm_obj <span class="op">=</span> <span class="va">fit_msoa</span>,
@@ -261,16 +278,16 @@
 <span class="co">#&gt; </span>
 <span class="co">#&gt;  optimization algorithm converged: yes </span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt;     par  estimate           se</span>
-<span class="co">#&gt; 1 alpha  39.01258 2.119094e+01</span>
-<span class="co">#&gt; 2 omega 337.27259 2.759628e+71</span>
-<span class="co">#&gt; 3 sigsq 338.27259 2.112444e+00</span>
-<span class="co">#&gt; 4   phi   0.58548 4.461007e-02</span>
-<span class="co">#&gt;                                                                                                                                                              ci</span>
-<span class="co">#&gt; 1                                                                                                                                              [-2.521; 80.546]</span>
-<span class="co">#&gt; 2 [-540877161923014509336980923227141658221426365089463704850384909290700800.000; 540877161923014509336980923227141658221426365089463704850384909290700800.000]</span>
-<span class="co">#&gt; 3                                                                                                                                            [334.132; 342.413]</span>
-<span class="co">#&gt; 4                                                                                                                                                [0.498; 0.673]</span></code></pre></div>
+<span class="co">#&gt;     par    estimate           se</span>
+<span class="co">#&gt; 1 alpha  39.2608465 1.957642e+01</span>
+<span class="co">#&gt; 2 omega 320.3624042 6.460125e+67</span>
+<span class="co">#&gt; 3 sigsq 321.3624042 1.679618e+00</span>
+<span class="co">#&gt; 4   phi   0.5736972 3.582329e-02</span>
+<span class="co">#&gt;                                                                                                                                                        ci</span>
+<span class="co">#&gt; 1                                                                                                                                         [0.892; 77.630]</span>
+<span class="co">#&gt; 2 [-126616118310703801967116683574876008632468745850150634986103008919552.000; 126616118310703801967116683574876008632468745850150634986103008919552.000]</span>
+<span class="co">#&gt; 3                                                                                                                                      [318.070; 324.654]</span>
+<span class="co">#&gt; 4                                                                                                                                          [0.503; 0.644]</span></code></pre></div>
 <p>Now we are going to perform predictions of the IMD at the MSOA level. Since from now on the process is pretty much the exam, the explanation will be shorter.</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">pred_msoa</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/predict_spm.html">predict_spm</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">liv_msoa</span>, spm_obj <span class="op">=</span> <span class="va">fit_lsoa</span>,
@@ -330,8 +347,8 @@
 <div id="joint-model" class="section level2">
 <h2 class="hasAnchor">
 <a href="#joint-model" class="anchor"></a>“Joint” model</h2>
-<p>For more details see this <a href="lcgodoy.me/spmismo/theory.html">link</a>.</p>
-<p>No we are going to model the two variables together. Besides an additional variance parameter, for this model we have an additional intercept and a <span class="math inline">\(\beta\)</span> parameter that measures how associated the two variables are (at the continuous process scale). First, we create a <code>spm</code> object contaning the info about both variables, as described in this <a href="lcgodoy.me/spmismo/theory.html">vignette</a>.</p>
+<p>For more details see this <a href="lcgodoy.me/smile/theory.html">link</a>.</p>
+<p>No we are going to model the two variables together. Besides an additional variance parameter, for this model we have an additional intercept and a <span class="math inline">\(\beta\)</span> parameter that measures how associated the two variables are (at the continuous process scale). First, we create a <code>spm</code> object contaning the info about both variables, as described in this <a href="lcgodoy.me/smile/theory.html">vignette</a>.</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">## joint spm object</span>
 <span class="va">spm_xy</span> <span class="op">&lt;-</span>
@@ -367,14 +384,19 @@
 </blockquote>
 </div>
 </div>
-<div id="reference" class="section level1">
+<div id="reference" class="section level1 unnumbered">
 <h1 class="hasAnchor">
 <a href="#reference" class="anchor"></a>Reference</h1>
+<div id="refs" class="references">
+<div id="ref-johnson2020dealing">
+<p>Johnson, Olatunji, Peter Diggle, and Emanuele Giorgi. 2020. “Dealing with Spatial Misalignment to Model the Relationship Between Deprivation and Life Expectancy: A Model-Based Geostatistical Approach.” <em>International Journal of Health Geographics</em> 19 (1): 1–13.</p>
+</div>
+</div>
 </div>
 <div class="footnotes">
 <hr>
 <ol>
-<li id="fn1"><p>for more details about the data, take a look at the vignette <a href="https://lcgodoy.me/spmismo/articles/sf-to-spm.html">sf-to-spm</a><a href="#fnref1" class="footnote-back">↩︎</a></p></li>
+<li id="fn1"><p>for more details about the data, take a look at the vignette <a href="https://lcgodoy.me/smile/articles/sf-to-spm.html">sf-to-spm</a><a href="#fnref1" class="footnote-back">↩︎</a></p></li>
 <li id="fn2"><p>This parameter is known to be hard to be estimated in the literature of geostatistics.<a href="#fnref2" class="footnote-back">↩︎</a></p></li>
 <li id="fn3"><p>The default algorithm used by the package is the Nelder-Mead, this can easily be changed by setting the parameter <code>opt_method = "L-BFGS-B"</code>, for example.<a href="#fnref3" class="footnote-back">↩︎</a></p></li>
 <li id="fn4"><p>Be careful here, a very large number of points can result in intractable covariance matrices<a href="#fnref4" class="footnote-back">↩︎</a></p></li>
