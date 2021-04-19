@@ -86,8 +86,14 @@ single_sf_to_spm <- function(sf_obj,
                     y = sf_obj[poly_ids],
                     join = sf::st_within)
 
-    sf_obj <- sf_obj[sf_obj[[poly_ids]] %in%
-                     unique(out_grid_pt[[poly_ids]]),]
+    if(any(! sf_obj[[poly_ids]] %in% out_grid_pt[[poly_ids]])) {
+        out_grid_pt <- rbind(
+            out_grid_pt,
+            suppressWarnings(sf::st_centroid(sf_obj[, poly_ids]))
+        )
+    }
+
+    out_grid_pt <- out_grid_pt[order(out_grid_pt[[poly_ids]]), ]
 
     out_grid_pt <- transform(out_grid_pt,
                              x = sf::st_coordinates(out_grid_pt)[, 1],
