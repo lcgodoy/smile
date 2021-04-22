@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">smile</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.1</span>
       </span>
     </div>
 
@@ -124,7 +124,7 @@
     
 <p>The purpose of this vignette is to illustrate how to convert <code>sf</code><span class="citation">(Pebesma 2018)</span> objects to objects support by the <code>smile</code> package. Besides the <code>sf</code> and <code>smile</code> packages, the <code>ggplot2</code><span class="citation">(Wickham 2011)</span> package will be used for the data visualizations.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://lcgodoy.me/spmismo">smile</a></span><span class="op">)</span>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://lcgodoy.me/smile">smile</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org">ggplot2</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://r-spatial.github.io/sf/">sf</a></span><span class="op">)</span>
 <span class="co">#&gt; Linking to GEOS 3.8.0, GDAL 3.0.4, PROJ 6.3.1</span></code></pre></div>
@@ -142,7 +142,7 @@
        <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="va">leb_est</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
     <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html">geom_sf</a></span><span class="op">(</span>color <span class="op">=</span> <span class="st">"black"</span>,
             lwd   <span class="op">=</span> <span class="fl">.1</span><span class="op">)</span> <span class="op">+</span>
-    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html">scale_fill_viridis_b</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html">scale_fill_viridis_b</a></span><span class="op">(</span>option <span class="op">=</span> <span class="st">"H"</span><span class="op">)</span> <span class="op">+</span>
     <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_minimal</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <p><img src="sf-to-spm_files/figure-html/read-data-1.png" width="700"></p>
 <p>We consider, in a first moment, that this random variable is normally distributed with a constant mean and a certain (spatial) covariance matrix. Now, let <span class="math inline">\(A_1\)</span> and <span class="math inline">\(A_2\)</span> be two distinct MSOA’s. Under the before mentioned assumption that the observed random variable is driven by an underlying gaussian random field with isotropic covariance function <span class="math inline">\(C(\lVert x - y \rVert \, ; \, \theta)\)</span>, where <span class="math inline">\(\lVert x - y \rVert\)</span> is the distance between two points in the coordinates <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span>, respectively. Then, the covariance between the (averaged) variable observed at <span class="math inline">\(A_1\)</span> and <span class="math inline">\(A_2\)</span> is define as <span class="math display">\[
@@ -161,6 +161,7 @@
 <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">msoa_spm</span><span class="op">$</span><span class="va">grid</span>,
        <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>color <span class="op">=</span> <span class="va">msoa11cd</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
     <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html">geom_sf</a></span><span class="op">(</span>pch <span class="op">=</span> <span class="fl">15</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html">scale_color_viridis_d</a></span><span class="op">(</span>option <span class="op">=</span> <span class="st">"H"</span><span class="op">)</span> <span class="op">+</span>
     <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/guides.html">guides</a></span><span class="op">(</span>color <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op">+</span>
     <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_minimal</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <p><img src="sf-to-spm_files/figure-html/sf-to-spm1-1.png" width="700"></p>

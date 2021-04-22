@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Matern covariance function (scalar - kappa = 3/2) — single_matern3 • smile</title>
+<title>Creatin a distance matrix — distmat • smile</title>
 
 
 <!-- jquery -->
@@ -39,9 +39,9 @@
 
 
 
-<meta property="og:title" content="Matern covariance function (scalar - kappa = 3/2) — single_matern3" />
-<meta property="og:description" content="Computing the Matern covariance function for a single distance
-measure, with \(\kappa = 3/2\)." />
+<meta property="og:title" content="Creatin a distance matrix — distmat" />
+<meta property="og:description" content="Internal use. For now it only supports euclidean distance. (May
+import parallelDist in the future)." />
 
 
 
@@ -154,46 +154,27 @@ measure, with \(\kappa = 3/2\)." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Matern covariance function (scalar - kappa = 3/2)</h1>
+    <h1>Creatin a distance matrix</h1>
     <small class="dont-index">Source: <a href='https://github.com/lcgodoy/smile/blob/master/R/RcppExports.R'><code>R/RcppExports.R</code></a></small>
-    <div class="hidden name"><code>single_matern3.Rd</code></div>
+    <div class="hidden name"><code>distmat.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Computing the Matern covariance function for a single distance
-measure, with \(\kappa = 3/2\).</p>
+    <p>Internal use. For now it only supports euclidean distance. (May
+import parallelDist in the future).</p>
     </div>
 
-    <pre class="usage"><span class='fu'>single_matern3</span><span class='op'>(</span><span class='va'>d</span>, <span class='va'>sigsq</span>, <span class='va'>phi</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>distmat</span><span class='op'>(</span><span class='va'>my_mat</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>d</th>
-      <td><p>a scalar representing the distance on which it is desired to
-evaluate the covariance function.</p></td>
-    </tr>
-    <tr>
-      <th>sigsq</th>
-      <td><p>the \(\sigma^2\) parameter from the Matern covariance
-function.</p></td>
-    </tr>
-    <tr>
-      <th>phi</th>
-      <td><p>the \(\phi\) parameter from the Matern covariance function,
-controls the range of the spatial dependence.</p></td>
+      <th>my_mat</th>
+      <td><p>a matrix representing a grid of points.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
-
-    <p>a scalar representing the (matern) covariance between two
-observations <code>d</code> apart of each other.</p>
-    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
-
-    <div class='dont-index'><p><code><a href='single_matern.html'>single_matern</a></code>, <code><a href='single_matern5.html'>single_matern5</a></code>
-<code><a href='single_exp.html'>single_exp</a></code>, <code><a href='mat_cov.html'>mat_cov</a></code></p></div>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

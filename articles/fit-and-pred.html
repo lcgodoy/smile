@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">smile</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.1</span>
       </span>
     </div>
 
@@ -123,7 +123,7 @@
     
     
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://lcgodoy.me/spmismo">smile</a></span><span class="op">)</span>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://lcgodoy.me/smile">smile</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org">ggplot2</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://r-spatial.github.io/sf/">sf</a></span><span class="op">)</span>
 <span class="co">#&gt; Linking to GEOS 3.8.0, GDAL 3.0.4, PROJ 6.3.1</span></code></pre></div>
@@ -165,7 +165,7 @@
 <code class="sourceCode R"><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">liv_msoa</span>,
        <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="va">leb_est</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
     <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html">geom_sf</a></span><span class="op">(</span>color <span class="op">=</span> <span class="fl">1</span>, lwd <span class="op">=</span> <span class="fl">.1</span><span class="op">)</span> <span class="op">+</span>
-    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html">scale_fill_viridis_c</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html">scale_fill_viridis_c</a></span><span class="op">(</span>option <span class="op">=</span> <span class="st">"H"</span><span class="op">)</span> <span class="op">+</span>
     <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_minimal</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <p><img src="fit-and-pred_files/figure-html/leb-msoa1-1.png" width="700"></p>
 <p>The map below displays the IMD observed at the LSOAs.</p>
@@ -173,7 +173,7 @@
 <code class="sourceCode R"><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">liv_lsoa</span>,
        <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="va">imdscore</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
     <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html">geom_sf</a></span><span class="op">(</span>color <span class="op">=</span> <span class="fl">1</span>, lwd <span class="op">=</span> <span class="fl">.1</span><span class="op">)</span> <span class="op">+</span>
-    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html">scale_fill_viridis_c</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html">scale_fill_viridis_c</a></span><span class="op">(</span>option <span class="op">=</span> <span class="st">"H"</span><span class="op">)</span> <span class="op">+</span>
     <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_minimal</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <p><img src="fit-and-pred_files/figure-html/imd-lsoa1-1.png" width="700"></p>
 <div id="fit-at-msoa-prediction-at-lsoa" class="section level2">
@@ -189,7 +189,7 @@
     <span class="fu"><a href="../reference/fit_spm.html">fit_spm</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">spm_msoa</span>,
             theta_st <span class="op">=</span> <span class="va">theta_st_msoa</span>,
             model <span class="op">=</span> <span class="st">"pexp"</span>,
-            kappa <span class="op">=</span> <span class="fl">1.5</span>,
+            kappa <span class="op">=</span> <span class="fl">.5</span>,
             apply_exp <span class="op">=</span> <span class="cn">TRUE</span>,
             control   <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>maxit <span class="op">=</span> <span class="fl">500</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p>After a few seconds, we get the Results. Now, we can use the function <code>summary_sspm_fit</code> to get the summary of the results. The function prints a table containing the estimates, their standard errors, and <code>1 - sig</code> confidence interval based on the asymptotic normality of the MLEs. The function also prints a message indicating if the optimization algorithm has converged<a href="#fn3" class="footnote-ref" id="fnref3"><sup>3</sup></a>.</p>
@@ -198,11 +198,11 @@
 <span class="co">#&gt; </span>
 <span class="co">#&gt;  optimization algorithm converged: yes </span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt;     par  estimate        se               ci</span>
-<span class="co">#&gt; 1 alpha 75.938095 0.6988746 [74.568; 77.308]</span>
-<span class="co">#&gt; 2 omega  7.977770 7.0187113 [-5.779; 21.734]</span>
-<span class="co">#&gt; 3 sigsq  8.977770 0.6042741  [7.793; 10.162]</span>
-<span class="co">#&gt; 4   phi  1.751201 0.1840810   [1.390; 2.112]</span></code></pre></div>
+<span class="co">#&gt;     par   estimate           se                                      ci</span>
+<span class="co">#&gt; 1 alpha 75.6561649 1.355755e+00                        [72.999; 78.313]</span>
+<span class="co">#&gt; 2 omega 31.7147774 5.371266e+11 [-1052748805563.156; 1052748805626.586]</span>
+<span class="co">#&gt; 3 sigsq 32.7147774 2.138194e+00                        [28.524; 36.906]</span>
+<span class="co">#&gt; 4   phi  0.4162069 3.921254e-01                         [-0.352; 1.185]</span></code></pre></div>
 <p>Finally, now we are going to perform predictions of the LEB at the LSOA level. To do so, we use the function <code>predict_spm</code>. The <code>x</code> argument gives the sf on which we want to make the predictions according to the <code>sbm_obj</code>, which represents the estimated parameters. Now, take a look at the remaining arguments. The last two, are analogous to what we have seen for the function <code>sf_to_spm</code>. They are concerning the grid generated over the study region, now we going to make predicitons over this grid. I set it to 2500 to “approximate” a continuous region<a href="#fn4" class="footnote-ref" id="fnref4"><sup>4</sup></a>. The argument <code>.aggregate</code> if set to <code>TRUE</code>, computes the predictions over the polygons from the input <code>x</code> (in this case <code>liv_lsoa</code>). This function also works if the input is a <code>sf</code> object with POINT geometries. The objects returned by the function <code>pred_lsoa</code> are lists with the following elements: 1) <code>mu_pred</code> - a vector with the predicted average for each location in the generated grid; 2) <code>sig_pred</code> the variance covariance matrix associated with the same grid; 3) the predictions (and standard errors) organized in an <code>sf</code> object to facilitate the visualization of the predictions over a (almost) continuous space; and 4) <code>pred_agg</code> which is returned only if we set <code>.aggregate = TRUE</code>. The last one contains the predictions and their standard erros integrated over the “new regions”.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">pred_lsoa</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/predict_spm.html">predict_spm</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">liv_lsoa</span>, spm_obj <span class="op">=</span> <span class="va">fit_msoa</span>,
@@ -238,8 +238,8 @@
     <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html">geom_sf</a></span><span class="op">(</span>data <span class="op">=</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_geometry.html">st_geometry</a></span><span class="op">(</span><span class="va">pred_lsoa</span><span class="op">$</span><span class="va">pred_agg</span><span class="op">)</span>, color <span class="op">=</span> <span class="fl">1</span>,
             lwd <span class="op">=</span> <span class="fl">.1</span>, inherit.aes <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op">+</span>
     <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html">geom_sf</a></span><span class="op">(</span>pch <span class="op">=</span> <span class="fl">15</span><span class="op">)</span> <span class="op">+</span>
-    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html">scale_fill_viridis_c</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
-    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html">scale_color_viridis_c</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html">scale_fill_viridis_c</a></span><span class="op">(</span>option <span class="op">=</span> <span class="st">"H"</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html">scale_color_viridis_c</a></span><span class="op">(</span>option <span class="op">=</span> <span class="st">"H"</span><span class="op">)</span> <span class="op">+</span>
     <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/guides.html">guides</a></span><span class="op">(</span>color <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op">+</span>
     <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html">facet_wrap</a></span><span class="op">(</span><span class="va">surface</span> <span class="op">~</span> <span class="va">.</span><span class="op">)</span> <span class="op">+</span>
     <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_bw</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
@@ -252,8 +252,8 @@
     <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html">geom_sf</a></span><span class="op">(</span>data <span class="op">=</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_geometry.html">st_geometry</a></span><span class="op">(</span><span class="va">pred_lsoa</span><span class="op">$</span><span class="va">pred_agg</span><span class="op">)</span>, color <span class="op">=</span> <span class="fl">1</span>,
             lwd <span class="op">=</span> <span class="fl">.1</span>, inherit.aes <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op">+</span>
     <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html">geom_sf</a></span><span class="op">(</span>pch <span class="op">=</span> <span class="fl">15</span><span class="op">)</span> <span class="op">+</span>
-    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html">scale_fill_viridis_c</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
-    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html">scale_color_viridis_c</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html">scale_fill_viridis_c</a></span><span class="op">(</span>option <span class="op">=</span> <span class="st">"H"</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html">scale_color_viridis_c</a></span><span class="op">(</span>option <span class="op">=</span> <span class="st">"H"</span><span class="op">)</span> <span class="op">+</span>
     <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/guides.html">guides</a></span><span class="op">(</span>color <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op">+</span>
     <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html">facet_wrap</a></span><span class="op">(</span><span class="va">surface</span> <span class="op">~</span> <span class="va">.</span><span class="op">)</span> <span class="op">+</span>
     <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_bw</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
@@ -284,16 +284,16 @@
 <span class="co">#&gt; </span>
 <span class="co">#&gt;  optimization algorithm converged: yes </span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt;     par    estimate           se</span>
-<span class="co">#&gt; 1 alpha  39.1505182 2.227935e+01</span>
-<span class="co">#&gt; 2 omega 335.0046532 9.253343e+70</span>
-<span class="co">#&gt; 3 sigsq 336.0046532 2.114536e+00</span>
-<span class="co">#&gt; 4   phi   0.6043619 4.158004e-02</span>
-<span class="co">#&gt;                                                                                                                                                              ci</span>
-<span class="co">#&gt; 1                                                                                                                                              [-4.516; 82.817]</span>
-<span class="co">#&gt; 2 [-181362188574556229437385443482066570999395238266496080334697784642895872.000; 181362188574556229437385443482066570999395238266496080334697784642895872.000]</span>
-<span class="co">#&gt; 3                                                                                                                                            [331.860; 340.149]</span>
-<span class="co">#&gt; 4                                                                                                                                                [0.523; 0.686]</span></code></pre></div>
+<span class="co">#&gt;     par    estimate            se</span>
+<span class="co">#&gt; 1 alpha  23.2694489  5.576587e+02</span>
+<span class="co">#&gt; 2 omega 513.0890159 4.701509e+111</span>
+<span class="co">#&gt; 3 sigsq 514.0890159  4.930865e+02</span>
+<span class="co">#&gt; 4   phi   0.7047439  9.159260e+00</span>
+<span class="co">#&gt;                                                                                                                                                                                                                                              ci</span>
+<span class="co">#&gt; 1                                                                                                                                                                                                                         [-1069.722; 1116.260]</span>
+<span class="co">#&gt; 2 [-9214788907318327954042928248887910211303034435721938494773912547349282148683317402486356674198256636019374817280.000; 9214788907318327954042928248887910211303034435721938494773912547349282148683317402486356674198256636019374817280.000]</span>
+<span class="co">#&gt; 3                                                                                                                                                                                                                          [-452.343; 1480.521]</span>
+<span class="co">#&gt; 4                                                                                                                                                                                                                             [-17.247; 18.657]</span></code></pre></div>
 <p>Now we are going to perform predictions of the IMD at the MSOA level. Since from now on the process is pretty much the exam, the explanation will be shorter.</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">pred_msoa</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/predict_spm.html">predict_spm</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">liv_msoa</span>, spm_obj <span class="op">=</span> <span class="va">fit_lsoa</span>,
@@ -329,8 +329,8 @@
     <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html">geom_sf</a></span><span class="op">(</span>data <span class="op">=</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_geometry.html">st_geometry</a></span><span class="op">(</span><span class="va">pred_msoa</span><span class="op">$</span><span class="va">pred_agg</span><span class="op">)</span>, color <span class="op">=</span> <span class="fl">1</span>,
             lwd <span class="op">=</span> <span class="fl">.1</span>, inherit.aes <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op">+</span>
     <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html">geom_sf</a></span><span class="op">(</span>pch <span class="op">=</span> <span class="fl">15</span><span class="op">)</span> <span class="op">+</span>
-    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html">scale_fill_viridis_c</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
-    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html">scale_color_viridis_c</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html">scale_fill_viridis_c</a></span><span class="op">(</span>option <span class="op">=</span> <span class="st">"H"</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html">scale_color_viridis_c</a></span><span class="op">(</span>option <span class="op">=</span> <span class="st">"H"</span><span class="op">)</span> <span class="op">+</span>
     <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/guides.html">guides</a></span><span class="op">(</span>color <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op">+</span>
     <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html">facet_wrap</a></span><span class="op">(</span><span class="va">surface</span> <span class="op">~</span> <span class="va">.</span><span class="op">)</span> <span class="op">+</span>
     <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_bw</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
@@ -343,8 +343,8 @@
     <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html">geom_sf</a></span><span class="op">(</span>data <span class="op">=</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_geometry.html">st_geometry</a></span><span class="op">(</span><span class="va">pred_msoa</span><span class="op">$</span><span class="va">pred_agg</span><span class="op">)</span>, color <span class="op">=</span> <span class="fl">1</span>,
             lwd <span class="op">=</span> <span class="fl">.1</span>, inherit.aes <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op">+</span>
     <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html">geom_sf</a></span><span class="op">(</span>pch <span class="op">=</span> <span class="fl">15</span><span class="op">)</span> <span class="op">+</span>
-    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html">scale_fill_viridis_c</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
-    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html">scale_color_viridis_c</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html">scale_fill_viridis_c</a></span><span class="op">(</span>option <span class="op">=</span> <span class="st">"H"</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html">scale_color_viridis_c</a></span><span class="op">(</span>option <span class="op">=</span> <span class="st">"H"</span><span class="op">)</span> <span class="op">+</span>
     <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/guides.html">guides</a></span><span class="op">(</span>color <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op">+</span>
     <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html">facet_wrap</a></span><span class="op">(</span><span class="va">surface</span> <span class="op">~</span> <span class="va">.</span><span class="op">)</span> <span class="op">+</span>
     <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_bw</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>

@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">smile</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.1</span>
       </span>
     </div>
 
@@ -162,7 +162,7 @@
     <p>Evaluate the log-likelihood for a given set of parameters</p>
     </div>
 
-    <pre class="usage"><span class='fu'>singl_log_lik</span><span class='op'>(</span><span class='va'>theta</span>, <span class='va'>.dt</span>, <span class='va'>dists</span>, <span class='va'>model</span>, kappa <span class='op'>=</span> <span class='cn'>NULL</span>, apply_exp <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>singl_log_lik</span><span class='op'>(</span><span class='va'>theta</span>, <span class='va'>.dt</span>, <span class='va'>dists</span>, <span class='va'>npix</span>, <span class='va'>model</span>, kappa <span class='op'>=</span> <span class='cn'>NULL</span>, apply_exp <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -185,9 +185,15 @@ second for the distance matrices associated with \(X\), and the last
 containing the cross-distance matrices.</p></td>
     </tr>
     <tr>
+      <th>npix</th>
+      <td><p>a <code>integer vector</code> containing the number of pixels within
+each polygon. (Ordered by the id variables for the polygons).</p></td>
+    </tr>
+    <tr>
       <th>model</th>
       <td><p>a <code>character</code> indicating which covariance function to
-use. Possible values are <code><a href='https://rdrr.io/r/base/c.html'>c("matern", "pexp", "gaussian", "spherical")</a></code>.</p></td>
+use. Possible values are <code><a href='https://rdrr.io/r/base/c.html'>c("matern", "pexp", "gaussian",
+    "spherical")</a></code>.</p></td>
     </tr>
     <tr>
       <th>kappa</th>
