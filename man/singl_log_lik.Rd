@@ -4,7 +4,7 @@
 \alias{singl_log_lik}
 \title{Evaluate log-lik}
 \usage{
-singl_log_lik(theta, .dt, dists, model, kappa = NULL, apply_exp = FALSE)
+singl_log_lik(theta, .dt, dists, npix, model, kappa = NULL, apply_exp = FALSE)
 }
 \arguments{
 \item{theta}{a \code{list} of size \eqn{2 p + \frac{p(p + 1)}{2} + 3}
@@ -18,8 +18,12 @@ matrices associated with the regions where \eqn{Y} was measured, the
 second for the distance matrices associated with \eqn{X}, and the last
 containing the cross-distance matrices.}
 
+\item{npix}{a \code{integer vector} containing the number of pixels within
+each polygon. (Ordered by the id variables for the polygons).}
+
 \item{model}{a \code{character} indicating which covariance function to
-use. Possible values are \code{c("matern", "pexp", "gaussian", "spherical")}.}
+use. Possible values are \code{c("matern", "pexp", "gaussian",
+    "spherical")}.}
 
 \item{kappa}{\eqn{\kappa} parameter. Not necessary if \code{mode} is
 \code{"gaussian"} or \code{"spherical"}}

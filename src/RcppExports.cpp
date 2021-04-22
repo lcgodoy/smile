@@ -215,6 +215,29 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// eucl_aux
+double eucl_aux(double x, double y);
+RcppExport SEXP _smile_eucl_aux(SEXP xSEXP, SEXP ySEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< double >::type x(xSEXP);
+    Rcpp::traits::input_parameter< double >::type y(ySEXP);
+    rcpp_result_gen = Rcpp::wrap(eucl_aux(x, y));
+    return rcpp_result_gen;
+END_RCPP
+}
+// distmat
+arma::mat distmat(const arma::mat& my_mat);
+RcppExport SEXP _smile_distmat(SEXP my_matSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const arma::mat& >::type my_mat(my_matSEXP);
+    rcpp_result_gen = Rcpp::wrap(distmat(my_mat));
+    return rcpp_result_gen;
+END_RCPP
+}
 // crossdist
 arma::mat crossdist(const arma::mat& m1, const arma::mat& m2);
 RcppExport SEXP _smile_crossdist(SEXP m1SEXP, SEXP m2SEXP) {
@@ -280,6 +303,8 @@ static const R_CallMethodDef CallEntries[] = {
     {"_smile_single_spher", (DL_FUNC) &_smile_single_spher, 3},
     {"_smile_spher_cov", (DL_FUNC) &_smile_spher_cov, 3},
     {"_smile_comp_spher_cov", (DL_FUNC) &_smile_comp_spher_cov, 5},
+    {"_smile_eucl_aux", (DL_FUNC) &_smile_eucl_aux, 2},
+    {"_smile_distmat", (DL_FUNC) &_smile_distmat, 1},
     {"_smile_crossdist", (DL_FUNC) &_smile_crossdist, 2},
     {"_smile_single_dists", (DL_FUNC) &_smile_single_dists, 1},
     {"_smile_mult_dists", (DL_FUNC) &_smile_mult_dists, 3},

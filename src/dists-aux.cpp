@@ -6,8 +6,9 @@
 // [[Rcpp::plugins(cpp11)]]
 using namespace Rcpp;
 
-//' @name eucl_aux
-double eucl_aux(x, y) {
+//' @name aux_mat
+// [[Rcpp::export]]
+double eucl_aux(double x, double y) {
   return sqrt( x*x + y*y );
 }
 

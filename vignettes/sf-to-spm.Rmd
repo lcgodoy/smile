@@ -3,7 +3,7 @@ title: "1. Converting sf objects to spm"
 output: rmarkdown::html_vignette
 bibliography: biblio.bib
 vignette: >
-  %\VignetteIndexEntry{Converting sf objects to spm}
+  %\VignetteIndexEntry{1. Converting sf objects to spm}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -55,7 +55,7 @@ ggplot(data = liv_msoa,
        aes(fill = leb_est)) +
     geom_sf(color = "black",
             lwd   = .1) +
-    scale_fill_viridis_b() +
+    scale_fill_viridis_b(option = "H") +
     theme_minimal()
 ```
 
@@ -120,6 +120,7 @@ msoa_spm <-
 ggplot(data = msoa_spm$grid,
        aes(color = msoa11cd)) +
     geom_sf(pch = 15) +
+    scale_color_viridis_d(option = "H") +
     guides(color = FALSE) +
     theme_minimal()
 ```
@@ -184,6 +185,7 @@ ggplot(data = to_plot,
        aes(color = msoa11cd)) +
     guides(color = FALSE) +
     geom_sf(pch = 15) +
+    scale_color_viridis_d(option = "H") +
     facet_grid(by_polygon ~ type, labeller = label_both) +
     theme_bw()
 ```

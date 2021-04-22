@@ -1,6 +1,6 @@
 Package: smile
 Title: Spatial MIsaLignment Estimation
-Version: 0.0.0.9000
+Version: 0.0.1
 Authors@R: 
     person(given = "Lucas",
            family = "Godoy",
@@ -30,7 +30,7 @@ Imports:
     utils
 Depends: 
     R (>= 3.5)
-URL: https://lcgodoy.me/spmismo, https://github.com/lcgodoy/smile
+URL: https://lcgodoy.me/smile, https://github.com/lcgodoy/smile
 BugReports: https://github.com/lcgodoy/smile/issues
 Suggests: 
     knitr,

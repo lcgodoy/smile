@@ -440,6 +440,22 @@ comp_spher_cov <- function(cross_dists, n, n2, sigsq, phi) {
     .Call(`_smile_comp_spher_cov`, cross_dists, n, n2, sigsq, phi)
 }
 
+#' @name aux_mat
+eucl_aux <- function(x, y) {
+    .Call(`_smile_eucl_aux`, x, y)
+}
+
+#' @title Creatin a distance matrix
+#' 
+#' @description Internal use. For now it only supports euclidean distance. (May
+#'   import parallelDist in the future).
+#'
+#' @param my_mat a matrix representing a grid of points.
+#' 
+distmat <- function(my_mat) {
+    .Call(`_smile_distmat`, my_mat)
+}
+
 #' @title Pairwise distances between matrices
 #' 
 #' @description Internal use.
@@ -455,6 +471,8 @@ crossdist <- function(m1, m2) {
 #' @param mat_list internal use
 #' @param mat_list1 internal use
 #' @param mat_list2 internal use
+#' @param x internal use
+#' @param y internal use
 #' @param return_single internal use
 #' @param pred_mat internal use
 #' @param x_to_list internal use

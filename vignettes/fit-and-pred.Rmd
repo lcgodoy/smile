@@ -68,7 +68,7 @@ The map below shows the LEB observed at the MSOAs.
 ggplot(data = liv_msoa,
        aes(fill = leb_est)) +
     geom_sf(color = 1, lwd = .1) +
-    scale_fill_viridis_c() +
+    scale_fill_viridis_c(option = "H") +
     theme_minimal()
 ```
 
@@ -77,7 +77,7 @@ The map below displays the IMD observed at the LSOAs.
 ggplot(data = liv_lsoa,
        aes(fill = imdscore)) +
     geom_sf(color = 1, lwd = .1) +
-    scale_fill_viridis_c() +
+    scale_fill_viridis_c(option = "H") +
     theme_minimal()
 ```
 
@@ -101,7 +101,7 @@ fit_msoa <-
     fit_spm(x = spm_msoa,
             theta_st = theta_st_msoa,
             model = "pexp",
-            kappa = 1.5,
+            kappa = .5,
             apply_exp = TRUE,
             control   = list(maxit = 500))
 ```
@@ -174,8 +174,8 @@ ggplot(data = aux_viz1[aux_viz1$variable == "prediction",],
     geom_sf(data = st_geometry(pred_lsoa$pred_agg), color = 1,
             lwd = .1, inherit.aes = FALSE) +
     geom_sf(pch = 15) +
-    scale_fill_viridis_c() +
-    scale_color_viridis_c() +
+    scale_fill_viridis_c(option = "H") +
+    scale_color_viridis_c(option = "H") +
     guides(color = FALSE) +
     facet_wrap(surface ~ .) +
     theme_bw()
@@ -190,8 +190,8 @@ ggplot(data = aux_viz1[aux_viz1$variable == "se",],
     geom_sf(data = st_geometry(pred_lsoa$pred_agg), color = 1,
             lwd = .1, inherit.aes = FALSE) +
     geom_sf(pch = 15) +
-    scale_fill_viridis_c() +
-    scale_color_viridis_c() +
+    scale_fill_viridis_c(option = "H") +
+    scale_color_viridis_c(option = "H") +
     guides(color = FALSE) +
     facet_wrap(surface ~ .) +
     theme_bw()
@@ -270,8 +270,8 @@ ggplot(data = aux_viz2[aux_viz2$variable == "prediction",],
     geom_sf(data = st_geometry(pred_msoa$pred_agg), color = 1,
             lwd = .1, inherit.aes = FALSE) +
     geom_sf(pch = 15) +
-    scale_fill_viridis_c() +
-    scale_color_viridis_c() +
+    scale_fill_viridis_c(option = "H") +
+    scale_color_viridis_c(option = "H") +
     guides(color = FALSE) +
     facet_wrap(surface ~ .) +
     theme_bw()
@@ -285,8 +285,8 @@ ggplot(data = aux_viz2[aux_viz2$variable == "se",],
     geom_sf(data = st_geometry(pred_msoa$pred_agg), color = 1,
             lwd = .1, inherit.aes = FALSE) +
     geom_sf(pch = 15) +
-    scale_fill_viridis_c() +
-    scale_color_viridis_c() +
+    scale_fill_viridis_c(option = "H") +
+    scale_color_viridis_c(option = "H") +
     guides(color = FALSE) +
     facet_wrap(surface ~ .) +
     theme_bw()

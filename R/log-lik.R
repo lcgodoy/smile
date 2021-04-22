@@ -188,8 +188,11 @@ mult_log_lik <- function(theta, .dt, dists, model, kappa = NULL,
 ##'     matrices associated with the regions where \eqn{Y} was measured, the
 ##'     second for the distance matrices associated with \eqn{X}, and the last
 ##'     containing the cross-distance matrices.
+##' @param npix a \code{integer vector} containing the number of pixels within
+##'     each polygon. (Ordered by the id variables for the polygons).
 ##' @param model a \code{character} indicating which covariance function to
-##'     use. Possible values are \code{c("matern", "pexp", "gaussian", "spherical")}.
+##'     use. Possible values are \code{c("matern", "pexp", "gaussian",
+##'     "spherical")}.
 ##' @param kappa \eqn{\kappa} parameter. Not necessary if \code{mode} is
 ##'     \code{"gaussian"} or \code{"spherical"}
 ##' @param apply_exp a \code{logical} indicater wheter the exponential
@@ -197,8 +200,8 @@ mult_log_lik <- function(theta, .dt, dists, model, kappa = NULL,
 ##'     facilitates the optimization process.
 ##' 
 ##' @return a scalar representing \code{-log.lik}.
-singl_log_lik <- function(theta, .dt, dists, model, kappa = NULL,
-                          apply_exp = FALSE) {
+singl_log_lik <- function(theta, .dt, dists, npix, model,
+                          kappa = NULL, apply_exp = FALSE) {
 
     p <- NCOL(.dt)
 
@@ -257,7 +260,8 @@ singl_log_lik <- function(theta, .dt, dists, model, kappa = NULL,
            })
     
     if(p == 1) {
-        varcov_y  <- varcov_u1 + diag(omega, nrow = .n, ncol = .n)
+        varcov_y  <- varcov_u1 + diag(omega / npix,
+                                      nrow = .n, ncol = .n)
         
         log_lik_y <- mvtnorm::dmvnorm(x = matrix(.dt, nrow = 1),
                                       mean  = rep(alpha, .n),
@@ -266,7 +270,7 @@ singl_log_lik <- function(theta, .dt, dists, model, kappa = NULL,
                                       checkSymmetry = FALSE)
     } else {
         varcov_y  <- kronecker(tcrossprod(matrix(rep(1, p), ncol = 1)), varcov_u1) +
-            kronecker(omega, diag(1, nrow = .n, ncol = .n))
+            kronecker(omega, diag(1 / npix, nrow = .n, ncol = .n))
         
         log_lik_y <- mvtnorm::dmvnorm(x = matrix(c(.dt), nrow = 1),
                                       mean  = c(kronecker(alpha,

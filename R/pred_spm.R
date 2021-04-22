@@ -13,7 +13,8 @@ predict_spm.sspm_fit <- function(x, .aggregate = TRUE, ...) {
         
         ## create the distance matrix of the predictive location
         coords_pred <- sf::st_coordinates(x$call_data$grid)
-        u_pred      <- as.matrix(stats::dist(coords_pred))
+        ## u_pred      <- as.matrix(stats::dist(coords_pred))
+        u_pred      <- distmat(coords_pred)
         n_pred      <- nrow(coords_pred)  # number of predicted location
 
         u_res_pred <- pred_cdist(get_grid_list(x_to_list = x$call_data$grid,
@@ -96,6 +97,13 @@ predict_spm.sspm_fit <- function(x, .aggregate = TRUE, ...) {
                                          sigsq = x$estimate["sigsq"])
                })
 
+        sig_y <- sig_y + diag(x$estimate["omega"] / x$call_data$npix,
+                              nrow = n_obs, ncol = n_obs)
+
+        sig_pred <- sig_pred + diag(x$estimate["omega"],
+                                    nrow = nrow(sig_pred),
+                                    ncol = ncol(sig_pred))
+        
         sig_y_inv <- chol2inv(chol(sig_y))
 
         mean_pred <- matrix(rep(x$estimate["alpha"], n_pred),
@@ -219,7 +227,8 @@ predict_spm.sf <- function(x, spm_obj, .aggregate = TRUE,
     }
 
     ## this part can be improved
-    u_pred <- as.matrix(stats::dist(coords_pred))
+    ## u_pred <- as.matrix(stats::dist(coords_pred))
+    u_pred <- distmat(coords_pred)
     n_pred <- nrow(coords_pred)  # number of locations to make predictions
 
     u_res_pred <- pred_cdist(get_grid_list(x_to_list = spm_obj$call_data$grid,
@@ -304,6 +313,14 @@ predict_spm.sf <- function(x, spm_obj, .aggregate = TRUE,
     if(all(grepl("POINT", sf::st_geometry_type(x))) & .aggregate) {
         warning("If you want to make predictions only for a set of locations, it does not make sense to use `.aggregate`.")
     }
+
+    
+    sig_y <- sig_y + diag(spm_obj$estimate["omega"] / spm_obj$call_data$npix,
+                          nrow = n_obs, ncol = n_obs)
+    
+    sig_pred <- sig_pred + diag(spm_obj$estimate["omega"],
+                                nrow = nrow(sig_pred),
+                                ncol = ncol(sig_pred))
     
     ## sig_y_inv <- solve(sig_y)
     sig_y_inv <- chol2inv(chol(sig_y))
@@ -353,7 +370,7 @@ predict_spm.sf <- function(x, spm_obj, .aggregate = TRUE,
                 pred_agg  = NA
             )
     }
-
+    
     class(output) <- append(class(output), "spm_pred")
 
     return(output)

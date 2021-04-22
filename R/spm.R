@@ -110,12 +110,19 @@ single_sf_to_spm <- function(sf_obj,
                 lapply(var_ids, function(id, y) y[[id]])
             )
     }
+
+    if(is.character(out_grid_pt[[poly_ids]])) {
+        npix <- tabulate(as.factor(out_grid_pt[[poly_ids]]))
+    } else {
+        npix <- tabulate(out_grid_pt[[poly_ids]])
+    }
     
     output <- list(
         var     = out_var,
         dists   = out_dists,
         ids_var = poly_ids,
         grid    = out_grid_pt[poly_ids],
+        npix    = npix,
         sf_poly = sf::st_geometry(sf_obj)
     )
 

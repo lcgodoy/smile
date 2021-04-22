@@ -5,3 +5,5 @@
 ^docs$
 ^pkgdown$
 setup-usethis.R
+^doc$
+^Meta$

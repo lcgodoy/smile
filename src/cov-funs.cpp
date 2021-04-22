@@ -247,7 +247,7 @@ double aux_matern(arma::mat dist, double sigsq,
 //' 
 // [[Rcpp::export]]
 arma::mat comp_mat_cov(const List& cross_dists, int n,
-		       int n2, double sigsq, double phi, 
+		       int n2, double sigsq, double phi,
 		       double kappa) {
   arma::mat out(n, n2, arma::fill::zeros);
   if(n == n2) {
