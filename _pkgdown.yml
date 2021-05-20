@@ -17,7 +17,7 @@ navbar:
         - text: "2. Spatial covariance functions"
           href: articles/sp-cov-functions.html
         - text: "3. Fitting models and making predictions"
-          href: articles/sp-cov-functions.html 
+          href: articles/fit-and-pred.html 
         - text: "4. Theory"
           href: articles/theory.html
     - text: "Reference"
