@@ -239,14 +239,73 @@ BEGIN_RCPP
 END_RCPP
 }
 // crossdist
-arma::mat crossdist(const arma::mat& m1, const arma::mat& m2);
-RcppExport SEXP _smile_crossdist(SEXP m1SEXP, SEXP m2SEXP) {
+arma::mat crossdist(const arma::mat& x, const arma::mat& y);
+RcppExport SEXP _smile_crossdist(SEXP xSEXP, SEXP ySEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const arma::mat& >::type m1(m1SEXP);
-    Rcpp::traits::input_parameter< const arma::mat& >::type m2(m2SEXP);
-    rcpp_result_gen = Rcpp::wrap(crossdist(m1, m2));
+    Rcpp::traits::input_parameter< const arma::mat& >::type x(xSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type y(ySEXP);
+    rcpp_result_gen = Rcpp::wrap(crossdist(x, y));
+    return rcpp_result_gen;
+END_RCPP
+}
+// haus_aux
+double haus_aux(const arma::mat& x, const arma::mat& y);
+RcppExport SEXP _smile_haus_aux(SEXP xSEXP, SEXP ySEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const arma::mat& >::type x(xSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type y(ySEXP);
+    rcpp_result_gen = Rcpp::wrap(haus_aux(x, y));
+    return rcpp_result_gen;
+END_RCPP
+}
+// haus_aux_cross
+double haus_aux_cross(const arma::mat& x, const arma::mat& y);
+RcppExport SEXP _smile_haus_aux_cross(SEXP xSEXP, SEXP ySEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const arma::mat& >::type x(xSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type y(ySEXP);
+    rcpp_result_gen = Rcpp::wrap(haus_aux_cross(x, y));
+    return rcpp_result_gen;
+END_RCPP
+}
+// dist_haus
+arma::mat dist_haus(const List& poly_list);
+RcppExport SEXP _smile_dist_haus(SEXP poly_listSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const List& >::type poly_list(poly_listSEXP);
+    rcpp_result_gen = Rcpp::wrap(dist_haus(poly_list));
+    return rcpp_result_gen;
+END_RCPP
+}
+// cdist_haus
+arma::mat cdist_haus(const List& poly_list, const arma::mat& pred_mat);
+RcppExport SEXP _smile_cdist_haus(SEXP poly_listSEXP, SEXP pred_matSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const List& >::type poly_list(poly_listSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type pred_mat(pred_matSEXP);
+    rcpp_result_gen = Rcpp::wrap(cdist_haus(poly_list, pred_mat));
+    return rcpp_result_gen;
+END_RCPP
+}
+// cdist_haus_lists
+arma::mat cdist_haus_lists(const List& poly_list, const List& poly_pred);
+RcppExport SEXP _smile_cdist_haus_lists(SEXP poly_listSEXP, SEXP poly_predSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const List& >::type poly_list(poly_listSEXP);
+    Rcpp::traits::input_parameter< const List& >::type poly_pred(poly_predSEXP);
+    rcpp_result_gen = Rcpp::wrap(cdist_haus_lists(poly_list, poly_pred));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -306,6 +365,11 @@ static const R_CallMethodDef CallEntries[] = {
     {"_smile_eucl_aux", (DL_FUNC) &_smile_eucl_aux, 2},
     {"_smile_distmat", (DL_FUNC) &_smile_distmat, 1},
     {"_smile_crossdist", (DL_FUNC) &_smile_crossdist, 2},
+    {"_smile_haus_aux", (DL_FUNC) &_smile_haus_aux, 2},
+    {"_smile_haus_aux_cross", (DL_FUNC) &_smile_haus_aux_cross, 2},
+    {"_smile_dist_haus", (DL_FUNC) &_smile_dist_haus, 1},
+    {"_smile_cdist_haus", (DL_FUNC) &_smile_cdist_haus, 2},
+    {"_smile_cdist_haus_lists", (DL_FUNC) &_smile_cdist_haus_lists, 2},
     {"_smile_single_dists", (DL_FUNC) &_smile_single_dists, 1},
     {"_smile_mult_dists", (DL_FUNC) &_smile_mult_dists, 3},
     {"_smile_pred_cdist", (DL_FUNC) &_smile_pred_cdist, 2},

@@ -3,15 +3,31 @@
 \name{aux_mat}
 \alias{aux_mat}
 \alias{eucl_aux}
+\alias{haus_aux}
+\alias{haus_aux_cross}
+\alias{dist_haus}
+\alias{cdist_haus}
+\alias{cdist_haus_lists}
 \alias{single_dists}
 \alias{mult_dists}
 \alias{pred_cdist}
 \alias{get_grid_list}
 \alias{dist_from_grids}
 \alias{mult_dist_from_grids}
+\alias{poly2coords}
 \title{Internal use only}
 \usage{
 eucl_aux(x, y)
+
+haus_aux(x, y)
+
+haus_aux_cross(x, y)
+
+dist_haus(poly_list)
+
+cdist_haus(poly_list, pred_mat)
+
+cdist_haus_lists(poly_list, poly_pred)
 
 single_dists(mat_list)
 
@@ -24,11 +40,19 @@ get_grid_list(x_to_list, by)
 dist_from_grids(y_grid, by)
 
 mult_dist_from_grids(y_grid, x_grid, by)
+
+poly2coords(poly)
 }
 \arguments{
 \item{x}{internal use}
 
 \item{y}{internal use}
+
+\item{poly_list}{internal use}
+
+\item{pred_mat}{internal use}
+
+\item{poly_pred}{internal use}
 
 \item{mat_list}{internal use}
 
@@ -38,8 +62,6 @@ mult_dist_from_grids(y_grid, x_grid, by)
 
 \item{return_single}{internal use}
 
-\item{pred_mat}{internal use}
-
 \item{x_to_list}{internal use}
 
 \item{by}{internal use}
@@ -47,6 +69,8 @@ mult_dist_from_grids(y_grid, x_grid, by)
 \item{y_grid}{internal use}
 
 \item{x_grid}{internal use}
+
+\item{poly}{internal use}
 }
 \description{
 Internal use only

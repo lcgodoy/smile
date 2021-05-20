@@ -9,7 +9,7 @@ using namespace Rcpp;
 //' @name aux_mat
 // [[Rcpp::export]]
 double eucl_aux(double x, double y) {
-  return sqrt( x*x + y*y );
+  return sqrt( (x * x) + (y * y) );
 }
 
 //' @title Creatin a distance matrix
@@ -51,23 +51,109 @@ arma::mat distmat(const arma::mat& my_mat) {
 //' 
 //' @description Internal use.
 //'
-//' @param m1 a matrix representing a grid of points within a polygon.
-//' @param m2 a matrix representing a grid of points within a polygon.
+//' @param x a matrix representing a grid of points within a polygon.
+//' @param y a matrix representing a grid of points within a polygon.
 //' 
 // [[Rcpp::export]]
-arma::mat crossdist(const arma::mat& m1, const arma::mat& m2) {
+arma::mat crossdist(const arma::mat& x, const arma::mat& y) {
 
-  int nrow1 = m1.n_rows, nrow2 = m2.n_rows;
+  int nrow1 = x.n_rows, nrow2 = y.n_rows;
  
   arma::mat out(nrow1, nrow2, arma::fill::zeros);
 
   for (int i = 0; i < nrow1; i++) {
     for (int j = 0; j < nrow2; j++) {
-      out(i, j) = eucl_aux( m1(i, 0) - m2(j, 0),
-			    m1(i, 1) - m2(j, 1)  );
+      out(i, j) = eucl_aux( x(i, 0) - y(j, 0),
+			    x(i, 1) - y(j, 1)  );
     }
   }
   
+  return out;
+}
+
+//' @name aux_mat
+// [[Rcpp::export]]
+double haus_aux(const arma::mat& x, const arma::mat& y) {
+  arma::mat aux_mat = crossdist(x, y);
+  double p = arma::max(arma::min(aux_mat, 0));
+  double q = arma::max(arma::min(aux_mat, 1));
+  // double q = arma::max(arma::min(aux_mat.t(), 0));
+  if(p > q) {
+    return p;
+  } else {
+    return q;
+  }
+}
+
+//' @name aux_mat
+// [[Rcpp::export]]
+double haus_aux_cross(const arma::mat& x, const arma::mat& y) {
+  arma::mat aux_mat = crossdist(x, y);
+  return arma::max(arma::min(aux_mat, 0));;
+}
+
+//' @name aux_mat
+// [[Rcpp::export]]
+arma::mat dist_haus(const List& poly_list) {
+  int n = poly_list.size(), k = 0;
+
+  arma::vec aux( n * (n + 1) * .5,
+		 arma::fill::zeros);
+
+  arma::mat out(n, n, arma::fill::zeros);
+  arma::uvec lw_idx = arma::trimatl_ind( arma::size(out) );
+
+  for (int i = 0; i < n; i++) {
+    for (int j = i; j < n; j++) {
+      if(i == j) {
+	aux(k) = 0;
+      } else {
+	aux(k) = haus_aux(poly_list[i], poly_list[j]);
+      }
+      k += 1;
+    }
+  }
+ 
+  out.elem(lw_idx) = aux;
+  out = arma::symmatl(out);
+  
+  return out;
+}
+
+
+//' @name aux_mat
+// [[Rcpp::export]]
+arma::mat cdist_haus(const List& poly_list,
+		     const arma::mat& pred_mat) {
+  int n = poly_list.size(),
+    n2 = pred_mat.n_rows;
+
+  arma::mat out(n, n2, arma::fill::zeros);
+
+  for (int i = 0; i < n; i++) {
+    for (int j = 0; j < n2; j++) {
+      out(i, j) = haus_aux_cross(poly_list[i], pred_mat.row(j));
+    }
+  }
+ 
+  return out;
+}
+
+//' @name aux_mat
+// [[Rcpp::export]]
+arma::mat cdist_haus_lists(const List& poly_list,
+			   const List& poly_pred) {
+  int n = poly_list.size(),
+    n2 = poly_pred.size();
+
+  arma::mat out(n, n2, arma::fill::zeros);
+
+  for (int i = 0; i < n; i++) {
+    for (int j = 0; j < n2; j++) {
+      out(i, j) = haus_aux(poly_list[i], poly_pred[j]);
+    }
+  }
+ 
   return out;
 }
 
@@ -79,10 +165,13 @@ arma::mat crossdist(const arma::mat& m1, const arma::mat& m2) {
 //' @param y internal use
 //' @param return_single internal use
 //' @param pred_mat internal use
+//' @param poly_pred internal use
 //' @param x_to_list internal use
 //' @param by internal use
 //' @param y_grid internal use
 //' @param x_grid internal use
+//' @param poly internal use
+//' @param poly_list internal use
 //' @name aux_mat
 // [[Rcpp::export]]
 List single_dists(const List& mat_list) {

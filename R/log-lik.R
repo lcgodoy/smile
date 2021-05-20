@@ -1,7 +1,204 @@
-##' Evaluate the log-likelihood for a given set of parameters
+##' @description Evaluate the log-likelihood for a given set of parameters
 ##'
-##' Internal use.
-##' @title Evaluate log-lik
+##' @details Internal use.
+##' @title Evaluate log-lik (when using hausdorff distance)
+##' @param theta a \code{list} of size \eqn{2 p + \frac{p(p + 1)}{2} + 3}
+##'     containing the parameters associated with the model. (Explain why)
+##' @param .dt a \code{list} with two positions. The first containing the
+##'     numerical data for the variable \eqn{Y}, and the second for \eqn{X}.
+##' @param dists a \code{list} of size three. The first containing the distance
+##'     matrices associated with the regions where \eqn{Y} was measured, the
+##'     second for the distance matrices associated with \eqn{X}, and the last
+##'     containing the cross-distance matrices.
+##' @param nap a \code{integer vector} containing either the number of pixels
+##'     within each polygon or the area associated with each polygon. The first
+##'     is used when we use a grid of points within the polygons, while the second
+##'     one is used when we compute the distance between the polygons using the
+##'     hausdorff distance (Ordered by the id variables for the polygons).
+##' @param model a \code{character} indicating which covariance function to
+##'     use. Possible values are \code{c("matern", "pexp", "gaussian",
+##'     "spherical")}.
+##' @param kappa \eqn{\kappa} parameter. Not necessary if \code{mode} is
+##'     \code{"gaussian"} or \code{"spherical"}
+##' @param apply_exp a \code{logical} indicater wheter the exponential
+##'     transformation should be applied to variance parameters. This
+##'     facilitates the optimization process.
+##' 
+##' @return a scalar representing \code{-log.lik}.
+haus_log_lik <- function(theta, .dt, dists, nap, model,
+                         kappa = NULL, apply_exp = FALSE) {
+
+    p <- NCOL(.dt)
+
+    if(! apply_exp & any(theta[(p + 1):length(theta)] < 0 )) {
+        return(NA_real_)
+    }
+    
+    if(p == 1) {
+        alpha <- theta[1]
+        omega <- theta[2]
+        sigsq <- theta[3]
+        phi   <- theta[4]
+    } else {
+        alpha <- matrix(theta[1:p], ncol = 1)
+        omega <- matrix(nrow = p, ncol = p)
+        omega[upper.tri(omega, diag = TRUE)] <-
+            theta[(p + 1):((p + 1) + .5*(p * ( p  + 1 )) - 1)]
+        omega[lower.tri(omega)] <- omega[upper.tri(omega)]
+        sigsq <- theta[((p + 1) + .5*(p * ( p  + 1 )))]
+        phi   <- theta[((p + 1) + .5*(p * ( p  + 1 )) + 1)]
+    }
+    if(apply_exp) {
+        omega <- expm1(omega)
+        sigsq <- exp(sigsq)
+        phi   <- exp(phi)
+    }
+
+    .n <- NROW(.dt)
+
+    switch(model,
+           "matern" = {
+               varcov_u1 <- mat_cov(dists = dists,
+                                    phi   = phi,
+                                    sigsq = sigsq,
+                                    kappa = kappa)
+           },
+           "pexp" = {
+               varcov_u1 <- pexp_cov(dists = dists,
+                                     phi   = phi,
+                                     sigsq = sigsq,
+                                     kappa = kappa)
+           },
+           "gaussian" = {
+               varcov_u1 <- gauss_cov(dists = dists,
+                                      phi   = phi,
+                                      sigsq = sigsq)
+           },
+           "spherical" = {
+               varcov_u1 <- spher_cov(dists = dists,
+                                      phi   = phi,
+                                      sigsq = sigsq)
+           })
+    
+    if(p == 1) {
+        varcov_y  <- varcov_u1 + diag(omega / nap,
+                                      nrow = .n, ncol = .n)
+        
+        log_lik_y <- mvtnorm::dmvnorm(x = matrix(.dt, nrow = 1),
+                                      mean  = rep(alpha, .n),
+                                      sigma = varcov_y,
+                                      log = TRUE,
+                                      checkSymmetry = FALSE)
+    } else {
+        varcov_y  <- kronecker(tcrossprod(matrix(rep(1, p), ncol = 1)), varcov_u1) +
+            kronecker(omega, diag(1 / nap, nrow = .n, ncol = .n))
+        
+        log_lik_y <- mvtnorm::dmvnorm(x = matrix(c(.dt), nrow = 1),
+                                      mean  = c(kronecker(alpha,
+                                                          matrix(rep(1, .n), ncol = 1))),
+                                      sigma = varcov_y,
+                                      log = TRUE,
+                                      checkSymmetry = FALSE)
+    }
+
+    return( - log_lik_y )
+}
+
+##' @description Evaluate the log-likelihood for a given set of parameters
+##'
+##' @details Internal use.
+##' @title Evaluate log-lik (when using a grid of points)
+##' @inheritParams haus_log_lik
+##' 
+##' @return a scalar representing \code{-log.lik}.
+grid_log_lik <- function(theta, .dt, dists, nap, model,
+                         kappa = NULL, apply_exp = FALSE) {
+
+    p <- NCOL(.dt)
+
+    if(! apply_exp & any(theta[(p + 1):length(theta)] < 0 )) {
+        return(NA_real_)
+    }
+    
+    if(p == 1) {
+        alpha <- theta[1]
+        omega <- theta[2]
+        sigsq <- theta[3]
+        phi   <- theta[4]
+    } else {
+        alpha <- matrix(theta[1:p], ncol = 1)
+        omega <- matrix(nrow = p, ncol = p)
+        omega[upper.tri(omega, diag = TRUE)] <-
+            theta[(p + 1):((p + 1) + .5*(p * ( p  + 1 )) - 1)]
+        omega[lower.tri(omega)] <- omega[upper.tri(omega)]
+        sigsq <- theta[((p + 1) + .5*(p * ( p  + 1 )))]
+        phi   <- theta[((p + 1) + .5*(p * ( p  + 1 )) + 1)]
+    }
+    if(apply_exp) {
+        omega <- expm1(omega)
+        sigsq <- exp(sigsq)
+        phi   <- exp(phi)
+    }
+
+    .n <- NROW(.dt)
+
+    switch(model,
+           "matern" = {
+               varcov_u1 <- comp_mat_cov(cross_dists = dists,
+                                         n = .n, n2 = .n,
+                                         phi = phi,
+                                         sigsq = sigsq,
+                                         kappa = kappa)
+           },
+           "pexp" = {
+               varcov_u1 <- comp_pexp_cov(cross_dists = dists,
+                                          n = .n, n2 = .n,
+                                          phi = phi,
+                                          sigsq = sigsq,
+                                          kappa = kappa)
+           },
+           "gaussian" = {
+               varcov_u1 <- comp_gauss_cov(cross_dists = dists,
+                                           n = .n, n2 = .n,
+                                           phi = phi,
+                                           sigsq = sigsq)
+           },
+           "spherical" = {
+               varcov_u1 <- comp_spher_cov(cross_dists = dists,
+                                           n = .n, n2 = .n,
+                                           phi = phi,
+                                           sigsq = sigsq)
+           })
+    
+    if(p == 1) {
+        varcov_y  <- varcov_u1 + diag(omega / nap,
+                                      nrow = .n, ncol = .n)
+        
+        log_lik_y <- mvtnorm::dmvnorm(x = matrix(.dt, nrow = 1),
+                                      mean  = rep(alpha, .n),
+                                      sigma = varcov_y,
+                                      log = TRUE,
+                                      checkSymmetry = FALSE)
+    } else {
+        varcov_y  <- kronecker(tcrossprod(matrix(rep(1, p), ncol = 1)), varcov_u1) +
+            kronecker(omega, diag(1 / nap, nrow = .n, ncol = .n))
+        
+        log_lik_y <- mvtnorm::dmvnorm(x = matrix(c(.dt), nrow = 1),
+                                      mean  = c(kronecker(alpha,
+                                                          matrix(rep(1, .n), ncol = 1))),
+                                      sigma = varcov_y,
+                                      log = TRUE,
+                                      checkSymmetry = FALSE)
+    }
+
+    return( - log_lik_y )
+}
+
+##' @description Evaluate the log-likelihood for a given set of parameters
+##'
+##' @details Internal use.
+##' @title Evaluate log-lik (deprecated)
+##'
 ##' @param theta a \code{list} of size \eqn{2 p + \frac{p(p + 1)}{2} + 3}
 ##'     containing the parameters associated with the model. (Explain why)
 ##' @param .dt a \code{list} with two positions. The first containing the
@@ -174,111 +371,4 @@ mult_log_lik <- function(theta, .dt, dists, model, kappa = NULL,
                                    checkSymmetry = FALSE)
 
     return(-(log_lik_x + log_lik_yx))
-}
-
-##' Evaluate the log-likelihood for a given set of parameters
-##'
-##' Internal use.
-##' @title Evaluate log-lik
-##' @param theta a \code{list} of size \eqn{2 p + \frac{p(p + 1)}{2} + 3}
-##'     containing the parameters associated with the model. (Explain why)
-##' @param .dt a \code{list} with two positions. The first containing the
-##'     numerical data for the variable \eqn{Y}, and the second for \eqn{X}.
-##' @param dists a \code{list} of size three. The first containing the distance
-##'     matrices associated with the regions where \eqn{Y} was measured, the
-##'     second for the distance matrices associated with \eqn{X}, and the last
-##'     containing the cross-distance matrices.
-##' @param npix a \code{integer vector} containing the number of pixels within
-##'     each polygon. (Ordered by the id variables for the polygons).
-##' @param model a \code{character} indicating which covariance function to
-##'     use. Possible values are \code{c("matern", "pexp", "gaussian",
-##'     "spherical")}.
-##' @param kappa \eqn{\kappa} parameter. Not necessary if \code{mode} is
-##'     \code{"gaussian"} or \code{"spherical"}
-##' @param apply_exp a \code{logical} indicater wheter the exponential
-##'     transformation should be applied to variance parameters. This
-##'     facilitates the optimization process.
-##' 
-##' @return a scalar representing \code{-log.lik}.
-singl_log_lik <- function(theta, .dt, dists, npix, model,
-                          kappa = NULL, apply_exp = FALSE) {
-
-    p <- NCOL(.dt)
-
-    if(! apply_exp & any(theta[(p + 1):length(theta)] < 0 )) {
-        return(NA_real_)
-    }
-    
-    if(p == 1) {
-        alpha <- theta[1]
-        omega <- theta[2]
-        sigsq <- theta[3]
-        phi   <- theta[4]
-    } else {
-        alpha <- matrix(theta[1:p], ncol = 1)
-        omega <- matrix(nrow = p, ncol = p)
-        omega[upper.tri(omega, diag = TRUE)] <-
-            theta[(p + 1):((p + 1) + .5*(p * ( p  + 1 )) - 1)]
-        omega[lower.tri(omega)] <- omega[upper.tri(omega)]
-        sigsq <- theta[((p + 1) + .5*(p * ( p  + 1 )))]
-        phi   <- theta[((p + 1) + .5*(p * ( p  + 1 )) + 1)]
-    }
-    if(apply_exp) {
-        omega <- expm1(omega)
-        sigsq <- exp(sigsq)
-        phi   <- exp(phi)
-    }
-
-    .n <- NROW(.dt)
-
-    switch(model,
-           "matern" = {
-               varcov_u1 <- comp_mat_cov(cross_dists = dists,
-                                         n = .n, n2 = .n,
-                                         phi = phi,
-                                         sigsq = sigsq,
-                                         kappa = kappa)
-           },
-           "pexp" = {
-               varcov_u1 <- comp_pexp_cov(cross_dists = dists,
-                                          n = .n, n2 = .n,
-                                          phi = phi,
-                                          sigsq = sigsq,
-                                          kappa = kappa)
-           },
-           "gaussian" = {
-               varcov_u1 <- comp_gauss_cov(cross_dists = dists,
-                                           n = .n, n2 = .n,
-                                           phi = phi,
-                                           sigsq = sigsq)
-           },
-           "spherical" = {
-               varcov_u1 <- comp_spher_cov(cross_dists = dists,
-                                           n = .n, n2 = .n,
-                                           phi = phi,
-                                           sigsq = sigsq)
-           })
-    
-    if(p == 1) {
-        varcov_y  <- varcov_u1 + diag(omega / npix,
-                                      nrow = .n, ncol = .n)
-        
-        log_lik_y <- mvtnorm::dmvnorm(x = matrix(.dt, nrow = 1),
-                                      mean  = rep(alpha, .n),
-                                      sigma = varcov_y,
-                                      log = TRUE,
-                                      checkSymmetry = FALSE)
-    } else {
-        varcov_y  <- kronecker(tcrossprod(matrix(rep(1, p), ncol = 1)), varcov_u1) +
-            kronecker(omega, diag(1 / npix, nrow = .n, ncol = .n))
-        
-        log_lik_y <- mvtnorm::dmvnorm(x = matrix(c(.dt), nrow = 1),
-                                      mean  = c(kronecker(alpha,
-                                                          matrix(rep(1, .n), ncol = 1))),
-                                      sigma = varcov_y,
-                                      log = TRUE,
-                                      checkSymmetry = FALSE)
-    }
-
-    return( - log_lik_y )
 }

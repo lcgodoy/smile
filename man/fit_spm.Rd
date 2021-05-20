@@ -73,8 +73,6 @@ a \code{sspm_fit} or a \code{mspm_fit} object.
 Fit a model adapted from
 \href{https://ij-healthgeographics.biomedcentral.com/articles/10.1186/s12942-020-00200-w}{Johnson
 et al. 2020}.
-
-Fitting the model based on
 }
 \details{
 This function uses the \code{\link[stats]{optim}} optimization

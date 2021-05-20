@@ -42,3 +42,8 @@ mult_dist_from_grids <- function(y_grid, x_grid, by) {
                       FALSE))
 }
 
+##' @name aux_mat
+poly2coords <- function(poly) {
+    lapply(sf::st_geometry(poly),
+           function(x) sf::st_coordinates(x)[, 1:2])
+}

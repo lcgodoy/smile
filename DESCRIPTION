@@ -1,6 +1,6 @@
 Package: smile
 Title: Spatial MIsaLignment Estimation
-Version: 0.0.1
+Version: 0.1.0
 Authors@R: 
     person(given = "Lucas",
            family = "Godoy",

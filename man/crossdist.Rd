@@ -4,12 +4,12 @@
 \alias{crossdist}
 \title{Pairwise distances between matrices}
 \usage{
-crossdist(m1, m2)
+crossdist(x, y)
 }
 \arguments{
-\item{m1}{a matrix representing a grid of points within a polygon.}
+\item{x}{a matrix representing a grid of points within a polygon.}
 
-\item{m2}{a matrix representing a grid of points within a polygon.}
+\item{y}{a matrix representing a grid of points within a polygon.}
 }
 \description{
 Internal use.

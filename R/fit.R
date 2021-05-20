@@ -26,7 +26,6 @@ fit_spm <- function(x, ...) UseMethod("fit_spm")
 ##'     the nonnegative parameters, allowing the optimization algorithm to
 ##'     search for all the paraters over the real numbers.
 ##' 
-##' @title Fitting the model based on
 ##' @param x an object of type \code{sspm} or \code{mspm}. Note that, the
 ##'     dimension of \code{theta_st} depends on the 2 factors. 1) the number of
 ##'     variables being analyzed, and 2) if the input is a \code{sspm} or a
@@ -63,32 +62,49 @@ fit_spm.sspm <- function(x, model, theta_st,
                          control_opt = list(),
                          ...) {
     
-    stopifnot(!is.null(names(theta_st)))
+    stopifnot( !is.null(names(theta_st)) )
 
     p <- NCOL(x$var)
     npar <- length(theta_st) 
     
     stopifnot(npar == (p + 2 + (.5 * p * (p + 1))))
-    
-    op_val <-
-        stats::optim(par = theta_st,
-                     fn  = singl_log_lik,
-                     method  = opt_method,
-                     control = control_opt,
-                     hessian = TRUE,
-                     .dt     = x$var,
-                     dists   = x$dists,
-                     npix    = x$npix,
-                     model   = model,
-                     kappa   = kappa,
-                     apply_exp = apply_exp,
-                     ...)
+
+    if( x$method == "grid" ) {
+        op_val <-
+            stats::optim(par = theta_st,
+                         fn  = grid_log_lik,
+                         method  = opt_method,
+                         control = control_opt,
+                         hessian = TRUE,
+                         .dt     = x$var,
+                         dists   = x$dists,
+                         nap     = x$nap,
+                         model   = model,
+                         kappa   = kappa,
+                         apply_exp = apply_exp,
+                         ...)
+    } else {
+        op_val <-
+            stats::optim(par = theta_st,
+                         fn  = haus_log_lik,
+                         method  = opt_method,
+                         control = control_opt,
+                         hessian = TRUE,
+                         .dt     = x$var,
+                         dists   = x$dists,
+                         nap     = x$nap,
+                         model   = model,
+                         kappa   = kappa,
+                         apply_exp = apply_exp,
+                         ...)
+
+    }
     
     info_mat  <- solve(op_val$hessian)
     estimates <- op_val$par
     
     if(apply_exp) {
-        estimates[2:npar] <- c(expm1(estimates[3]), exp(estimates[3:npar]))
+        estimates[2:npar] <- c(expm1(estimates[2]), exp(estimates[3:npar]))
         ## Using Delta-Method
         ## https://stats.idre.ucla.edu/r/faq/how-can-i-estimate-the-standard-error-of-transformed-regression-parameters-in-r-using-the-delta-method/
         grad_mat <-

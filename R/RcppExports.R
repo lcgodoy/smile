@@ -460,11 +460,36 @@ distmat <- function(my_mat) {
 #' 
 #' @description Internal use.
 #'
-#' @param m1 a matrix representing a grid of points within a polygon.
-#' @param m2 a matrix representing a grid of points within a polygon.
+#' @param x a matrix representing a grid of points within a polygon.
+#' @param y a matrix representing a grid of points within a polygon.
 #' 
-crossdist <- function(m1, m2) {
-    .Call(`_smile_crossdist`, m1, m2)
+crossdist <- function(x, y) {
+    .Call(`_smile_crossdist`, x, y)
+}
+
+#' @name aux_mat
+haus_aux <- function(x, y) {
+    .Call(`_smile_haus_aux`, x, y)
+}
+
+#' @name aux_mat
+haus_aux_cross <- function(x, y) {
+    .Call(`_smile_haus_aux_cross`, x, y)
+}
+
+#' @name aux_mat
+dist_haus <- function(poly_list) {
+    .Call(`_smile_dist_haus`, poly_list)
+}
+
+#' @name aux_mat
+cdist_haus <- function(poly_list, pred_mat) {
+    .Call(`_smile_cdist_haus`, poly_list, pred_mat)
+}
+
+#' @name aux_mat
+cdist_haus_lists <- function(poly_list, poly_pred) {
+    .Call(`_smile_cdist_haus_lists`, poly_list, poly_pred)
 }
 
 #' @title Internal use only
@@ -475,10 +500,13 @@ crossdist <- function(m1, m2) {
 #' @param y internal use
 #' @param return_single internal use
 #' @param pred_mat internal use
+#' @param poly_pred internal use
 #' @param x_to_list internal use
 #' @param by internal use
 #' @param y_grid internal use
 #' @param x_grid internal use
+#' @param poly internal use
+#' @param poly_list internal use
 #' @name aux_mat
 single_dists <- function(mat_list) {
     .Call(`_smile_single_dists`, mat_list)

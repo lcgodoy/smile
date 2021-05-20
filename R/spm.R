@@ -1,46 +1,21 @@
-##' Transforming a \code{sf} into a \code{spm} object (Internal use)
+##' @description Transforming a \code{sf} into a \code{spm} object (Internal use)
 ##'
-##' @title single \code{sf} to \code{spm}
-##' @param sf_obj a \code{sf} object s.t. its geometries are polygons.
-##' @param n_pts a \code{numeric} scalar representing the number of points to
-##'     create a grid in the study region on which the polygons in \code{sf_obj}
-##'     is observed. Alternatively, it can be a vector of the same length as
-##'     \code{nrow(sf_obj)}. In this case, it generates the given number of
-##'     points for each polygon in \code{sf_obj}.
-##' @param type a \code{character} indicating the type of grid to be
-##'     generated. The options are \code{c("random", "regular",
-##'     "hexagonal")}. For more details, see \code{\link[sf]{st_sample}}.
-##' @param by_polygon a \code{logical} indicating wheter we should generate
-##'     \code{n_pts} by polygon or for the \code{n_pts} for the whole study
-##'     region.
-##' @param poly_ids a \code{character} vector informing the name of the variable
-##'     in \code{sf_obj} that represents the polygons unique identifiers. In
-##'     case this is not informed, we assume the id of the polygons are given by
-##'     their row numbers.
-##' @param var_ids a scalar or vector of type \code{character} indicating the
-##'     (numerical) variables that are going to be analyzed.
+##' @details This is a helper function for internal use. It is used within
+##' \code{\link{single_sf_to_spm}} when \code{method = "grid"} is set.
+##' 
+##' @title single \code{sf} to \code{spm} - grid
+##' @inheritParams single_sf_to_spm
 ##' @return a \code{list}.
-##' @export
-single_sf_to_spm <- function(sf_obj, 
-                             n_pts, type = "regular",
-                             by_polygon = FALSE,
-                             poly_ids = NULL,
-                             var_ids  = NULL) {
-    stopifnot(inherits(sf_obj, "sf"))
-    stopifnot(all(grepl("POLYGON", sf::st_geometry_type(sf_obj))))
-    stopifnot(! is.null(var_ids) )
-    stopifnot(inherits(sf_obj, "sf"))
+grid_spm <- function(sf_obj, 
+                     poly_ids = NULL,
+                     var_ids  = NULL,
+                     n_pts,
+                     type = "regular",
+                     by_polygon = FALSE) {
     stopifnot(length(n_pts) == 1 | length(n_pts) == nrow(sf_obj))
     stopifnot(type %in% c("random", "regular", "hexagonal"))
-    
-    
-    if(is.null(poly_ids) | ( ! poly_ids %in% names(sf_obj))) {
-        sf_obj <- transform(sf_obj,
-                            poly_ids = seq_len(nrow(sf_obj)))
-        poly_ids <- "poly_ids"
-    }
-    
-    if(by_polygon & length(n_pts) == 1) {
+
+    if( by_polygon & length(n_pts) == 1 ) {
         out_grid <-
             lapply(sf::st_cast(sf::st_geometry(sf_obj),
                                "POLYGON"),
@@ -53,7 +28,7 @@ single_sf_to_spm <- function(sf_obj,
                    },
                    .sz = n_pts, 
                    .tp = type)
-    } else if(length(n_pts) > 1) {
+    } else if( length(n_pts) > 1 ) {
         out_grid <-
             Map(function(x, .sz, .tp) {
                 sf::st_as_sf(
@@ -75,7 +50,7 @@ single_sf_to_spm <- function(sf_obj,
                           by_polygon = by_polygon)
     }
 
-    if(by_polygon) {
+    if( by_polygon ) {
         out_grid <- sf::st_set_crs(do.call("rbind", out_grid),
                                    sf::st_crs(sf_obj))
         
@@ -101,7 +76,7 @@ single_sf_to_spm <- function(sf_obj,
 
     out_dists <- dist_from_grids(out_grid_pt, poly_ids)
     
-    if(length(var_ids) == 1) {
+    if( length(var_ids) == 1 ) {
         out_var <- sf_obj[[var_ids]]
     } else {
         out_var <-
@@ -111,10 +86,10 @@ single_sf_to_spm <- function(sf_obj,
             )
     }
 
-    if(is.character(out_grid_pt[[poly_ids]])) {
-        npix <- tabulate(as.factor(out_grid_pt[[poly_ids]]))
+    if( is.character(out_grid_pt[[poly_ids]]) ) {
+        nap <- tabulate(as.factor(out_grid_pt[[poly_ids]]))
     } else {
-        npix <- tabulate(out_grid_pt[[poly_ids]])
+        nap <- tabulate(out_grid_pt[[poly_ids]])
     }
     
     output <- list(
@@ -122,18 +97,119 @@ single_sf_to_spm <- function(sf_obj,
         dists   = out_dists,
         ids_var = poly_ids,
         grid    = out_grid_pt[poly_ids],
-        npix    = npix,
+        nap     = nap,
         sf_poly = sf::st_geometry(sf_obj)
     )
 
     return(output)
 }
 
-##' Transforming one (or two) \code{sf} objects into a \code{sspm} (or \code{mspm}) object
+##' @description Transforming a \code{sf} into a \code{spm} object (Internal
+##'     use)
+##'
+##' @details This is a helper function for internal use. It is used within
+##' \code{\link{single_sf_to_spm}} when \code{method = "hausdorff"} is set.
+##' 
+##' @title single \code{sf} to \code{spm} - hausdorff
+##' @inheritParams single_sf_to_spm
+##' @return a \code{list}.
+haus_spm <- function(sf_obj, 
+                     poly_ids = NULL,
+                     var_ids  = NULL) {
+    if( length(var_ids) == 1 ) {
+        out_var <- sf_obj[[var_ids]]
+    } else {
+        out_var <-
+            do.call(
+                "cbind",
+                lapply(var_ids, function(id, y) y[[id]])
+            )
+    }
+
+    nap <- as.numeric( sf::st_area(sf_obj) )
+    
+    output <- list(
+        var     = out_var,
+        dists   = dist_haus( poly2coords(sf_obj) ),
+        ids_var = poly_ids,
+        nap     = nap,
+        sf_poly = sf::st_geometry(sf_obj)
+    )
+
+    return(output)
+}
+
+##' @description Transforming a \code{sf} into a \code{spm} object (Internal
+##'     use)
+##'
+##' @details if we set \code{method = "hausdorff"}, then \code{n_pts},
+##'     \code{type}, \code{by_polygon} are ignored.
+##' 
+##' @title single \code{sf} to \code{spm}
+##' @param sf_obj a \code{sf} object s.t. its geometries are polygons.
+##' @param poly_ids a \code{character} vector informing the name of the variable
+##'     in \code{sf_obj} that represents the polygons unique identifiers. In
+##'     case this is not informed, we assume the id of the polygons are given by
+##'     their row numbers.
+##' @param var_ids a scalar or vector of type \code{character} indicating the
+##'     (numerical) variables that are going to be analyzed.
+##' @param method a \code{character} specicifying the method to compute the
+##'     distance / covariances between polygons. The options are \code{"grid"}
+##'     (default) and \code{"hausdorff"}
+##' @param n_pts a \code{numeric} scalar representing the number of points to
+##'     create a grid in the study region on which the polygons in \code{sf_obj}
+##'     is observed. Alternatively, it can be a vector of the same length as
+##'     \code{nrow(sf_obj)}. In this case, it generates the given number of
+##'     points for each polygon in \code{sf_obj}.
+##' @param type a \code{character} indicating the type of grid to be
+##'     generated. The options are \code{c("random", "regular",
+##'     "hexagonal")}. For more details, see \code{\link[sf]{st_sample}}.
+##' @param by_polygon a \code{logical} indicating wheter we should generate
+##'     \code{n_pts} by polygon or for the \code{n_pts} for the whole study
+##'     region.
+##' @return a \code{list}.
+##' @export
+single_sf_to_spm <- function(sf_obj, 
+                             poly_ids = NULL,
+                             var_ids  = NULL,
+                             method = "grid",
+                             n_pts,
+                             type = "regular",
+                             by_polygon = FALSE) {
+    stopifnot( inherits(sf_obj, "sf") )
+    stopifnot( all(grepl("POLYGON", sf::st_geometry_type(sf_obj))) )
+    stopifnot( !is.null(var_ids) )
+    stopifnot( inherits(sf_obj, "sf") )
+    stopifnot( method %in% c("grid", "hausdorff") )
+    
+    if( is.null(poly_ids) | ( ! poly_ids %in% names(sf_obj)) ) {
+        sf_obj <- transform(sf_obj,
+                            poly_ids = seq_len(nrow(sf_obj)))
+        poly_ids <- "poly_ids"
+    }
+    
+    if( method == "grid" ) {
+        output <- grid_spm(sf_obj, poly_ids, var_ids,
+                           n_pts, type, by_polygon)
+    } else {
+        output <- haus_spm(sf_obj, poly_ids, var_ids)
+    }
+
+    output <- append(output, method)
+    names(output)[length(output)] <- "method"
+    
+    return(output)
+}
+
+##' @description Transforming one (or two) \code{sf} objects into a \code{sspm}
+##'     (or \code{mspm}) object
 ##' 
 ##' @title \code{sf} to \code{spm}
 ##' @param sf_obj1 a \code{sf} object s.t. its geometries are polygons.
 ##' @param sf_obj2 a \code{sf} object s.t. its geometries are polygons.
+##' @param method a \code{character} specicifying the method to compute the
+##'     distance / covariances between polygons. The options are \code{"grid"}
+##'     (default) and \code{"hausdorff"}
 ##' @param n_pts a \code{numeric} scalar representing the number of points to
 ##'     create a grid in the study region on which the polygons in \code{sf_obj}
 ##'     is observed.  Alternatively, it can be a vector of the same length as
@@ -168,20 +244,24 @@ single_sf_to_spm <- function(sf_obj,
 ##' @export
 sf_to_spm <- function(sf_obj1,
                       sf_obj2,
+                      method = "grid",
                       n_pts, type = "regular",
                       by_polygon = FALSE,
                       poly_ids = NULL,
                       var_ids) {
-    stopifnot(!missing(sf_obj1))
-    stopifnot(!missing(n_pts))
-    stopifnot(!missing(var_ids))
+    stopifnot( !missing(sf_obj1) )
+    stopifnot( !missing(n_pts) )
+    stopifnot( !missing(var_ids) )
 
-    if(missing(sf_obj2)) {
+    if( missing(sf_obj2) ) {
         stopifnot(length(poly_ids) == 1)
         output <-
-            single_sf_to_spm(sf_obj1, n_pts, type,
-                             by_polygon,
-                             poly_ids, var_ids)
+            single_sf_to_spm(sf_obj = sf_obj1,
+                             poly_ids = poly_ids,
+                             var_ids  = var_ids,
+                             method = method,
+                             n_pts, type,
+                             by_polygon)
         class(output) <- append(class(output), "sspm")
     } else {
         stopifnot(length(var_ids) == 2)
@@ -226,16 +306,20 @@ sf_to_spm <- function(sf_obj1,
 ##' @export
 print.sspm <- function(x, ...) {
     
-    cat(sprintf("\n Number of variables to be analyzed: %d \n", NCOL(x$var)))
-    cat(sprintf("\n ID variable: %ds\n", x$poly_ids))
+    cat(sprintf("\n Number of variables to be analyzed: %d \n",
+                NCOL(x$var)))
+    cat(sprintf("\n ID variable: %ds\n",
+                x$poly_ids))
     if(NCOL(x$var) == 1) {
         cat("\n Variable summary: ")
         summary(x$var)
     } else {
         apply(x$var, 2, summary)
     }
-    cat(sprintf("\n Number of polygons in the partition: %d \n", nrow(x$sf_poly)))
-    cat(sprintf("\n Number of points in the grid over: %d \n", nrow(x$grid)))
+    cat(sprintf("\n Number of polygons in the partition: %d \n",
+                nrow(x$sf_poly)))
+    cat(sprintf("\n Number of points in the grid over: %d \n",
+                nrow(x$grid)))
 }
 
 
@@ -246,14 +330,22 @@ summary.sspm <- function(object, ...) {
 
 ##' @export
 print.mspm <- function(x, ...) {
-    cat(sprintf("\n Number of variables to be analyzed in the partition A: %d \n", NCOL(x$y$var)))
-    cat(sprintf("ID for the polygons observed in the partition A: %ds\n", x$y$poly_ids))
-    cat(sprintf("Number of polygons in the partition A: %d \n", nrow(x$y$sf_poly)))
-    cat(sprintf("Number of points in the grid over A: %d \n \n", nrow(x$y$grid)))
-    cat(sprintf("Number of variables to be analyzed in the partition B: %d \n", NCOL(x$x$var)))
-    cat(sprintf("ID for the polygons observed in the partition B: %ds\n", x$x$poly_ids))
-    cat(sprintf("Number of polygons in the partition B: %d \n", nrow(x$x$sf_poly)))
-    cat(sprintf("Number of points in the grid over B: %d \n", nrow(x$x$grid)))
+    cat(sprintf("\n Number of variables to be analyzed in the partition A: %d \n",
+                NCOL(x$y$var)))
+    cat(sprintf("ID for the polygons observed in the partition A: %ds\n",
+                x$y$poly_ids))
+    cat(sprintf("Number of polygons in the partition A: %d \n",
+                nrow(x$y$sf_poly)))
+    cat(sprintf("Number of points in the grid over A: %d \n \n",
+                nrow(x$y$grid)))
+    cat(sprintf("Number of variables to be analyzed in the partition B: %d \n",
+                NCOL(x$x$var)))
+    cat(sprintf("ID for the polygons observed in the partition B: %ds\n",
+                x$x$poly_ids))
+    cat(sprintf("Number of polygons in the partition B: %d \n",
+                nrow(x$x$sf_poly)))
+    cat(sprintf("Number of points in the grid over B: %d \n",
+                nrow(x$x$grid)))
 }
 
 

@@ -7,6 +7,7 @@
 sf_to_spm(
   sf_obj1,
   sf_obj2,
+  method = "grid",
   n_pts,
   type = "regular",
   by_polygon = FALSE,
@@ -18,6 +19,10 @@ sf_to_spm(
 \item{sf_obj1}{a \code{sf} object s.t. its geometries are polygons.}
 
 \item{sf_obj2}{a \code{sf} object s.t. its geometries are polygons.}
+
+\item{method}{a \code{character} specicifying the method to compute the
+distance / covariances between polygons. The options are \code{"grid"}
+(default) and \code{"hausdorff"}}
 
 \item{n_pts}{a \code{numeric} scalar representing the number of points to
 create a grid in the study region on which the polygons in \code{sf_obj}
@@ -56,5 +61,6 @@ and \code{sf_obj2}, respectively.}
 a \code{sspm} or \code{mspm} object.
 }
 \description{
-Transforming one (or two) \code{sf} objects into a \code{sspm} (or \code{mspm}) object
+Transforming one (or two) \code{sf} objects into a \code{sspm}
+(or \code{mspm}) object
 }
