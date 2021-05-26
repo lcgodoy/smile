@@ -88,12 +88,13 @@ fit_spm.sspm <- function(x, model, theta_st,
     estimates <- op_val$par
     
     if(apply_exp) {
-        estimates[2:npar] <- c(expm1(estimates[2]), exp(estimates[3:npar]))
+        ## estimates[2:npar] <- c(expm1(estimates[2]), exp(estimates[3:npar]))
+        estimates[2:npar] <- exp(estimates[2:npar])
         ## Using Delta-Method
         ## https://stats.idre.ucla.edu/r/faq/how-can-i-estimate-the-standard-error-of-transformed-regression-parameters-in-r-using-the-delta-method/
         grad_mat <-
-            diag(c(1, expm1(estimates[2]), exp(estimates[3:npar])))
-        info_mat <- crossprod(grad_mat, info_mat) %*% info_mat
+            diag(c(1, exp(estimates[2:npar])))
+        info_mat <- crossprod(grad_mat, info_mat) %*% grad_mat
     } 
 
     output <- list(
@@ -176,9 +177,12 @@ fit_spm.mspm <- function(x, model, theta_st,
 ##' @export
 summary_sspm_fit <- function(x, sig = .05) {
     se_est <- sqrt(diag(x$info_mat))
+    lb <- x$estimate - stats::qnorm(1 - (sig/2)) * se_est
+    k  <- which(grepl("(omega|phi|sigsq)", names(x$estimate)))
+    lb[k] <- pmax(lb[k], 0)
+    ub <- x$estimate + stats::qnorm(1 - (sig/2)) * se_est
     ci_est <- sprintf("[%.3f; %.3f]",
-                      x$estimate - stats::qnorm(1 - (sig/2)) * se_est,
-                      x$estimate + stats::qnorm(1 - (sig/2)) * se_est)
+                      lb, ub)
     if(is.null(names(x$estimate))) {
         tbl <- data.frame(
             estimate = x$estimate,
