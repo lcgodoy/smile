@@ -1,6 +1,7 @@
 ## History files
 .Rhistory
 .Rapp.history
+..Rcheck/
 
 ## Session Data files
 .RData
