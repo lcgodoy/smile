@@ -178,7 +178,7 @@ fit_spm.mspm <- function(x, model, theta_st,
 summary_sspm_fit <- function(x, sig = .05) {
     se_est <- sqrt(diag(x$info_mat))
     lb <- x$estimate - stats::qnorm(1 - (sig/2)) * se_est
-    k  <- which(grepl("(omega|phi|sigsq)", names(x$estimate)))
+    k  <- which(grepl("(tausq|phi|sigsq)", names(x$estimate)))
     lb[k] <- pmax(lb[k], 0)
     ub <- x$estimate + stats::qnorm(1 - (sig/2)) * se_est
     ci_est <- sprintf("[%.3f; %.3f]",

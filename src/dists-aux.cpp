@@ -6,6 +6,7 @@
 // [[Rcpp::plugins(cpp11)]]
 using namespace Rcpp;
 
+//' @title Internal use only
 //' @name aux_mat
 // [[Rcpp::export]]
 double eucl_aux(double x, double y) {
@@ -98,6 +99,7 @@ List single_dists(const List& mat_list) {
   return out;
 }
 
+//' @title Internal use only
 //' @name aux_mat
 // [[Rcpp::export]]
 List mult_dists(const List& mat_list1, const List& mat_list2,
@@ -119,6 +121,7 @@ List mult_dists(const List& mat_list1, const List& mat_list2,
   return out_cross;
 }
 
+//' @title Internal use only
 //' @name aux_mat
 // [[Rcpp::export]]
 List pred_cdist(const List& mat_list, const arma::mat& pred_mat) {

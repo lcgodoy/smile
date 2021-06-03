@@ -440,6 +440,7 @@ comp_spher_cov <- function(cross_dists, n, n2, sigsq, phi) {
     .Call(`_smile_comp_spher_cov`, cross_dists, n, n2, sigsq, phi)
 }
 
+#' @title Internal use only
 #' @name aux_mat
 eucl_aux <- function(x, y) {
     .Call(`_smile_eucl_aux`, x, y)
@@ -484,11 +485,13 @@ single_dists <- function(mat_list) {
     .Call(`_smile_single_dists`, mat_list)
 }
 
+#' @title Internal use only
 #' @name aux_mat
 mult_dists <- function(mat_list1, mat_list2, return_single) {
     .Call(`_smile_mult_dists`, mat_list1, mat_list2, return_single)
 }
 
+#' @title Internal use only
 #' @name aux_mat
 pred_cdist <- function(mat_list, pred_mat) {
     .Call(`_smile_pred_cdist`, mat_list, pred_mat)

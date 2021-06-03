@@ -210,21 +210,21 @@ singl_log_lik <- function(theta, .dt, dists, npix, model,
     }
     
     if(p == 1) {
-        alpha <- theta[1]
-        omega <- theta[2]
+        mu    <- theta[1]
+        tausq <- theta[2]
         sigsq <- theta[3]
         phi   <- theta[4]
     } else {
-        alpha <- matrix(theta[1:p], ncol = 1)
-        omega <- matrix(nrow = p, ncol = p)
-        omega[upper.tri(omega, diag = TRUE)] <-
+        mu    <- matrix(theta[1:p], ncol = 1)
+        tausq <- matrix(nrow = p, ncol = p)
+        tausq[upper.tri(tausq, diag = TRUE)] <-
             theta[(p + 1):((p + 1) + .5*(p * ( p  + 1 )) - 1)]
-        omega[lower.tri(omega)] <- omega[upper.tri(omega)]
+        tausq[lower.tri(tausq)] <- tausq[upper.tri(tausq)]
         sigsq <- theta[((p + 1) + .5*(p * ( p  + 1 )))]
         phi   <- theta[((p + 1) + .5*(p * ( p  + 1 )) + 1)]
     }
     if(apply_exp) {
-        omega <- expm1(omega)
+        tausq <- exp(tausq)
         sigsq <- exp(sigsq)
         phi   <- exp(phi)
     }
@@ -260,20 +260,20 @@ singl_log_lik <- function(theta, .dt, dists, npix, model,
            })
     
     if(p == 1) {
-        varcov_y  <- varcov_u1 + diag(omega / npix,
+        varcov_y  <- varcov_u1 + diag(tausq / npix,
                                       nrow = .n, ncol = .n)
         
         log_lik_y <- mvtnorm::dmvnorm(x = matrix(.dt, nrow = 1),
-                                      mean  = rep(alpha, .n),
+                                      mean  = rep(mu, .n),
                                       sigma = varcov_y,
                                       log = TRUE,
                                       checkSymmetry = FALSE)
     } else {
         varcov_y  <- kronecker(tcrossprod(matrix(rep(1, p), ncol = 1)), varcov_u1) +
-            kronecker(omega, diag(1 / npix, nrow = .n, ncol = .n))
+            kronecker(tausq, diag(1 / npix, nrow = .n, ncol = .n))
         
         log_lik_y <- mvtnorm::dmvnorm(x = matrix(c(.dt), nrow = 1),
-                                      mean  = c(kronecker(alpha,
+                                      mean  = c(kronecker(mu,
                                                           matrix(rep(1, .n), ncol = 1))),
                                       sigma = varcov_y,
                                       log = TRUE,

@@ -94,7 +94,7 @@ this inputing vector to be a named vector, because some functions track the
 parameters by their names. 
 ```{R fit-pred-1}
 theta_st_msoa <-
-    c("alpha" = 70, "omega" = 1,
+    c("mu" = 70, "tausq" = 1,
       "sigsq" = 1, "phi" = 1)
 
 fit_msoa <-
@@ -213,7 +213,7 @@ $\kappa = 2.5$.
 
 ```{R fit-pred-2}
 theta_st_lsoa <-
-    c("alpha" = 25, "omega" = 1,
+    c("mu" = 25, "tausq" = 1,
       "sigsq" = 1, "phi" = 1)
 
 fit_lsoa <-

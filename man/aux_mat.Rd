@@ -50,4 +50,10 @@ mult_dist_from_grids(y_grid, x_grid, by)
 }
 \description{
 Internal use only
+
+Internal use only
+
+Internal use only
+
+Internal use only
 }

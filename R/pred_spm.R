@@ -9,7 +9,7 @@ predict_spm.sspm_fit <- function(x, .aggregate = TRUE, ...) {
     n_obs <- NROW(x$call_data$var)
 
     if(p == 1) {        
-        mean_y <- matrix(rep(x$estimate["alpha"], n_obs), ncol = 1)
+        mean_y <- matrix(rep(x$estimate["mu"], n_obs), ncol = 1)
         
         ## create the distance matrix of the predictive location
         coords_pred <- sf::st_coordinates(x$call_data$grid)
@@ -97,16 +97,16 @@ predict_spm.sspm_fit <- function(x, .aggregate = TRUE, ...) {
                                          sigsq = x$estimate["sigsq"])
                })
 
-        sig_y <- sig_y + diag(x$estimate["omega"] / x$call_data$npix,
+        sig_y <- sig_y + diag(x$estimate["tausq"] / x$call_data$npix,
                               nrow = n_obs, ncol = n_obs)
 
-        sig_pred <- sig_pred + diag(x$estimate["omega"],
+        sig_pred <- sig_pred + diag(x$estimate["tausq"],
                                     nrow = nrow(sig_pred),
                                     ncol = ncol(sig_pred))
         
         sig_y_inv <- chol2inv(chol(sig_y))
 
-        mean_pred <- matrix(rep(x$estimate["alpha"], n_pred),
+        mean_pred <- matrix(rep(x$estimate["mu"], n_pred),
                             ncol = 1)
 
         dt_yinv  <- crossprod(d_mat, sig_y_inv)
@@ -114,7 +114,7 @@ predict_spm.sspm_fit <- function(x, .aggregate = TRUE, ...) {
         sig_pred_y <- sig_pred - (dt_yinv %*% d_mat)
 
         mean_pred_y <- mean_pred +
-            dt_yinv %*% (matrix(x$call_data$var - x$estimate["alpha"],
+            dt_yinv %*% (matrix(x$call_data$var - x$estimate["mu"],
                                 ncol = 1))
 
         if(any(diag(sig_pred_y) < 0)) {
@@ -315,18 +315,18 @@ predict_spm.sf <- function(x, spm_obj, .aggregate = TRUE,
     }
 
     
-    sig_y <- sig_y + diag(spm_obj$estimate["omega"] / spm_obj$call_data$npix,
+    sig_y <- sig_y + diag(spm_obj$estimate["tausq"] / spm_obj$call_data$npix,
                           nrow = n_obs, ncol = n_obs)
     
-    sig_pred <- sig_pred + diag(spm_obj$estimate["omega"],
+    sig_pred <- sig_pred + diag(spm_obj$estimate["tausq"],
                                 nrow = nrow(sig_pred),
                                 ncol = ncol(sig_pred))
     
     ## sig_y_inv <- solve(sig_y)
     sig_y_inv <- chol2inv(chol(sig_y))
     
-    mean_y <- matrix(rep(spm_obj$estimate["alpha"], n_obs), ncol = 1)
-    mean_pred <- matrix(rep(spm_obj$estimate["alpha"], n_pred),
+    mean_y <- matrix(rep(spm_obj$estimate["mu"], n_obs), ncol = 1)
+    mean_pred <- matrix(rep(spm_obj$estimate["mu"], n_pred),
                         ncol = 1)
     
     dt_yinv  <- crossprod(d_mat, sig_y_inv)
@@ -334,7 +334,7 @@ predict_spm.sf <- function(x, spm_obj, .aggregate = TRUE,
     sig_pred_y <- sig_pred - (dt_yinv %*% d_mat)
     
     mean_pred_y <- mean_pred +
-        dt_yinv %*% (matrix(spm_obj$call_data$var - spm_obj$estimate["alpha"],
+        dt_yinv %*% (matrix(spm_obj$call_data$var - spm_obj$estimate["mu"],
                             ncol = 1))
 
     if(any(diag(sig_pred_y) < 0)) {
