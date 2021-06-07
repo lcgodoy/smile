@@ -3,6 +3,8 @@
 \name{fit_spm}
 \alias{fit_spm}
 \alias{fit_spm.sspm}
+\alias{fit_spm2}
+\alias{fit_spm3}
 \alias{fit_spm.mspm}
 \title{Fit a model adapted from
 \href{https://ij-healthgeographics.biomedcentral.com/articles/10.1186/s12942-020-00200-w}{Johnson
@@ -18,6 +20,31 @@ fit_spm(x, ...)
   apply_exp = FALSE,
   opt_method = "Nelder-Mead",
   control_opt = list(),
+  comp_hess = TRUE,
+  ...
+)
+
+fit_spm2(
+  x,
+  model,
+  theta_st,
+  kappa = NULL,
+  apply_exp = FALSE,
+  opt_method = "Nelder-Mead",
+  control_opt = list(),
+  comp_hess = TRUE,
+  ...
+)
+
+fit_spm3(
+  x,
+  model,
+  theta_st,
+  kappa = NULL,
+  apply_exp = FALSE,
+  opt_method = "Nelder-Mead",
+  control_opt = list(),
+  comp_hess = TRUE,
   ...
 )
 
@@ -49,12 +76,12 @@ parameters.}
 
 \item{kappa}{a \code{numeric} value indicating either the \eqn{\kappa}
 paramater from the Matern covariance function (controlling the process
-differentiability), or the "pexp" for the Powered Exponential
-family. If the \code{model} chosen by the user is Matern and
-\code{kappa} is not informed, it is automatically set to .5. On the
-other hand, if the user choses the Powered Exponential family and do not
-inform \code{kappa}, then it is set to 1. In both cases, the covariance
-function becomes the so covalled exponential covariance function.}
+differentiability), or the "pexp" for the Powered Exponential family. If
+the \code{model} chosen by the user is Matern and \code{kappa} is not
+informed, it is automatically set to .5. On the other hand, if the user
+choses the Powered Exponential family and do not inform \code{kappa},
+then it is set to 1. In both cases, the covariance function becomes the
+so covalled exponential covariance function.}
 
 \item{apply_exp}{a \code{logical} scalar indicating wheter the parameters
 that cannot assume negative values should be exponentiate or not.}
@@ -65,6 +92,9 @@ algorithm to be used. For details, see \code{\link[stats]{optim}}.}
 \item{control_opt}{a named \code{list} containing the control arguments for
 the optimization algorithm to be used. For details, see
 \code{\link[stats]{optim}}.}
+
+\item{comp_hess}{a \code{boolean} indicating whether the Hessian matrix
+should be computed}
 }
 \value{
 a \code{sspm_fit} or a \code{mspm_fit} object.

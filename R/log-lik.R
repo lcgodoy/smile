@@ -282,3 +282,201 @@ singl_log_lik <- function(theta, .dt, dists, npix, model,
 
     return( - log_lik_y )
 }
+
+##' Evaluate the log-likelihood for a given set of parameters - New
+##' parametrization + profile likelihood
+##'
+##' Internal use.
+##' @title Evaluate log-lik
+##' @param theta a \code{list} of size 2 containing the parameters associated
+##'     with the model. (Explain why)
+##' @param .dt a \code{list} with two positions. The first containing the
+##'     numerical data for the variable \eqn{Y}, and the second for \eqn{X}.
+##' @param dists a \code{list} of size three. The first containing the distance
+##'     matrices associated with the regions where \eqn{Y} was measured, the
+##'     second for the distance matrices associated with \eqn{X}, and the last
+##'     containing the cross-distance matrices.
+##' @param npix a \code{integer vector} containing the number of pixels within
+##'     each polygon. (Ordered by the id variables for the polygons).
+##' @param model a \code{character} indicating which covariance function to
+##'     use. Possible values are \code{c("matern", "pexp", "gaussian",
+##'     "spherical")}.
+##' @param kappa \eqn{\kappa} parameter. Not necessary if \code{mode} is
+##'     \code{"gaussian"} or \code{"spherical"}
+##' @param apply_exp a \code{logical} indicater wheter the exponential
+##'     transformation should be applied to variance parameters. This
+##'     facilitates the optimization process.
+##' 
+##' @return a scalar representing \code{-log.lik}.
+singl_log_plik <- function(theta, .dt, dists, npix, model,
+                           kappa = NULL, apply_exp = FALSE) {
+    
+    p <- NCOL(.dt)
+
+    if(! apply_exp & any(theta[(p + 1):length(theta)] < 0 )) {
+        return(NA_real_)
+    }
+    
+    if(p == 1) {
+        nu  <- theta[1]
+        phi <- theta[2]
+    } else {
+        nu <- matrix(nrow = p, ncol = p)
+        nu[upper.tri(nu, diag = TRUE)] <-
+            theta[1:(1 + .5*(p * ( p  + 1 )) - 1)]
+        nu[lower.tri(nu)] <- nu[upper.tri(nu)]
+        phi <- theta[( .5 * (p * ( p  + 1 )) + 1)]
+    }
+    if(apply_exp) {
+        nu    <- exp(nu)
+        phi   <- exp(phi)
+    }
+
+    .n <- NROW(.dt)
+
+    switch(model,
+           "matern" = {
+               varcov_u1 <- comp_mat_cov(cross_dists = dists,
+                                         n = .n, n2 = .n,
+                                         phi = phi,
+                                         sigsq = 1,
+                                         kappa = kappa)
+           },
+           "pexp" = {
+               varcov_u1 <- comp_pexp_cov(cross_dists = dists,
+                                          n = .n, n2 = .n,
+                                          phi = phi,
+                                          sigsq = 1,
+                                          kappa = kappa)
+           },
+           "gaussian" = {
+               varcov_u1 <- comp_gauss_cov(cross_dists = dists,
+                                           n = .n, n2 = .n,
+                                           phi = phi,
+                                           sigsq = 1)
+           },
+           "spherical" = {
+               varcov_u1 <- comp_spher_cov(cross_dists = dists,
+                                           n = .n, n2 = .n,
+                                           phi = phi,
+                                           sigsq = 1)
+           })
+    
+    if(p == 1) {
+        V <- varcov_u1 + diag(nu / npix,
+                              nrow = .n, ncol = .n)
+        chol_v <- chol(V)
+        inv_v  <- chol2inv(chol_v)
+        ones_n <- matrix(rep(1, .n), ncol = 1L)
+        y <- matrix(.dt, ncol = 1L)
+        mu_hat    <- as.numeric( crossprod(ones_n, inv_v) %*% y / (sum(inv_v)) )
+        y_mu_hat  <- y - mu_hat
+        sigsq_hat <- as.numeric( crossprod(y_mu_hat, inv_v) %*% y_mu_hat / .n )
+        log_lik_y <- .5 * (.n * log(2 * pi) + .n * log(sigsq_hat) + 2 * sum(log(diag(chol_v))) + .n)
+    } else {
+        stop("to be implemented.")
+    }
+
+    return( log_lik_y )
+}
+
+##' Evaluate the log-likelihood for a given set of parameters - New
+##' parametrization + restricted likelihood
+##'
+##' Internal use.
+##' @title Evaluate log-lik
+##' @param theta a \code{list} of size 3 containing the parameters associated
+##'     with the model. (Explain why)
+##' @param .dt a \code{list} with two positions. The first containing the
+##'     numerical data for the variable \eqn{Y}, and the second for \eqn{X}.
+##' @param dists a \code{list} of size three. The first containing the distance
+##'     matrices associated with the regions where \eqn{Y} was measured, the
+##'     second for the distance matrices associated with \eqn{X}, and the last
+##'     containing the cross-distance matrices.
+##' @param npix a \code{integer vector} containing the number of pixels within
+##'     each polygon. (Ordered by the id variables for the polygons).
+##' @param model a \code{character} indicating which covariance function to
+##'     use. Possible values are \code{c("matern", "pexp", "gaussian",
+##'     "spherical")}.
+##' @param kappa \eqn{\kappa} parameter. Not necessary if \code{mode} is
+##'     \code{"gaussian"} or \code{"spherical"}
+##' @param apply_exp a \code{logical} indicater wheter the exponential
+##'     transformation should be applied to variance parameters. This
+##'     facilitates the optimization process.
+##' 
+##' @return a scalar representing \code{-log.lik}.
+singl_log_rel <- function(theta, .dt, dists, npix, model,
+                          kappa = NULL, apply_exp = FALSE) {
+    
+    p <- NCOL(.dt)
+
+    if(! apply_exp & any(theta[(p + 1):length(theta)] < 0 )) {
+        return(NA_real_)
+    }
+    
+    if(p == 1) {
+        nu    <- theta[1]
+        sigsq <- theta[2]
+        phi   <- theta[3]
+    } else {
+        nu <- matrix(nrow = p, ncol = p)
+        nu[upper.tri(nu, diag = TRUE)] <-
+            theta[1:(1 + .5*(p * ( p  + 1 )) - 1)]
+        nu[lower.tri(nu)] <- nu[upper.tri(nu)]
+        sigsq <- theta[( .5 * (p * ( p  + 1 )) + 1)]
+        phi   <- theta[( .5 * (p * ( p  + 1 )) + 2)]
+    }
+    if(apply_exp) {
+        nu    <- exp(nu)
+        sigsq <- exp(sigsq)
+        phi   <- exp(phi)
+    }
+
+    .n <- NROW(.dt)
+
+    switch(model,
+           "matern" = {
+               varcov_u1 <- comp_mat_cov(cross_dists = dists,
+                                         n = .n, n2 = .n,
+                                         phi = phi,
+                                         sigsq = 1,
+                                         kappa = kappa)
+           },
+           "pexp" = {
+               varcov_u1 <- comp_pexp_cov(cross_dists = dists,
+                                          n = .n, n2 = .n,
+                                          phi = phi,
+                                          sigsq = 1,
+                                          kappa = kappa)
+           },
+           "gaussian" = {
+               varcov_u1 <- comp_gauss_cov(cross_dists = dists,
+                                           n = .n, n2 = .n,
+                                           phi = phi,
+                                           sigsq = 1)
+           },
+           "spherical" = {
+               varcov_u1 <- comp_spher_cov(cross_dists = dists,
+                                           n = .n, n2 = .n,
+                                           phi = phi,
+                                           sigsq = 1)
+           })
+    
+    if(p == 1) {
+        V <- varcov_u1 + diag(nu / npix,
+                              nrow = .n, ncol = .n)
+        chol_v <- chol(V)
+        inv_v  <- chol2inv(chol_v)
+        ones_n <- matrix(rep(1, .n), ncol = 1L)
+        y <- matrix(.dt, ncol = 1L)
+        mu_hat    <- as.numeric( crossprod(ones_n, inv_v) %*% y / (sum(inv_v)) )
+        y_mu_hat  <- y - mu_hat
+        log_lik_y <- .5 * (.n * log(2 * pi) + .n * log(sigsq) + 2 * sum(log(diag(chol_v))) +
+                           (crossprod(y_mu_hat, inv_v) %*% y_mu_hat / sigsq) +
+                           (sum(inv_v) / sigsq))
+    } else {
+        stop("to be implemented.")
+    }
+
+    return( log_lik_y )
+}
