@@ -313,7 +313,7 @@ singl_log_plik <- function(theta, .dt, dists, npix, model,
     
     p <- NCOL(.dt)
 
-    if(! apply_exp & any(theta[(p + 1):length(theta)] < 0 )) {
+    if(! apply_exp & any(theta < 0 )) {
         return(NA_real_)
     }
     
@@ -328,8 +328,8 @@ singl_log_plik <- function(theta, .dt, dists, npix, model,
         phi <- theta[( .5 * (p * ( p  + 1 )) + 1)]
     }
     if(apply_exp) {
-        nu    <- exp(nu)
-        phi   <- exp(phi)
+        nu  <- exp(nu)
+        phi <- exp(phi)
     }
 
     .n <- NROW(.dt)

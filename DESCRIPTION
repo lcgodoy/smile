@@ -27,6 +27,7 @@ Imports:
     mvtnorm,
     Matrix,
     stats,
+    data.table,
     utils
 Depends: 
     R (>= 3.5)

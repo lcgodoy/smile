@@ -87,12 +87,19 @@ single_sf_to_spm <- function(sf_obj,
                     join = sf::st_within)
 
     if(any(! sf_obj[[poly_ids]] %in% out_grid_pt[[poly_ids]])) {
-        out_grid_pt <- rbind(
-            out_grid_pt,
-            suppressWarnings(sf::st_centroid(sf_obj[, poly_ids]))
-        )
-    }
+        empty_polys <- which(! sf_obj[[poly_ids]] %in% out_grid_pt[[poly_ids]])
+        out_grid_aux <-
+            st_sample(x = sf_obj[empty_polys, ],
+                      size = 2L,
+                      type = type,
+                      by_polygon = TRUE)
 
+        out_grid_pt <- rbind(out_grid_pt,
+                             sf::st_join(x = sf::st_sf(out_grid_aux),
+                                         y = sf_obj[poly_ids],
+                                         join = sf::st_within))
+    }
+    
     out_grid_pt <- out_grid_pt[order(out_grid_pt[[poly_ids]]), ]
 
     out_grid_pt <- transform(out_grid_pt,
