@@ -89,11 +89,16 @@ single_sf_to_spm <- function(sf_obj,
     if(any(! sf_obj[[poly_ids]] %in% out_grid_pt[[poly_ids]])) {
         empty_polys <- which(! sf_obj[[poly_ids]] %in% out_grid_pt[[poly_ids]])
         out_grid_aux <-
-            st_sample(x = sf_obj[empty_polys, ],
+            sf::st_sfc(
+                    st_sample(x = sf_obj[empty_polys, ],
                       size = 2L,
                       type = type,
+                      exact = TRUE,
                       by_polygon = TRUE)
-
+                ) |>
+            sf::st_cast("POINT") |>
+            sf::st_set_crs(sf::st_crs(sf_obj))
+        
         out_grid_pt <- rbind(out_grid_pt,
                              sf::st_join(x = sf::st_sf(out_grid_aux),
                                          y = sf_obj[poly_ids],
