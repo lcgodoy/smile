@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>summarizing spm_fit — summary_sspm_fit • smile</title>
+<title>Voronoi Tesselation inside a polygon — vor_build • smile</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,9 @@
 
 
 
-<meta property="og:title" content="summarizing spm_fit — summary_sspm_fit" />
-<meta property="og:description" content="summarizing spm_fit" />
+<meta property="og:title" content="Voronoi Tesselation inside a polygon — vor_build" />
+<meta property="og:description" content="voronoi tesselation of a given a set of points inside a polygon.
+This is an internal use function." />
 
 
 
@@ -153,30 +154,34 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>summarizing <code>spm_fit</code></h1>
-    <small class="dont-index">Source: <a href='https://github.com/lcgodoy/smile/blob/master/R/fit.R'><code>R/fit.R</code></a></small>
-    <div class="hidden name"><code>summary_sspm_fit.Rd</code></div>
+    <h1>Voronoi Tesselation inside a polygon</h1>
+    <small class="dont-index">Source: <a href='https://github.com/lcgodoy/smile/blob/master/R/vdl.R'><code>R/vdl.R</code></a></small>
+    <div class="hidden name"><code>vor_build.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>summarizing <code>spm_fit</code></p>
+    <p>voronoi tesselation of a given a set of points inside a polygon.
+This is an internal use function.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>summary_sspm_fit</span><span class='op'>(</span><span class='va'>x</span>, sig <span class='op'>=</span> <span class='fl'>0.05</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>vor_build</span><span class='op'>(</span><span class='va'>points_sf</span>, <span class='va'>poly_sf</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>x</th>
-      <td><p>either a <code>sspm_fit</code> or a <code>mspm_fit</code> object</p></td>
+      <th>points_sf</th>
+      <td><p><code>sf data frame</code> containing the points' coordinates</p></td>
     </tr>
     <tr>
-      <th>sig</th>
-      <td><p>signigicance level</p></td>
+      <th>poly_sf</th>
+      <td><p>a <code>sf</code> polygon</p></td>
     </tr>
     </table>
 
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>a <code>sf</code> polygon</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

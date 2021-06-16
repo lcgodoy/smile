@@ -39,13 +39,13 @@
       <ul class="nav navbar-nav">
 <li>
   <a href="../index.html">
-    <span class="fas fa-home fa-lg"></span>
+    <span class="fa fa-home fa-lg"></span>
      
   </a>
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    <span class="fas fa-book fa-lg"></span>
+    <span class="fa fa-book fa-lg"></span>
      
     Vignettes
      
@@ -68,7 +68,7 @@
 </li>
 <li>
   <a href="../reference/index.html">
-    <span class="fas fa-search fa-lg"></span>
+    <span class="fa fa-search fa-lg"></span>
      
     Reference
   </a>
@@ -77,25 +77,25 @@
 <ul class="nav navbar-nav navbar-right">
 <li>
   <a href="https://twitter.com/ldcgodoy">
-    <span class="fas fa-twitter"></span>
+    <span class="fa fa-twitter"></span>
      
   </a>
 </li>
 <li>
   <a href="https://www.linkedin.com/in/godoy-lucas/">
-    <span class="fas fa-linkedin"></span>
+    <span class="fa fa-linkedin"></span>
      
   </a>
 </li>
 <li>
   <a href="https://github.com/lcgodoy">
-    <span class="fas fa-github"></span>
+    <span class="fa fa-github"></span>
      
   </a>
 </li>
 <li>
   <a href="https://stacksoverflow.com/users/9220758/lcgodoy">
-    <span class="fas fa-stack-overflow fa-lg"></span>
+    <span class="fa fa-stack-overflow fa-lg"></span>
      
   </a>
 </li>
@@ -163,7 +163,9 @@
     <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html">geom_sf</a></span><span class="op">(</span>pch <span class="op">=</span> <span class="fl">15</span><span class="op">)</span> <span class="op">+</span>
     <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html">scale_color_viridis_d</a></span><span class="op">(</span>option <span class="op">=</span> <span class="st">"H"</span><span class="op">)</span> <span class="op">+</span>
     <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/guides.html">guides</a></span><span class="op">(</span>color <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op">+</span>
-    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_minimal</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
+    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_minimal</a></span><span class="op">(</span><span class="op">)</span>
+<span class="co">#&gt; Warning: `guides(&lt;scale&gt; = FALSE)` is deprecated. Please use `guides(&lt;scale&gt; =</span>
+<span class="co">#&gt; "none")` instead.</span></code></pre></div>
 <p><img src="sf-to-spm_files/figure-html/sf-to-spm1-1.png" width="700"></p>
 <p>Next, we illustrate how do different values of <code>type</code> and <code>by_polygon</code> affect the final result of the <code>sf_to_spm</code> call. In all examples we are going to use a grid of 305 points (multiple of the number of polygons observed). The “sparsity” of the points forming the grid helps to see the differences caused by the different inputs for the function. The panel below displays every possible combination of the parameters <code>type</code> and <code>by_polygon</code>. Although there is no “right” choice for these parameters, we advise using <code>type</code> as <code>"regular"</code> or <code>"hexagonal"</code> with by <code>by_polygon = FALSE</code>. Also, it is import to make sure that, after generating the grid, your grid is in a finer resolution than your smallest polygon, that is, to make sure that there exists no points lying in more than one polygon. <img src="sf-to-spm_files/figure-html/sf-to-spm2-1.png" width="700"></p>
 <p>Lastly, we show two additional examples of usage of the <code>sf_to_spm</code> function. The first one, using the IMD data at the LSOA level, we show how to proceed when analysing more than one random variable. In the code chunk below, we load the data and convert it to an <code>smile</code> compatible object using a regular grid of 1500 points. We also inform the software that we are interested in analyzing two variables within this dataset, the variables <code>"imdscore"</code> and <code>"male"</code>, respectively<a href="#fn5" class="footnote-ref" id="fnref5"><sup>5</sup></a>.</p>

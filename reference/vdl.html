@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>summarizing spm_fit — summary_sspm_fit • smile</title>
+<title>Voronoi Data Linkage — vdl • smile</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,8 @@
 
 
 
-<meta property="og:title" content="summarizing spm_fit — summary_sspm_fit" />
-<meta property="og:description" content="summarizing spm_fit" />
+<meta property="og:title" content="Voronoi Data Linkage — vdl" />
+<meta property="og:description" content="Reminder, have to create an example." />
 
 
 
@@ -153,30 +153,62 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>summarizing <code>spm_fit</code></h1>
-    <small class="dont-index">Source: <a href='https://github.com/lcgodoy/smile/blob/master/R/fit.R'><code>R/fit.R</code></a></small>
-    <div class="hidden name"><code>summary_sspm_fit.Rd</code></div>
+    <h1>Voronoi Data Linkage</h1>
+    <small class="dont-index">Source: <a href='https://github.com/lcgodoy/smile/blob/master/R/vdl.R'><code>R/vdl.R</code></a></small>
+    <div class="hidden name"><code>vdl.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>summarizing <code>spm_fit</code></p>
+    <p>Reminder, have to create an example.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>summary_sspm_fit</span><span class='op'>(</span><span class='va'>x</span>, sig <span class='op'>=</span> <span class='fl'>0.05</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>vdl</span><span class='op'>(</span>
+  <span class='va'>coords_sf</span>,
+  <span class='va'>areal_sf</span>,
+  id_coords <span class='op'>=</span> <span class='cn'>NULL</span>,
+  list_vars <span class='op'>=</span> <span class='cn'>NULL</span>,
+  show_warning <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  <span class='va'>buff</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>x</th>
-      <td><p>either a <code>sspm_fit</code> or a <code>mspm_fit</code> object</p></td>
+      <th>coords_sf</th>
+      <td><p><code>sf</code> object representing point coordinates</p></td>
     </tr>
     <tr>
-      <th>sig</th>
-      <td><p>signigicance level</p></td>
+      <th>areal_sf</th>
+      <td><p><code>sf</code> object representing the areal data (e.g. spatial polygons)</p></td>
+    </tr>
+    <tr>
+      <th>id_coords</th>
+      <td><p><code>character</code> indicating the <em>id</em> variable for <code>coords_sf</code>. If
+not informed, the <em>row number</em> is assumed to by the id.</p></td>
+    </tr>
+    <tr>
+      <th>list_vars</th>
+      <td><p>a named <code>list</code> representing the variables from <code>areal_sf</code>
+that need to be estimated in <code>coords_sf</code>. The <code>list</code> position names represent
+the populational variables, while the contend within each position represent
+the average variavles.</p></td>
+    </tr>
+    <tr>
+      <th>show_warning</th>
+      <td><p><code>logical</code>, indicating wheter a warning for the crs
+transformation should be printed or not. (default is <code>TRUE</code>)</p></td>
+    </tr>
+    <tr>
+      <th>buff</th>
+      <td><p>scalar <code>numeric</code>. Mostly for internal use.</p></td>
     </tr>
     </table>
 
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>a <code>sf</code> object, contaning the <code>id_coords</code> variable and the
+<code>list_vars</code> for the <code>coords_sf</code> spatial data set.</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

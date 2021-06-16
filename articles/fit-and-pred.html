@@ -39,13 +39,13 @@
       <ul class="nav navbar-nav">
 <li>
   <a href="../index.html">
-    <span class="fas fa-home fa-lg"></span>
+    <span class="fa fa-home fa-lg"></span>
      
   </a>
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    <span class="fas fa-book fa-lg"></span>
+    <span class="fa fa-book fa-lg"></span>
      
     Vignettes
      
@@ -68,7 +68,7 @@
 </li>
 <li>
   <a href="../reference/index.html">
-    <span class="fas fa-search fa-lg"></span>
+    <span class="fa fa-search fa-lg"></span>
      
     Reference
   </a>
@@ -77,25 +77,25 @@
 <ul class="nav navbar-nav navbar-right">
 <li>
   <a href="https://twitter.com/ldcgodoy">
-    <span class="fas fa-twitter"></span>
+    <span class="fa fa-twitter"></span>
      
   </a>
 </li>
 <li>
   <a href="https://www.linkedin.com/in/godoy-lucas/">
-    <span class="fas fa-linkedin"></span>
+    <span class="fa fa-linkedin"></span>
      
   </a>
 </li>
 <li>
   <a href="https://github.com/lcgodoy">
-    <span class="fas fa-github"></span>
+    <span class="fa fa-github"></span>
      
   </a>
 </li>
 <li>
   <a href="https://stacksoverflow.com/users/9220758/lcgodoy">
-    <span class="fas fa-stack-overflow fa-lg"></span>
+    <span class="fa fa-stack-overflow fa-lg"></span>
      
   </a>
 </li>
@@ -198,11 +198,11 @@
 <span class="co">#&gt; </span>
 <span class="co">#&gt;  optimization algorithm converged: yes </span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt;     par     estimate           se                          ci</span>
-<span class="co">#&gt; 1    mu 7.571735e+01 1.221498e+00            [73.323; 78.111]</span>
-<span class="co">#&gt; 2 tausq 3.112688e-04 2.158757e+02            [0.000; 423.109]</span>
-<span class="co">#&gt; 3 sigsq 3.102188e+01 5.416890e+12 [0.000; 10616909952838.508]</span>
-<span class="co">#&gt; 4   phi 4.776283e-01 1.112906e+00              [0.000; 2.659]</span></code></pre></div>
+<span class="co">#&gt;     par     estimate           se                         ci</span>
+<span class="co">#&gt; 1    mu 7.565974e+01 1.313412e+00           [73.086; 78.234]</span>
+<span class="co">#&gt; 2 tausq 7.722651e-05 4.409328e+02           [0.000; 864.213]</span>
+<span class="co">#&gt; 3 sigsq 3.053667e+01 3.309474e+12 [0.000; 6486450667897.228]</span>
+<span class="co">#&gt; 4   phi 5.436733e-01 1.223526e+00             [0.000; 2.942]</span></code></pre></div>
 <p>Finally, now we are going to perform predictions of the LEB at the LSOA level. To do so, we use the function <code>predict_spm</code>. The <code>x</code> argument gives the sf on which we want to make the predictions according to the <code>sbm_obj</code>, which represents the estimated parameters. Now, take a look at the remaining arguments. The last two, are analogous to what we have seen for the function <code>sf_to_spm</code>. They are concerning the grid generated over the study region, now we going to make predicitons over this grid. I set it to 2500 to “approximate” a continuous region<a href="#fn4" class="footnote-ref" id="fnref4"><sup>4</sup></a>. The argument <code>.aggregate</code> if set to <code>TRUE</code>, computes the predictions over the polygons from the input <code>x</code> (in this case <code>liv_lsoa</code>). This function also works if the input is a <code>sf</code> object with POINT geometries. The objects returned by the function <code>pred_lsoa</code> are lists with the following elements: 1) <code>mu_pred</code> - a vector with the predicted average for each location in the generated grid; 2) <code>sig_pred</code> the variance covariance matrix associated with the same grid; 3) the predictions (and standard errors) organized in an <code>sf</code> object to facilitate the visualization of the predictions over a (almost) continuous space; and 4) <code>pred_agg</code> which is returned only if we set <code>.aggregate = TRUE</code>. The last one contains the predictions and their standard erros integrated over the “new regions”.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">pred_lsoa</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/predict_spm.html">predict_spm</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">liv_lsoa</span>, spm_obj <span class="op">=</span> <span class="va">fit_msoa</span>,
@@ -242,7 +242,9 @@
     <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html">scale_color_viridis_c</a></span><span class="op">(</span>option <span class="op">=</span> <span class="st">"H"</span><span class="op">)</span> <span class="op">+</span>
     <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/guides.html">guides</a></span><span class="op">(</span>color <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op">+</span>
     <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html">facet_wrap</a></span><span class="op">(</span><span class="va">surface</span> <span class="op">~</span> <span class="va">.</span><span class="op">)</span> <span class="op">+</span>
-    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_bw</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
+    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_bw</a></span><span class="op">(</span><span class="op">)</span>
+<span class="co">#&gt; Warning: `guides(&lt;scale&gt; = FALSE)` is deprecated. Please use `guides(&lt;scale&gt; =</span>
+<span class="co">#&gt; "none")` instead.</span></code></pre></div>
 <p><img src="fit-and-pred_files/figure-html/manip-pred-1-1.png" width="700"></p>
 <p>The next one displays the standard errors for the predictions. Clearly, we have less variability in the neighborhoods on which we have small polygons.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
@@ -256,7 +258,9 @@
     <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html">scale_color_viridis_c</a></span><span class="op">(</span>option <span class="op">=</span> <span class="st">"H"</span><span class="op">)</span> <span class="op">+</span>
     <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/guides.html">guides</a></span><span class="op">(</span>color <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op">+</span>
     <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html">facet_wrap</a></span><span class="op">(</span><span class="va">surface</span> <span class="op">~</span> <span class="va">.</span><span class="op">)</span> <span class="op">+</span>
-    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_bw</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
+    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_bw</a></span><span class="op">(</span><span class="op">)</span>
+<span class="co">#&gt; Warning: `guides(&lt;scale&gt; = FALSE)` is deprecated. Please use `guides(&lt;scale&gt; =</span>
+<span class="co">#&gt; "none")` instead.</span></code></pre></div>
 <p><img src="fit-and-pred_files/figure-html/se-ggplot1-1.png" width="700"></p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/rm.html">rm</a></span><span class="op">(</span><span class="va">aux_viz1</span>, <span class="va">pred_lsoa</span>, <span class="va">fit_msoa</span><span class="op">)</span>
@@ -284,16 +288,16 @@
 <span class="co">#&gt; </span>
 <span class="co">#&gt;  optimization algorithm converged: yes </span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt;     par    estimate            se</span>
-<span class="co">#&gt; 1    mu  38.8232764  4.357255e+00</span>
-<span class="co">#&gt; 2 tausq 395.6304835           Inf</span>
-<span class="co">#&gt; 3 sigsq 335.2529104 9.375545e+144</span>
-<span class="co">#&gt; 4   phi   0.5443657  2.819892e-01</span>
-<span class="co">#&gt;                                                                                                                                                                ci</span>
-<span class="co">#&gt; 1                                                                                                                                                [30.283; 47.363]</span>
-<span class="co">#&gt; 2                                                                                                                                                    [0.000; Inf]</span>
-<span class="co">#&gt; 3 [0.000; 18375730950671449377456965001638278149076746109071728351021840116354483524277939799685007672326867605658800572894790634351854492955781757642211328.000]</span>
-<span class="co">#&gt; 4                                                                                                                                                  [0.000; 1.097]</span></code></pre></div>
+<span class="co">#&gt;     par   estimate            se</span>
+<span class="co">#&gt; 1    mu  39.171452  4.401371e+00</span>
+<span class="co">#&gt; 2 tausq 405.441614           Inf</span>
+<span class="co">#&gt; 3 sigsq 333.466535 1.603974e+144</span>
+<span class="co">#&gt; 4   phi   0.557444  2.805310e-01</span>
+<span class="co">#&gt;                                                                                                                                                               ci</span>
+<span class="co">#&gt; 1                                                                                                                                               [30.545; 47.798]</span>
+<span class="co">#&gt; 2                                                                                                                                                   [0.000; Inf]</span>
+<span class="co">#&gt; 3 [0.000; 3143732238011082171172902392210721478798916542499737727375969299973480974413736744049871715367731801101847286340159423893236806233535453874618368.000]</span>
+<span class="co">#&gt; 4                                                                                                                                                 [0.008; 1.107]</span></code></pre></div>
 <p>Now we are going to perform predictions of the IMD at the MSOA level. Since from now on the process is pretty much the exam, the explanation will be shorter.</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">pred_msoa</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/predict_spm.html">predict_spm</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">liv_msoa</span>, spm_obj <span class="op">=</span> <span class="va">fit_lsoa</span>,
@@ -333,7 +337,9 @@
     <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html">scale_color_viridis_c</a></span><span class="op">(</span>option <span class="op">=</span> <span class="st">"H"</span><span class="op">)</span> <span class="op">+</span>
     <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/guides.html">guides</a></span><span class="op">(</span>color <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op">+</span>
     <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html">facet_wrap</a></span><span class="op">(</span><span class="va">surface</span> <span class="op">~</span> <span class="va">.</span><span class="op">)</span> <span class="op">+</span>
-    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_bw</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
+    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_bw</a></span><span class="op">(</span><span class="op">)</span>
+<span class="co">#&gt; Warning: `guides(&lt;scale&gt; = FALSE)` is deprecated. Please use `guides(&lt;scale&gt; =</span>
+<span class="co">#&gt; "none")` instead.</span></code></pre></div>
 <p><img src="fit-and-pred_files/figure-html/manip-pred-2-1.png" width="700"></p>
 <p>The next one displays the standard errors for the predictions.</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
@@ -347,7 +353,9 @@
     <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html">scale_color_viridis_c</a></span><span class="op">(</span>option <span class="op">=</span> <span class="st">"H"</span><span class="op">)</span> <span class="op">+</span>
     <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/guides.html">guides</a></span><span class="op">(</span>color <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op">+</span>
     <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html">facet_wrap</a></span><span class="op">(</span><span class="va">surface</span> <span class="op">~</span> <span class="va">.</span><span class="op">)</span> <span class="op">+</span>
-    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_bw</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
+    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_bw</a></span><span class="op">(</span><span class="op">)</span>
+<span class="co">#&gt; Warning: `guides(&lt;scale&gt; = FALSE)` is deprecated. Please use `guides(&lt;scale&gt; =</span>
+<span class="co">#&gt; "none")` instead.</span></code></pre></div>
 <p><img src="fit-and-pred_files/figure-html/se-ggplot2-1.png" width="700"></p>
 </div>
 <div id="joint-model" class="section level2">
