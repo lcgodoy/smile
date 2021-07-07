@@ -42,5 +42,5 @@ their row numbers.}
 a \code{list}.
 }
 \description{
-Transforming a \code{sf} into a \code{spm} object (Internal use)
+Trsansforming a \code{sf} into a \code{spm} object (Internal use)
 }

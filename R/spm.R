@@ -1,4 +1,4 @@
-##' Transforming a \code{sf} into a \code{spm} object (Internal use)
+##' Trsansforming a \code{sf} into a \code{spm} object (Internal use)
 ##'
 ##' @title single \code{sf} to \code{spm}
 ##' @param sf_obj a \code{sf} object s.t. its geometries are polygons.
@@ -88,21 +88,26 @@ single_sf_to_spm <- function(sf_obj,
 
     if(any(! sf_obj[[poly_ids]] %in% out_grid_pt[[poly_ids]])) {
         empty_polys <- which(! sf_obj[[poly_ids]] %in% out_grid_pt[[poly_ids]])
-        out_grid_aux <-
-            sf::st_sfc(
-                    sf::st_sample(x = sf_obj[empty_polys, ],
-                                  size = rep(2L,
-                                             length(empty_polys)),
-                                  type = type,
-                                  exact = TRUE)
-                ) |>
-            sf::st_cast("POINT") |>
-            sf::st_set_crs(sf::st_crs(sf_obj))
+        ## out_grid_aux <-
+        ##     sf::st_sfc(
+        ##             sf::st_sample(x = sf_obj[empty_polys, ],
+        ##                           size = rep(2L,
+        ##                                      length(empty_polys)),
+        ##                           type = type,
+        ##                           exact = TRUE)
+        ##         ) |>
+        ##     sf::st_cast("POINT") |>
+        ##     sf::st_set_crs(sf::st_crs(sf_obj))
+
+        ## out_grid_pt <- rbind(out_grid_pt,
+        ##                      sf::st_join(x = out_grid_aux,
+        ##                                  y = sf_obj[poly_ids],
+        ##                                  join = sf::st_within))
         
-        out_grid_pt <- rbind(out_grid_pt,
-                             sf::st_join(x = sf::st_sf(out_grid_aux),
-                                         y = sf_obj[poly_ids],
-                                         join = sf::st_within))
+        out_grid_aux <-
+            sf::st_centroid(x = sf_obj[empty_polys, poly_ids])
+        
+        out_grid_pt <- rbind(out_grid_pt, sf::st_sf(out_grid_aux))
     }
     
     out_grid_pt <- out_grid_pt[order(out_grid_pt[[poly_ids]]), ]

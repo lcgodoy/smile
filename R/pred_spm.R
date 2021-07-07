@@ -30,19 +30,22 @@ predict_spm.sspm_fit <- function(x, .aggregate = TRUE, ...) {
                    sig_y <- comp_mat_cov(x$call_data$dists,
                                          n = n_obs, n2 = n_obs,
                                          phi   = x$estimate["phi"],
-                                         sigsq = x$estimate["sigsq"],
+                                         ## sigsq = x$estimate["sigsq"],
+                                         sigsq = 1,
                                          kappa = x$kappa)
 
 
                    d_mat <- comp_mat_cov(cross_dists = u_res_pred,
                                          n = n_obs, n2 = n_pred,
                                          phi   = x$estimate["phi"],
-                                         sigsq = x$estimate["sigsq"],
+                                         ## sigsq = x$estimate["sigsq"],
+                                         sigsq = 1,
                                          kappa = x$kappa)
                    
                    sig_pred <- mat_cov(dists = u_pred,
                                        phi   = x$estimate["phi"],
-                                       sigsq = x$estimate["sigsq"],
+                                       ## sigsq = x$estimate["sigsq"],
+                                       sigsq = 1,
                                        kappa = x$kappa)
                },
                "pexp" = {
@@ -52,57 +55,90 @@ predict_spm.sspm_fit <- function(x, .aggregate = TRUE, ...) {
                    sig_y <- comp_pexp_cov(x$call_data$dists,
                                           n = n_obs, n2 = n_obs,
                                           phi   = x$estimate["phi"],
-                                          sigsq = x$estimate["sigsq"],
+                                          ## sigsq = x$estimate["sigsq"],
+                                          sigsq = 1,
                                           kappa = x$kappa)
                    
                    d_mat <- comp_pexp_cov(cross_dists = u_res_pred,
                                           n = n_obs, n2 = n_pred,
                                           phi   = x$estimate["phi"],
-                                          sigsq = x$estimate["sigsq"],
+                                          ## sigsq = x$estimate["sigsq"],
+                                          sigsq = 1,
                                           kappa = x$kappa)
                    
                    sig_pred <- pexp_cov(dists = u_pred,
                                         phi   = x$estimate["phi"],
-                                        sigsq = x$estimate["sigsq"],
+                                        ## sigsq = x$estimate["sigsq"],
+                                        sigsq = 1,
                                         kappa = x$kappa)
                },
                "gaussian" = {
                    sig_y <- comp_gauss_cov(x$call_data$dists,
                                            n = n_obs, n2 = n_obs,
                                            phi   = x$estimate["phi"],
-                                           sigsq = x$estimate["sigsq"])
+                                           ## sigsq = x$estimate["sigsq"]
+                                           sigsq = 1)
                    
                    d_mat <- comp_gauss_cov(cross_dists = u_res_pred,
                                            n = n_obs, n2 = n_pred,
                                            phi   = x$estimate["phi"],
-                                           sigsq = x$estimate["sigsq"])
+                                           ## sigsq = x$estimate["sigsq"]
+                                           sigsq = 1)
                    
                    sig_pred <- gauss_cov(dists = u_pred,
                                          phi   = x$estimate["phi"],
-                                         sigsq = x$estimate["sigsq"])
+                                         ## sigsq = x$estimate["sigsq"]
+                                         sigsq = 1)
                },
                "spherical" = {
                    sig_y <- comp_spher_cov(x$call_data$dists, 
                                            n = n_obs, n2 = n_obs,
                                            phi   = x$estimate["phi"],
-                                           sigsq = x$estimate["sigsq"])
+                                           ## sigsq = x$estimate["sigsq"]
+                                           sigsq = 1)
                    
                    d_mat <- comp_spher_cov(cross_dists = u_res_pred,
                                            n = n_obs, n2 = n_pred,
                                            phi   = x$estimate["phi"],
-                                           sigsq = x$estimate["sigsq"])
+                                           ## sigsq = x$estimate["sigsq"]
+                                           sigsq = 1)
                    
                    sig_pred <- spher_cov(dists = u_pred,
                                          phi   = x$estimate["phi"],
-                                         sigsq = x$estimate["sigsq"])
+                                         ## sigsq = x$estimate["sigsq"]
+                                         sigsq = 1)
                })
 
-        sig_y <- sig_y + diag(x$estimate["tausq"] / x$call_data$npix,
-                              nrow = n_obs, ncol = n_obs)
-
-        sig_pred <- sig_pred + diag(x$estimate["tausq"],
-                                    nrow = nrow(sig_pred),
-                                    ncol = ncol(sig_pred))
+        if("tausq" %in% names(x$estimate)) {
+            sig_y <- (x$estimate["sigsq"] * sig_y) +
+                diag(x$estimate["tausq"] / x$call_data$npix,
+                     nrow = n_obs, ncol = n_obs)
+            
+            sig_pred <- (x$estimate["sigsq"] * sig_pred) +
+                diag(x$estimate["tausq"],
+                     nrow = nrow(sig_pred),
+                     ncol = ncol(sig_pred))
+        } else if("alpha" %in% names(x$estimate)) {
+            sig_y <- x$estimate["sigsq"] *
+                (sig_y +
+                 diag(x$estimate["alpha"] / x$call_data$npix,
+                      nrow = n_obs, ncol = n_obs))
+            
+            sig_pred <- x$estimate["sigsq"] *
+                (sig_pred +
+                 diag(x$estimate["alpha"],
+                      nrow = nrow(sig_pred),
+                      ncol = ncol(sig_pred)))
+        } else {
+            sig_y <- (x$estimate["sigsq"] * sig_y) +
+                diag(x$estimate["omega"] / x$call_data$npix,
+                     nrow = n_obs, ncol = n_obs)
+            
+            sig_pred <- (x$estimate["sigsq"] * sig_pred) +
+                diag(x$estimate["omega"],
+                     nrow = nrow(sig_pred),
+                     ncol = ncol(sig_pred))
+        }
         
         sig_y_inv <- chol2inv(chol(sig_y))
 
@@ -119,20 +155,23 @@ predict_spm.sspm_fit <- function(x, .aggregate = TRUE, ...) {
 
         if(any(diag(sig_pred_y) < 0)) {
             warning("Negative variance for at least one predicted region. Taking absolute value.")
-            se_pred_y <- sqrt(abs(diag(sig_pred_y)))
+            var_pred_y <- abs(diag(sig_pred_y))
         } else {
-            se_pred_y <- sqrt(diag(sig_pred_y))
+            var_pred_y <- diag(sig_pred_y)
         }
         
         pred_grid <- transform(x$call_data$grid,
                                mu_pred = mean_pred_y,
-                               se_pred = se_pred_y)
+                               se_pred = var_pred_y)
 
         if(.aggregate) {
             out_poly <- aggregate_aux(x = pred_grid[c("mu_pred", "se_pred")],
                                       by = x$call_data$sf_poly,
                                       FUN = mean,
                                       join = sf::st_intersects)
+
+            out_poly[["se_pred"]]  <- sqrt(out_poly[["se_pred"]])
+            pred_grid[["se_pred"]] <- sqrt(pred_grid[["se_pred"]])
             
             output <-
                 list(
@@ -142,6 +181,8 @@ predict_spm.sspm_fit <- function(x, .aggregate = TRUE, ...) {
                     pred_agg  = out_poly
                 )
         } else {
+            pred_grid[["se_pred"]] <- sqrt(pred_grid[["se_pred"]])
+
             output <-
                 list(
                     mu_pred   = mean_pred_y,
@@ -243,19 +284,22 @@ predict_spm.sf <- function(x, spm_obj, .aggregate = TRUE,
                sig_y <- comp_mat_cov(spm_obj$call_data$dists,
                                      n = n_obs, n2 = n_obs,
                                      phi   = spm_obj$estimate["phi"],
-                                     sigsq = spm_obj$estimate["sigsq"],
+                                     ## sigsq = spm_obj$estimate["sigsq"],
+                                     sigsq = 1,
                                      kappa = spm_obj$kappa)
 
 
                d_mat <- comp_mat_cov(cross_dists = u_res_pred,
                                      n = n_obs, n2 = n_pred,
                                      phi   = spm_obj$estimate["phi"],
-                                     sigsq = spm_obj$estimate["sigsq"],
+                                     ## sigsq = spm_obj$estimate["sigsq"],
+                                     sigsq = 1,
                                      kappa = spm_obj$kappa)
                
                sig_pred <- mat_cov(dists = u_pred,
                                    phi   = spm_obj$estimate["phi"],
-                                   sigsq = spm_obj$estimate["sigsq"],
+                                   ## sigsq = spm_obj$estimate["sigsq"],
+                                   sigsq = 1,
                                    kappa = spm_obj$kappa)
            },
            "pexp" = {
@@ -265,62 +309,95 @@ predict_spm.sf <- function(x, spm_obj, .aggregate = TRUE,
                sig_y <- comp_pexp_cov(spm_obj$call_data$dists,
                                       n = n_obs, n2 = n_obs,
                                       phi   = spm_obj$estimate["phi"],
-                                      sigsq = spm_obj$estimate["sigsq"],
+                                      ## sigsq = spm_obj$estimate["sigsq"],
+                                      sigsq = 1,
                                       kappa = spm_obj$kappa)
                
                d_mat <- comp_pexp_cov(cross_dists = u_res_pred,
                                       n = n_obs, n2 = n_pred,
                                       phi   = spm_obj$estimate["phi"],
-                                      sigsq = spm_obj$estimate["sigsq"],
+                                      ## sigsq = spm_obj$estimate["sigsq"],
+                                      sigsq = 1,
                                       kappa = spm_obj$kappa)
                
                sig_pred <- pexp_cov(dists = u_pred,
                                     phi   = spm_obj$estimate["phi"],
-                                    sigsq = spm_obj$estimate["sigsq"],
+                                    ## sigsq = spm_obj$estimate["sigsq"],
+                                    sigsq = 1,
                                     kappa = spm_obj$kappa)
            },
            "gaussian" = {
                sig_y <- comp_gauss_cov(spm_obj$call_data$dists,
                                        n = n_obs, n2 = n_obs,
                                        phi   = spm_obj$estimate["phi"],
-                                       sigsq = spm_obj$estimate["sigsq"])
+                                       ## sigsq = spm_obj$estimate["sigsq"]
+                                       sigsq = 1)
                
                d_mat <- comp_gauss_cov(cross_dists = u_res_pred,
                                        n = n_obs, n2 = n_pred,
                                        phi   = spm_obj$estimate["phi"],
-                                       sigsq = spm_obj$estimate["sigsq"])
+                                       ## sigsq = spm_obj$estimate["sigsq"]
+                                       sigsq = 1)
                
                sig_pred <- gauss_cov(dists = u_pred,
                                      phi   = spm_obj$estimate["phi"],
-                                     sigsq = spm_obj$estimate["sigsq"])
+                                     ## sigsq = spm_obj$estimate["sigsq"]
+                                     sigsq = 1)
            },
            "spherical" = {
                sig_y <- comp_spher_cov(spm_obj$call_data$dists, 
                                        n = n_obs, n2 = n_obs,
                                        phi   = spm_obj$estimate["phi"],
-                                       sigsq = spm_obj$estimate["sigsq"])
+                                       ## sigsq = spm_obj$estimate["sigsq"]
+                                       sigsq = 1)
                
                d_mat <- comp_spher_cov(cross_dists = u_res_pred,
                                        n = n_obs, n2 = n_pred,
                                        phi   = spm_obj$estimate["phi"],
-                                       sigsq = spm_obj$estimate["sigsq"])
+                                       ## sigsq = spm_obj$estimate["sigsq"]
+                                       sigsq = 1)
                
                sig_pred <- spher_cov(dists = u_pred,
                                      phi   = spm_obj$estimate["phi"],
-                                     sigsq = spm_obj$estimate["sigsq"])
+                                     ## sigsq = spm_obj$estimate["sigsq"]
+                                     sigsq = 1)
            })
 
     if(all(grepl("POINT", sf::st_geometry_type(x))) & .aggregate) {
         warning("If you want to make predictions only for a set of locations, it does not make sense to use `.aggregate`.")
     }
 
-    
-    sig_y <- sig_y + diag(spm_obj$estimate["tausq"] / spm_obj$call_data$npix,
-                          nrow = n_obs, ncol = n_obs)
-    
-    sig_pred <- sig_pred + diag(spm_obj$estimate["tausq"],
-                                nrow = nrow(sig_pred),
-                                ncol = ncol(sig_pred))
+    if("tausq" %in% names(spm_obj$estimate)) {
+        sig_y <- (spm_obj$estimate["sigsq"] * sig_y) +
+            diag(spm_obj$estimate["tausq"] / spm_obj$call_data$npix,
+                 nrow = n_obs, ncol = n_obs)
+        
+        sig_pred <- (spm_obj$estimate["sigsq"] * sig_pred) +
+            diag(spm_obj$estimate["tausq"],
+                 nrow = nrow(sig_pred),
+                 ncol = ncol(sig_pred))
+    } else if("alpha" %in% names(spm_obj$estimate)) {
+        sig_y <- spm_obj$estimate["sigsq"] *
+            (sig_y +
+             diag(spm_obj$estimate["alpha"] / spm_obj$call_data$npix,
+                  nrow = n_obs, ncol = n_obs))
+        
+        sig_pred <- spm_obj$estimate["sigsq"] *
+            (sig_pred +
+             diag(spm_obj$estimate["alpha"],
+                  nrow = nrow(sig_pred),
+                  ncol = ncol(sig_pred)))
+    } else {
+        ## this part will be deleted soon
+        sig_y <- (spm_obj$estimate["sigsq"] * sig_y) +
+            diag(spm_obj$estimate["omega"] / spm_obj$call_data$npix,
+                 nrow = n_obs, ncol = n_obs)
+        
+        sig_pred <- (spm_obj$estimate["sigsq"] * sig_pred) +
+            diag(spm_obj$estimate["omega"],
+                 nrow = nrow(sig_pred),
+                 ncol = ncol(sig_pred))
+    }
     
     ## sig_y_inv <- solve(sig_y)
     sig_y_inv <- chol2inv(chol(sig_y))
@@ -339,20 +416,23 @@ predict_spm.sf <- function(x, spm_obj, .aggregate = TRUE,
 
     if(any(diag(sig_pred_y) < 0)) {
         warning("Negative variance for at least one predicted region. Taking absolute value.")
-        se_pred_y <- sqrt(abs(diag(sig_pred_y)))
+        var_pred_y <- abs(diag(sig_pred_y))
     } else {
-        se_pred_y <- sqrt(diag(sig_pred_y))
+        var_pred_y <- diag(sig_pred_y)
     }
     
     pred_grid <- transform(sf::st_sf(geometry = pred_grid),
                            mu_pred = mean_pred_y,
-                           se_pred = se_pred_y)
+                           se_pred = var_pred_y)
     
     if(.aggregate) {
         out_poly <- aggregate_aux(x = pred_grid[c("mu_pred", "se_pred")],
                                   by = sf::st_geometry(x),
                                   FUN = mean,
                                   join = sf::st_intersects)
+
+        out_poly[["se_pred"]]  <- sqrt(out_poly[["se_pred"]])
+        pred_grid[["se_pred"]] <- sqrt(pred_grid[["se_pred"]])
         
         output <-
             list(
@@ -362,6 +442,8 @@ predict_spm.sf <- function(x, spm_obj, .aggregate = TRUE,
                 pred_agg  = out_poly
             )
     } else {
+        pred_grid[["se_pred"]] <- sqrt(pred_grid[["se_pred"]])
+        
         output <-
             list(
                 mu_pred   = mean_pred_y,
