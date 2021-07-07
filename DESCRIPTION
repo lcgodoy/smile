@@ -21,7 +21,8 @@ SystemRequirements: C++11, GDAL (>= 2.0.1), GEOS (>= 3.4.0),
 LinkingTo: 
     Rcpp,
     RcppArmadillo
-Imports: 
+Imports:
+    numDeriv,
     Rcpp,
     sf,
     mvtnorm,

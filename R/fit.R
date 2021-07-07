@@ -221,14 +221,16 @@ fit_spm2 <- function(x, model, theta_st,
 
     if(comp_hess) {
         info_mat <- solve(
-            stats::optimHess(par = estimates,
-                             fn  = singl_log_lik,
-                             .dt = x$var,
-                             dists = x$dists,
-                             npix = x$npix,
-                             model = model,
-                             kappa = kappa,
-                             apply_exp = FALSE)
+            numDeriv::hessian(func = singl_log_lik,
+                              x = estimates,
+                              ## stats::optimHess(par = estimates,
+                              ##                  fn  = singl_log_lik,
+                              .dt = x$var,
+                              dists = x$dists,
+                              npix = x$npix,
+                              model = model,
+                              kappa = kappa,
+                              apply_exp = FALSE)
         )
     } else {
         info_mat <- matrix(NA_real_, ncol = p, nrow = p)
