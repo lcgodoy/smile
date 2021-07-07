@@ -118,15 +118,15 @@ predict_spm.sspm_fit <- function(x, .aggregate = TRUE, ...) {
                 diag(x$estimate["tausq"],
                      nrow = nrow(sig_pred),
                      ncol = ncol(sig_pred))
-        } else if("alpha" %in% names(x$estimate)) {
+        } else if("nu" %in% names(x$estimate)) {
             sig_y <- x$estimate["sigsq"] *
                 (sig_y +
-                 diag(x$estimate["alpha"] / x$call_data$npix,
+                 diag(x$estimate["nu"] / x$call_data$npix,
                       nrow = n_obs, ncol = n_obs))
             
             sig_pred <- x$estimate["sigsq"] *
                 (sig_pred +
-                 diag(x$estimate["alpha"],
+                 diag(x$estimate["nu"],
                       nrow = nrow(sig_pred),
                       ncol = ncol(sig_pred)))
         } else {
@@ -376,15 +376,15 @@ predict_spm.sf <- function(x, spm_obj, .aggregate = TRUE,
             diag(spm_obj$estimate["tausq"],
                  nrow = nrow(sig_pred),
                  ncol = ncol(sig_pred))
-    } else if("alpha" %in% names(spm_obj$estimate)) {
+    } else if("nu" %in% names(spm_obj$estimate)) {
         sig_y <- spm_obj$estimate["sigsq"] *
             (sig_y +
-             diag(spm_obj$estimate["alpha"] / spm_obj$call_data$npix,
+             diag(spm_obj$estimate["nu"] / spm_obj$call_data$npix,
                   nrow = n_obs, ncol = n_obs))
         
         sig_pred <- spm_obj$estimate["sigsq"] *
             (sig_pred +
-             diag(spm_obj$estimate["alpha"],
+             diag(spm_obj$estimate["nu"],
                   nrow = nrow(sig_pred),
                   ncol = ncol(sig_pred)))
     } else {
