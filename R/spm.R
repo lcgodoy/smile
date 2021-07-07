@@ -128,11 +128,13 @@ single_sf_to_spm <- function(sf_obj,
             )
     }
 
-    if(is.character(out_grid_pt[[poly_ids]])) {
-        npix <- tabulate(as.factor(out_grid_pt[[poly_ids]]))
-    } else {
-        npix <- tabulate(out_grid_pt[[poly_ids]])
-    }
+    ## if(is.character(out_grid_pt[[poly_ids]])) {
+    ##     npix <- tabulate(as.factor(out_grid_pt[[poly_ids]]))
+    ## } else {
+    ##     npix <- tabulate(out_grid_pt[[poly_ids]])
+    ## }
+
+    npix <- as.numeric( sf::st_area(sf_obj) )
     
     output <- list(
         var     = out_var,
