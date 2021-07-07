@@ -439,24 +439,29 @@ fit_spm.mspm <- function(x, model, theta_st,
 ##' @param sig signigicance level
 ##' @export
 summary_sspm_fit <- function(x, sig = .05) {
-    se_est <- sqrt(diag(x$info_mat))
-    lb <- x$estimate - stats::qnorm(1 - (sig/2)) * se_est
-    k  <- which(grepl("(tausq|phi|sigsq)", names(x$estimate)))
+    se_est <- diag(x$info_mat)
+    est <- x$estimate
+    cc <- matrix(c(0, 1, 1, 0), ncol = 1)
+    est <- c(est, as.numeric(crossprod(cc, est)))
+    se_est <- c(se_est, as.numeric(crossprod(cc, x$info_mat) %*% cc))
+    se_est <- sqrt(se_est)
+    lb <- est - stats::qnorm(1 - (sig/2)) * se_est
+    k  <- 2:length(est)
     lb[k] <- pmax(lb[k], 0)
-    ub <- x$estimate + stats::qnorm(1 - (sig/2)) * se_est
+    ub <- est + stats::qnorm(1 - (sig/2)) * se_est
     ci_est <- sprintf("[%.3f; %.3f]",
                       lb, ub)
     if(is.null(names(x$estimate))) {
         tbl <- data.frame(
-            estimate = x$estimate,
+            estimate = est,
             se       = se_est,
             ci       = ci_est,
             row.names = NULL
         )
     } else {
         tbl <- data.frame(
-            par      = names(x$estimate),
-            estimate = x$estimate,
+            par      = c(names(x$estimate), "var"),
+            estimate = est,
             se       = se_est,
             ci       = ci_est,
             row.names = NULL
