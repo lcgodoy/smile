@@ -4,200 +4,179 @@ predict_spm <- function(x, ...) UseMethod("predict_spm")
 
 ##' @name predict_spm
 ##' @export
-predict_spm.sspm_fit <- function(x, .aggregate = TRUE, ...) {
-    p     <- NCOL(x$call_data$var)
+predict_spm.spm_fit <- function(x, .aggregate = TRUE, ...) {
     n_obs <- NROW(x$call_data$var)
+    ids_betas <- which(grepl("^beta", names(x$estimate)))
+    mean_y <- x$call_data$X %*% matrix(x$estimate[ids_betas], ncol = 1)
+    
+    ## create the distance matrix of the predictive location
+    coords_pred <- sf::st_coordinates(x$call_data$grid)
+    ## u_pred      <- as.matrix(stats::dist(coords_pred))
+    u_pred      <- distmat(coords_pred)
+    n_pred      <- nrow(coords_pred)  # number of predicted location
 
-    if(p == 1) {        
-        mean_y <- matrix(rep(x$estimate["mu"], n_obs), ncol = 1)
-        
-        ## create the distance matrix of the predictive location
-        coords_pred <- sf::st_coordinates(x$call_data$grid)
-        ## u_pred      <- as.matrix(stats::dist(coords_pred))
-        u_pred      <- distmat(coords_pred)
-        n_pred      <- nrow(coords_pred)  # number of predicted location
+    u_res_pred <- pred_cdist(get_grid_list(x_to_list = x$call_data$grid,
+                                           by = x$call_data$ids_var),
+                             coords_pred)
 
-        u_res_pred <- pred_cdist(get_grid_list(x_to_list = x$call_data$grid,
-                                               by = x$call_data$ids_var),
-                                 coords_pred)
+    ## can be turned in to a function to make to code cleaner
+    switch(x$model,
+           "matern" = {
+               if(is.null(x$kappa))
+                   x$kappa <- .5
 
-        ## can be turned in to a function to make to code cleaner
-        switch(x$model,
-               "matern" = {
-                   if(is.null(x$kappa))
-                       x$kappa <- .5
+               sig_y <- comp_mat_cov(x$call_data$dists,
+                                     n = n_obs, n2 = n_obs,
+                                     phi   = x$estimate["phi"],
+                                     ## sigsq = x$estimate["sigsq"],
+                                     sigsq = 1,
+                                     kappa = x$kappa)
+               d_mat <- comp_mat_cov(cross_dists = u_res_pred,
+                                     n = n_obs, n2 = n_pred,
+                                     phi   = x$estimate["phi"],
+                                     sigsq = x$estimate["sigsq"],
+                                     kappa = x$kappa)
+               sig_pred <- mat_cov(dists = u_pred,
+                                   phi   = x$estimate["phi"],
+                                   ## sigsq = x$estimate["sigsq"],
+                                   sigsq = 1,
+                                   kappa = x$kappa)
+           },
+           "pexp" = {
+               if(is.null(x$kappa))
+                   x$kappa <- 1
 
-                   sig_y <- comp_mat_cov(x$call_data$dists,
-                                         n = n_obs, n2 = n_obs,
-                                         phi   = x$estimate["phi"],
-                                         ## sigsq = x$estimate["sigsq"],
-                                         sigsq = 1,
-                                         kappa = x$kappa)
-
-
-                   d_mat <- comp_mat_cov(cross_dists = u_res_pred,
-                                         n = n_obs, n2 = n_pred,
-                                         phi   = x$estimate["phi"],
-                                         sigsq = x$estimate["sigsq"],
-                                         kappa = x$kappa)
-                   
-                   sig_pred <- mat_cov(dists = u_pred,
+               sig_y <- comp_pexp_cov(x$call_data$dists,
+                                      n = n_obs, n2 = n_obs,
+                                      phi   = x$estimate["phi"],
+                                      ## sigsq = x$estimate["sigsq"],
+                                      sigsq = 1,
+                                      kappa = x$kappa)
+               
+               d_mat <- comp_pexp_cov(cross_dists = u_res_pred,
+                                      n = n_obs, n2 = n_pred,
+                                      phi   = x$estimate["phi"],
+                                      sigsq = x$estimate["sigsq"],
+                                      kappa = x$kappa)
+               
+               sig_pred <- pexp_cov(dists = u_pred,
+                                    phi   = x$estimate["phi"],
+                                    ## sigsq = x$estimate["sigsq"],
+                                    sigsq = 1,
+                                    kappa = x$kappa)
+           },
+           "gaussian" = {
+               sig_y <- comp_gauss_cov(x$call_data$dists,
+                                       n = n_obs, n2 = n_obs,
                                        phi   = x$estimate["phi"],
-                                       ## sigsq = x$estimate["sigsq"],
-                                       sigsq = 1,
-                                       kappa = x$kappa)
-               },
-               "pexp" = {
-                   if(is.null(x$kappa))
-                       x$kappa <- 1
+                                       ## sigsq = x$estimate["sigsq"]
+                                       sigsq = 1)
+               
+               d_mat <- comp_gauss_cov(cross_dists = u_res_pred,
+                                       n = n_obs, n2 = n_pred,
+                                       phi   = x$estimate["phi"],
+                                       sigsq = x$estimate["sigsq"])
+               
+               sig_pred <- gauss_cov(dists = u_pred,
+                                     phi   = x$estimate["phi"],
+                                     ## sigsq = x$estimate["sigsq"]
+                                     sigsq = 1)
+           },
+           "spherical" = {
+               sig_y <- comp_spher_cov(x$call_data$dists, 
+                                       n = n_obs, n2 = n_obs,
+                                       phi   = x$estimate["phi"],
+                                       ## sigsq = x$estimate["sigsq"]
+                                       sigsq = 1)
+               
+               d_mat <- comp_spher_cov(cross_dists = u_res_pred,
+                                       n = n_obs, n2 = n_pred,
+                                       phi   = x$estimate["phi"],
+                                       sigsq = x$estimate["sigsq"])
+               
+               sig_pred <- spher_cov(dists = u_pred,
+                                     phi   = x$estimate["phi"],
+                                     ## sigsq = x$estimate["sigsq"]
+                                     sigsq = 1)
+           })
 
-                   sig_y <- comp_pexp_cov(x$call_data$dists,
-                                          n = n_obs, n2 = n_obs,
-                                          phi   = x$estimate["phi"],
-                                          ## sigsq = x$estimate["sigsq"],
-                                          sigsq = 1,
-                                          kappa = x$kappa)
-                   
-                   d_mat <- comp_pexp_cov(cross_dists = u_res_pred,
-                                          n = n_obs, n2 = n_pred,
-                                          phi   = x$estimate["phi"],
-                                          sigsq = x$estimate["sigsq"],
-                                          kappa = x$kappa)
-                   
-                   sig_pred <- pexp_cov(dists = u_pred,
-                                        phi   = x$estimate["phi"],
-                                        ## sigsq = x$estimate["sigsq"],
-                                        sigsq = 1,
-                                        kappa = x$kappa)
-               },
-               "gaussian" = {
-                   sig_y <- comp_gauss_cov(x$call_data$dists,
-                                           n = n_obs, n2 = n_obs,
-                                           phi   = x$estimate["phi"],
-                                           ## sigsq = x$estimate["sigsq"]
-                                           sigsq = 1)
-                   
-                   d_mat <- comp_gauss_cov(cross_dists = u_res_pred,
-                                           n = n_obs, n2 = n_pred,
-                                           phi   = x$estimate["phi"],
-                                           sigsq = x$estimate["sigsq"])
-                   
-                   sig_pred <- gauss_cov(dists = u_pred,
-                                         phi   = x$estimate["phi"],
-                                         ## sigsq = x$estimate["sigsq"]
-                                         sigsq = 1)
-               },
-               "spherical" = {
-                   sig_y <- comp_spher_cov(x$call_data$dists, 
-                                           n = n_obs, n2 = n_obs,
-                                           phi   = x$estimate["phi"],
-                                           ## sigsq = x$estimate["sigsq"]
-                                           sigsq = 1)
-                   
-                   d_mat <- comp_spher_cov(cross_dists = u_res_pred,
-                                           n = n_obs, n2 = n_pred,
-                                           phi   = x$estimate["phi"],
-                                           sigsq = x$estimate["sigsq"])
-                   
-                   sig_pred <- spher_cov(dists = u_pred,
-                                         phi   = x$estimate["phi"],
-                                         ## sigsq = x$estimate["sigsq"]
-                                         sigsq = 1)
-               })
-
-        if(length(x$estimate) > 3) {
-            if("tausq" %in% names(x$estimate)) {
-                sig_y <- (x$estimate["sigsq"] * sig_y) +
-                    diag(x$estimate["tausq"] / x$call_data$npix,
-                         nrow = n_obs, ncol = n_obs)
-                
-                sig_pred <- (x$estimate["sigsq"] * sig_pred) +
-                    diag(x$estimate["tausq"],
-                         nrow = nrow(sig_pred),
-                         ncol = ncol(sig_pred))
-            } else if("nu" %in% names(x$estimate)) {
-                sig_y <- x$estimate["sigsq"] *
-                    (sig_y +
-                     diag(x$estimate["nu"] / x$call_data$npix,
-                          nrow = n_obs, ncol = n_obs))
-                
-                sig_pred <- x$estimate["sigsq"] *
-                    (sig_pred +
-                     diag(x$estimate["nu"],
-                          nrow = nrow(sig_pred),
-                          ncol = ncol(sig_pred)))
-            } else {
-                sig_y <- (x$estimate["sigsq"] * sig_y) +
-                    diag(x$estimate["omega"] / x$call_data$npix,
-                         nrow = n_obs, ncol = n_obs)
-                
-                sig_pred <- (x$estimate["sigsq"] * sig_pred) +
-                    diag(x$estimate["omega"],
-                         nrow = nrow(sig_pred),
-                         ncol = ncol(sig_pred))
-            }
-        } else {
-            sig_y <- (x$estimate["sigsq"] * sig_y)
-
-            sig_pred <- (x$estimate["sigsq"] * sig_pred) 
-        }
-        
-        sig_y_inv <- chol2inv(chol(sig_y))
-
-        mean_pred <- matrix(rep(x$estimate["mu"], n_pred),
-                            ncol = 1)
-
-        dt_yinv  <- crossprod(d_mat, sig_y_inv)
-
-        sig_pred_y <- sig_pred - (dt_yinv %*% d_mat)
-
-        mean_pred_y <- mean_pred +
-            dt_yinv %*% (matrix(x$call_data$var - x$estimate["mu"],
-                                ncol = 1))
-
-        if(any(diag(sig_pred_y) < 0)) {
-            warning("Negative variance for at least one predicted region. Taking absolute value.")
-            var_pred_y <- abs(diag(sig_pred_y))
-        } else {
-            var_pred_y <- diag(sig_pred_y)
-        }
-        
-        pred_grid <- transform(x$call_data$grid,
-                               mu_pred = mean_pred_y,
-                               se_pred = var_pred_y)
-
-        if(.aggregate) {
-            out_poly <- aggregate_aux(x = pred_grid[c("mu_pred", "se_pred")],
-                                      by = x$call_data$sf_poly,
-                                      FUN = mean,
-                                      join = sf::st_intersects)
-
-            out_poly[["se_pred"]]  <- sqrt(out_poly[["se_pred"]])
-            pred_grid[["se_pred"]] <- sqrt(pred_grid[["se_pred"]])
+    if(length(x$estimate) > (length(ids_betas) + 2)) {
+        if("tausq" %in% names(x$estimate)) {
+            sig_y <- (x$estimate["sigsq"] * sig_y) +
+                diag(x$estimate["tausq"] / x$call_data$npix,
+                     nrow = n_obs, ncol = n_obs)
             
-            output <-
-                list(
-                    mu_pred   = mean_pred_y,
-                    sig_pred  = sig_pred_y,
-                    pred_grid = pred_grid,
-                    pred_agg  = out_poly
-                )
-        } else {
-            pred_grid[["se_pred"]] <- sqrt(pred_grid[["se_pred"]])
-
-            output <-
-                list(
-                    mu_pred   = mean_pred_y,
-                    sig_pred  = sig_pred_y,
-                    pred_grid = pred_grid,
-                    pred_agg  = NA
-                )
-        }
-
-        
+            sig_pred <- (x$estimate["sigsq"] * sig_pred) +
+                diag(x$estimate["tausq"],
+                     nrow = nrow(sig_pred),
+                     ncol = ncol(sig_pred))
+        } else if("nu" %in% names(x$estimate)) {
+            sig_y <- x$estimate["sigsq"] *
+                (sig_y +
+                 diag(x$estimate["nu"] / x$call_data$npix,
+                      nrow = n_obs, ncol = n_obs))
+            sig_pred <- x$estimate["sigsq"] *
+                (sig_pred +
+                 diag(x$estimate["nu"],
+                      nrow = nrow(sig_pred),
+                      ncol = ncol(sig_pred)))
+        } 
     } else {
-        ## URGENT
-        stop("still has to be implemented.")
+        sig_y <- (x$estimate["sigsq"] * sig_y)
+        sig_pred <- (x$estimate["sigsq"] * sig_pred) 
+    }
+    
+    sig_y_inv <- chol2inv(chol(sig_y))
+
+    mean_pred <- x$call_data$X0 %*%
+        matrix(x$estimate[ids_betas],
+               ncol = 1)
+
+    dt_yinv  <- crossprod(d_mat, sig_y_inv)
+
+    sig_pred_y <- sig_pred - (dt_yinv %*% d_mat)
+
+    mean_pred_y <- mean_pred +
+        dt_yinv %*% (matrix(x$call_data$var - as.numeric(mean_y),
+                            ncol = 1))
+
+    if(any(diag(sig_pred_y) < 0)) {
+        warning("Negative variance for at least one predicted region. Taking absolute value.")
+        var_pred_y <- abs(diag(sig_pred_y))
+    } else {
+        var_pred_y <- diag(sig_pred_y)
+    }
+    
+    pred_grid <- transform(x$call_data$grid,
+                           mu_pred = mean_pred_y,
+                           se_pred = var_pred_y)
+
+    if(.aggregate) {
+        out_poly <- aggregate_aux(x = pred_grid[c("mu_pred", "se_pred")],
+                                  by = x$call_data$sf_poly,
+                                  FUN = mean,
+                                  join = sf::st_intersects)
+
+        out_poly[["se_pred"]]  <- sqrt(out_poly[["se_pred"]])
+        pred_grid[["se_pred"]] <- sqrt(pred_grid[["se_pred"]])
+        
+        output <-
+            list(
+                mu_pred   = mean_pred_y,
+                sig_pred  = sig_pred_y,
+                pred_grid = pred_grid,
+                pred_agg  = out_poly
+            )
+    } else {
+        pred_grid[["se_pred"]] <- sqrt(pred_grid[["se_pred"]])
+
+        output <-
+            list(
+                mu_pred   = mean_pred_y,
+                sig_pred  = sig_pred_y,
+                pred_grid = pred_grid,
+                pred_agg  = NA
+            )
     }
 
     class(output) <- append(class(output), "spm_pred")
@@ -221,7 +200,7 @@ predict_spm.mspm_fit <- function(x, ...) {
 ##' 
 ##' @param x a \code{sf} object such that its geometris are either points or
 ##'     polygons.
-##' @param spm_obj an object of either class \code{sspm_fit} or \code{mspm_fit}
+##' @param spm_obj an object of either class \code{spm_fit} or \code{mspm_fit}
 ##' @param .aggregate \code{logical}. Should the predictions be aggregated? In
 ##'     case the input is only a "fit" object, the aggregation is made over the
 ##'     polygons on which the original data was observed. In case the input
@@ -236,23 +215,16 @@ predict_spm.mspm_fit <- function(x, ...) {
 ##' @return an object of class \code{spm_pred}
 ##' 
 ##' @export
-predict_spm.sf <- function(x, spm_obj, .aggregate = TRUE,
+predict_spm.sf <- function(x, spm_obj, X0,
+                           .aggregate = TRUE,
                            n_pts, type,
                            ...) {
-    if(inherits(spm_obj, "mspm_fit"))
-        stop("yet to be implemented.")
-
     if(sf::st_crs(x) != sf::st_crs(spm_obj$call_data$sf_poly)) {
         warning("`x` and the data on which the model was ajdusted are not in the same CRS. Reprojecting `x`")
         x <- sf::st_transform(x, sf::st_crs(spm_obj$call_data$sf_poly))
     }
 
-    p     <- NCOL(spm_obj$call_data$var)
     n_obs <- NROW(spm_obj$call_data$var)
-
-    ## HIGH PRIORITY AND EASY TO BE FIXED
-    if(p > 1)
-        stop("predictions for more than one random variable still have to be implemented.")
 
     stopifnot(all(grepl("(POLYGON|POINT)", sf::st_geometry_type(x))))
 
