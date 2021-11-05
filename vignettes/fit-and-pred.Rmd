@@ -93,9 +93,7 @@ estimated in the literature of geostatistics.].  Note that, it is important for
 this inputing vector to be a named vector, because some functions track the
 parameters by their names. 
 ```{R fit-pred-1}
-theta_st_msoa <-
-    c("mu" = 70, "tausq" = 1,
-      "sigsq" = 1, "phi" = 1)
+theta_st_msoa <- c("phi" = 1)
 
 fit_msoa <-
     fit_spm(x = spm_msoa,
@@ -103,6 +101,7 @@ fit_msoa <-
             model = "pexp",
             kappa = .5,
             apply_exp = TRUE,
+            opt_method = "L-BFGS-B",
             control   = list(maxit = 500))
 ```
 
@@ -213,8 +212,7 @@ $\kappa = 2.5$.
 
 ```{R fit-pred-2}
 theta_st_lsoa <-
-    c("mu" = 25, "tausq" = 1,
-      "sigsq" = 1, "phi" = 1)
+    c("phi" = 1)
 
 fit_lsoa <-
     fit_spm(x = spm_lsoa,
@@ -222,6 +220,7 @@ fit_lsoa <-
             model = "matern",
             kappa = 2.5,
             apply_exp = TRUE,
+            opt_method = "L-BFGS-B",
             control   = list(maxit = 500))
 ```
 

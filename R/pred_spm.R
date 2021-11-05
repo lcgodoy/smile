@@ -38,8 +38,7 @@ predict_spm.sspm_fit <- function(x, .aggregate = TRUE, ...) {
                    d_mat <- comp_mat_cov(cross_dists = u_res_pred,
                                          n = n_obs, n2 = n_pred,
                                          phi   = x$estimate["phi"],
-                                         ## sigsq = x$estimate["sigsq"],
-                                         sigsq = 1,
+                                         sigsq = x$estimate["sigsq"],
                                          kappa = x$kappa)
                    
                    sig_pred <- mat_cov(dists = u_pred,
@@ -62,8 +61,7 @@ predict_spm.sspm_fit <- function(x, .aggregate = TRUE, ...) {
                    d_mat <- comp_pexp_cov(cross_dists = u_res_pred,
                                           n = n_obs, n2 = n_pred,
                                           phi   = x$estimate["phi"],
-                                          ## sigsq = x$estimate["sigsq"],
-                                          sigsq = 1,
+                                          sigsq = x$estimate["sigsq"],
                                           kappa = x$kappa)
                    
                    sig_pred <- pexp_cov(dists = u_pred,
@@ -82,8 +80,7 @@ predict_spm.sspm_fit <- function(x, .aggregate = TRUE, ...) {
                    d_mat <- comp_gauss_cov(cross_dists = u_res_pred,
                                            n = n_obs, n2 = n_pred,
                                            phi   = x$estimate["phi"],
-                                           ## sigsq = x$estimate["sigsq"]
-                                           sigsq = 1)
+                                           sigsq = x$estimate["sigsq"])
                    
                    sig_pred <- gauss_cov(dists = u_pred,
                                          phi   = x$estimate["phi"],
@@ -100,8 +97,7 @@ predict_spm.sspm_fit <- function(x, .aggregate = TRUE, ...) {
                    d_mat <- comp_spher_cov(cross_dists = u_res_pred,
                                            n = n_obs, n2 = n_pred,
                                            phi   = x$estimate["phi"],
-                                           ## sigsq = x$estimate["sigsq"]
-                                           sigsq = 1)
+                                           sigsq = x$estimate["sigsq"])
                    
                    sig_pred <- spher_cov(dists = u_pred,
                                          phi   = x$estimate["phi"],
@@ -109,35 +105,41 @@ predict_spm.sspm_fit <- function(x, .aggregate = TRUE, ...) {
                                          sigsq = 1)
                })
 
-        if("tausq" %in% names(x$estimate)) {
-            sig_y <- (x$estimate["sigsq"] * sig_y) +
-                diag(x$estimate["tausq"] / x$call_data$npix,
-                     nrow = n_obs, ncol = n_obs)
-            
-            sig_pred <- (x$estimate["sigsq"] * sig_pred) +
-                diag(x$estimate["tausq"],
-                     nrow = nrow(sig_pred),
-                     ncol = ncol(sig_pred))
-        } else if("nu" %in% names(x$estimate)) {
-            sig_y <- x$estimate["sigsq"] *
-                (sig_y +
-                 diag(x$estimate["nu"] / x$call_data$npix,
-                      nrow = n_obs, ncol = n_obs))
-            
-            sig_pred <- x$estimate["sigsq"] *
-                (sig_pred +
-                 diag(x$estimate["nu"],
-                      nrow = nrow(sig_pred),
-                      ncol = ncol(sig_pred)))
+        if(length(x$estimate) > 3) {
+            if("tausq" %in% names(x$estimate)) {
+                sig_y <- (x$estimate["sigsq"] * sig_y) +
+                    diag(x$estimate["tausq"] / x$call_data$npix,
+                         nrow = n_obs, ncol = n_obs)
+                
+                sig_pred <- (x$estimate["sigsq"] * sig_pred) +
+                    diag(x$estimate["tausq"],
+                         nrow = nrow(sig_pred),
+                         ncol = ncol(sig_pred))
+            } else if("nu" %in% names(x$estimate)) {
+                sig_y <- x$estimate["sigsq"] *
+                    (sig_y +
+                     diag(x$estimate["nu"] / x$call_data$npix,
+                          nrow = n_obs, ncol = n_obs))
+                
+                sig_pred <- x$estimate["sigsq"] *
+                    (sig_pred +
+                     diag(x$estimate["nu"],
+                          nrow = nrow(sig_pred),
+                          ncol = ncol(sig_pred)))
+            } else {
+                sig_y <- (x$estimate["sigsq"] * sig_y) +
+                    diag(x$estimate["omega"] / x$call_data$npix,
+                         nrow = n_obs, ncol = n_obs)
+                
+                sig_pred <- (x$estimate["sigsq"] * sig_pred) +
+                    diag(x$estimate["omega"],
+                         nrow = nrow(sig_pred),
+                         ncol = ncol(sig_pred))
+            }
         } else {
-            sig_y <- (x$estimate["sigsq"] * sig_y) +
-                diag(x$estimate["omega"] / x$call_data$npix,
-                     nrow = n_obs, ncol = n_obs)
-            
-            sig_pred <- (x$estimate["sigsq"] * sig_pred) +
-                diag(x$estimate["omega"],
-                     nrow = nrow(sig_pred),
-                     ncol = ncol(sig_pred))
+            sig_y <- (x$estimate["sigsq"] * sig_y)
+
+            sig_pred <- (x$estimate["sigsq"] * sig_pred) 
         }
         
         sig_y_inv <- chol2inv(chol(sig_y))
@@ -367,36 +369,42 @@ predict_spm.sf <- function(x, spm_obj, .aggregate = TRUE,
         warning("If you want to make predictions only for a set of locations, it does not make sense to use `.aggregate`.")
     }
 
-    if("tausq" %in% names(spm_obj$estimate)) {
-        sig_y <- (spm_obj$estimate["sigsq"] * sig_y) +
-            diag(spm_obj$estimate["tausq"] / spm_obj$call_data$npix,
-                 nrow = n_obs, ncol = n_obs)
-        
-        sig_pred <- (spm_obj$estimate["sigsq"] * sig_pred) +
-            diag(spm_obj$estimate["tausq"],
-                 nrow = nrow(sig_pred),
-                 ncol = ncol(sig_pred))
-    } else if("nu" %in% names(spm_obj$estimate)) {
-        sig_y <- spm_obj$estimate["sigsq"] *
-            (sig_y +
-             diag(spm_obj$estimate["nu"] / spm_obj$call_data$npix,
-                  nrow = n_obs, ncol = n_obs))
-        
-        sig_pred <- spm_obj$estimate["sigsq"] *
-            (sig_pred +
-             diag(spm_obj$estimate["nu"],
-                  nrow = nrow(sig_pred),
-                  ncol = ncol(sig_pred)))
+    if(length(spm_obj$estimate) > 3) {
+        if("tausq" %in% names(spm_obj$estimate)) {
+            sig_y <- (spm_obj$estimate["sigsq"] * sig_y) +
+                diag(spm_obj$estimate["tausq"] / spm_obj$call_data$npix,
+                     nrow = n_obs, ncol = n_obs)
+            
+            sig_pred <- (spm_obj$estimate["sigsq"] * sig_pred) +
+                diag(spm_obj$estimate["tausq"],
+                     nrow = nrow(sig_pred),
+                     ncol = ncol(sig_pred))
+        } else if("nu" %in% names(spm_obj$estimate)) {
+            sig_y <- spm_obj$estimate["sigsq"] *
+                (sig_y +
+                 diag(spm_obj$estimate["nu"] / spm_obj$call_data$npix,
+                      nrow = n_obs, ncol = n_obs))
+            
+            sig_pred <- spm_obj$estimate["sigsq"] *
+                (sig_pred +
+                 diag(spm_obj$estimate["nu"],
+                      nrow = nrow(sig_pred),
+                      ncol = ncol(sig_pred)))
+        } else {
+            ## this part will be deleted soon
+            sig_y <- (spm_obj$estimate["sigsq"] * sig_y) +
+                diag(spm_obj$estimate["omega"] / spm_obj$call_data$npix,
+                     nrow = n_obs, ncol = n_obs)
+            
+            sig_pred <- (spm_obj$estimate["sigsq"] * sig_pred) +
+                diag(spm_obj$estimate["omega"],
+                     nrow = nrow(sig_pred),
+                     ncol = ncol(sig_pred))
+        }
     } else {
-        ## this part will be deleted soon
-        sig_y <- (spm_obj$estimate["sigsq"] * sig_y) +
-            diag(spm_obj$estimate["omega"] / spm_obj$call_data$npix,
-                 nrow = n_obs, ncol = n_obs)
-        
-        sig_pred <- (spm_obj$estimate["sigsq"] * sig_pred) +
-            diag(spm_obj$estimate["omega"],
-                 nrow = nrow(sig_pred),
-                 ncol = ncol(sig_pred))
+        sig_y <- spm_obj$estimate["sigsq"] * sig_y
+            
+        sig_pred <- spm_obj$estimate["sigsq"] * sig_pred
     }
     
     ## sig_y_inv <- solve(sig_y)

@@ -4,14 +4,26 @@
 \alias{singl_log_plik}
 \title{Evaluate log-lik}
 \usage{
-singl_log_plik(theta, .dt, dists, npix, model, kappa = NULL, apply_exp = FALSE)
+singl_log_plik(
+  theta,
+  .dt,
+  X,
+  dists,
+  npix,
+  model,
+  kappa = NULL,
+  apply_exp = FALSE
+)
 }
 \arguments{
-\item{theta}{a \code{list} of size 2 containing the parameters associated
-with the model. (Explain why)}
+\item{theta}{a \code{vector} of size 2 containing the parameters associated
+with the model. These parameters are \eqn{\nu} and \eqn{\phi},
+respectively.}
 
-\item{.dt}{a \code{list} with two positions. The first containing the
-numerical data for the variable \eqn{Y}, and the second for \eqn{X}.}
+\item{.dt}{a \code{numeric} vector containing the variable \eqn{Y}.}
+
+\item{X}{a \code{numeric} design matrix \eqn{X} of dimension \eqn{n \times
+p}.}
 
 \item{dists}{a \code{list} of size three. The first containing the distance
 matrices associated with the regions where \eqn{Y} was measured, the

@@ -4,14 +4,25 @@
 \alias{singl_log_lik}
 \title{Evaluate log-lik}
 \usage{
-singl_log_lik(theta, .dt, dists, npix, model, kappa = NULL, apply_exp = FALSE)
+singl_log_lik(
+  theta,
+  .dt,
+  X,
+  dists,
+  npix,
+  model,
+  kappa = NULL,
+  apply_exp = FALSE
+)
 }
 \arguments{
 \item{theta}{a \code{list} of size \eqn{2 p + \frac{p(p + 1)}{2} + 3}
 containing the parameters associated with the model. (Explain why)}
 
-\item{.dt}{a \code{list} with two positions. The first containing the
-numerical data for the variable \eqn{Y}, and the second for \eqn{X}.}
+\item{.dt}{a \code{numeric} vector containing the variable \eqn{Y}.}
+
+\item{X}{a \code{numeric} design matrix \eqn{X} of dimension \eqn{n \times
+p}.}
 
 \item{dists}{a \code{list} of size three. The first containing the distance
 matrices associated with the regions where \eqn{Y} was measured, the
