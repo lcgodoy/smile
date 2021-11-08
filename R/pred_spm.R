@@ -7,7 +7,6 @@ predict_spm <- function(x, ...) UseMethod("predict_spm")
 predict_spm.spm_fit <- function(x, .aggregate = TRUE, ...) {
     n_obs <- NROW(x$call_data$var)
     ids_betas <- which(grepl("^beta", names(x$estimate)))
-    mean_y <- x$call_data$X %*% matrix(x$estimate[ids_betas], ncol = 1)
     
     ## create the distance matrix of the predictive location
     coords_pred <- sf::st_coordinates(x$call_data$grid)
@@ -125,20 +124,18 @@ predict_spm.spm_fit <- function(x, .aggregate = TRUE, ...) {
         sig_y <- (x$estimate["sigsq"] * sig_y)
         sig_pred <- (x$estimate["sigsq"] * sig_pred) 
     }
-    
-    sig_y_inv <- chol2inv(chol(sig_y))
 
-    mean_pred <- x$call_data$X0 %*%
-        matrix(x$estimate[ids_betas],
-               ncol = 1)
+    mean_y <- x$call_data$X %*% x$estimate[ids_betas]
+    mean_pred <- x$call_data$X0 %*% x$estimate[ids_betas]
+
+    sig_y_inv <- chol2inv(chol(sig_y))
 
     dt_yinv  <- crossprod(d_mat, sig_y_inv)
 
     sig_pred_y <- sig_pred - (dt_yinv %*% d_mat)
 
     mean_pred_y <- mean_pred +
-        dt_yinv %*% (matrix(x$call_data$var - as.numeric(mean_y),
-                            ncol = 1))
+        dt_yinv %*% (x$call_data$var - mean_y)
 
     if(any(diag(sig_pred_y) < 0)) {
         warning("Negative variance for at least one predicted region. Taking absolute value.")
@@ -185,12 +182,6 @@ predict_spm.spm_fit <- function(x, .aggregate = TRUE, ...) {
 }
 
 ##' @name predict_spm
-##' @export
-predict_spm.mspm_fit <- function(x, ...) {
-    stop("still has to be implemented.")
-}
-
-##' @name predict_spm
 ##'
 ##' @title Prediction over the same or a different set of regions (or points).
 ##'
@@ -200,6 +191,7 @@ predict_spm.mspm_fit <- function(x, ...) {
 ##' 
 ##' @param x a \code{sf} object such that its geometris are either points or
 ##'     polygons.
+##' @param X0 a \code{matrix} representing the covariates observed at \code{x}.
 ##' @param spm_obj an object of either class \code{spm_fit} or \code{mspm_fit}
 ##' @param .aggregate \code{logical}. Should the predictions be aggregated? In
 ##'     case the input is only a "fit" object, the aggregation is made over the
@@ -241,6 +233,9 @@ predict_spm.sf <- function(x, spm_obj, X0,
         coords_pred <- sf::st_coordinates(pred_grid)
     }
 
+    ids_betas <- which(grepl("^beta", names(spm_obj$estimate)))
+    mean_y <- spm_obj$call_data$X %*% spm_obj$estimate[ids_betas]
+    
     ## this part can be improved
     ## u_pred <- as.matrix(stats::dist(coords_pred))
     u_pred <- distmat(coords_pred)
@@ -341,7 +336,7 @@ predict_spm.sf <- function(x, spm_obj, X0,
         warning("If you want to make predictions only for a set of locations, it does not make sense to use `.aggregate`.")
     }
 
-    if(length(spm_obj$estimate) > 3) {
+    if(length(spm_obj$estimate) > length(ids_betas) + 2) {
         if("tausq" %in% names(spm_obj$estimate)) {
             sig_y <- (spm_obj$estimate["sigsq"] * sig_y) +
                 diag(spm_obj$estimate["tausq"] / spm_obj$call_data$npix,
@@ -382,17 +377,23 @@ predict_spm.sf <- function(x, spm_obj, X0,
     ## sig_y_inv <- solve(sig_y)
     sig_y_inv <- chol2inv(chol(sig_y))
     
-    mean_y <- matrix(rep(spm_obj$estimate["mu"], n_obs), ncol = 1)
-    mean_pred <- matrix(rep(spm_obj$estimate["mu"], n_pred),
-                        ncol = 1)
+    ## mean_y <- matrix(rep(spm_obj$estimate["mu"], n_obs), ncol = 1)
+
+    if(! is.null(X0) ) {
+        if(NROW(X0) != n_pred)
+            warning("X0 and prediction region are not conformable")
+    } else {
+        X0 <- matrix(1, nrow = n_pred, ncol = 1)
+    }
+    
+    mean_pred <- X0 %*% spm_obj$estimate[ids_betas]
     
     dt_yinv  <- crossprod(d_mat, sig_y_inv)
     
     sig_pred_y <- sig_pred - (dt_yinv %*% d_mat)
     
     mean_pred_y <- mean_pred +
-        dt_yinv %*% (matrix(spm_obj$call_data$var - spm_obj$estimate["mu"],
-                            ncol = 1))
+        dt_yinv %*% (spm_obj$call_data$var - mean_y)
 
     if(any(diag(sig_pred_y) < 0)) {
         warning("Negative variance for at least one predicted region. Taking absolute value.")

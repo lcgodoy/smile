@@ -17,7 +17,7 @@ dist_from_grids <- function(y_grid,  by) {
     return(
         single_dists(
             lapply(out_list,
-                   function(x) as.matrix(x[ ,c(2, 3)]))
+                   function(x) as.matrix(x[ , c("x", "y")]))
         )
     )
 }
