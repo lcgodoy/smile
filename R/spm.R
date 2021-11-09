@@ -5,14 +5,8 @@
 ##' @title single \code{sf} to \code{spm}
 ##' 
 ##' @param sf_obj a \code{sf} object s.t. its geometries are polygons.
-##' ## @param X a numeric \code{matrix} with the covariates at each polygon in
-##' ##     \code{sf_obj}. \code{X} and \code{sf_obj} order and number of rows must
-##' ##     match.
 ##' @param X a numeric \code{vector} containing the index of the columns of
 ##'     \code{sf_obj} to be used as covariates.
-##' ## @param trend a character \code{vector} (or scalar) assuming either
-##' ##     \code{"x"}, \code{"y"}, \code{"xy"}, \code{c("x", "y")}, or \code{c("x",
-##' ##     "y", "xy")}.
 ##' @param n_pts a \code{numeric} scalar representing the number of points to
 ##'     create a grid in the study region on which the polygons in \code{sf_obj}
 ##'     is observed. Alternatively, it can be a vector of the same length as
@@ -167,7 +161,6 @@ single_sf_to_spm <- function(sf_obj,
     }
 
     class(output) <- append(class(output), "spm")
-
     return(output)
 }
 
@@ -176,9 +169,7 @@ single_sf_to_spm <- function(sf_obj,
 ##' @export
 sf_to_spm <- single_sf_to_spm
 
-
-print.spm <- function(x, ...) {
-    
+print.spm <- function(x, ...) {    
     cat(sprintf("\n Number of variables to be analyzed: %d \n", NCOL(x$var)))
     cat(sprintf("\n ID variable: %ds\n", x$poly_ids))
     if(NCOL(x$var) == 1) {

@@ -7,6 +7,7 @@
 singl_log_lik_nn(
   theta,
   .dt,
+  X,
   dists,
   npix,
   model,
@@ -18,6 +19,9 @@ singl_log_lik_nn(
 \item{theta}{a scalar for the \eqn{\phi} parameter.}
 
 \item{.dt}{a \code{numeric} vector containing the variable \eqn{Y}.}
+
+\item{X}{a \code{numeric} design matrix \eqn{X} of dimension \eqn{n \times
+p}.}
 
 \item{dists}{a \code{list} of size three. The first containing the distance
 matrices associated with the regions where \eqn{Y} was measured, the
@@ -37,9 +41,6 @@ use. Possible values are \code{c("matern", "pexp", "gaussian",
 \item{apply_exp}{a \code{logical} indicater wheter the exponential
 transformation should be applied to variance parameters. This
 facilitates the optimization process.}
-
-\item{X}{a \code{numeric} design matrix \eqn{X} of dimension \eqn{n \times
-p}.}
 }
 \value{
 a scalar representing \code{-log.lik}.

@@ -207,7 +207,7 @@ predict_spm.spm_fit <- function(x, .aggregate = TRUE, ...) {
 ##' @return an object of class \code{spm_pred}
 ##' 
 ##' @export
-predict_spm.sf <- function(x, spm_obj, X0,
+predict_spm.sf <- function(x, spm_obj, X0 = NULL,
                            .aggregate = TRUE,
                            n_pts, type,
                            ...) {

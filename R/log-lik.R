@@ -26,6 +26,7 @@
 singl_log_lik <- function(theta, .dt, X, dists, npix, model,
                           kappa = NULL, apply_exp = FALSE) {
 
+    p <- NCOL(X)
     if(! apply_exp & any(theta[(p + 1):length(theta)] < 0 )) {
         return(NA_real_)
     }
@@ -212,7 +213,7 @@ singl_log_plik <- function(theta, .dt, X, dists, npix, model,
 ##'     facilitates the optimization process.
 ##' 
 ##' @return a scalar representing \code{-log.lik}.
-singl_log_lik_nn <- function(theta, .dt, dists, npix, model,
+singl_log_lik_nn <- function(theta, .dt, X, dists, npix, model,
                              kappa = NULL, apply_exp = FALSE) {
     
     if(! apply_exp & theta < 0 ) {

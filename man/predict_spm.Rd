@@ -2,19 +2,16 @@
 % Please edit documentation in R/pred_spm.R
 \name{predict_spm}
 \alias{predict_spm}
-\alias{predict_spm.sspm_fit}
-\alias{predict_spm.mspm_fit}
+\alias{predict_spm.spm_fit}
 \alias{predict_spm.sf}
 \alias{predict_spm.matrix}
 \title{Prediction over the same or a different set of regions (or points).}
 \usage{
 predict_spm(x, ...)
 
-\method{predict_spm}{sspm_fit}(x, .aggregate = TRUE, ...)
+\method{predict_spm}{spm_fit}(x, .aggregate = TRUE, ...)
 
-\method{predict_spm}{mspm_fit}(x, ...)
-
-\method{predict_spm}{sf}(x, spm_obj, .aggregate = TRUE, n_pts, type, ...)
+\method{predict_spm}{sf}(x, spm_obj, X0 = NULL, .aggregate = TRUE, n_pts, type, ...)
 
 \method{predict_spm}{matrix}(x, ...)
 }
@@ -30,7 +27,9 @@ polygons on which the original data was observed. In case the input
 \code{x} is composed by \code{sf POLYGONS}, the aggregation is made over
 this new partition of the study region.}
 
-\item{spm_obj}{an object of either class \code{sspm_fit} or \code{mspm_fit}}
+\item{spm_obj}{an object of either class \code{spm_fit} or \code{mspm_fit}}
+
+\item{X0}{a \code{matrix} representing the covariates observed at \code{x}.}
 
 \item{n_pts}{a \code{numeric} scalar standing for number of points to form a
 grid over the whole region to make the predictions}

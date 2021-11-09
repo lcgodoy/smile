@@ -113,7 +113,7 @@ The code of chunk below displays the generated grid coloring each point
 belonging to this grid accordign to the polygon they "belong to".
 ```{R sf-to-spm1}
 msoa_spm <-
-    sf_to_spm(sf_obj1 = liv_msoa, n_pts = 1000,
+    sf_to_spm(sf_obj = liv_msoa, n_pts = 1000,
               type = "regular", by_polygon = FALSE,
               poly_ids = "msoa11cd", var_ids = "leb_est")
 
@@ -140,32 +140,32 @@ more than one polygon.
 set.seed(123)
 
 msoa_spm1 <-
-    sf_to_spm(sf_obj1 = liv_msoa, n_pts = 305,
+    sf_to_spm(sf_obj = liv_msoa, n_pts = 305,
               type = "random", by_polygon = FALSE,
               poly_ids = "msoa11cd", var_ids = "leb_est")
 
 msoa_spm2 <-
-    sf_to_spm(sf_obj1 = liv_msoa, n_pts = 305,
+    sf_to_spm(sf_obj = liv_msoa, n_pts = 305,
               type = "regular", by_polygon = FALSE,
               poly_ids = "msoa11cd", var_ids = "leb_est")
 
 msoa_spm3 <-
-    sf_to_spm(sf_obj1 = liv_msoa, n_pts = 305,
+    sf_to_spm(sf_obj = liv_msoa, n_pts = 305,
               type = "hexagonal", by_polygon = FALSE,
               poly_ids = "msoa11cd", var_ids = "leb_est")
 
 msoa_spm4 <-
-    sf_to_spm(sf_obj1 = liv_msoa, n_pts = 305/61,
+    sf_to_spm(sf_obj = liv_msoa, n_pts = 305/61,
               type = "random", by_polygon = TRUE,
               poly_ids = "msoa11cd", var_ids = "leb_est")
 
 msoa_spm5 <-
-    sf_to_spm(sf_obj1 = liv_msoa, n_pts = 305/61,
+    sf_to_spm(sf_obj = liv_msoa, n_pts = 305/61,
               type = "regular", by_polygon = TRUE,
               poly_ids = "msoa11cd", var_ids = "leb_est")
 
 msoa_spm6 <-
-    sf_to_spm(sf_obj1 = liv_msoa, n_pts = 305/61,
+    sf_to_spm(sf_obj = liv_msoa, n_pts = 305/61,
               type = "hexagonal", by_polygon = TRUE,
               poly_ids = "msoa11cd", var_ids = "leb_est")
 
@@ -204,31 +204,10 @@ st_crs(liv_lsoa) <-
     st_crs(liv_lsoa)$input
 
 msoa_spm <-
-    sf_to_spm(sf_obj1 = liv_lsoa, n_pts = 1500,
+    sf_to_spm(sf_obj = liv_lsoa, n_pts = 1500,
               type = "regular", by_polygon = FALSE,
               poly_ids = "lsoa11cd",
               var_ids = c("imdscore", "male"))
-```
-
-Finally, to code chunk below displays the situation on which we input two `sf`
-objects, representing two partitions of the same space, to the `sf_to_spm`
-function. There are some key changes in here, parameters that were scalars
-before, now turn into vectors or lists. For instance, `n_pts` now is a list such
-that its first position is about the `sf_obj1` and its second position stores
-information about the grid of points to be generated for `sf_obj2`. Yes, we can
-generate two different grids in here. This is useful especially when the two
-datasets analysed are in very different scales, allowing us to use a more sparse
-grid for the dataset with "smaller" resolution. This brings computational
-improvements because we end up dealing with covariance matrices of lower
-dimensions. Please, refer to the documentation of the function for further
-details.
-```{R sf-to-spm4, eval = FALSE}
-mult_spm <-
-    sf_to_spm(sf_obj1 = liv_msoa, sf_obj2 = liv_lsoa,
-              n_pts = list(750, 1500),
-              type = "regular", by_polygon = FALSE,
-              poly_ids = c("msoa11cd", "lsoa11cd"),
-              var_ids = list("leb_est", "imdscore"))
 ```
 
 # References

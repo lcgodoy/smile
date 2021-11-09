@@ -2,59 +2,60 @@
 % Please edit documentation in R/spm.R
 \name{sf_to_spm}
 \alias{sf_to_spm}
-\title{\code{sf} to \code{spm}}
+\alias{single_sf_to_spm}
+\title{single \code{sf} to \code{spm}}
 \usage{
-sf_to_spm(
-  sf_obj1,
-  sf_obj2,
+single_sf_to_spm(
+  sf_obj,
+  X = NULL,
   n_pts,
   type = "regular",
   by_polygon = FALSE,
   poly_ids = NULL,
-  var_ids
+  var_ids = NULL
+)
+
+sf_to_spm(
+  sf_obj,
+  X = NULL,
+  n_pts,
+  type = "regular",
+  by_polygon = FALSE,
+  poly_ids = NULL,
+  var_ids = NULL
 )
 }
 \arguments{
-\item{sf_obj1}{a \code{sf} object s.t. its geometries are polygons.}
+\item{sf_obj}{a \code{sf} object s.t. its geometries are polygons.}
 
-\item{sf_obj2}{a \code{sf} object s.t. its geometries are polygons.}
+\item{X}{a numeric \code{vector} containing the index of the columns of
+\code{sf_obj} to be used as covariates.}
 
 \item{n_pts}{a \code{numeric} scalar representing the number of points to
 create a grid in the study region on which the polygons in \code{sf_obj}
-is observed.  Alternatively, it can be a vector of the same length as
-\code{nrow(sf_obj)}.  In this case, it generates the given number of
-points for each polygon in \code{sf_obj}. Considering the scenario on
-which you also input a \code{sf_obj2}, this argument can be set to be a
-list with two positions such that the first position contains the
-\code{n_pts} argument for \code{sf_obj1}, and the second position
-contains informations about the same parameter but for the
-\code{sf_obj2}.}
+is observed. Alternatively, it can be a vector of the same length as
+\code{nrow(sf_obj)}. In this case, it generates the given number of
+points for each polygon in \code{sf_obj}.}
 
-\item{type}{a \code{character} indicating the type of grid to be generated.
-The options are \code{c("random", "regular", "hexagonal")}. For more
-details, see \code{\link[sf]{st_sample}}. Similarly to \code{n_pts}, you
-can input a two positions list in here too.}
+\item{type}{a \code{character} indicating the type of grid to be
+generated. The options are \code{c("random", "regular",
+    "hexagonal")}. For more details, see \code{\link[sf]{st_sample}}.}
 
 \item{by_polygon}{a \code{logical} indicating wheter we should generate
 \code{n_pts} by polygon or for the \code{n_pts} for the whole study
-region. Similarly to \code{n_pts} (and \code{by_polygon}), you can input
-a two positions list in here too.}
+region.}
 
-\item{poly_ids}{a \code{list} with two positions, being the first and the
-second one a \code{character} vector informing the name of the variable
-in \code{sf_obj} and \code{sf_obj2}, respectively, that represents the
-polygons unique identifiers. In case this is not informed, we assume the
-id of the polygons are given by their row numbers. Note that, if this is
-informed, it must be a two positions list.}
+\item{poly_ids}{a \code{character} vector informing the name of the variable
+in \code{sf_obj} that represents the polygons unique identifiers. In
+case this is not informed, we assume the id of the polygons are given by
+their row numbers.}
 
-\item{var_ids}{a two positions \code{list} containing in each position
-either a scalar or vector of type \code{character}, indicating the
-(numerical) variables that are going to be analyzed for \code{sf_obj1}
-and \code{sf_obj2}, respectively.}
+\item{var_ids}{a scalar or vector of type \code{character} indicating the
+(numerical) variables that are going to be analyzed.}
 }
 \value{
-a \code{sspm} or \code{mspm} object.
+a \code{list}.
 }
 \description{
-Transforming one (or two) \code{sf} objects into a \code{sspm} (or \code{mspm}) object
+Transforming a \code{sf} into a \code{spm} object (Internal use)
 }

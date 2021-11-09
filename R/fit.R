@@ -67,7 +67,7 @@ fit_spm.spm <- function(x, model, theta_st,
                         ...) {
     
     stopifnot(!is.null(names(theta_st)))
-    stopinot(NCOL(x$var) == 1)
+    stopifnot(NCOL(x$var) == 1)
 
     npar <- length(theta_st) 
     
@@ -183,9 +183,7 @@ fit_spm.spm <- function(x, model, theta_st,
         inv_v <- chol2inv(chol(V))
         mles <- est_mle(x$var, x$X, inv_v)
         estimates <- c(mles, 
-                       "tausq" = unname(mles[length(mles)] *
-                                        estimates["nu"]),
-                       "phi"   = unname(estimates["phi"]))
+                       "phi" = unname(estimates["phi"]))
         if(comp_hess) {
             ## stats::optimHess(par = estimates,
             ##                  fn  = singl_log_lik,
@@ -193,6 +191,7 @@ fit_spm.spm <- function(x, model, theta_st,
                 numDeriv::hessian(func = singl_ll_nn_hess,
                                   x = estimates,
                                   .dt = x$var,
+                                  X = x$X,
                                   dists = x$dists,
                                   npix = x$npix,
                                   model = model,
@@ -200,7 +199,9 @@ fit_spm.spm <- function(x, model, theta_st,
                                   apply_exp = FALSE)
             )
         } else {
-            info_mat <- matrix(NA_real_, ncol = p, nrow = p)
+            info_mat <- matrix(NA_real_,
+                               ncol = length(estimates),
+                               nrow = length(estimates))
         }
     }
     
