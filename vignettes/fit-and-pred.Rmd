@@ -99,14 +99,14 @@ fit_msoa <-
     fit_spm(x = spm_msoa,
             theta_st = theta_st_msoa,
             model = "pexp",
-            kappa = .5,
+            kappa = 1,
             apply_exp = TRUE,
             opt_method = "L-BFGS-B",
             control   = list(maxit = 500))
 ```
 
 After a few seconds, we get the Results. Now, we can use the function
-`summary_sspm_fit` to get the summary of the results. The function prints a
+`summary_spm_fit` to get the summary of the results. The function prints a
 table containing the estimates, their standard errors, and `1 - sig` confidence
 interval based on the asymptotic normality of the MLEs. The function also prints
 a message indicating if the optimization algorithm has converged^[The default
@@ -175,7 +175,7 @@ ggplot(data = aux_viz1[aux_viz1$variable == "prediction",],
     geom_sf(pch = 15) +
     scale_fill_viridis_c(option = "H") +
     scale_color_viridis_c(option = "H") +
-    guides(color = FALSE) +
+    guides(color = "none") +
     facet_wrap(surface ~ .) +
     theme_bw()
 ```
@@ -191,7 +191,7 @@ ggplot(data = aux_viz1[aux_viz1$variable == "se",],
     geom_sf(pch = 15) +
     scale_fill_viridis_c(option = "H") +
     scale_color_viridis_c(option = "H") +
-    guides(color = FALSE) +
+    guides(color = "none") +
     facet_wrap(surface ~ .) +
     theme_bw()
 ```
@@ -271,7 +271,7 @@ ggplot(data = aux_viz2[aux_viz2$variable == "prediction",],
     geom_sf(pch = 15) +
     scale_fill_viridis_c(option = "H") +
     scale_color_viridis_c(option = "H") +
-    guides(color = FALSE) +
+    guides(color = "none") +
     facet_wrap(surface ~ .) +
     theme_bw()
 ```
@@ -286,7 +286,7 @@ ggplot(data = aux_viz2[aux_viz2$variable == "se",],
     geom_sf(pch = 15) +
     scale_fill_viridis_c(option = "H") +
     scale_color_viridis_c(option = "H") +
-    guides(color = FALSE) +
+    guides(color = "none") +
     facet_wrap(surface ~ .) +
     theme_bw()
 ```
