@@ -23,7 +23,7 @@ fit_spm <- function(x, ...) UseMethod("fit_spm")
 ##'     optimization algorithm to search for all the parameters over the real
 ##'     numbers.
 ##'
-##'     The model assumes \deqn{Y(\mathbf{s}) = \mathbf{x}(\mathbf{s})^{\top} \beta + S(\mathbf{s})} at the point level.
+##'     The model assumes \deqn{Y(\mathbf{s}) = \mu + S(\mathbf{s})} at the point level.
 ##'     Where \eqn{S ~ GP(0, \sigma^2 C(\lVert \mathbf{s} - \mathbf{s}_2 \rVert; \theta))}.
 ##'     Further, the observed data is supposed to be
 ##'     \eqn{Y(B) = \lvert B \rvert^{-1} \int_{B} Y(\mathbf{s}) \, \textrm{d} \mathbf{s}}.
@@ -79,7 +79,6 @@ fit_spm.spm <- function(x, model, theta_st,
                          control = control_opt,
                          hessian = FALSE,
                          .dt     = x$var,
-                         X       = x$X,
                          dists   = x$dists,
                          npix    = x$npix,
                          model   = model,
@@ -94,7 +93,6 @@ fit_spm.spm <- function(x, model, theta_st,
                          control = control_opt,
                          hessian = FALSE,
                          .dt     = x$var,
-                         X       = x$X,
                          dists   = x$dists,
                          npix    = x$npix,
                          model   = model,
@@ -158,7 +156,7 @@ fit_spm.spm <- function(x, model, theta_st,
         V <- V + diag(estimates["nu"] / x$npix,
                       nrow = .n, ncol = .n) 
         inv_v <- chol2inv(chol(V))
-        mles <- est_mle(x$var, x$X, inv_v)
+        mles <- est_mle(x$var, inv_v)
         estimates <- c(mles, 
                        "tausq" = unname(mles[length(mles)] *
                                         estimates["nu"]),
@@ -168,7 +166,6 @@ fit_spm.spm <- function(x, model, theta_st,
                 numDeriv::hessian(func = singl_log_lik,
                                   x = estimates,
                                   .dt = x$var,
-                                  X = x$X,
                                   dists = x$dists,
                                   npix = x$npix,
                                   model = model,
@@ -181,7 +178,7 @@ fit_spm.spm <- function(x, model, theta_st,
         
     } else if(npar == 1) {
         inv_v <- chol2inv(chol(V))
-        mles <- est_mle(x$var, x$X, inv_v)
+        mles <- est_mle(x$var, inv_v)
         estimates <- c(mles, 
                        "phi" = unname(estimates["phi"]))
         if(comp_hess) {
@@ -191,7 +188,6 @@ fit_spm.spm <- function(x, model, theta_st,
                 numDeriv::hessian(func = singl_ll_nn_hess,
                                   x = estimates,
                                   .dt = x$var,
-                                  X = x$X,
                                   dists = x$dists,
                                   npix = x$npix,
                                   model = model,

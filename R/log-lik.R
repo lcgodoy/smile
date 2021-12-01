@@ -2,39 +2,31 @@
 ##'
 ##' Internal use.
 ##' @title Evaluate log-lik
-##' @param theta a \code{list} of size \eqn{2 p + \frac{p(p + 1)}{2} + 3}
-##'     containing the parameters associated with the model. (Explain why)
+##' @param theta a \code{numeric} vector of size 4 (\eqn{\mu, \sigma^2, \tau^2,
+##'     \phi}) containing the parameters associated with the model.
 ##' @param .dt a \code{numeric} vector containing the variable \eqn{Y}.
-##' @param X a \code{numeric} design matrix \eqn{X} of dimension \eqn{n \times
-##'     p}.
-##' @param dists a \code{list} of size three. The first containing the distance
-##'     matrices associated with the regions where \eqn{Y} was measured, the
-##'     second for the distance matrices associated with \eqn{X}, and the last
-##'     containing the cross-distance matrices.
+##' @param dists a \code{list} of size distance matrices at the point level.
 ##' @param npix a \code{integer vector} containing the number of pixels within
 ##'     each polygon. (Ordered by the id variables for the polygons).
 ##' @param model a \code{character} indicating which covariance function to
 ##'     use. Possible values are \code{c("matern", "pexp", "gaussian",
 ##'     "spherical")}.
-##' @param kappa \eqn{\kappa} parameter. Not necessary if \code{mode} is
+##' @param kappa \eqn{\kappa} parameter. Not necessary if \code{model} is
 ##'     \code{"gaussian"} or \code{"spherical"}
 ##' @param apply_exp a \code{logical} indicater wheter the exponential
 ##'     transformation should be applied to variance parameters. This
 ##'     facilitates the optimization process.
 ##' 
 ##' @return a scalar representing \code{-log.lik}.
-singl_log_lik <- function(theta, .dt, X, dists, npix, model,
+singl_log_lik <- function(theta, .dt, dists, npix, model,
                           kappa = NULL, apply_exp = FALSE) {
 
-    p <- NCOL(X)
-    if(! apply_exp & any(theta[(p + 1):length(theta)] < 0 )) {
+    if(! apply_exp & any(theta[3:4] < 0 )) {
         return(NA_real_)
     }
 
-    npar <- length(theta)
-    
-    betas <- matrix(theta[1:(npar - 3)], ncol = 1)
-    sigsq <- theta[npar - 2]
+    mu    <- theta[1]
+    sigsq <- theta[2]
     tausq <- theta[npar - 1]
     phi   <- theta[npar]
 
@@ -85,7 +77,8 @@ singl_log_lik <- function(theta, .dt, X, dists, npix, model,
                                   nrow = .n, ncol = .n)
     
     log_lik_y <- mvtnorm::dmvnorm(x = matrix(.dt, nrow = 1),
-                                  mean  = X %*% betas,
+                                  mean  = matrix(rep(mu, .n),
+                                                 ncol = 1),
                                   sigma = varcov_y,
                                   log = TRUE,
                                   checkSymmetry = FALSE)
@@ -111,8 +104,6 @@ singl_log_lik <- function(theta, .dt, X, dists, npix, model,
 ##'     with the model. These parameters are \eqn{\nu} and \eqn{\phi},
 ##'     respectively.
 ##' @param .dt a \code{numeric} vector containing the variable \eqn{Y}.
-##' @param X a \code{numeric} design matrix \eqn{X} of dimension \eqn{n \times
-##'     p}.
 ##' @param dists a \code{list} of size three. The first containing the distance
 ##'     matrices associated with the regions where \eqn{Y} was measured, the
 ##'     second for the distance matrices associated with \eqn{X}, and the last
@@ -129,7 +120,7 @@ singl_log_lik <- function(theta, .dt, X, dists, npix, model,
 ##'     facilitates the optimization process.
 ##' 
 ##' @return a scalar representing \code{-log.lik}.
-singl_log_plik <- function(theta, .dt, X, dists, npix, model,
+singl_log_plik <- function(theta, .dt, dists, npix, model,
                           kappa = NULL, apply_exp = FALSE) {
     
     if(! apply_exp & any(theta < 0 )) {
@@ -138,11 +129,6 @@ singl_log_plik <- function(theta, .dt, X, dists, npix, model,
     
     nu  <- theta[1]
     phi <- theta[2]
-    ## nu <- matrix(nrow = p, ncol = p)
-    ## nu[upper.tri(nu, diag = TRUE)] <-
-    ##     theta[1:(1 + .5*(p * ( p  + 1 )) - 1)]
-    ## nu[lower.tri(nu)] <- nu[upper.tri(nu)]
-    ## phi <- theta[( .5 * (p * ( p  + 1 )) + 1)]
     if(apply_exp) {
         nu  <- exp(nu)
         phi <- exp(phi)
@@ -181,7 +167,7 @@ singl_log_plik <- function(theta, .dt, X, dists, npix, model,
                           nrow = .n, ncol = .n)
     chol_v <- chol(V)
     inv_v  <- chol2inv(chol_v)
-    mles   <- est_mle(.dt, X, inv_v)
+    mles   <- est_mle(.dt, inv_v)
     log_lik_y <- .5 * (.n * log(2 * pi) + .n * log(mles[length(mles)]) +
                        2 * sum(log(diag(chol_v))) + .n)
 
@@ -195,8 +181,6 @@ singl_log_plik <- function(theta, .dt, X, dists, npix, model,
 ##' @title Evaluate log-lik
 ##' @param theta a scalar for the \eqn{\phi} parameter.
 ##' @param .dt a \code{numeric} vector containing the variable \eqn{Y}.
-##' @param X a \code{numeric} design matrix \eqn{X} of dimension \eqn{n \times
-##'     p}.
 ##' @param dists a \code{list} of size three. The first containing the distance
 ##'     matrices associated with the regions where \eqn{Y} was measured, the
 ##'     second for the distance matrices associated with \eqn{X}, and the last
@@ -213,7 +197,7 @@ singl_log_plik <- function(theta, .dt, X, dists, npix, model,
 ##'     facilitates the optimization process.
 ##' 
 ##' @return a scalar representing \code{-log.lik}.
-singl_log_lik_nn <- function(theta, .dt, X, dists, npix, model,
+singl_log_lik_nn <- function(theta, .dt, dists, npix, model,
                              kappa = NULL, apply_exp = FALSE) {
     
     if(! apply_exp & theta < 0 ) {
@@ -259,7 +243,7 @@ singl_log_lik_nn <- function(theta, .dt, X, dists, npix, model,
     V <- varcov_u1
     chol_v <- chol(V)
     inv_v  <- chol2inv(chol_v)
-    mles   <- est_mle(.dt, X, inv_v)
+    mles   <- est_mle(.dt, inv_v)
     log_lik_y <- .5 * (.n * log(2 * pi) + .n * log(mles[length(mles)]) +
                        2 * sum(log(diag(chol_v))) + .n)
     return( log_lik_y )
@@ -520,11 +504,10 @@ singl_log_lik_nn <- function(theta, .dt, X, dists, npix, model,
 ##'
 ##' Internal use.
 ##' @title Evaluate log-lik
-##' @param theta a \code{list} of size \eqn{3} containing the parameters
-##'     associated with the model. (Explain why)
+##' @param theta a \code{numeric} vector of size \eqn{3} containing the
+##'     parameters values associated with \eqn{\mu}, \eqn{\sigma^2}, and
+##'     \eqn{\phi}, respectively.
 ##' @param .dt a \code{numeric} vector containing the variable \eqn{Y}.
-##' @param X a \code{numeric} design matrix \eqn{X} of dimension \eqn{n \times
-##'     p}.
 ##' @param dists a \code{list} of size three. The first containing the distance
 ##'     matrices associated with the regions where \eqn{Y} was measured, the
 ##'     second for the distance matrices associated with \eqn{X}, and the last
@@ -541,14 +524,14 @@ singl_log_lik_nn <- function(theta, .dt, X, dists, npix, model,
 ##'     facilitates the optimization process.
 ##' 
 ##' @return a scalar representing \code{-log.lik}.
-singl_ll_nn_hess <- function(theta, .dt, X, dists, npix, model,
+singl_ll_nn_hess <- function(theta, .dt, dists, npix, model,
                              kappa = NULL, apply_exp = FALSE) {
 
     npar <- length(theta)
     
-    betas <- matrix(theta[1:(npar - 3)], ncol = 1)
-    sigsq <- theta[npar - 1]
-    phi   <- theta[npar]
+    mu    <- theta[1]
+    sigsq <- theta[2]
+    phi   <- theta[3]
     ## mu    <- matrix(theta[1:p], ncol = 1)
     ## sigsq <- theta[p + 1]
     ## phi   <- theta[p + 2]
@@ -587,7 +570,8 @@ singl_ll_nn_hess <- function(theta, .dt, X, dists, npix, model,
                                            sigsq = sigsq)
            })
     log_lik_y <- mvtnorm::dmvnorm(x = matrix(.dt, nrow = 1),
-                                  mean  = X %*% betas,
+                                  mean  = matrix(rep(mu, .n),
+                                                 ncol = 1),
                                   sigma = varcov_u1,
                                   log = TRUE,
                                   checkSymmetry = FALSE)

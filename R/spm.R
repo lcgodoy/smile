@@ -5,8 +5,6 @@
 ##' @title single \code{sf} to \code{spm}
 ##' 
 ##' @param sf_obj a \code{sf} object s.t. its geometries are polygons.
-##' @param X a numeric \code{vector} containing the index of the columns of
-##'     \code{sf_obj} to be used as covariates.
 ##' @param n_pts a \code{numeric} scalar representing the number of points to
 ##'     create a grid in the study region on which the polygons in \code{sf_obj}
 ##'     is observed. Alternatively, it can be a vector of the same length as
@@ -27,9 +25,6 @@
 ##' @return a \code{list}.
 ##' @export
 single_sf_to_spm <- function(sf_obj,
-                             X = NULL,
-                             ## covariates = NULL,
-                             ## trend = NULL,
                              n_pts, type = "regular",
                              by_polygon = FALSE,
                              poly_ids = NULL,
@@ -131,39 +126,18 @@ single_sf_to_spm <- function(sf_obj,
     
     npix <- as.numeric( sf::st_area(sf_obj) )
 
-    if( is.null(X) ) {
-        X  <- matrix(1, nrow = length(npix))
-        X0 <- matrix(1, nrow = NROW(out_grid_pt))
-        output <- list(
-            var     = out_var,
-            X       = X,
-            X0      = X0,
-            dists   = out_dists,
-            ids_var = poly_ids,
-            grid    = out_grid_pt[poly_ids],
-            npix    = npix,
-            sf_poly = sf::st_geometry(sf_obj)
-        )
-    } else {
-        X  <- as.matrix(sf::st_drop_geometry(sf_obj)[, X])
-        X0 <- as.matrix(sf::st_drop_geometry(out_grid_pt)[, -1])
-        output <- list(
-            var     = out_var,
-            X       = X,
-            X0      = X0,
-            dists   = out_dists,
-            ids_var = poly_ids,
-            grid    = out_grid_pt[poly_ids],
-            npix    = npix,
-            sf_poly = sf::st_geometry(sf_obj)
-        )
-
-    }
-
+    output <- list(
+        var     = out_var,
+        dists   = out_dists,
+        ids_var = poly_ids,
+        grid    = out_grid_pt[poly_ids],
+        npix    = npix,
+        sf_poly = sf::st_geometry(sf_obj)
+    )
+    
     class(output) <- append(class(output), "spm")
     return(output)
 }
-
 
 ##' @name sf_to_spm
 ##' @export
