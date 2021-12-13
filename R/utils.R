@@ -1,3 +1,18 @@
+##' @title MLEs for fixed V.
+##' @details internal use.
+##' @param y response variable.
+##' @param Vinv inverse of \eqn{V}
+est_mle <- function(y, Vinv) {
+    n <- length(y)
+    ones  <- matrix(1, nrow = n)
+    IVinv <- crossprod(ones, Vinv)
+    mu    <- as.numeric((IVinv %*% y) / (IVinv %*% ones))
+    y     <- matrix(y - mu, ncol = 1)
+    sigsq <- (crossprod(y, Vinv) %*% y) / n
+    out   <- c("mu" = mu, "sigsq" = sigsq)
+    return(out)
+}
+
 ##' @name aux_mat
 get_grid_list <- function(x_to_list, by) {
     x_list <- sf::st_coordinates(x_to_list)
@@ -17,7 +32,7 @@ dist_from_grids <- function(y_grid,  by) {
     return(
         single_dists(
             lapply(out_list,
-                   function(x) as.matrix(x[ ,c(2, 3)]))
+                   function(x) as.matrix(x[ , c("x", "y")]))
         )
     )
 }

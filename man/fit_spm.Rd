@@ -2,15 +2,12 @@
 % Please edit documentation in R/fit.R
 \name{fit_spm}
 \alias{fit_spm}
-\alias{fit_spm.sspm}
-\alias{fit_spm.mspm}
-\title{Fit a model adapted from
-\href{https://ij-healthgeographics.biomedcentral.com/articles/10.1186/s12942-020-00200-w}{Johnson
-et al. 2020}.}
+\alias{fit_spm.spm}
+\title{Fitting an underlying continuous process to areal data}
 \usage{
 fit_spm(x, ...)
 
-\method{fit_spm}{sspm}(
+\method{fit_spm}{spm}(
   x,
   model,
   theta_st,
@@ -18,25 +15,14 @@ fit_spm(x, ...)
   apply_exp = FALSE,
   opt_method = "Nelder-Mead",
   control_opt = list(),
-  ...
-)
-
-\method{fit_spm}{mspm}(
-  x,
-  model,
-  theta_st,
-  kappa = NULL,
-  apply_exp = FALSE,
-  opt_method = "Nelder-Mead",
-  control_opt = list(),
+  comp_hess = TRUE,
   ...
 )
 }
 \arguments{
-\item{x}{an object of type \code{sspm} or \code{mspm}. Note that, the
-dimension of \code{theta_st} depends on the 2 factors. 1) the number of
-variables being analyzed, and 2) if the input is a \code{sspm} or a
-\code{mspm} object.}
+\item{x}{an object of type \code{spm}. Note that, the dimension of
+\code{theta_st} depends on the 2 factors. 1) the number of variables
+being analyzed, and 2) if the input is a \code{spm} object.}
 
 \item{...}{additionnal parameters, either passed to \code{optim}.}
 
@@ -49,12 +35,12 @@ parameters.}
 
 \item{kappa}{a \code{numeric} value indicating either the \eqn{\kappa}
 paramater from the Matern covariance function (controlling the process
-differentiability), or the "pexp" for the Powered Exponential
-family. If the \code{model} chosen by the user is Matern and
-\code{kappa} is not informed, it is automatically set to .5. On the
-other hand, if the user choses the Powered Exponential family and do not
-inform \code{kappa}, then it is set to 1. In both cases, the covariance
-function becomes the so covalled exponential covariance function.}
+differentiability), or the "pexp" for the Powered Exponential family. If
+the \code{model} chosen by the user is Matern and \code{kappa} is not
+informed, it is automatically set to .5. On the other hand, if the user
+choses the Powered Exponential family and do not inform \code{kappa},
+then it is set to 1. In both cases, the covariance function becomes the
+so covalled exponential covariance function.}
 
 \item{apply_exp}{a \code{logical} scalar indicating wheter the parameters
 that cannot assume negative values should be exponentiate or not.}
@@ -65,33 +51,35 @@ algorithm to be used. For details, see \code{\link[stats]{optim}}.}
 \item{control_opt}{a named \code{list} containing the control arguments for
 the optimization algorithm to be used. For details, see
 \code{\link[stats]{optim}}.}
+
+\item{comp_hess}{a \code{boolean} indicating whether the Hessian matrix
+should be computed}
 }
 \value{
-a \code{sspm_fit} or a \code{mspm_fit} object.
+a \code{spm_fit} object.
 }
 \description{
-Fit a model adapted from
-\href{https://ij-healthgeographics.biomedcentral.com/articles/10.1186/s12942-020-00200-w}{Johnson
-et al. 2020}.
-
-Fitting the model based on
+Fitting an underlying continuous process to areal data
 }
 \details{
 This function uses the \code{\link[stats]{optim}} optimization
 algorithms to find the Maximum Likelihood estimators, and their standard
-errors, from a model adapted from
-\href{https://ij-healthgeographics.biomedcentral.com/articles/10.1186/s12942-020-00200-w}{Johnson
-et al. 2020}. The function allows the user to input the control
-parameters from the \code{\link[stats]{optim}} function through the
-argument \code{control_opt}, which is a named list. Additionally, the
-user can input lower and upper boundaries for the optimization problem,
-as well as the preferred optimization algorithm (as long as it is
-available at \code{\link[stats]{optim}}). The preferred algorithm is
-selected by the argument \code{opt_method}. In addition to the control
-of the optimization, the user can select a covariance function among the
-following: Matern, Exponential, Powered Exponential, Gaussian, and
-Spherical. The parameter \code{apply_exp} is a \code{logical} scalar
-such that, if set to \code{TRUE}, the \eqn{\exp} function is applied to
-the nonnegative parameters, allowing the optimization algorithm to
-search for all the paraters over the real numbers.
+errors, from a model adapted from. The function allows the user to input
+the control parameters from the \code{\link[stats]{optim}} function
+through the argument \code{control_opt}, which is a named
+list. Additionally, the one can input lower and upper boundaries for the
+optimization problem, as well as the preferred optimization algorithm
+(as long as it is available for \code{\link[stats]{optim}}). The
+preferred algorithm is selected by the argument \code{opt_method}. In
+addition to the control of the optimization, the user can select a
+covariance function among the following: Matern, Exponential, Powered
+Exponential, Gaussian, and Spherical. The parameter \code{apply_exp} is
+a \code{logical} scalar such that, if set to \code{TRUE}, the \eqn{\exp}
+function is applied to the nonnegative parameters, allowing the
+optimization algorithm to search for all the parameters over the real
+numbers.\preformatted{The model assumes \deqn{Y(\mathbf{s}) = \mu + S(\mathbf{s})} at the point level.
+Where \eqn{S ~ GP(0, \sigma^2 C(\lVert \mathbf{s} - \mathbf{s}_2 \rVert; \theta))}.
+Further, the observed data is supposed to be
+\eqn{Y(B) = \lvert B \rvert^{-1} \int_{B} Y(\mathbf{s}) \, \textrm{d} \mathbf{s}}.
+}
 }

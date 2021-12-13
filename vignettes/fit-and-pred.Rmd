@@ -46,18 +46,18 @@ st_crs(liv_lsoa) <-
 
 ## msoa to spm
 spm_msoa <-
-    sf_to_spm(sf_obj1 = liv_msoa,
-              n_pts   = 500,
-              type    = "regular",
+    sf_to_spm(sf_obj = liv_msoa,
+              n_pts  = 500,
+              type   = "regular",
               by_polygon = FALSE,
               poly_ids = "msoa11cd",
               var_ids  = "leb_est")
 
 ## lsoa to spm
 spm_lsoa <-
-    sf_to_spm(sf_obj1 = liv_lsoa,
-              n_pts   = 5,
-              type    = "regular",
+    sf_to_spm(sf_obj = liv_lsoa,
+              n_pts  = 5,
+              type   = "regular",
               by_polygon = TRUE,
               poly_ids = "lsoa11cd",
               var_ids  = "imdscore")
@@ -93,28 +93,27 @@ estimated in the literature of geostatistics.].  Note that, it is important for
 this inputing vector to be a named vector, because some functions track the
 parameters by their names. 
 ```{R fit-pred-1}
-theta_st_msoa <-
-    c("mu" = 70, "tausq" = 1,
-      "sigsq" = 1, "phi" = 1)
+theta_st_msoa <- c("phi" = 1)
 
 fit_msoa <-
     fit_spm(x = spm_msoa,
             theta_st = theta_st_msoa,
             model = "pexp",
-            kappa = .5,
+            kappa = 1,
             apply_exp = TRUE,
+            opt_method = "L-BFGS-B",
             control   = list(maxit = 500))
 ```
 
 After a few seconds, we get the Results. Now, we can use the function
-`summary_sspm_fit` to get the summary of the results. The function prints a
+`summary_spm_fit` to get the summary of the results. The function prints a
 table containing the estimates, their standard errors, and `1 - sig` confidence
 interval based on the asymptotic normality of the MLEs. The function also prints
 a message indicating if the optimization algorithm has converged^[The default
 algorithm used by the package is the Nelder-Mead, this can easily be changed by
 setting the parameter `opt_method = "L-BFGS-B"`, for example.].
 ```{R summary-fit1}
-summary_sspm_fit(fit_msoa, sig = .05)
+summary_spm_fit(fit_msoa, sig = .05)
 ```
 
 Finally, now we are going to perform predictions of the LEB at the LSOA
@@ -176,7 +175,7 @@ ggplot(data = aux_viz1[aux_viz1$variable == "prediction",],
     geom_sf(pch = 15) +
     scale_fill_viridis_c(option = "H") +
     scale_color_viridis_c(option = "H") +
-    guides(color = FALSE) +
+    guides(color = "none") +
     facet_wrap(surface ~ .) +
     theme_bw()
 ```
@@ -192,7 +191,7 @@ ggplot(data = aux_viz1[aux_viz1$variable == "se",],
     geom_sf(pch = 15) +
     scale_fill_viridis_c(option = "H") +
     scale_color_viridis_c(option = "H") +
-    guides(color = FALSE) +
+    guides(color = "none") +
     facet_wrap(surface ~ .) +
     theme_bw()
 ```
@@ -213,22 +212,22 @@ $\kappa = 2.5$.
 
 ```{R fit-pred-2}
 theta_st_lsoa <-
-    c("mu" = 25, "tausq" = 1,
-      "sigsq" = 1, "phi" = 1)
+    c("phi" = 1)
 
 fit_lsoa <-
     fit_spm(x = spm_lsoa,
             theta_st = theta_st_lsoa,
             model = "matern",
-            kappa = 2.5,
+            kappa = .5,
             apply_exp = TRUE,
+            opt_method = "L-BFGS-B",
             control   = list(maxit = 500))
 ```
 
 After a few seconds, we get the Results. Now, we can use the function
 `summary_sspm_fit` again to summarise the estimated parameters. 
 ```{R summary-fit2}
-summary_sspm_fit(fit_lsoa, sig = .05)
+summary_spm_fit(fit_lsoa, sig = .05)
 ```
 
 Now we are going to perform predictions of the IMD at the MSOA level. Since from
@@ -272,7 +271,7 @@ ggplot(data = aux_viz2[aux_viz2$variable == "prediction",],
     geom_sf(pch = 15) +
     scale_fill_viridis_c(option = "H") +
     scale_color_viridis_c(option = "H") +
-    guides(color = FALSE) +
+    guides(color = "none") +
     facet_wrap(surface ~ .) +
     theme_bw()
 ```
@@ -287,67 +286,9 @@ ggplot(data = aux_viz2[aux_viz2$variable == "se",],
     geom_sf(pch = 15) +
     scale_fill_viridis_c(option = "H") +
     scale_color_viridis_c(option = "H") +
-    guides(color = FALSE) +
+    guides(color = "none") +
     facet_wrap(surface ~ .) +
     theme_bw()
 ```
-
-## "Joint" model
-
-For more details see this [link](lcgodoy.me/smile/theory.html).  
-
-No we are going to model the two variables together. Besides an additional
-variance parameter, for this model we have an additional intercept and a $\beta$
-parameter that measures how associated the two variables are (at the continuous
-process scale). First, we create a `spm` object contaning the info about both
-variables, as described in this [vignette](lcgodoy.me/smile/theory.html).
-```{R spm-msoa-lsoa, eval = FALSE}
-## joint spm object
-spm_xy <-
-    sf_to_spm(sf_obj1 = liv_msoa,
-              sf_obj2 = liv_lsoa,
-              n_pts   = list(500, 5),
-              type    = "regular",
-              by_polygon = c(FALSE, TRUE),
-              poly_ids = list("msoa11cd", "lsoa11cd"),
-              var_ids  = list("leb_est", "imdscore"))
-```
-
-Now, we can fit the model using the same `fit_spm` function. Here, we are using
-the Exponential covariance function. Also, pay attention the the different
-starting parameters forthe vector `theta_xy`.
-
-```{R mult-fit, eval = FALSE}
-theta_xy <-
-    c("alpha" = 60, "beta" = 2,
-      "gamma" = 30, "omega" = 10,
-      "sigsq" = 1, "phi" = 3,
-      "nusq" = 10)
-
-fit_xy <-
-    fit_spm(x = spm_xy,
-            theta_st  = theta_xy,
-            model = "matern",
-            kappa = .5,
-            apply_exp = TRUE,
-            control   = list(maxit = 1000))
-```
-
-Now, we use the same summary function to verify the results as follows.
-```{R summary-mult, eval = FALSE}
-summary_sspm_fit(fit_xy, sig = .05)
-```
-
-Note that, for this scenario the optimization algorithm has not converged. For
-this reason, I set, temporarily, the `eval` option to `FALSE` for the three last
-chunks of code. 
-
-This needs to be further investigated.
-
-> P.S.: For all estimation problems we have used the parameter `apply_exp =
-> TRUE`, which implies that the parameters that cannot assume negative values
-> have to be exponentiated. This makes the optimization process easier. The only
-> care that we need to take is that we need to use the Delta Method to Transform
-> the Information Matrix accordingly.
 
 # Reference

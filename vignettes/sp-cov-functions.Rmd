@@ -35,7 +35,7 @@ the `RcppParallel` package].
 The first spatial covariance family implemented is the so-called Mat\'ern
 Covariance function, it is of form
 \[
-C(h; \sigma^2, \phi, \kappa) = \sigma^2 frac{(h / \phi)^{\kappa} K_{\kappa}( h / \phi )}
+C(h; \sigma^2, \phi, \kappa) = \sigma^2 \frac{(h / \phi)^{\kappa} K_{\kappa}( h / \phi )}
 { 2^{\kappa - 1} \Gamma(\kappa) },
 \]
 where $h$ is the distance between two points, $\sigma^2$ is analogous to a

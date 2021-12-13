@@ -4,14 +4,7 @@
 \alias{vdl}
 \title{Voronoi Data Linkage}
 \usage{
-vdl(
-  coords_sf,
-  areal_sf,
-  id_coords = NULL,
-  list_vars = NULL,
-  show_warning = TRUE,
-  buff
-)
+vdl(coords_sf, areal_sf, id_coords = NULL, list_vars = NULL, buff)
 }
 \arguments{
 \item{coords_sf}{\code{sf} object representing point coordinates}
@@ -25,9 +18,6 @@ not informed, the \emph{row number} is assumed to by the id.}
 that need to be estimated in \code{coords_sf}. The \code{list} position names represent
 the populational variables, while the contend within each position represent
 the average variavles.}
-
-\item{show_warning}{\code{logical}, indicating wheter a warning for the crs
-transformation should be printed or not. (default is \code{TRUE})}
 
 \item{buff}{scalar \code{numeric}. Mostly for internal use.}
 }

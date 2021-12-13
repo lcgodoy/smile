@@ -1,5 +1,5 @@
 Package: smile
-Title: Spatial MIsaLignment Estimation
+Title: Spatial Misalignment: Interpolation, Linkage, and Estimation
 Version: 0.0.1
 Authors@R: 
     person(given = "Lucas",
@@ -9,8 +9,8 @@ Authors@R:
            comment = c(ORCID = "0000-0003-4265-972X"))
 Description: The package provides Maximum Likelihood estimates for the
 	estimation of underlying random fields for lattice (polygon data)
-	facilitating the estimation of an onbserved random variable in
-	different partitions of a region of study.
+	facilitating the estimation of an onbserved random variable in different
+	partitions of a region of study.
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
@@ -21,7 +21,8 @@ SystemRequirements: C++11, GDAL (>= 2.0.1), GEOS (>= 3.4.0),
 LinkingTo: 
     Rcpp,
     RcppArmadillo
-Imports: 
+Imports:
+    numDeriv,
     Rcpp,
     sf,
     mvtnorm,
