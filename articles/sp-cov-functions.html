@@ -19,6 +19,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -31,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">smile</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.0.1</span>
       </span>
     </div>
 
@@ -76,25 +78,25 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://twitter.com/ldcgodoy">
+  <a href="https://twitter.com/ldcgodoy" class="external-link">
     <span class="fa fa-twitter"></span>
      
   </a>
 </li>
 <li>
-  <a href="https://www.linkedin.com/in/godoy-lucas/">
+  <a href="https://www.linkedin.com/in/godoy-lucas/" class="external-link">
     <span class="fa fa-linkedin"></span>
      
   </a>
 </li>
 <li>
-  <a href="https://github.com/lcgodoy">
+  <a href="https://github.com/lcgodoy" class="external-link">
     <span class="fa fa-github"></span>
      
   </a>
 </li>
 <li>
-  <a href="https://stacksoverflow.com/users/9220758/lcgodoy">
+  <a href="https://stacksoverflow.com/users/9220758/lcgodoy" class="external-link">
     <span class="fa fa-stack-overflow fa-lg"></span>
      
   </a>
@@ -115,7 +117,7 @@
       <h1 data-toc-skip>2. Spatial covariance functions</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/lcgodoy/smile/blob/master/vignettes/sp-cov-functions.Rmd"><code>vignettes/sp-cov-functions.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/lcgodoy/smile/blob/HEAD/vignettes/sp-cov-functions.Rmd" class="external-link"><code>vignettes/sp-cov-functions.Rmd</code></a></small>
       <div class="hidden name"><code>sp-cov-functions.Rmd</code></div>
 
     </div>
@@ -131,7 +133,7 @@
 <!-- for the data. -->
 <p>in this short vignette, we illustrate the family of spatial covariance functions implemented in this package. Note that, all of them are based on the assumptions of stationarity and isotropy of the underlying Gaussian Random Field (GRF). Also, the implementations (and definitions) are based on the families of spatial <em>correlation</em> functions presented in <span class="citation">Diggle and Ribeiro (2007)</span>. The implemtations make use of the <code>RcppArmadillo</code> <span class="citation">(Eddelbuettel and Sanderson 2014)</span> package and the STL library algorithms (C++ 11)<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>.</p>
 <p>The first spatial covariance family implemented is the so-called Mat'ern Covariance function, it is of form <span class="math display">\[
-C(h; \sigma^2, \phi, \kappa) = \sigma^2 frac{(h / \phi)^{\kappa} K_{\kappa}( h / \phi )}
+C(h; \sigma^2, \phi, \kappa) = \sigma^2 \frac{(h / \phi)^{\kappa} K_{\kappa}( h / \phi )}
 { 2^{\kappa - 1} \Gamma(\kappa) },
 \]</span> where <span class="math inline">\(h\)</span> is the distance between two points, <span class="math inline">\(\sigma^2\)</span> is analogous to a variance parameter, <span class="math inline">\(\phi\)</span> is the scale parameter that controls the rech of the spatial dependence, and <span class="math inline">\(\kappa\)</span> is a shape parameter that controls the differentiability of the process. The function <span class="math inline">\(K_{\kappa}(\cdot)\)</span> is the <span class="math inline">\(\kappa\)</span>-order Modified Bessel function of Second-Kind There are special cases of the Mat'er family implemented on the package, when setting <span class="math inline">\(\kappa\)</span> to <span class="math inline">\(1/2\)</span>, <span class="math inline">\(3/2\)</span>, <span class="math inline">\(5/2\)</span>, or <span class="math inline">\(\infty\)</span> the expression simplifies. The first and the last cases yields to the Exponential and Gaussian family, respectively.</p>
 <p>The second spatial covariance family implemented is the Powered Exponential Covariance function, it is defined as <span class="math display">\[
@@ -150,9 +152,9 @@ C(h; \sigma^2, \phi) =
 \end{cases}
 \]</span> where, again, <span class="math inline">\(\sigma^2\)</span> is a variance parameter, while $&gt; 0 $ is a parameter with the same magnitude as the distances on which the function is being evaluated at.</p>
 <p>All this functions will be useful in the upcoming vignette.</p>
-<div id="reference" class="section level1 unnumbered">
-<h1 class="hasAnchor">
-<a href="#reference" class="anchor"></a>Reference</h1>
+<div class="section level1 unnumbered">
+<h1 id="reference">Reference<a class="anchor" aria-label="anchor" href="#reference"></a>
+</h1>
 <div id="refs" class="references">
 <div id="ref-diggle2007model">
 <p>Diggle, PJ, and Paulo Justiniano Ribeiro. 2007. “Model-Based Geostatistics (Springer Series in Statistics).” In, 51–56. Springer.</p>
@@ -181,11 +183,13 @@ C(h; \sigma^2, \phi) =
 
 
       <footer><div class="copyright">
-  <p>Developed by Lucas Godoy.</p>
+  <p></p>
+<p>Developed by Lucas Godoy.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
 </div>
 
       </footer>
@@ -193,6 +197,8 @@ C(h; \sigma^2, \phi) =
 
   
 
+
+  
 
   </body>
 </html>

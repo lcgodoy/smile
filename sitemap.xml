@@ -1,6 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>https://lcgodoy.me/smile/404.html</loc>
+  </url>
+  <url>
+    <loc>https://lcgodoy.me/smile/LICENSE.html</loc>
+  </url>
+  <url>
+    <loc>https://lcgodoy.me/smile/articles/fit-and-pred.html</loc>
+  </url>
+  <url>
+    <loc>https://lcgodoy.me/smile/articles/index.html</loc>
+  </url>
+  <url>
+    <loc>https://lcgodoy.me/smile/articles/sf-to-spm.html</loc>
+  </url>
+  <url>
+    <loc>https://lcgodoy.me/smile/articles/sp-cov-functions.html</loc>
+  </url>
+  <url>
+    <loc>https://lcgodoy.me/smile/articles/theory.html</loc>
+  </url>
+  <url>
+    <loc>https://lcgodoy.me/smile/authors.html</loc>
+  </url>
+  <url>
     <loc>https://lcgodoy.me/smile/index.html</loc>
   </url>
   <url>
@@ -28,6 +52,9 @@
     <loc>https://lcgodoy.me/smile/reference/distmat.html</loc>
   </url>
   <url>
+    <loc>https://lcgodoy.me/smile/reference/est_mle.html</loc>
+  </url>
+  <url>
     <loc>https://lcgodoy.me/smile/reference/find_phi.html</loc>
   </url>
   <url>
@@ -35,6 +62,9 @@
   </url>
   <url>
     <loc>https://lcgodoy.me/smile/reference/gauss_cov.html</loc>
+  </url>
+  <url>
+    <loc>https://lcgodoy.me/smile/reference/index.html</loc>
   </url>
   <url>
     <loc>https://lcgodoy.me/smile/reference/liv_lsoa.html</loc>
@@ -46,9 +76,6 @@
     <loc>https://lcgodoy.me/smile/reference/mat_cov.html</loc>
   </url>
   <url>
-    <loc>https://lcgodoy.me/smile/reference/mult_log_lik.html</loc>
-  </url>
-  <url>
     <loc>https://lcgodoy.me/smile/reference/pexp_cov.html</loc>
   </url>
   <url>
@@ -58,7 +85,16 @@
     <loc>https://lcgodoy.me/smile/reference/sf_to_spm.html</loc>
   </url>
   <url>
+    <loc>https://lcgodoy.me/smile/reference/singl_ll_nn_hess.html</loc>
+  </url>
+  <url>
     <loc>https://lcgodoy.me/smile/reference/singl_log_lik.html</loc>
+  </url>
+  <url>
+    <loc>https://lcgodoy.me/smile/reference/singl_log_lik_nn.html</loc>
+  </url>
+  <url>
+    <loc>https://lcgodoy.me/smile/reference/singl_log_plik.html</loc>
   </url>
   <url>
     <loc>https://lcgodoy.me/smile/reference/single_exp.html</loc>
@@ -79,9 +115,6 @@
     <loc>https://lcgodoy.me/smile/reference/single_pexp.html</loc>
   </url>
   <url>
-    <loc>https://lcgodoy.me/smile/reference/single_sf_to_spm.html</loc>
-  </url>
-  <url>
     <loc>https://lcgodoy.me/smile/reference/single_spher.html</loc>
   </url>
   <url>
@@ -91,7 +124,7 @@
     <loc>https://lcgodoy.me/smile/reference/spher_cov.html</loc>
   </url>
   <url>
-    <loc>https://lcgodoy.me/smile/reference/summary_sspm_fit.html</loc>
+    <loc>https://lcgodoy.me/smile/reference/summary_spm_fit.html</loc>
   </url>
   <url>
     <loc>https://lcgodoy.me/smile/reference/transform.sf.html</loc>
@@ -100,18 +133,9 @@
     <loc>https://lcgodoy.me/smile/reference/vdl.html</loc>
   </url>
   <url>
+    <loc>https://lcgodoy.me/smile/reference/vdl_var.html</loc>
+  </url>
+  <url>
     <loc>https://lcgodoy.me/smile/reference/vor_build.html</loc>
-  </url>
-  <url>
-    <loc>https://lcgodoy.me/smile/articles/fit-and-pred.html</loc>
-  </url>
-  <url>
-    <loc>https://lcgodoy.me/smile/articles/sf-to-spm.html</loc>
-  </url>
-  <url>
-    <loc>https://lcgodoy.me/smile/articles/sp-cov-functions.html</loc>
-  </url>
-  <url>
-    <loc>https://lcgodoy.me/smile/articles/theory.html</loc>
   </url>
 </urlset>

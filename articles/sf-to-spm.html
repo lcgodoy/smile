@@ -19,6 +19,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -31,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">smile</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.0.1</span>
       </span>
     </div>
 
@@ -76,25 +78,25 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://twitter.com/ldcgodoy">
+  <a href="https://twitter.com/ldcgodoy" class="external-link">
     <span class="fa fa-twitter"></span>
      
   </a>
 </li>
 <li>
-  <a href="https://www.linkedin.com/in/godoy-lucas/">
+  <a href="https://www.linkedin.com/in/godoy-lucas/" class="external-link">
     <span class="fa fa-linkedin"></span>
      
   </a>
 </li>
 <li>
-  <a href="https://github.com/lcgodoy">
+  <a href="https://github.com/lcgodoy" class="external-link">
     <span class="fa fa-github"></span>
      
   </a>
 </li>
 <li>
-  <a href="https://stacksoverflow.com/users/9220758/lcgodoy">
+  <a href="https://stacksoverflow.com/users/9220758/lcgodoy" class="external-link">
     <span class="fa fa-stack-overflow fa-lg"></span>
      
   </a>
@@ -115,7 +117,7 @@
       <h1 data-toc-skip>1. Converting sf objects to spm</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/lcgodoy/smile/blob/master/vignettes/sf-to-spm.Rmd"><code>vignettes/sf-to-spm.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/lcgodoy/smile/blob/HEAD/vignettes/sf-to-spm.Rmd" class="external-link"><code>vignettes/sf-to-spm.Rmd</code></a></small>
       <div class="hidden name"><code>sf-to-spm.Rmd</code></div>
 
     </div>
@@ -124,26 +126,26 @@
     
 <p>The purpose of this vignette is to illustrate how to convert <code>sf</code><span class="citation">(Pebesma 2018)</span> objects to objects support by the <code>smile</code> package. Besides the <code>sf</code> and <code>smile</code> packages, the <code>ggplot2</code><span class="citation">(Wickham 2011)</span> package will be used for the data visualizations.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://lcgodoy.me/smile">smile</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org">ggplot2</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://r-spatial.github.io/sf/">sf</a></span><span class="op">)</span>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://lcgodoy.me/smile">smile</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-spatial.github.io/sf/" class="external-link">sf</a></span><span class="op">)</span>
 <span class="co">#&gt; Linking to GEOS 3.8.0, GDAL 3.0.4, PROJ 6.3.1</span></code></pre></div>
 <p>The data used here are the datasets provided by <span class="citation">Johnson, Diggle, and Giorgi (2020)</span> about the Life Expectancy at Birth and Index of Multiple Deprivation. These two variables were observed into different paritions of Liverpool, the LSOA and MSOA<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>, respectively.</p>
 <p>The methods developed in this package are heavily based on the theory developed in <span class="citation">Johnson, Diggle, and Giorgi (2020)</span>. The main assumption is that continuous random variables observed in polygons (like administrative regios) are composed by the average of an stationary and isotropic underlying Gaussian Random Field <span class="citation">(Rue and Held 2005)</span> plus a Gaussian “Residual”. In practice, there exists an identifiability when estimating some variance parameters, which can be seen either as small scale variation (nugget effect) or measurement errors.</p>
 <p>To illustrate how this work, consider the case on which we do observe a random variable in a partition of a study region. In our example, this random variable is the estimated LEB<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a> in Liverpool observed in the MSOA’s. We can load and visualize the data by using the command below.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="va">liv_msoa</span><span class="op">)</span>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">liv_msoa</span><span class="op">)</span>
 
 <span class="co">## workaround for compatibility with different PROJ versions</span>
-<span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_crs.html">st_crs</a></span><span class="op">(</span><span class="va">liv_msoa</span><span class="op">)</span> <span class="op">&lt;-</span>
-    <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_crs.html">st_crs</a></span><span class="op">(</span><span class="va">liv_msoa</span><span class="op">)</span><span class="op">$</span><span class="va">input</span>
+<span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_crs.html" class="external-link">st_crs</a></span><span class="op">(</span><span class="va">liv_msoa</span><span class="op">)</span> <span class="op">&lt;-</span>
+    <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_crs.html" class="external-link">st_crs</a></span><span class="op">(</span><span class="va">liv_msoa</span><span class="op">)</span><span class="op">$</span><span class="va">input</span>
 
-<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">liv_msoa</span>,
-       <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="va">leb_est</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
-    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html">geom_sf</a></span><span class="op">(</span>color <span class="op">=</span> <span class="st">"black"</span>,
+<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">liv_msoa</span>,
+       <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="va">leb_est</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">geom_sf</a></span><span class="op">(</span>color <span class="op">=</span> <span class="st">"black"</span>,
             lwd   <span class="op">=</span> <span class="fl">.1</span><span class="op">)</span> <span class="op">+</span>
-    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html">scale_fill_viridis_b</a></span><span class="op">(</span>option <span class="op">=</span> <span class="st">"H"</span><span class="op">)</span> <span class="op">+</span>
-    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_minimal</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
+    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html" class="external-link">scale_fill_viridis_b</a></span><span class="op">(</span>option <span class="op">=</span> <span class="st">"H"</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_minimal</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <p><img src="sf-to-spm_files/figure-html/read-data-1.png" width="700"></p>
 <p>We consider, in a first moment, that this random variable is normally distributed with a constant mean and a certain (spatial) covariance matrix. Now, let <span class="math inline">\(A_1\)</span> and <span class="math inline">\(A_2\)</span> be two distinct MSOA’s. Under the before mentioned assumption that the observed random variable is driven by an underlying gaussian random field with isotropic covariance function <span class="math inline">\(C(\lVert x - y \rVert \, ; \, \theta)\)</span>, where <span class="math inline">\(\lVert x - y \rVert\)</span> is the distance between two points in the coordinates <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span>, respectively. Then, the covariance between the (averaged) variable observed at <span class="math inline">\(A_1\)</span> and <span class="math inline">\(A_2\)</span> is define as <span class="math display">\[
 \Sigma_{12} = Cov(A_1, A_2) = \frac{1}{\lvert A_1 \rvert \lvert A_2 \rvert}
@@ -154,49 +156,41 @@
 <p>The code of chunk below displays the generated grid coloring each point belonging to this grid accordign to the polygon they “belong to”.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">msoa_spm</span> <span class="op">&lt;-</span>
-    <span class="fu"><a href="../reference/sf_to_spm.html">sf_to_spm</a></span><span class="op">(</span>sf_obj1 <span class="op">=</span> <span class="va">liv_msoa</span>, n_pts <span class="op">=</span> <span class="fl">1000</span>,
+    <span class="fu"><a href="../reference/sf_to_spm.html">sf_to_spm</a></span><span class="op">(</span>sf_obj <span class="op">=</span> <span class="va">liv_msoa</span>, n_pts <span class="op">=</span> <span class="fl">1000</span>,
               type <span class="op">=</span> <span class="st">"regular"</span>, by_polygon <span class="op">=</span> <span class="cn">FALSE</span>,
               poly_ids <span class="op">=</span> <span class="st">"msoa11cd"</span>, var_ids <span class="op">=</span> <span class="st">"leb_est"</span><span class="op">)</span>
 
-<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">msoa_spm</span><span class="op">$</span><span class="va">grid</span>,
-       <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>color <span class="op">=</span> <span class="va">msoa11cd</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
-    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html">geom_sf</a></span><span class="op">(</span>pch <span class="op">=</span> <span class="fl">15</span><span class="op">)</span> <span class="op">+</span>
-    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html">scale_color_viridis_d</a></span><span class="op">(</span>option <span class="op">=</span> <span class="st">"H"</span><span class="op">)</span> <span class="op">+</span>
-    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/guides.html">guides</a></span><span class="op">(</span>color <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op">+</span>
-    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_minimal</a></span><span class="op">(</span><span class="op">)</span>
+<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">msoa_spm</span><span class="op">$</span><span class="va">grid</span>,
+       <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>color <span class="op">=</span> <span class="va">msoa11cd</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">geom_sf</a></span><span class="op">(</span>pch <span class="op">=</span> <span class="fl">15</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html" class="external-link">scale_color_viridis_d</a></span><span class="op">(</span>option <span class="op">=</span> <span class="st">"H"</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/guides.html" class="external-link">guides</a></span><span class="op">(</span>color <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_minimal</a></span><span class="op">(</span><span class="op">)</span>
 <span class="co">#&gt; Warning: `guides(&lt;scale&gt; = FALSE)` is deprecated. Please use `guides(&lt;scale&gt; =</span>
 <span class="co">#&gt; "none")` instead.</span></code></pre></div>
 <p><img src="sf-to-spm_files/figure-html/sf-to-spm1-1.png" width="700"></p>
 <p>Next, we illustrate how do different values of <code>type</code> and <code>by_polygon</code> affect the final result of the <code>sf_to_spm</code> call. In all examples we are going to use a grid of 305 points (multiple of the number of polygons observed). The “sparsity” of the points forming the grid helps to see the differences caused by the different inputs for the function. The panel below displays every possible combination of the parameters <code>type</code> and <code>by_polygon</code>. Although there is no “right” choice for these parameters, we advise using <code>type</code> as <code>"regular"</code> or <code>"hexagonal"</code> with by <code>by_polygon = FALSE</code>. Also, it is import to make sure that, after generating the grid, your grid is in a finer resolution than your smallest polygon, that is, to make sure that there exists no points lying in more than one polygon. <img src="sf-to-spm_files/figure-html/sf-to-spm2-1.png" width="700"></p>
 <p>Lastly, we show two additional examples of usage of the <code>sf_to_spm</code> function. The first one, using the IMD data at the LSOA level, we show how to proceed when analysing more than one random variable. In the code chunk below, we load the data and convert it to an <code>smile</code> compatible object using a regular grid of 1500 points. We also inform the software that we are interested in analyzing two variables within this dataset, the variables <code>"imdscore"</code> and <code>"male"</code>, respectively<a href="#fn5" class="footnote-ref" id="fnref5"><sup>5</sup></a>.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="va">liv_lsoa</span><span class="op">)</span>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">liv_lsoa</span><span class="op">)</span>
 
-<span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_crs.html">st_crs</a></span><span class="op">(</span><span class="va">liv_lsoa</span><span class="op">)</span> <span class="op">&lt;-</span>
-    <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_crs.html">st_crs</a></span><span class="op">(</span><span class="va">liv_lsoa</span><span class="op">)</span><span class="op">$</span><span class="va">input</span>
+<span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_crs.html" class="external-link">st_crs</a></span><span class="op">(</span><span class="va">liv_lsoa</span><span class="op">)</span> <span class="op">&lt;-</span>
+    <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_crs.html" class="external-link">st_crs</a></span><span class="op">(</span><span class="va">liv_lsoa</span><span class="op">)</span><span class="op">$</span><span class="va">input</span>
 
 <span class="va">msoa_spm</span> <span class="op">&lt;-</span>
-    <span class="fu"><a href="../reference/sf_to_spm.html">sf_to_spm</a></span><span class="op">(</span>sf_obj1 <span class="op">=</span> <span class="va">liv_lsoa</span>, n_pts <span class="op">=</span> <span class="fl">1500</span>,
+    <span class="fu"><a href="../reference/sf_to_spm.html">sf_to_spm</a></span><span class="op">(</span>sf_obj <span class="op">=</span> <span class="va">liv_lsoa</span>, n_pts <span class="op">=</span> <span class="fl">1500</span>,
               type <span class="op">=</span> <span class="st">"regular"</span>, by_polygon <span class="op">=</span> <span class="cn">FALSE</span>,
               poly_ids <span class="op">=</span> <span class="st">"lsoa11cd"</span>,
-              var_ids <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"imdscore"</span>, <span class="st">"male"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<p>Finally, to code chunk below displays the situation on which we input two <code>sf</code> objects, representing two partitions of the same space, to the <code>sf_to_spm</code> function. There are some key changes in here, parameters that were scalars before, now turn into vectors or lists. For instance, <code>n_pts</code> now is a list such that its first position is about the <code>sf_obj1</code> and its second position stores information about the grid of points to be generated for <code>sf_obj2</code>. Yes, we can generate two different grids in here. This is useful especially when the two datasets analysed are in very different scales, allowing us to use a more sparse grid for the dataset with “smaller” resolution. This brings computational improvements because we end up dealing with covariance matrices of lower dimensions. Please, refer to the documentation of the function for further details.</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">mult_spm</span> <span class="op">&lt;-</span>
-    <span class="fu"><a href="../reference/sf_to_spm.html">sf_to_spm</a></span><span class="op">(</span>sf_obj1 <span class="op">=</span> <span class="va">liv_msoa</span>, sf_obj2 <span class="op">=</span> <span class="va">liv_lsoa</span>,
-              n_pts <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="fl">750</span>, <span class="fl">1500</span><span class="op">)</span>,
-              type <span class="op">=</span> <span class="st">"regular"</span>, by_polygon <span class="op">=</span> <span class="cn">FALSE</span>,
-              poly_ids <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"msoa11cd"</span>, <span class="st">"lsoa11cd"</span><span class="op">)</span>,
-              var_ids <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="st">"leb_est"</span>, <span class="st">"imdscore"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<div id="references" class="section level1 unnumbered">
-<h1 class="hasAnchor">
-<a href="#references" class="anchor"></a>References</h1>
+              var_ids <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"imdscore"</span>, <span class="st">"male"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<div class="section level1 unnumbered">
+<h1 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
+</h1>
 <div id="refs" class="references">
 <div id="ref-johnson2020dealing">
 <p>Johnson, Olatunji, Peter Diggle, and Emanuele Giorgi. 2020. “Dealing with Spatial Misalignment to Model the Relationship Between Deprivation and Life Expectancy: A Model-Based Geostatistical Approach.” <em>International Journal of Health Geographics</em> 19 (1): 1–13.</p>
 </div>
 <div id="ref-pebesma2018simple">
-<p>Pebesma, Edzer. 2018. “Simple Features for R: Standardized Support for Spatial Vector Data.” <em>The R Journal</em> 10 (1): 439–46. <a href="https://doi.org/10.32614/RJ-2018-009">https://doi.org/10.32614/RJ-2018-009</a>.</p>
+<p>Pebesma, Edzer. 2018. “Simple Features for R: Standardized Support for Spatial Vector Data.” <em>The R Journal</em> 10 (1): 439–46. <a href="https://doi.org/10.32614/RJ-2018-009" class="external-link">https://doi.org/10.32614/RJ-2018-009</a>.</p>
 </div>
 <div id="ref-rue2005gaussian">
 <p>Rue, Havard, and Leonhard Held. 2005. “Gaussian Markov Random Fields: Theory and Applications.” In, 32–42. CRC press.</p>
@@ -229,11 +223,13 @@
 
 
       <footer><div class="copyright">
-  <p>Developed by Lucas Godoy.</p>
+  <p></p>
+<p>Developed by Lucas Godoy.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
 </div>
 
       </footer>
@@ -241,6 +237,8 @@
 
   
 
+
+  
 
   </body>
 </html>

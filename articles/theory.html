@@ -19,6 +19,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -31,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">smile</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.0.1</span>
       </span>
     </div>
 
@@ -76,25 +78,25 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://twitter.com/ldcgodoy">
+  <a href="https://twitter.com/ldcgodoy" class="external-link">
     <span class="fa fa-twitter"></span>
      
   </a>
 </li>
 <li>
-  <a href="https://www.linkedin.com/in/godoy-lucas/">
+  <a href="https://www.linkedin.com/in/godoy-lucas/" class="external-link">
     <span class="fa fa-linkedin"></span>
      
   </a>
 </li>
 <li>
-  <a href="https://github.com/lcgodoy">
+  <a href="https://github.com/lcgodoy" class="external-link">
     <span class="fa fa-github"></span>
      
   </a>
 </li>
 <li>
-  <a href="https://stacksoverflow.com/users/9220758/lcgodoy">
+  <a href="https://stacksoverflow.com/users/9220758/lcgodoy" class="external-link">
     <span class="fa fa-stack-overflow fa-lg"></span>
      
   </a>
@@ -115,7 +117,7 @@
       <h1 data-toc-skip>4. Theory</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/lcgodoy/smile/blob/master/vignettes/theory.Rmd"><code>vignettes/theory.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/lcgodoy/smile/blob/HEAD/vignettes/theory.Rmd" class="external-link"><code>vignettes/theory.Rmd</code></a></small>
       <div class="hidden name"><code>theory.Rmd</code></div>
 
     </div>
@@ -125,12 +127,11 @@
 <blockquote>
 <p>What I did for this package was based on the work from <span class="citation">Johnson, Diggle, and Giorgi (2020)</span>.</p>
 </blockquote>
-<div id="theoretical-background" class="section level1">
-<h1 class="hasAnchor">
-<a href="#theoretical-background" class="anchor"></a>Theoretical Background</h1>
-<div id="univariate-y-and-no-x" class="section level2">
-<h2 class="hasAnchor">
-<a href="#univariate-y-and-no-x" class="anchor"></a>Univariate <span class="math inline">\(Y\)</span> and no <span class="math inline">\(X\)</span>
+<div class="section level1">
+<h1 id="theoretical-background">Theoretical Background<a class="anchor" aria-label="anchor" href="#theoretical-background"></a>
+</h1>
+<div class="section level2">
+<h2 id="univariate-y-and-no-x">Univariate <span class="math inline">\(Y\)</span> and no <span class="math inline">\(X\)</span><a class="anchor" aria-label="anchor" href="#univariate-y-and-no-x"></a>
 </h2>
 <p>Let <span class="math inline">\(\{ U(\mathbf{x}) \,:\, x \in D \subset \mathbb{R}^2 \}\)</span> (being <span class="math inline">\(D\)</span> the whole region of study, tipically a city) be a stationary and isotropic Gaussian Random Field <span class="citation">(Rue and Held 2005)</span> with mean constant and equal to zero over the space and covariance function <span class="math inline">\(C(h; \mathbf{\theta})\)</span>, where <span class="math inline">\(h\)</span> is the euclidean distance between two given points within <span class="math inline">\(D\)</span>, and <span class="math inline">\(\mathbf{\theta}\)</span> is the vector of parameters controling the spatial covariance structure of such process. Now, let <span class="math inline">\(\mathbf{Y}\)</span> to be a random variable observed at a partition of <span class="math inline">\(D\)</span> defined as <span class="math inline">\(A = \{A_1, \dots, A_n \}\)</span>. Then, we define <span class="math display">\[
 Y( A_i ) = \alpha + U( A_i ) + \epsilon_i, \, i = 1, ..., n,
@@ -159,9 +160,8 @@ A_i \rvert^2} \int_{A_i} \int_{A_i} C( \lVert \mathbf{s}_1 - \mathbf{s}_2 \rVert
 ; \theta) d\mathbf{s}_1 \, d\mathbf{s}_2.
 \]</span></p>
 </div>
-<div id="multivariate-y-and-no-x" class="section level2">
-<h2 class="hasAnchor">
-<a href="#multivariate-y-and-no-x" class="anchor"></a>Multivariate <span class="math inline">\(Y\)</span> and no <span class="math inline">\(X\)</span>
+<div class="section level2">
+<h2 id="multivariate-y-and-no-x">Multivariate <span class="math inline">\(Y\)</span> and no <span class="math inline">\(X\)</span><a class="anchor" aria-label="anchor" href="#multivariate-y-and-no-x"></a>
 </h2>
 <p>Consider the process <span class="math inline">\(\{ U(\mathbf{x}) \,:\, x \in D \subset \mathbb{R}^2 \}\)</span> having the same process as the one defined in the previous section, and a region of study <span class="math inline">\(D\)</span>. Now, let <span class="math inline">\(\mathbf{Y}\)</span> to be a <em>p</em>-dimensional random variable observed at a partition of <span class="math inline">\(D\)</span> defined as <span class="math inline">\(A = \{A_1, \dots, A_n \}\)</span>. Then, we define <span class="math display">\[
 Y ( A_i )_k = \alpha_k + U( A_i ) + V_k, \, i = 1, \ldots, n, k = 1, \ldots, p,
@@ -172,9 +172,9 @@ Y \sim N( \mathbf{1}_n \otimes \mathbf{\alpha},
 \mathbf{J}_p \otimes \Sigma_{A} + \mathbf{I}_n \otimes \Omega ),
 \]</span> where <span class="math inline">\(\Sigma_{A}\)</span> is defined analogously as the variance and covariance matrix of the univariate <span class="math inline">\(Y\)</span>, <span class="math inline">\(\mathbf{1}_n\)</span> is a vector of ones, <span class="math inline">\(\mathbf{J}_p\)</span> is a matrix of ones, and <span class="math inline">\(\mathbf{I}_n\)</span> is a identity matrix.</p>
 </div>
-<div id="p-dimensional-y-and-univariate-x" class="section level2">
-<h2 class="hasAnchor">
-<a href="#p-dimensional-y-and-univariate-x" class="anchor"></a><span class="math inline">\(p\)</span>-dimensional <span class="math inline">\(Y\)</span> and univariate <span class="math inline">\(X\)</span>
+<div class="section level2">
+<h2 id="p-dimensional-y-and-univariate-x">
+<span class="math inline">\(p\)</span>-dimensional <span class="math inline">\(Y\)</span> and univariate <span class="math inline">\(X\)</span><a class="anchor" aria-label="anchor" href="#p-dimensional-y-and-univariate-x"></a>
 </h2>
 <p>Let <span class="math inline">\(\{ U(\mathbf{x}) \,:\, x \in D \subset \mathbb{R}^2 \}\)</span> (being <span class="math inline">\(D\)</span> the whole region of study) be a stationary and isotropic Gaussian Random Field with covariance function <span class="math inline">\(C(h; \mathbf{\theta})\)</span>, where <span class="math inline">\(h\)</span> is the euclidean distance between any two points within <span class="math inline">\(D\)</span>, and <span class="math inline">\(\mathbf{\theta}\)</span> is the vector of parameters controling the spatial structure of <span class="math inline">\(U(\mathbf{x})\)</span>. Now, let <span class="math inline">\(\mathbf{Y}\)</span> to be a <span class="math inline">\(p\)</span>-dimensional random variable observed at a partition of <span class="math inline">\(D\)</span> defined as <span class="math inline">\(A = \{A_1, \dots, A_n \}\)</span> and <span class="math inline">\(\mathbf{X}\)</span> to be a random variable observed at a different partition of the same space denoted by <span class="math inline">\(B = \{B_1, \dots, B_m \}\)</span>. We define each of these variables as follows <span class="math display">\[\begin{equation}
 \label{eq:model_1}
@@ -234,15 +234,15 @@ D \Sigma^{-1}_X ( \mathbf{x} - \gamma \cdot \mathbf{1}_m)  \, \in \,
 \end{align*}\]</span> come from standard theoremos involving the multivariate normal <span class="citation">(Ravishanker and Dey 2020)</span>.</p>
 </div>
 </div>
-<div id="limitations-and-further-work" class="section level1">
-<h1 class="hasAnchor">
-<a href="#limitations-and-further-work" class="anchor"></a>Limitations and Further Work</h1>
+<div class="section level1">
+<h1 id="limitations-and-further-work">Limitations and Further Work<a class="anchor" aria-label="anchor" href="#limitations-and-further-work"></a>
+</h1>
 <p>It is known from the literature of geostatistics, that the small scale variance parameters are hard to be estimated due to identifiability problems, unless the researcher knows, for example, the ratio of the variance and this effect. This parameters, for the considered models, are <span class="math inline">\(\omega\)</span>, <span class="math inline">\(\tau^2\)</span>, and <span class="math inline">\(\Omega\)</span>. This last one is not properly a nugget effect, since it can also includes terms of covariance between variables.</p>
 <p>Different methods of estimation need to be implemented and the problem needs to be further examined.</p>
 </div>
-<div id="reference" class="section level1 unnumbered">
-<h1 class="hasAnchor">
-<a href="#reference" class="anchor"></a>Reference</h1>
+<div class="section level1 unnumbered">
+<h1 id="reference">Reference<a class="anchor" aria-label="anchor" href="#reference"></a>
+</h1>
 <div id="refs" class="references">
 <div id="ref-johnson2020dealing">
 <p>Johnson, Olatunji, Peter Diggle, and Emanuele Giorgi. 2020. “Dealing with Spatial Misalignment to Model the Relationship Between Deprivation and Life Expectancy: A Model-Based Geostatistical Approach.” <em>International Journal of Health Geographics</em> 19 (1): 1–13.</p>
@@ -268,11 +268,13 @@ D \Sigma^{-1}_X ( \mathbf{x} - \gamma \cdot \mathbf{1}_m)  \, \in \,
 
 
       <footer><div class="copyright">
-  <p>Developed by Lucas Godoy.</p>
+  <p></p>
+<p>Developed by Lucas Godoy.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
 </div>
 
       </footer>
@@ -280,6 +282,8 @@ D \Sigma^{-1}_X ( \mathbf{x} - \gamma \cdot \mathbf{1}_m)  \, \in \,
 
   
 
+
+  
 
   </body>
 </html>
