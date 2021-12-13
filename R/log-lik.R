@@ -27,8 +27,8 @@ singl_log_lik <- function(theta, .dt, dists, npix, model,
 
     mu    <- theta[1]
     sigsq <- theta[2]
-    tausq <- theta[npar - 1]
-    phi   <- theta[npar]
+    tausq <- theta[3]
+    phi   <- theta[4]
 
     ## tausq <- matrix(nrow = p, ncol = p)
     ## tausq[upper.tri(tausq, diag = TRUE)] <-

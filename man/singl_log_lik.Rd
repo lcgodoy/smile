@@ -4,30 +4,15 @@
 \alias{singl_log_lik}
 \title{Evaluate log-lik}
 \usage{
-singl_log_lik(
-  theta,
-  .dt,
-  X,
-  dists,
-  npix,
-  model,
-  kappa = NULL,
-  apply_exp = FALSE
-)
+singl_log_lik(theta, .dt, dists, npix, model, kappa = NULL, apply_exp = FALSE)
 }
 \arguments{
-\item{theta}{a \code{list} of size \eqn{2 p + \frac{p(p + 1)}{2} + 3}
-containing the parameters associated with the model. (Explain why)}
+\item{theta}{a \code{numeric} vector of size 4 (\eqn{\mu, \sigma^2, \tau^2,
+\phi}) containing the parameters associated with the model.}
 
 \item{.dt}{a \code{numeric} vector containing the variable \eqn{Y}.}
 
-\item{X}{a \code{numeric} design matrix \eqn{X} of dimension \eqn{n \times
-p}.}
-
-\item{dists}{a \code{list} of size three. The first containing the distance
-matrices associated with the regions where \eqn{Y} was measured, the
-second for the distance matrices associated with \eqn{X}, and the last
-containing the cross-distance matrices.}
+\item{dists}{a \code{list} of size distance matrices at the point level.}
 
 \item{npix}{a \code{integer vector} containing the number of pixels within
 each polygon. (Ordered by the id variables for the polygons).}
@@ -36,7 +21,7 @@ each polygon. (Ordered by the id variables for the polygons).}
 use. Possible values are \code{c("matern", "pexp", "gaussian",
     "spherical")}.}
 
-\item{kappa}{\eqn{\kappa} parameter. Not necessary if \code{mode} is
+\item{kappa}{\eqn{\kappa} parameter. Not necessary if \code{model} is
 \code{"gaussian"} or \code{"spherical"}}
 
 \item{apply_exp}{a \code{logical} indicater wheter the exponential

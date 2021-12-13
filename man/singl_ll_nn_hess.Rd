@@ -7,7 +7,6 @@
 singl_ll_nn_hess(
   theta,
   .dt,
-  X,
   dists,
   npix,
   model,
@@ -16,13 +15,11 @@ singl_ll_nn_hess(
 )
 }
 \arguments{
-\item{theta}{a \code{list} of size \eqn{3} containing the parameters
-associated with the model. (Explain why)}
+\item{theta}{a \code{numeric} vector of size \eqn{3} containing the
+parameters values associated with \eqn{\mu}, \eqn{\sigma^2}, and
+\eqn{\phi}, respectively.}
 
 \item{.dt}{a \code{numeric} vector containing the variable \eqn{Y}.}
-
-\item{X}{a \code{numeric} design matrix \eqn{X} of dimension \eqn{n \times
-p}.}
 
 \item{dists}{a \code{list} of size three. The first containing the distance
 matrices associated with the regions where \eqn{Y} was measured, the

@@ -4,12 +4,10 @@
 \alias{est_mle}
 \title{MLEs for fixed V.}
 \usage{
-est_mle(y, X, Vinv)
+est_mle(y, Vinv)
 }
 \arguments{
 \item{y}{response variable.}
-
-\item{X}{design matrix.}
 
 \item{Vinv}{inverse of \eqn{V}}
 }

@@ -7,7 +7,6 @@
 \usage{
 single_sf_to_spm(
   sf_obj,
-  X = NULL,
   n_pts,
   type = "regular",
   by_polygon = FALSE,
@@ -17,7 +16,6 @@ single_sf_to_spm(
 
 sf_to_spm(
   sf_obj,
-  X = NULL,
   n_pts,
   type = "regular",
   by_polygon = FALSE,
@@ -27,9 +25,6 @@ sf_to_spm(
 }
 \arguments{
 \item{sf_obj}{a \code{sf} object s.t. its geometries are polygons.}
-
-\item{X}{a numeric \code{vector} containing the index of the columns of
-\code{sf_obj} to be used as covariates.}
 
 \item{n_pts}{a \code{numeric} scalar representing the number of points to
 create a grid in the study region on which the polygons in \code{sf_obj}

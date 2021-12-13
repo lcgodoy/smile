@@ -4,7 +4,7 @@
 ##' @param Vinv inverse of \eqn{V}
 est_mle <- function(y, Vinv) {
     n <- length(y)
-    ones  <- matrix(1, length = n)
+    ones  <- matrix(1, nrow = n)
     IVinv <- crossprod(ones, Vinv)
     mu    <- as.numeric((IVinv %*% y) / (IVinv %*% ones))
     y     <- matrix(y - mu, ncol = 1)

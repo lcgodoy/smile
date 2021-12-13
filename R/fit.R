@@ -69,7 +69,8 @@ fit_spm.spm <- function(x, model, theta_st,
     stopifnot(!is.null(names(theta_st)))
     stopifnot(NCOL(x$var) == 1)
 
-    npar <- length(theta_st) 
+    npar <- length(theta_st)
+    p    <- npar + 2L
     
     if(npar == 2) {
         op_val <-

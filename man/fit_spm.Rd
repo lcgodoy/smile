@@ -77,7 +77,7 @@ Exponential, Gaussian, and Spherical. The parameter \code{apply_exp} is
 a \code{logical} scalar such that, if set to \code{TRUE}, the \eqn{\exp}
 function is applied to the nonnegative parameters, allowing the
 optimization algorithm to search for all the parameters over the real
-numbers.\preformatted{The model assumes \deqn{Y(\mathbf{s}) = \mathbf{x}(\mathbf{s})^{\top} \beta + S(\mathbf{s})} at the point level.
+numbers.\preformatted{The model assumes \deqn{Y(\mathbf{s}) = \mu + S(\mathbf{s})} at the point level.
 Where \eqn{S ~ GP(0, \sigma^2 C(\lVert \mathbf{s} - \mathbf{s}_2 \rVert; \theta))}.
 Further, the observed data is supposed to be
 \eqn{Y(B) = \lvert B \rvert^{-1} \int_{B} Y(\mathbf{s}) \, \textrm{d} \mathbf{s}}.

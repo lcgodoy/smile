@@ -1,5 +1,5 @@
 Package: smile
-Title: Spatial Misalignment: Interpolation, Linkage, and Estimation.
+Title: Spatial Misalignment: Interpolation, Linkage, and Estimation
 Version: 0.0.1
 Authors@R: 
     person(given = "Lucas",

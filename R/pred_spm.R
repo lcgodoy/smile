@@ -134,8 +134,8 @@ predict_spm.spm_fit <- function(x, .aggregate = TRUE, ...) {
 
     sig_pred_y <- sig_pred - (dt_yinv %*% d_mat)
 
-    mean_pred_y <- mu +
-        dt_yinv %*% (x$call_data$var - mean_y)
+    mean_pred_y <- x$estimate["mu"] +
+        dt_yinv %*% (x$call_data$var - x$estimate["mu"])
 
     if(any(diag(sig_pred_y) < 0)) {
         warning("Negative variance for at least one predicted region. Taking absolute value.")
@@ -335,7 +335,7 @@ predict_spm.sf <- function(x, spm_obj,
         warning("If you want to make predictions only for a set of locations, it does not make sense to use `.aggregate`.")
     }
 
-    if(length(spm_obj$estimate) > length(ids_betas) + 2) {
+    if(length(spm_obj$estimate) > 3) {
         if("tausq" %in% names(spm_obj$estimate)) {
             sig_y <- (spm_obj$estimate["sigsq"] * sig_y) +
                 diag(spm_obj$estimate["tausq"] / spm_obj$call_data$npix,

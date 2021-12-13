@@ -11,7 +11,7 @@ predict_spm(x, ...)
 
 \method{predict_spm}{spm_fit}(x, .aggregate = TRUE, ...)
 
-\method{predict_spm}{sf}(x, spm_obj, X0 = NULL, .aggregate = TRUE, n_pts, type, ...)
+\method{predict_spm}{sf}(x, spm_obj, .aggregate = TRUE, n_pts, type, ...)
 
 \method{predict_spm}{matrix}(x, ...)
 }
@@ -28,8 +28,6 @@ polygons on which the original data was observed. In case the input
 this new partition of the study region.}
 
 \item{spm_obj}{an object of either class \code{spm_fit} or \code{mspm_fit}}
-
-\item{X0}{a \code{matrix} representing the covariates observed at \code{x}.}
 
 \item{n_pts}{a \code{numeric} scalar standing for number of points to form a
 grid over the whole region to make the predictions}

@@ -83,30 +83,15 @@ single_sf_to_spm <- function(sf_obj,
         
     }
     
-    if( ! is.null(X) ) {
-        cov_ids <- c(which(names(sf_obj) == poly_ids), X)
-        out_grid_pt <-
-            sf::st_join(x = sf::st_sf(out_grid),
-                        y = sf_obj[cov_ids],
-                        join = sf::st_within)
-    } else {
-        out_grid_pt <-
-            sf::st_join(x = sf::st_sf(out_grid),
-                        y = sf_obj[poly_ids],
-                        join = sf::st_within)
-    }
+    out_grid_pt <-
+        sf::st_join(x = sf::st_sf(out_grid),
+                    y = sf_obj[poly_ids],
+                    join = sf::st_within)
     if(any(! sf_obj[[poly_ids]] %in% out_grid_pt[[poly_ids]])) {
         empty_polys <- which(! sf_obj[[poly_ids]] %in% out_grid_pt[[poly_ids]])
  
-        if( !is.null(X) ) {
-            cov_ids <- c(which(names(sf_obj) == poly_ids), X)
-            out_grid_aux <-
-                sf::st_centroid(x = sf_obj[empty_polys, cov_ids])
-
-        } else {
-            out_grid_aux <-
-                sf::st_centroid(x = sf_obj[empty_polys, poly_ids])
-        }
+        out_grid_aux <-
+            sf::st_centroid(x = sf_obj[empty_polys, poly_ids])
         out_grid_pt <- rbind(out_grid_pt, sf::st_sf(out_grid_aux))
     }
     
