@@ -63,34 +63,34 @@ mult_dist_from_grids <- function(y_grid, x_grid, by) {
 ##' @param x a \code{sf} or \code{sfc} polygon.
 ##' @return a \code{sf} or \code{sfc} polygon.
 st_remove_holes <- function(x) {
-    stopifnot(all(st_is(x, "POLYGON") | st_is(x, "MULTIPOLYGON")))
-    geometry_is_polygon = all(st_is(x, "POLYGON"))
-    type_is_sfg = any(class(x) == "sfg")
-    type_is_sf = any(class(x) == "sf")
-    geom = st_geometry(x)
+    stopifnot(all(sf::st_is(x, "POLYGON") | sf::st_is(x, "MULTIPOLYGON")))
+    geometry_is_polygon <- all(sf::st_is(x, "POLYGON"))
+    type_is_sfg <- any(inherits(x, "sfg"))
+    type_is_sf <- any(inherits(x, "sf"))
+    geom <- sf::st_geometry(x)
     if (type_is_sf) 
-        dat = st_set_geometry(x, NULL)
+        dat <- sf::st_set_geometry(x, NULL)
     for (i in 1:length(geom)) {
-        if (st_is(geom[i], "POLYGON")) {
+        if (sf::st_is(geom[i], "POLYGON")) {
             if (length(geom[i][[1]]) > 1) {
-                geom[i] = st_multipolygon(lapply(geom[i], function(p) p[1]))
+                geom[i] <- sf::st_multipolygon(lapply(geom[i], function(p) p[1]))
             }
         }
-        if (st_is(geom[i], "MULTIPOLYGON")) {
-            tmp = st_cast(geom[i], "POLYGON")
+        if (sf::st_is(geom[i], "MULTIPOLYGON")) {
+            tmp <- sf::st_cast(geom[i], "POLYGON")
             for (j in 1:length(tmp)) {
                 if (length(tmp[j][[1]]) > 1) {
-                    tmp[j] = st_multipolygon(lapply(tmp[j], function(p) p[1]))
+                    tmp[j] <- sf::st_multipolygon(lapply(tmp[j], function(p) p[1]))
                 }
             }
-            geom[i] = st_combine(tmp)
+            geom[i] = sf::st_combine(tmp)
         }
     }
     if (geometry_is_polygon) 
-        geom = st_cast(geom, "POLYGON")
+        geom = sf::st_cast(geom, "POLYGON")
     if (type_is_sfg) 
         geom = geom[[1]]
     if (type_is_sf) 
-        geom = st_sf(dat, geom)
+        geom = sf::st_sf(dat, geom)
     return(geom)
 }

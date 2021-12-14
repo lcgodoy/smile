@@ -7,12 +7,12 @@
 \title{Akaike's (and Bayesian) An Information Criterion for \code{spm_fit}
 objects.}
 \usage{
-\method{AIC}{spm_fit}(x, ..., k = 2)
+\method{AIC}{spm_fit}(object, ..., k = 2)
 
-\method{BIC}{spm_fit}(x, ...)
+\method{BIC}{spm_fit}(object, ...)
 }
 \arguments{
-\item{x}{a \code{spm_fit} object.}
+\item{object}{a \code{spm_fit} object.}
 
 \item{...}{optionally more fitted model objects.}
 
