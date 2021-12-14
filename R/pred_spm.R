@@ -7,7 +7,7 @@ predict_spm <- function(x, ...) UseMethod("predict_spm")
 predict_spm.spm_fit <- function(x, .aggregate = TRUE, ...) {
     n_obs <- NROW(x$call_data$var)
     ## ids_betas <- which(grepl("^beta", names(x$estimate)))
-    
+
     ## create the distance matrix of the predictive location
     coords_pred <- sf::st_coordinates(x$call_data$grid)
     ## u_pred      <- as.matrix(stats::dist(coords_pred))
@@ -225,7 +225,11 @@ predict_spm.sf <- function(x, spm_obj,
         if( ! missing(n_pts) | ! missing(type) )
             warning("The arguments 'n_pts' and 'type' are ignored when the sf geometry type is POINT.")
     } else {
-        pred_grid   <- sf::st_sample(x    = sf::st_union(spm_obj$call_data$sf_poly),
+        boundaries_aux <- spm_obj$call_data$sf_poly |>
+            sf::st_cast("POLYGON") |>
+            sf::st_union() |>
+            st_remove_holes()
+        pred_grid   <- sf::st_sample(x    = boundaries_aux,
                                      size = n_pts, 
                                      by_polygon = FALSE,
                                      type = type)

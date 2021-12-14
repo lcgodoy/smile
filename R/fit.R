@@ -214,6 +214,7 @@ fit_spm.spm <- function(x, model, theta_st,
         info_mat  = info_mat,
         converged = ifelse(op_val$convergence == 0,
                            "yes", "no"),
+        log_lik   = - op_val$value,
         call_data = x,
         model     = model,
         kappa     = kappa
@@ -483,6 +484,7 @@ fit_spm2 <- function(x, model, kappa,
         estimate  = estimates,
         info_mat  = info_mat,
         converged = "yes",
+        log_lik   = - pl[which.min(pl)],
         call_data = x,
         model     = model,
         kappa     = kappa
@@ -491,4 +493,33 @@ fit_spm2 <- function(x, model, kappa,
     class(output) <- append(class(output), "spm_fit")
 
     return(output)
+}
+
+##' @name goodness_of_fit
+##'
+##' @title Akaike's (and Bayesian) An Information Criterion for \code{spm_fit}
+##'     objects.
+##' 
+##' @param x a \code{spm_fit} object.
+##' @param ... optionally more fitted model objects.
+##' @param k \code{numeric}, the _penalty_ per parameter to be used; the default
+##'     'k = 2' is the classical AIC. (for compatibility with \code{stats::AIC}.
+##'
+##' @importFrom stats AIC BIC
+##' 
+##' @return a \code{numeric} scalar corresponding to the goodness of fit
+##'     measure.
+##' @export
+AIC.spm_fit <- function(x, ..., k = 2) {
+    p <- length(x$estimates)
+    ll <- x$log_lik
+    k * (p - x$log_lik)
+}
+
+##' @name goodness_of_fit
+##' @export
+BIC.spm_fit <- function(x, ...) {
+    .n <- length(x$call_data$var)
+    ll <- x$log_lik
+    log(.n) - 2 * x$log_lik
 }
