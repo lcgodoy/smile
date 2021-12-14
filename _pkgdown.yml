@@ -1,6 +1,7 @@
 url: https://lcgodoy.me/smile
 
 template:
+  bootstrap: 5
   params:
     bootswatch: yeti
 
@@ -24,11 +25,11 @@ navbar:
       icon: fa-search fa-lg
       href: reference/index.html
   right:
-   - icon: fa-twitter
-     href: https://twitter.com/ldcgodoy
-   - icon: fa-linkedin
-     href: https://www.linkedin.com/in/godoy-lucas/
    - icon: fa-github
      href: https://github.com/lcgodoy
    - icon: fa-stack-overflow fa-lg
      href: https://stacksoverflow.com/users/9220758/lcgodoy
+   - icon: fa-twitter
+     href: https://twitter.com/ldcgodoy
+   - icon: fa-linkedin
+     href: https://www.linkedin.com/in/godoy-lucas/
