@@ -1,6 +1,7 @@
 ---
 title: "1. Converting sf objects to spm"
-output: rmarkdown::html_vignette
+output:
+  rmarkdown::html_vignette
 bibliography: biblio.bib
 vignette: >
   %\VignetteIndexEntry{1. Converting sf objects to spm}
@@ -32,13 +33,13 @@ The purpose of this vignette is to illustrate how to convert
 package. Besides these two packages, we are going to use the
 `ggplot2`[@wickham2011ggplot2] package for the data visualization.
 
-This vignette is useful when the used wants to pursue the model-based
+This vignette is useful when the user wants to pursue the model-based
 approach. This methodology is based on the assumption that areal data (e.g.,
-variables measured at census tracts) is composed by averages of a continuous
-underlying process [@gelfand2001change, @moraga2017geostatistical,
-@johnson2020dealing, @wilson2020pointless]. In practice, there exists an
-identifiability when estimating some variance parameters, which can be seen
-either as small scale variation (nugget effect) or measurement errors. When
+variables measured at census tracts) are composed by averages of a continuous
+underlying process [@gelfand2001change; @moraga2017geostatistical,
+@johnson2020dealing; @wilson2020pointless]. In practice, there exists an
+identifiability problem when estimating some variance parameters, which can be
+seen either as small scale variation (nugget effect) or measurement errors. When
 fitting models, the users may chose to ignore the measurement error associated
 with the problem. Model fitting and prediction are explained in the vignette
 available on [this link](https://lcgodoy.me/smile/articles/fit-and-pred.html).
@@ -46,9 +47,9 @@ available on [this link](https://lcgodoy.me/smile/articles/fit-and-pred.html).
 To illustrate how to convert `sf` polygons into `spm` objects, we are going to
 use the datasets provided by @johnson2020dealing. For this data, we have the
 Life Expectancy at Birth (LEB) and the Index of Multiple Deprivation (IMD) in
-Liverpool. These variables are Middle Super Output Areas (MSOA) and in the Lower
-Super Output Areas (LSOA), respectively. After loading our package, these
-datasets can be loaded by simply running the chunk of code below. Figure
+Liverpool. These variables are observed at the Middle Super Output Areas (MSOA)
+and Lower Super Output Areas (LSOA), respectively. After loading our package,
+the datasets can be loaded by simply running the chunk of code below. Figure
 \ref{fig:leb-msoa} displays the LEB at the MSOA.
 ```{r load-data, eval = TRUE, echo = TRUE}
 data(liv_lsoa) # loading the LSOA data
@@ -72,18 +73,18 @@ ggplot(data = liv_msoa,
 
 <!-- We consider, in a first moment, that this random variable is normally -->
 <!-- distributed with a constant mean and a certain (spatial) covariance -->
-<!-- matrix. Now, let $A_1$ and $A_2$ be two distinct MSOA's. Under the -->
-<!-- before mentioned assumption that the observed random variable is driven -->
-<!-- by an underlying Gaussian random field with isotropic covariance -->
-<!-- function $C(\lVert x - y \rVert \, ; \, \theta)$, where $\lVert x - y -->
-<!-- \rVert$ is the distance between two points in the coordinates $x$ and -->
-<!-- $y$, respectively. Then, the covariance between the (averaged) variable -->
-<!-- observed at $A_1$ and $A_2$ is define as \[ \Sigma_{12} = Cov(A_1, A_2) -->
-<!-- = \frac{1}{\lvert A_1 \rvert \lvert A_2 \rvert} \int_{A_1} \int_{A_2} -->
-<!-- C(\lVert x - y \rVert; \theta) \, dy \, dx.  \] In order to approximate -->
-<!-- the continuous surface on which these covariances have to be computed, -->
-<!-- we generate a fine grid over the whole study region (or a fine grid -->
-<!-- within each MSOA) and approximate such covariance by numerical integration. -->
+<!-- matrix. Now, let $A_1$ and $A_2$ be two distinct MSOA's. Under the --> <!--
+before mentioned assumption that the observed random variable is driven --> <!--
+by an underlying Gaussian random field with isotropic covariance --> <!--
+function $C(\lVert x - y \rVert \, ; \, \theta)$, where $\lVert x - y --> <!--
+\rVert$ is the distance between two points in the coordinates $x$ and --> <!--
+$y$, respectively. Then, the covariance between the (averaged) variable --> <!--
+observed at $A_1$ and $A_2$ is define as \[ \Sigma_{12} = Cov(A_1, A_2) --> <!--
+= \frac{1}{\lvert A_1 \rvert \lvert A_2 \rvert} \int_{A_1} \int_{A_2} --> <!--
+C(\lVert x - y \rVert; \theta) \, dy \, dx.  \] In order to approximate --> <!--
+the continuous surface on which these covariances have to be computed, --> <!--
+we generate a fine grid over the whole study region (or a fine grid --> <!--
+within each MSOA) and approximate such covariance by numerical integration. -->
 
 Now, suppose we are interested in estimating the LEB at the LSOA, so we will be
 able to conduct association analysis between LEB and IMD at the MSOA level. We
@@ -116,12 +117,12 @@ and
 \end{align*}
 where $\lVert \mathbf{s} - \mathbf{s}' \rVert$ is the Euclidean distance between
 the coordinates $\mathbf{s}$ and $\mathbf{s}'$, and ${\rm C}( \lVert
-\mathbf{s} - \mathbf{s}' \rVert ; \boldsymbol{\theta})$ is a isotropic covariance
-function depending on the parameter $\boldsymbol{\theta}$.
+\mathbf{s} - \mathbf{s}' \rVert ; \boldsymbol{\theta})$ is an isotropic
+covariance function depending on the parameter $\boldsymbol{\theta}$.
 
 In practice, however, the integrals in the equation above are hard to be
 evaluated analytically. A common workaround is to evaluate them either
-numerically or by Monte Carlo integration [@gelfand2001chnge]. When using the
+numerically or by Monte Carlo integration [@gelfand2001change]. When using the
 function `sf_to_spm`, the parameter `"type"` controls the method of
 integration. The options are `"regular"` (or `"hexagonal"`) for numerical
 integration, or `"random"` for Monte Carlo integration. Regardless of the
@@ -253,7 +254,8 @@ ggplot(data = to_plot,
     geom_sf(pch = 15) +
     scale_color_viridis_d(option = "H") +
     facet_grid(by_polygon ~ type, labeller = label_both) +
-    theme_bw()
+    theme_bw() +
+    theme(axis.text = element_blank())
 ```
 
 # References
