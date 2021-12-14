@@ -35,7 +35,7 @@ package. Besides these two packages, we are going to use the
 This vignette is useful when the used wants to pursue the model-based
 approach. This methodology is based on the assumption that areal data (e.g.,
 variables measured at census tracts) is composed by averages of a continuous
-underlying process [gelfand2001change, @moraga2017geostatistica,
+underlying process [@gelfand2001change, @moraga2017geostatistical,
 @johnson2020dealing, @wilson2020pointless]. In practice, there exists an
 identifiability when estimating some variance parameters, which can be seen
 either as small scale variation (nugget effect) or measurement errors. When
@@ -111,12 +111,12 @@ and
 \int_{A_i \times A_j} {\rm Cov}[Y(\mathbf{s}, Y(\mathbf{s}')] \, {\rm d}
 \mathbf{s} \, {\rm d} \mathbf{s'} \\
 & = \frac{1}{\lvert A_i \rvert \lvert A_j \rvert} \int_{A_i \times A_j} {\rm C}(
-\lVert \mathbf{s} - \mathbf{s}' \rVert ; \bolsymbol{\theta}) \, {\rm d}
+\lVert \mathbf{s} - \mathbf{s}' \rVert ; \boldsymbol{\theta}) \, {\rm d}
 \mathbf{s} \, {\rm d} \mathbf{s'},
 \end{align*}
 where $\lVert \mathbf{s} - \mathbf{s}' \rVert$ is the Euclidean distance between
 the coordinates $\mathbf{s}$ and $\mathbf{s}'$, and ${\rm C}( \lVert
-\mathbf{s} - \mathbf{s}' \rVert ; \bolsymbol{\theta})$ is a isotropic covariance
+\mathbf{s} - \mathbf{s}' \rVert ; \boldsymbol{\theta})$ is a isotropic covariance
 function depending on the parameter $\boldsymbol{\theta}$.
 
 In practice, however, the integrals in the equation above are hard to be
