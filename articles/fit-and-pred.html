@@ -29,7 +29,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">smile</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -187,9 +187,9 @@
 <span class="co">#&gt;  optimization algorithm converged: yes </span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt;     par   estimate        se               ci</span>
-<span class="co">#&gt; 1    mu 75.9036106 0.7517487 [74.430; 77.377]</span>
-<span class="co">#&gt; 2 sigsq 23.9207067 4.3909863 [15.315; 32.527]</span>
-<span class="co">#&gt; 3   phi  0.7419054 0.1899013   [0.370; 1.114]</span></code></pre></div>
+<span class="co">#&gt; 1    mu 75.9369280 0.8408291 [74.289; 77.585]</span>
+<span class="co">#&gt; 2 sigsq 23.2646828 4.2140767 [15.005; 31.524]</span>
+<span class="co">#&gt; 3   phi  0.8714168 0.2283807   [0.424; 1.319]</span></code></pre></div>
 <p>Finally, now we are going to perform predictions of the LEB at the LSOA level. To do so, we use the function <code>predict_spm</code>. The <code>x</code> argument gives the sf on which we want to make the predictions according to the <code>sbm_obj</code>, which represents the estimated parameters. Now, take a look at the remaining arguments. The last two, are analogous to what we have seen for the function <code>sf_to_spm</code>. They are concerning the grid generated over the study region, now we going to make predicitons over this grid. I set it to 2500 to “approximate” a continuous region<a class="footnote-ref" tabindex="0" data-bs-toggle="popover" data-bs-content="&lt;p&gt;Be careful here, a very large number of points can result in intractable covariance matrices&lt;/p&gt;"><sup>4</sup></a>. The argument <code>.aggregate</code> if set to <code>TRUE</code>, computes the predictions over the polygons from the input <code>x</code> (in this case <code>liv_lsoa</code>). This function also works if the input is a <code>sf</code> object with POINT geometries. The objects returned by the function <code>pred_lsoa</code> are lists with the following elements: 1) <code>mu_pred</code> - a vector with the predicted average for each location in the generated grid; 2) <code>sig_pred</code> the variance covariance matrix associated with the same grid; 3) the predictions (and standard errors) organized in an <code>sf</code> object to facilitate the visualization of the predictions over a (almost) continuous space; and 4) <code>pred_agg</code> which is returned only if we set <code>.aggregate = TRUE</code>. The last one contains the predictions and their standard erros integrated over the “new regions”.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">pred_lsoa</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/predict_spm.html">predict_spm</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">liv_lsoa</span>, spm_obj <span class="op">=</span> <span class="va">fit_msoa</span>,
@@ -271,10 +271,10 @@
 <span class="co">#&gt; </span>
 <span class="co">#&gt;  optimization algorithm converged: yes </span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt;     par    estimate          se                 ci</span>
-<span class="co">#&gt; 1    mu  39.1683441  3.17725981   [32.941; 45.396]</span>
-<span class="co">#&gt; 2 sigsq 568.0992830 60.02870920 [450.445; 685.753]</span>
-<span class="co">#&gt; 3   phi   0.6455681  0.08956356     [0.470; 0.821]</span></code></pre></div>
+<span class="co">#&gt;     par   estimate          se                 ci</span>
+<span class="co">#&gt; 1    mu  39.266667  3.14035085   [33.112; 45.422]</span>
+<span class="co">#&gt; 2 sigsq 573.099317 59.54439895 [456.394; 689.804]</span>
+<span class="co">#&gt; 3   phi   0.628386  0.08634069     [0.459; 0.798]</span></code></pre></div>
 <p>Now we are going to perform predictions of the IMD at the MSOA level. Since from now on the process is pretty much the exam, the explanation will be shorter.</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">pred_msoa</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/predict_spm.html">predict_spm</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">liv_msoa</span>, spm_obj <span class="op">=</span> <span class="va">fit_lsoa</span>,
@@ -350,12 +350,12 @@
 
     <footer><div class="pkgdown-footer-left">
   <p></p>
-<p>NULL</p>
+<p>Powered by <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a>.</p>
 </div>
 
 <div class="pkgdown-footer-right">
   <p></p>
-<p>NULL Provided without <strong>any warranty</strong>.</p>
+<p>Lucas da Cunha Godoy. Provided without <strong>any warranty</strong>.</p>
 </div>
 
     </footer>
