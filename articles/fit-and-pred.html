@@ -4,122 +4,106 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="description" content="smile">
 <title>3. Fitting models and making predictions • smile</title>
-<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/yeti/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="../bootstrap-toc.css">
-<script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
+<script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link href="../deps/bootstrap-5.1.0/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.1.0/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
-<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
-<script src="../pkgdown.js"></script><meta property="og:title" content="3. Fitting models and making predictions">
+<!-- bootstrap-toc --><script src="https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.1/dist/bootstrap-toc.min.js"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="3. Fitting models and making predictions">
 <meta property="og:description" content="smile">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
 </head>
-<body data-spy="scroll" data-target="#toc">
+<body>
+    <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
     
 
-    <div class="container template-article">
-      <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
-  <div class="container">
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <span class="navbar-brand">
-        <a class="navbar-link" href="../index.html">smile</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.0.1</span>
-      </span>
-    </div>
+    <nav class="navbar fixed-top navbar-dark navbar-expand-lg bg-primary"><div class="container">
+    
+    <a class="navbar-brand me-2" href="../index.html">smile</a>
 
-    <div id="navbar" class="navbar-collapse collapse">
-      <ul class="nav navbar-nav">
-<li>
-  <a href="../index.html">
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.1</small>
+
+    
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div id="navbar" class="collapse navbar-collapse ms-2">
+      <ul class="navbar-nav me-auto">
+<li class="nav-item">
+  <a class="nav-link" href="../index.html">
     <span class="fa fa-home fa-lg"></span>
      
   </a>
 </li>
-<li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+<li class="active nav-item dropdown">
+  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown--vignettes">
     <span class="fa fa-book fa-lg"></span>
      
     Vignettes
-     
-    <span class="caret"></span>
   </a>
-  <ul class="dropdown-menu" role="menu">
-<li>
-      <a href="../articles/sf-to-spm.html">1. Converting sf objects to spm</a>
-    </li>
-    <li>
-      <a href="../articles/sp-cov-functions.html">2. Spatial covariance functions</a>
-    </li>
-    <li>
-      <a href="../articles/fit-and-pred.html">3. Fitting models and making predictions</a>
-    </li>
-    <li>
-      <a href="../articles/theory.html">4. Theory</a>
-    </li>
-  </ul>
+  <div class="dropdown-menu" aria-labelledby="dropdown--vignettes">
+    <a class="dropdown-item" href="../articles/sf-to-spm.html">1. Converting sf objects to spm</a>
+    <a class="dropdown-item" href="../articles/sp-cov-functions.html">2. Spatial covariance functions</a>
+    <a class="dropdown-item" href="../articles/fit-and-pred.html">3. Fitting models and making predictions</a>
+    <a class="dropdown-item" href="../articles/theory.html">4. Theory</a>
+  </div>
 </li>
-<li>
-  <a href="../reference/index.html">
+<li class="nav-item">
+  <a class="nav-link" href="../reference/index.html">
     <span class="fa fa-search fa-lg"></span>
      
     Reference
   </a>
 </li>
       </ul>
-<ul class="nav navbar-nav navbar-right">
-<li>
-  <a href="https://twitter.com/ldcgodoy" class="external-link">
-    <span class="fa fa-twitter"></span>
-     
-  </a>
-</li>
-<li>
-  <a href="https://www.linkedin.com/in/godoy-lucas/" class="external-link">
-    <span class="fa fa-linkedin"></span>
-     
-  </a>
-</li>
-<li>
-  <a href="https://github.com/lcgodoy" class="external-link">
+<form class="form-inline my-2 my-lg-0" role="search">
+        <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off">
+</form>
+
+      <ul class="navbar-nav">
+<li class="nav-item">
+  <a class="external-link nav-link" href="https://github.com/lcgodoy">
     <span class="fa fa-github"></span>
      
   </a>
 </li>
-<li>
-  <a href="https://stacksoverflow.com/users/9220758/lcgodoy" class="external-link">
+<li class="nav-item">
+  <a class="external-link nav-link" href="https://stacksoverflow.com/users/9220758/lcgodoy">
     <span class="fa fa-stack-overflow fa-lg"></span>
+     
+  </a>
+</li>
+<li class="nav-item">
+  <a class="external-link nav-link" href="https://twitter.com/ldcgodoy">
+    <span class="fa fa-twitter"></span>
+     
+  </a>
+</li>
+<li class="nav-item">
+  <a class="external-link nav-link" href="https://www.linkedin.com/in/godoy-lucas/">
+    <span class="fa fa-linkedin"></span>
      
   </a>
 </li>
       </ul>
 </div>
-<!--/.nav-collapse -->
+
+    
   </div>
-<!--/.container -->
-</div>
-<!--/.navbar -->
-
-      
-
-      </header><script src="fit-and-pred_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
-  <div class="col-md-9 contents">
-    <div class="page-header toc-ignore">
-      <h1 data-toc-skip>3. Fitting models and making predictions</h1>
+</nav><div class="container template-article">
+<script src="fit-and-pred_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
+  <main id="main"><div class="page-header">
+      <img src="" class="logo" alt=""><h1>3. Fitting models and making predictions</h1>
             
       
       <small class="dont-index">Source: <a href="https://github.com/lcgodoy/smile/blob/HEAD/vignettes/fit-and-pred.Rmd" class="external-link"><code>vignettes/fit-and-pred.Rmd</code></a></small>
-      <div class="hidden name"><code>fit-and-pred.Rmd</code></div>
-
+      <div class="d-none name"><code>fit-and-pred.Rmd</code></div>
     </div>
 
     
@@ -133,7 +117,7 @@
 <div class="section level1">
 <h1 id="application">Application<a class="anchor" aria-label="anchor" href="#application"></a>
 </h1>
-<p>To exemplify the fitting and predicting functions, we are going to use the data from <span class="citation">Johnson, Diggle, and Giorgi (2020)</span> again<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>. First, in the code chunk below, we load the data and convert it to <code>smile</code> compatible classes. Since this is a toy example, we are going to generate a 500 points grid for the MSOA data and 5 points by polygon for the LSOA data.</p>
+<p>To exemplify the fitting and predicting functions, we are going to use the data from <span class="citation">Johnson, Diggle, and Giorgi (2020)</span> again<a class="footnote-ref" tabindex="0" data-bs-toggle="popover" data-bs-content='&lt;p&gt;for more details about the data, take a look at the vignette &lt;a href="https://lcgodoy.me/smile/articles/sf-to-spm.html"&gt;sf-to-spm&lt;/a&gt;&lt;/p&gt;'><sup>1</sup></a>. First, in the code chunk below, we load the data and convert it to <code>smile</code> compatible classes. Since this is a toy example, we are going to generate a 500 points grid for the MSOA data and 5 points by polygon for the LSOA data.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">liv_msoa</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">liv_lsoa</span><span class="op">)</span>
@@ -181,7 +165,7 @@
 <div class="section level2">
 <h2 id="fit-at-msoa-prediction-at-lsoa">Fit at MSOA, prediction at LSOA<a class="anchor" aria-label="anchor" href="#fit-at-msoa-prediction-at-lsoa"></a>
 </h2>
-<p>Using as starting parameters <span class="math inline">\(\alpha = 70\)</span> (average of <span class="math inline">\(Y\)</span>), <span class="math inline">\(\omega = 1\)</span> (can be seen as a nugget effect), <span class="math inline">\(\sigma^2\)</span> (variance parameter for the powered exponential family), and <span class="math inline">\(\phi = 1\)</span> (paramter that controls the range os spatial dependence, 1 here represents 1_km_). We are going to compute the Maximum Likelihood estimates considering a Powered Exponential covariance function to the data, with <span class="math inline">\(\kappa = 1.5\)</span><a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a>. Note that, it is important for this inputing vector to be a named vector, because some functions track the parameters by their names.</p>
+<p>Using as starting parameters <span class="math inline">\(\alpha = 70\)</span> (average of <span class="math inline">\(Y\)</span>), <span class="math inline">\(\omega = 1\)</span> (can be seen as a nugget effect), <span class="math inline">\(\sigma^2\)</span> (variance parameter for the powered exponential family), and <span class="math inline">\(\phi = 1\)</span> (paramter that controls the range os spatial dependence, 1 here represents 1_km_). We are going to compute the Maximum Likelihood estimates considering a Powered Exponential covariance function to the data, with <span class="math inline">\(\kappa = 1.5\)</span><a class="footnote-ref" tabindex="0" data-bs-toggle="popover" data-bs-content="&lt;p&gt;This parameter is known to be hard to be estimated in the literature of geostatistics.&lt;/p&gt;"><sup>2</sup></a>. Note that, it is important for this inputing vector to be a named vector, because some functions track the parameters by their names.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">theta_st_msoa</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"phi"</span> <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>
 
@@ -193,17 +177,17 @@
             apply_exp <span class="op">=</span> <span class="cn">TRUE</span>,
             opt_method <span class="op">=</span> <span class="st">"L-BFGS-B"</span>,
             control   <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>maxit <span class="op">=</span> <span class="fl">500</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<p>After a few seconds, we get the Results. Now, we can use the function <code>summary_spm_fit</code> to get the summary of the results. The function prints a table containing the estimates, their standard errors, and <code>1 - sig</code> confidence interval based on the asymptotic normality of the MLEs. The function also prints a message indicating if the optimization algorithm has converged<a href="#fn3" class="footnote-ref" id="fnref3"><sup>3</sup></a>.</p>
+<p>After a few seconds, we get the Results. Now, we can use the function <code>summary_spm_fit</code> to get the summary of the results. The function prints a table containing the estimates, their standard errors, and <code>1 - sig</code> confidence interval based on the asymptotic normality of the MLEs. The function also prints a message indicating if the optimization algorithm has converged<a class="footnote-ref" tabindex="0" data-bs-toggle="popover" data-bs-content='&lt;p&gt;The default algorithm used by the package is the Nelder-Mead, this can easily be changed by setting the parameter &lt;code&gt;opt_method = "L-BFGS-B"&lt;/code&gt;, for example.&lt;/p&gt;'><sup>3</sup></a>.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/summary_spm_fit.html">summary_spm_fit</a></span><span class="op">(</span><span class="va">fit_msoa</span>, sig <span class="op">=</span> <span class="fl">.05</span><span class="op">)</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt;  optimization algorithm converged: yes </span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt;     par   estimate        se               ci</span>
-<span class="co">#&gt; 1    mu 75.9586750 0.8028102 [74.385; 77.532]</span>
-<span class="co">#&gt; 2 sigsq 22.5831867 4.0909184 [14.565; 30.601]</span>
-<span class="co">#&gt; 3   phi  0.8374741 0.2195371   [0.407; 1.268]</span></code></pre></div>
-<p>Finally, now we are going to perform predictions of the LEB at the LSOA level. To do so, we use the function <code>predict_spm</code>. The <code>x</code> argument gives the sf on which we want to make the predictions according to the <code>sbm_obj</code>, which represents the estimated parameters. Now, take a look at the remaining arguments. The last two, are analogous to what we have seen for the function <code>sf_to_spm</code>. They are concerning the grid generated over the study region, now we going to make predicitons over this grid. I set it to 2500 to “approximate” a continuous region<a href="#fn4" class="footnote-ref" id="fnref4"><sup>4</sup></a>. The argument <code>.aggregate</code> if set to <code>TRUE</code>, computes the predictions over the polygons from the input <code>x</code> (in this case <code>liv_lsoa</code>). This function also works if the input is a <code>sf</code> object with POINT geometries. The objects returned by the function <code>pred_lsoa</code> are lists with the following elements: 1) <code>mu_pred</code> - a vector with the predicted average for each location in the generated grid; 2) <code>sig_pred</code> the variance covariance matrix associated with the same grid; 3) the predictions (and standard errors) organized in an <code>sf</code> object to facilitate the visualization of the predictions over a (almost) continuous space; and 4) <code>pred_agg</code> which is returned only if we set <code>.aggregate = TRUE</code>. The last one contains the predictions and their standard erros integrated over the “new regions”.</p>
+<span class="co">#&gt; 1    mu 75.9167886 0.7769281 [74.394; 77.440]</span>
+<span class="co">#&gt; 2 sigsq 23.5209950 4.2812818 [15.130; 31.912]</span>
+<span class="co">#&gt; 3   phi  0.7788689 0.2000827   [0.387; 1.171]</span></code></pre></div>
+<p>Finally, now we are going to perform predictions of the LEB at the LSOA level. To do so, we use the function <code>predict_spm</code>. The <code>x</code> argument gives the sf on which we want to make the predictions according to the <code>sbm_obj</code>, which represents the estimated parameters. Now, take a look at the remaining arguments. The last two, are analogous to what we have seen for the function <code>sf_to_spm</code>. They are concerning the grid generated over the study region, now we going to make predicitons over this grid. I set it to 2500 to “approximate” a continuous region<a class="footnote-ref" tabindex="0" data-bs-toggle="popover" data-bs-content="&lt;p&gt;Be careful here, a very large number of points can result in intractable covariance matrices&lt;/p&gt;"><sup>4</sup></a>. The argument <code>.aggregate</code> if set to <code>TRUE</code>, computes the predictions over the polygons from the input <code>x</code> (in this case <code>liv_lsoa</code>). This function also works if the input is a <code>sf</code> object with POINT geometries. The objects returned by the function <code>pred_lsoa</code> are lists with the following elements: 1) <code>mu_pred</code> - a vector with the predicted average for each location in the generated grid; 2) <code>sig_pred</code> the variance covariance matrix associated with the same grid; 3) the predictions (and standard errors) organized in an <code>sf</code> object to facilitate the visualization of the predictions over a (almost) continuous space; and 4) <code>pred_agg</code> which is returned only if we set <code>.aggregate = TRUE</code>. The last one contains the predictions and their standard erros integrated over the “new regions”.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">pred_lsoa</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/predict_spm.html">predict_spm</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">liv_lsoa</span>, spm_obj <span class="op">=</span> <span class="va">fit_msoa</span>,
                          .aggregate <span class="op">=</span> <span class="cn">TRUE</span>, n_pts <span class="op">=</span> <span class="fl">2500</span>,
@@ -285,9 +269,9 @@
 <span class="co">#&gt;  optimization algorithm converged: yes </span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt;     par    estimate         se                 ci</span>
-<span class="co">#&gt; 1    mu  39.5400206  3.0513929   [33.559; 45.521]</span>
-<span class="co">#&gt; 2 sigsq 586.5529320 59.2591232 [470.407; 702.699]</span>
-<span class="co">#&gt; 3   phi   0.6019525  0.0809771     [0.443; 0.761]</span></code></pre></div>
+<span class="co">#&gt; 1    mu  39.9068719  3.2734227   [33.491; 46.323]</span>
+<span class="co">#&gt; 2 sigsq 562.0877797 61.2685191 [442.004; 682.172]</span>
+<span class="co">#&gt; 3   phi   0.6741557  0.0958524     [0.486; 0.862]</span></code></pre></div>
 <p>Now we are going to perform predictions of the IMD at the MSOA level. Since from now on the process is pretty much the exam, the explanation will be shorter.</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">pred_msoa</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/predict_spm.html">predict_spm</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">liv_msoa</span>, spm_obj <span class="op">=</span> <span class="va">fit_lsoa</span>,
@@ -354,42 +338,27 @@
 </div>
 </div>
 </div>
-<div class="footnotes">
-<hr>
-<ol>
-<li id="fn1"><p>for more details about the data, take a look at the vignette <a href="https://lcgodoy.me/smile/articles/sf-to-spm.html">sf-to-spm</a><a href="#fnref1" class="footnote-back">↩︎</a></p></li>
-<li id="fn2"><p>This parameter is known to be hard to be estimated in the literature of geostatistics.<a href="#fnref2" class="footnote-back">↩︎</a></p></li>
-<li id="fn3"><p>The default algorithm used by the package is the Nelder-Mead, this can easily be changed by setting the parameter <code>opt_method = "L-BFGS-B"</code>, for example.<a href="#fnref3" class="footnote-back">↩︎</a></p></li>
-<li id="fn4"><p>Be careful here, a very large number of points can result in intractable covariance matrices<a href="#fnref4" class="footnote-back">↩︎</a></p></li>
-</ol>
-</div>
-  </div>
 
-  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
-
-        <nav id="toc" data-toggle="toc"><h2 data-toc-skip>Contents</h2>
-    </nav>
-</div>
-
+  </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
+    </nav></aside>
 </div>
 
 
 
-      <footer><div class="copyright">
+    <footer><div class="pkgdown-footer-left">
   <p></p>
 <p>Developed by Lucas Godoy.</p>
 </div>
 
-<div class="pkgdown">
+<div class="pkgdown-footer-right">
   <p></p>
 <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
 </div>
 
-      </footer>
+    </footer>
 </div>
 
   
-
 
   
 
