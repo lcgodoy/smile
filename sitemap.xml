@@ -28,6 +28,9 @@
     <loc>https://lcgodoy.me/smile/index.html</loc>
   </url>
   <url>
+    <loc>https://lcgodoy.me/smile/reference/SAI.html</loc>
+  </url>
+  <url>
     <loc>https://lcgodoy.me/smile/reference/aggregate_aux.html</loc>
   </url>
   <url>
@@ -77,6 +80,9 @@
   </url>
   <url>
     <loc>https://lcgodoy.me/smile/reference/mat_cov.html</loc>
+  </url>
+  <url>
+    <loc>https://lcgodoy.me/smile/reference/morans_i.html</loc>
   </url>
   <url>
     <loc>https://lcgodoy.me/smile/reference/pexp_cov.html</loc>
@@ -143,5 +149,8 @@
   </url>
   <url>
     <loc>https://lcgodoy.me/smile/reference/vor_build.html</loc>
+  </url>
+  <url>
+    <loc>https://lcgodoy.me/smile/reference/weight_mat.html</loc>
   </url>
 </urlset>
