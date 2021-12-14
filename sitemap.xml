@@ -64,6 +64,9 @@
     <loc>https://lcgodoy.me/smile/reference/gauss_cov.html</loc>
   </url>
   <url>
+    <loc>https://lcgodoy.me/smile/reference/goodness_of_fit.html</loc>
+  </url>
+  <url>
     <loc>https://lcgodoy.me/smile/reference/index.html</loc>
   </url>
   <url>
@@ -122,6 +125,9 @@
   </url>
   <url>
     <loc>https://lcgodoy.me/smile/reference/spher_cov.html</loc>
+  </url>
+  <url>
+    <loc>https://lcgodoy.me/smile/reference/st_remove_holes.html</loc>
   </url>
   <url>
     <loc>https://lcgodoy.me/smile/reference/summary_spm_fit.html</loc>

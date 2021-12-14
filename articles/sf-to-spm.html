@@ -115,8 +115,8 @@
 <span class="co">#&gt; Linking to GEOS 3.8.0, GDAL 3.0.4, PROJ 6.3.1</span></code></pre></div>
 <p>Often, in an applied setting, it is desirable to change the spatial support of some variables in order to conduct either association or regression analysis. This package provides functions to deal with this problem under two different approaches, a model-based one and a (non-parametric) spatial interpolation.</p>
 <p>The purpose of this vignette is to illustrate how to convert <code>sf</code><span class="citation">(Pebesma 2018)</span> objects to objects support by the <code>smile</code> package. Besides these two packages, we are going to use the <code>ggplot2</code><span class="citation">(Wickham 2011)</span> package for the data visualization.</p>
-<p>This vignette is useful when the used wants to pursue the model-based approach. This methodology is based on the assumption that areal data (e.g., variables measured at census tracts) is composed by averages of a continuous underlying process <span class="citation">(Gelfand, Zhu, and Carlin 2001, @moraga2017geostatistical, @johnson2020dealing, @wilson2020pointless)</span>. In practice, there exists an identifiability when estimating some variance parameters, which can be seen either as small scale variation (nugget effect) or measurement errors. When fitting models, the users may chose to ignore the measurement error associated with the problem. Model fitting and prediction are explained in the vignette available on <a href="https://lcgodoy.me/smile/articles/fit-and-pred.html">this link</a>.</p>
-<p>To illustrate how to convert <code>sf</code> polygons into <code>spm</code> objects, we are going to use the datasets provided by <span class="citation">Johnson, Diggle, and Giorgi (2020)</span>. For this data, we have the Life Expectancy at Birth (LEB) and the Index of Multiple Deprivation (IMD) in Liverpool. These variables are Middle Super Output Areas (MSOA) and in the Lower Super Output Areas (LSOA), respectively. After loading our package, these datasets can be loaded by simply running the chunk of code below. Figure  displays the LEB at the MSOA.</p>
+<p>This vignette is useful when the user wants to pursue the model-based approach. This methodology is based on the assumption that areal data (e.g., variables measured at census tracts) are composed by averages of a continuous underlying process <span class="citation">(Gelfand, Zhu, and Carlin 2001; Moraga et al. 2017, @johnson2020dealing; Wilson and Wakefield 2020)</span>. In practice, there exists an identifiability problem when estimating some variance parameters, which can be seen either as small scale variation (nugget effect) or measurement errors. When fitting models, the users may chose to ignore the measurement error associated with the problem. Model fitting and prediction are explained in the vignette available on <a href="https://lcgodoy.me/smile/articles/fit-and-pred.html">this link</a>.</p>
+<p>To illustrate how to convert <code>sf</code> polygons into <code>spm</code> objects, we are going to use the datasets provided by <span class="citation">Johnson, Diggle, and Giorgi (2020)</span>. For this data, we have the Life Expectancy at Birth (LEB) and the Index of Multiple Deprivation (IMD) in Liverpool. These variables are observed at the Middle Super Output Areas (MSOA) and Lower Super Output Areas (LSOA), respectively. After loading our package, the datasets can be loaded by simply running the chunk of code below. Figure  displays the LEB at the MSOA.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">liv_lsoa</span><span class="op">)</span> <span class="co"># loading the LSOA data</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">liv_msoa</span><span class="op">)</span> <span class="co"># loading the MSOA data</span>
@@ -141,17 +141,28 @@ LEB in Liverpool at the MSOA.
 <!-- We consider, in a first moment, that this random variable is normally -->
 <!-- distributed with a constant mean and a certain (spatial) covariance -->
 <!-- matrix. Now, let $A_1$ and $A_2$ be two distinct MSOA's. Under the -->
-<!-- before mentioned assumption that the observed random variable is driven -->
-<!-- by an underlying Gaussian random field with isotropic covariance -->
-<!-- function $C(\lVert x - y \rVert \, ; \, \theta)$, where $\lVert x - y -->
-<!-- \rVert$ is the distance between two points in the coordinates $x$ and -->
-<!-- $y$, respectively. Then, the covariance between the (averaged) variable -->
-<!-- observed at $A_1$ and $A_2$ is define as \[ \Sigma_{12} = Cov(A_1, A_2) -->
-<!-- = \frac{1}{\lvert A_1 \rvert \lvert A_2 \rvert} \int_{A_1} \int_{A_2} -->
-<!-- C(\lVert x - y \rVert; \theta) \, dy \, dx.  \] In order to approximate -->
-<!-- the continuous surface on which these covariances have to be computed, -->
-<!-- we generate a fine grid over the whole study region (or a fine grid -->
-<!-- within each MSOA) and approximate such covariance by numerical integration. -->
+<!--
+before mentioned assumption that the observed random variable is driven -->
+<!--
+by an underlying Gaussian random field with isotropic covariance -->
+<!--
+function $C(\lVert x - y \rVert \, ; \, \theta)$, where $\lVert x - y -->
+<!--
+\rVert$ is the distance between two points in the coordinates $x$ and -->
+<!--
+$y$, respectively. Then, the covariance between the (averaged) variable -->
+<!--
+observed at $A_1$ and $A_2$ is define as \[ \Sigma_{12} = Cov(A_1, A_2) -->
+<!--
+= \frac{1}{\lvert A_1 \rvert \lvert A_2 \rvert} \int_{A_1} \int_{A_2} -->
+<!--
+C(\lVert x - y \rVert; \theta) \, dy \, dx.  \] In order to approximate -->
+<!--
+the continuous surface on which these covariances have to be computed, -->
+<!--
+we generate a fine grid over the whole study region (or a fine grid -->
+<!--
+within each MSOA) and approximate such covariance by numerical integration. -->
 <p>Now, suppose we are interested in estimating the LEB at the LSOA, so we will be able to conduct association analysis between LEB and IMD at the MSOA level. We assume, that the LEB, denoted <span class="math inline">\(Y(\cdot)\)</span>, is driven by a stationary and isotropic continuous Gaussian process over the region of study, such that, the observed data at the <span class="math inline">\(i\)</span>-th MSOA area (denoted <span class="math inline">\(A_i\)</span>) is an average of this underlying process. If we knew the parameters and covariance function associated with this process, then the LEB at the <span class="math inline">\(i\)</span>-th MSOA would be as follow <span class="math display">\[
     Y(A_i) = \frac{1}{\lvert A_i \rvert} \int_{A_i} Y(\mathbf{s}) \, {\rm d}
     \mathbf{s},
@@ -168,8 +179,8 @@ E}[Y(\mathbf{s})] \, {\rm d} \mathbf{s} \\
 &amp; = \frac{1}{\lvert A_i \rvert \lvert A_j \rvert} \int_{A_i \times A_j} {\rm C}(
 \lVert \mathbf{s} - \mathbf{s}' \rVert ; \boldsymbol{\theta}) \, {\rm d}
 \mathbf{s} \, {\rm d} \mathbf{s'},
-\end{align*}\]</span> where <span class="math inline">\(\lVert \mathbf{s} - \mathbf{s}' \rVert\)</span> is the Euclidean distance between the coordinates <span class="math inline">\(\mathbf{s}\)</span> and <span class="math inline">\(\mathbf{s}'\)</span>, and <span class="math inline">\({\rm C}( \lVert \mathbf{s} - \mathbf{s}' \rVert ; \boldsymbol{\theta})\)</span> is a isotropic covariance function depending on the parameter <span class="math inline">\(\boldsymbol{\theta}\)</span>.</p>
-<p>In practice, however, the integrals in the equation above are hard to be evaluated analytically. A common workaround is to evaluate them either numerically or by Monte Carlo integration <span class="citation">(<span class="citeproc-not-found" data-reference-id="gelfand2001chnge"><strong>???</strong></span>)</span>. When using the function <code>sf_to_spm</code>, the parameter <code>"type"</code> controls the method of integration. The options are <code>"regular"</code> (or <code>"hexagonal"</code>) for numerical integration, or <code>"random"</code> for Monte Carlo integration. Regardless of the <code>"type"</code> chosen, we have to generate a grid of points over the study region. When doing so, we may chose whether we want to approximate the integral within each area with the same precision or if we want the precision to vary according to the size of the polygon. This is controlled by the parameter <code>"by_polygon"</code>, which is a boolean scalar. When set to <code>TRUE</code>, all the integrals will be estimated with the same precision, regardless of the size of the polygon. On the other hand, if this parameter is set to <code>FALSE</code>, the grid of points will be generated over the whole study region and, afterwards, the points will be attributed to the areas they are contained in. This way, larger polygons will contain more points and, thus, the respective integrals will have a smaller numerical error. Lastly, there exists a parameter called <code>"npts"</code>. This parameter controls the number of points used to compute this integrals. We may either input a vector with the same length as the number of areas or a scalar. When inputting a scalar, this scalar will stand for the number of points over the whole city if <code>by_polygon = FALSE</code> and the number of points per polygon (area) otherwise.</p>
+\end{align*}\]</span> where <span class="math inline">\(\lVert \mathbf{s} - \mathbf{s}' \rVert\)</span> is the Euclidean distance between the coordinates <span class="math inline">\(\mathbf{s}\)</span> and <span class="math inline">\(\mathbf{s}'\)</span>, and <span class="math inline">\({\rm C}( \lVert \mathbf{s} - \mathbf{s}' \rVert ; \boldsymbol{\theta})\)</span> is an isotropic covariance function depending on the parameter <span class="math inline">\(\boldsymbol{\theta}\)</span>.</p>
+<p>In practice, however, the integrals in the equation above are hard to be evaluated analytically. A common workaround is to evaluate them either numerically or by Monte Carlo integration <span class="citation">(Gelfand, Zhu, and Carlin 2001)</span>. When using the function <code>sf_to_spm</code>, the parameter <code>"type"</code> controls the method of integration. The options are <code>"regular"</code> (or <code>"hexagonal"</code>) for numerical integration, or <code>"random"</code> for Monte Carlo integration. Regardless of the <code>"type"</code> chosen, we have to generate a grid of points over the study region. When doing so, we may chose whether we want to approximate the integral within each area with the same precision or if we want the precision to vary according to the size of the polygon. This is controlled by the parameter <code>"by_polygon"</code>, which is a boolean scalar. When set to <code>TRUE</code>, all the integrals will be estimated with the same precision, regardless of the size of the polygon. On the other hand, if this parameter is set to <code>FALSE</code>, the grid of points will be generated over the whole study region and, afterwards, the points will be attributed to the areas they are contained in. This way, larger polygons will contain more points and, thus, the respective integrals will have a smaller numerical error. Lastly, there exists a parameter called <code>"npts"</code>. This parameter controls the number of points used to compute this integrals. We may either input a vector with the same length as the number of areas or a scalar. When inputting a scalar, this scalar will stand for the number of points over the whole city if <code>by_polygon = FALSE</code> and the number of points per polygon (area) otherwise.</p>
 <!-- Firstly, we are going to show how does it work with a single `sf` -->
 <!-- object. Besides the `sf` objects, this function has 5 additional arguments. The -->
 <!-- first one, called `n_pts`, controls the number of points we are going to -->
