@@ -7,6 +7,7 @@ template:
     base_font: {google: "Roboto"}
     heading_font: {google: "Roboto Slab"}
     code_font: {google: "JetBrains Mono"}
+    btn-link-color: "#0054AD"
 
 navbar:
   bg: primary
@@ -43,4 +44,6 @@ footer:
     left: pkgdown
     right: [authors, legal]
   components:
+    pkgdown: Powered by [pkgdown](https://pkgdown.r-lib.org/).
+    authors: Lucas da Cunha Godoy.
     legal: Provided without **any warranty**.

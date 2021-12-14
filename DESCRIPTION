@@ -1,16 +1,16 @@
 Package: smile
 Title: Spatial Misalignment: Interpolation, Linkage, and Estimation
-Version: 0.0.1
+Version: 1.0.0
 Authors@R: 
     person(given = "Lucas",
+           middle = "da Cunha",
            family = "Godoy",
            role = c("aut", "cre"),
            email = "lucasdac.godoy@gmail.com",
            comment = c(ORCID = "0000-0003-4265-972X"))
-Description: The package provides Maximum Likelihood estimates for the
-	estimation of underlying random fields for lattice (polygon data)
-	facilitating the estimation of an onbserved random variable in different
-	partitions of a region of study.
+Description: The package provides functions to estimate, predict and interpolate
+        areal data. For estimation and prediction we assume areal data is an
+	average of an underlying continuos spatial process.
 License: GPL-3
 Encoding: UTF-8
 LazyData: true

@@ -26,7 +26,7 @@ from Professor Jun Yan, at UConn.
 The package has not been submitted to [CRAN](https://CRAN.R-project.org)
 yet. Therefore, only the development version from [GitHub](https://github.com/)
 is available. If you are interested, you can installed using:
-``` r
+```r
 # install.packages("devtools")
-devtools::install_github("lcgodoy/smile")
+devtools::install_github("lcgodoy/spmismo")
 ```
