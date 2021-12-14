@@ -61,7 +61,7 @@ st_crs(liv_lsoa) <-
     st_crs(liv_lsoa)$input
 ```
 
-```{R read-data, fig.caption="LEB in Liverpool at the MSOA."}
+```{R read-data, fig.cap="LEB in Liverpool at the MSOA."}
 ggplot(data = liv_msoa,
        aes(fill = leb_est)) +
     geom_sf(color = "black",
@@ -202,7 +202,7 @@ msoa_spm <-
 <!-- that, after generating the grid, your grid is in a finer resolution than your -->
 <!-- smallest polygon, that is, to make sure that there exists no points lying in -->
 <!-- more than one polygon. -->
-```{R sf-to-spm2, echo = FALSE, warning = FALSE, message = FALSE, fig.caption = "All the possible combinations for the arguments `type` and `by_polygon`,"}
+```{R sf-to-spm2, echo = FALSE, warning = FALSE, message = FALSE, fig.cap = "All the possible combinations for the arguments `type` and `by_polygon`,"}
 set.seed(123)
 
 msoa_spm1 <-
