@@ -23,10 +23,11 @@ fit_spm <- function(x, ...) UseMethod("fit_spm")
 ##'     optimization algorithm to search for all the parameters over the real
 ##'     numbers.
 ##'
-##'     The model assumes \deqn{Y(\mathbf{s}) = \mu + S(\mathbf{s})} at the point level.
-##'     Where \eqn{S ~ GP(0, \sigma^2 C(\lVert \mathbf{s} - \mathbf{s}_2 \rVert; \theta))}.
-##'     Further, the observed data is supposed to be
-##'     \eqn{Y(B) = \lvert B \rvert^{-1} \int_{B} Y(\mathbf{s}) \, \textrm{d} \mathbf{s}}.
+##'     The model assumes \deqn{Y(\mathbf{s}) = \mu + S(\mathbf{s})} at the
+##'     point level.  Where \eqn{S ~ GP(0, \sigma^2 C(\lVert \mathbf{s} -
+##'     \mathbf{s}_2 \rVert; \theta))}.  Further, the observed data is supposed
+##'     to be \eqn{Y(B) = \lvert B \rvert^{-1} \int_{B} Y(\mathbf{s}) \,
+##'     \textrm{d} \mathbf{s}}.
 ##' 
 ##' @param x an object of type \code{spm}. Note that, the dimension of
 ##'     \code{theta_st} depends on the 2 factors. 1) the number of variables
@@ -52,7 +53,13 @@ fit_spm <- function(x, ...) UseMethod("fit_spm")
 ##'     the optimization algorithm to be used. For details, see
 ##'     \code{\link[stats]{optim}}.
 ##' @param comp_hess a \code{boolean} indicating whether the Hessian matrix
-##'     should be computed
+##'     should be computed.
+##' @param phi_min a \code{numeric} scalar representing the minimum \eqn{phi}
+##'     value to look for.
+##' @param phi_max a \code{numeric} scalar representing the maximum \eqn{phi}
+##'     value to look for.
+##' @param nphi a \code{numeric} scalar indicating the number of values to
+##'     compute a grid-search over \eqn{phi}.
 ##' @param ... additionnal parameters, either passed to \code{optim}.
 ##' 
 ##' @return a \code{spm_fit} object.
@@ -64,14 +71,14 @@ fit_spm.spm <- function(x, model, theta_st,
                         opt_method  = "Nelder-Mead",
                         control_opt = list(),
                         comp_hess = TRUE,
-                        ...) {
-    
+                        ...) {    
     stopifnot(!is.null(names(theta_st)))
     stopifnot(NCOL(x$var) == 1)
-
+    stopifnot(inherits(x, "spm"))
+    if(! missing(kappa))
+        stopifnot(length(kappa) == 1)
     npar <- length(theta_st)
     p    <- npar + 2L
-    
     if(npar == 2) {
         op_val <-
             stats::optim(par = theta_st,
@@ -357,4 +364,131 @@ summary_spm_fit <- function(x, sig = .05) {
     }
     cat(sprintf("\n optimization algorithm converged: %s \n \n", x$converged))    
     return(tbl)
+}
+
+##' @name fit_spm
+##' @export
+fit_spm2 <- function(x, model, kappa,
+                     comp_hess = TRUE, 
+                     phi_min, phi_max, nphi = 10) {
+    stopifnot(NCOL(x$var) == 1)
+    stopifnot(inherits(x, "spm"))
+    stopifnot(length(nphi) == 1)
+    stopifnot(model %in% c("matern", "pexp", "gaussian",
+                           "spherical"))
+    if(! missing(kappa))
+        stopifnot(length(kappa) == 1)
+    
+    my_phi <- seq(from = phi_min,
+                  to   = phi_max,
+                  length.out = nphi)
+
+    ## vector to store the profile likelihood value for each phi
+    pl <- vector(mode = "numeric",
+                 length = 2 * length(my_phi))
+
+    for( i in seq_along(my_phi) ) {
+        pl[i] <- singl_log_lik_nn(my_phi[i], .dt = x$var,
+                                  dists = x$dists, npix = 1,
+                                  model = model, kappa = kappa)
+    }
+
+    k <- which.min(pl[seq_len(nphi)])
+
+    if(k == 1) {
+        my_phi2 <- seq(my_phi[1] - 1e-05, my_phi[1],
+                       length.out = length(my_phi))
+    } else if(k == length(my_phi)) {
+        my_phi2 <- seq(my_phi[nphi], my_phi[nphi] + 1e-05,
+                       length.out = length(my_phi))
+    } else {
+        my_phi2 <- seq(my_phi[k - 1], my_phi[k + 1],
+                       length.out = length(my_phi))
+    }
+
+    for( i in seq_along(my_phi2) ) {
+        pl[i + nphi] <- 
+            singl_log_lik_nn(my_phi2[i], .dt = x$var,
+                             dists = x$dists, npix = 1,
+                             model = model, kappa = kappa)
+    }
+
+    phi_out <- c(my_phi, my_phi2)[which.min(pl)]
+
+    .n <- NROW(x$var)
+    
+    ## can be turned in to a function to make to code cleaner
+    switch(model,
+           "matern" = {
+               if(is.null(kappa))
+                   kappa <- .5
+
+               V <- comp_mat_cov(x$dists,
+                                 n = .n, n2 = .n,
+                                 phi   = phi_out,
+                                 sigsq = 1,
+                                 kappa = kappa)
+           },
+           "pexp" = {
+               if(is.null(kappa))
+                   kappa <- 1
+
+               V <- comp_pexp_cov(x$dists,
+                                  n = .n, n2 = .n,
+                                  phi   = phi_out,
+                                  sigsq = 1,
+                                  kappa = kappa)
+           },
+           "gaussian" = {
+               V <- comp_gauss_cov(x$dists,
+                                   n = .n, n2 = .n,
+                                   phi   = phi_out,
+                                   sigsq = 1)
+           },
+           "spherical" = {
+               V <- comp_spher_cov(x$dists,
+                                   n = .n, n2 = .n,
+                                   phi   = phi_out,
+                                   sigsq = 1)
+           })
+    
+    ones_n <- matrix(rep(1, .n), ncol = 1L)
+    y <- matrix(x$var, ncol = 1L)
+
+    inv_v <- chol2inv(chol(V))
+    mles <- est_mle(x$var, inv_v)
+    estimates <- c(mles, 
+                   "phi" = unname(phi_out))
+
+    if(comp_hess) {
+        ## stats::optimHess(par = estimates,
+        ##                  fn  = singl_log_lik,
+        info_mat <- solve(
+            numDeriv::hessian(func = singl_ll_nn_hess,
+                              x = estimates,
+                              .dt = x$var,
+                              dists = x$dists,
+                              npix = x$npix,
+                              model = model,
+                              kappa = kappa,
+                              apply_exp = FALSE)
+        )
+    } else {
+        info_mat <- matrix(NA_real_,
+                           ncol = length(estimates),
+                           nrow = length(estimates))
+    }
+
+    output <- list(
+        estimate  = estimates,
+        info_mat  = info_mat,
+        converged = "yes",
+        call_data = x,
+        model     = model,
+        kappa     = kappa
+    )
+    
+    class(output) <- append(class(output), "spm_fit")
+
+    return(output)
 }

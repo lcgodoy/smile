@@ -53,7 +53,7 @@ mult_dist_from_grids <- function(y_grid, x_grid, by) {
                                  levels = unique(x_grid[[by[2]]])))
     
     return(mult_dists(lapply(y_list, as.matrix),
-                      lapply(y_list, as.matrix),
+                      lapply(x_list, as.matrix),
                       FALSE))
 }
 

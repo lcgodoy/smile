@@ -3,6 +3,7 @@
 \name{fit_spm}
 \alias{fit_spm}
 \alias{fit_spm.spm}
+\alias{fit_spm2}
 \title{Fitting an underlying continuous process to areal data}
 \usage{
 fit_spm(x, ...)
@@ -18,6 +19,8 @@ fit_spm(x, ...)
   comp_hess = TRUE,
   ...
 )
+
+fit_spm2(x, model, kappa, comp_hess = TRUE, phi_min, phi_max, nphi = 10)
 }
 \arguments{
 \item{x}{an object of type \code{spm}. Note that, the dimension of
@@ -53,7 +56,16 @@ the optimization algorithm to be used. For details, see
 \code{\link[stats]{optim}}.}
 
 \item{comp_hess}{a \code{boolean} indicating whether the Hessian matrix
-should be computed}
+should be computed.}
+
+\item{phi_min}{a \code{numeric} scalar representing the minimum \eqn{phi}
+value to look for.}
+
+\item{phi_max}{a \code{numeric} scalar representing the maximum \eqn{phi}
+value to look for.}
+
+\item{nphi}{a \code{numeric} scalar indicating the number of values to
+compute a grid-search over \eqn{phi}.}
 }
 \value{
 a \code{spm_fit} object.
@@ -77,9 +89,10 @@ Exponential, Gaussian, and Spherical. The parameter \code{apply_exp} is
 a \code{logical} scalar such that, if set to \code{TRUE}, the \eqn{\exp}
 function is applied to the nonnegative parameters, allowing the
 optimization algorithm to search for all the parameters over the real
-numbers.\preformatted{The model assumes \deqn{Y(\mathbf{s}) = \mu + S(\mathbf{s})} at the point level.
-Where \eqn{S ~ GP(0, \sigma^2 C(\lVert \mathbf{s} - \mathbf{s}_2 \rVert; \theta))}.
-Further, the observed data is supposed to be
-\eqn{Y(B) = \lvert B \rvert^{-1} \int_{B} Y(\mathbf{s}) \, \textrm{d} \mathbf{s}}.
+numbers.\preformatted{The model assumes \deqn{Y(\mathbf{s}) = \mu + S(\mathbf{s})} at the
+point level.  Where \eqn{S ~ GP(0, \sigma^2 C(\lVert \mathbf{s} -
+    \mathbf{s}_2 \rVert; \theta))}.  Further, the observed data is supposed
+to be \eqn{Y(B) = \lvert B \rvert^{-1} \int_{B} Y(\mathbf{s}) \,
+    \textrm{d} \mathbf{s}}.
 }
 }
