@@ -4,26 +4,20 @@
 \alias{vdl}
 \title{Voronoi Data Linkage}
 \usage{
-vdl(coords_sf, areal_sf, id_coords = NULL, list_vars = NULL, buff)
+vdl(coords_sf, areal_sf, vars, buff)
 }
 \arguments{
-\item{coords_sf}{\code{sf} object representing point coordinates}
+\item{coords_sf}{\code{sf} POINT target dataset.}
 
-\item{areal_sf}{\code{sf} object representing the areal data (e.g. spatial polygons)}
+\item{areal_sf}{\code{sf} POLYGON source dataset.}
 
-\item{id_coords}{\code{character} indicating the \emph{id} variable for \code{coords_sf}. If
-not informed, the \emph{row number} is assumed to by the id.}
-
-\item{list_vars}{a named \code{list} representing the variables from \code{areal_sf}
-that need to be estimated in \code{coords_sf}. The \code{list} position names represent
-the populational variables, while the contend within each position represent
-the average variavles.}
+\item{vars}{a \code{character} representing the variables (observed at the
+source - polygon) to be estimated at the target data.}
 
 \item{buff}{scalar \code{numeric}. Mostly for internal use.}
 }
 \value{
-a \code{sf} object, contaning the \code{id_coords} variable and the
-\code{list_vars} for the \code{coords_sf} spatial data set.
+a \code{sf} object for the \code{coords_sf} spatial data set.
 }
 \description{
 Reminder, have to create an example.

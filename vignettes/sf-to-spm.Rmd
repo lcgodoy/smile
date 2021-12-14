@@ -181,10 +181,7 @@ these points to the area they are contained in. Also, the `"poly_ids"` argument
 is a string indicating the variable in the `liv_msoa` dataset that contains the
 unique identifier associated with each area. The argument `"var_ids"` is a
 string as well but this indicates the "response variable". That is, the variable
-that for which we will be interested in fitting a model to. Finally, Figure
-\ref{fig:sf-to-spm2} displays the grids associated with each of the possible
-combinations of the parameters `type` and `by_polygon` when calling the
-`sf_to_spm` function.
+that for which we will be interested in fitting a model to. 
 ```{R sf-to-spm1}
 msoa_spm <-
     sf_to_spm(sf_obj = liv_msoa, n_pts = 1000,
@@ -192,6 +189,9 @@ msoa_spm <-
               poly_ids = "msoa11cd", var_ids = "leb_est")
 ```
 
+Finally, the Figure below displays the grids associated with each of the
+possible combinations of the parameters `type` and `by_polygon` when calling the
+`sf_to_spm` function.
 <!-- Next, we illustrate how do different values of `type` and `by_polygon` affect -->
 <!-- the final result of the `sf_to_spm` call. In all examples we are going to use a -->
 <!-- grid of 305 points (multiple of the number of polygons observed). The "sparsity" -->
@@ -203,7 +203,7 @@ msoa_spm <-
 <!-- that, after generating the grid, your grid is in a finer resolution than your -->
 <!-- smallest polygon, that is, to make sure that there exists no points lying in -->
 <!-- more than one polygon. -->
-```{R sf-to-spm2, echo = FALSE, warning = FALSE, message = FALSE, fig.cap = "All the possible combinations for the arguments `type` and `by_polygon`,"}
+```{R sf-to-spm2, echo = FALSE, warning = FALSE, message = FALSE}
 set.seed(123)
 
 msoa_spm1 <-
@@ -257,5 +257,8 @@ ggplot(data = to_plot,
     theme_bw() +
     theme(axis.text = element_blank())
 ```
+
+For details on fitting models and making precitions, see [this
+vignette](https://lcgodoy.me/smile/articles/fit-and-pred.html).
 
 # References

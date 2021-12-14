@@ -2,10 +2,14 @@ url: https://lcgodoy.me/smile
 
 template:
   bootstrap: 5
-  params:
-    bootswatch: yeti
+  bootswatch: sandstone
+  bslib:
+    base_font: {google: "Roboto"}
+    heading_font: {google: "Roboto Slab"}
+    code_font: {google: "JetBrains Mono"}
 
 navbar:
+  bg: primary
   title: "smile"
   left:
     - icon: fa-home fa-lg
@@ -33,3 +37,10 @@ navbar:
      href: https://twitter.com/ldcgodoy
    - icon: fa-linkedin
      href: https://www.linkedin.com/in/godoy-lucas/
+
+footer:
+  structure: 
+    left: pkgdown
+    right: [authors, legal]
+  components:
+    legal: Provided without **any warranty**.

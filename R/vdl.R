@@ -30,39 +30,24 @@ vor_build <- function(points_sf, poly_sf) {
 ##'
 ##' @description Reminder, have to create an example.
 ##'
-##' @param coords_sf `sf` object representing point coordinates
-##' @param areal_sf `sf` object representing the areal data (e.g. spatial polygons)
-##' @param id_coords `character` indicating the _id_ variable for `coords_sf`. If
-##' not informed, the _row number_ is assumed to by the id.
-##' @param list_vars a named `list` representing the variables from `areal_sf`
-##' that need to be estimated in `coords_sf`. The `list` position names represent
-##' the populational variables, while the contend within each position represent
-##' the average variavles.
+##' @param coords_sf \code{sf} POINT target dataset.
+##' @param areal_sf \code{sf} POLYGON source dataset.
+##' @param vars a \code{character} representing the variables (observed at the
+##'     source - polygon) to be estimated at the target data.
 ##' @param buff scalar `numeric`. Mostly for internal use.
 ##'
-##' @importFrom data.table .I .SD .N ':='
 ##'
-##' @return a `sf` object, contaning the `id_coords` variable and the
-##' `list_vars` for the `coords_sf` spatial data set.
+##' @return a `sf` object for the `coords_sf` spatial data set.
 ##' @export
 ##'
 vdl <- function(coords_sf, areal_sf,
-                id_coords = NULL,
-                list_vars = NULL,
+                vars,
                 buff) {
     if(!all(inherits(coords_sf, "sf"), inherits(areal_sf, "sf")))
         stop("coords_sf and areal_sf must be sf objects.")
 
-    if(is.null(list_vars))
+    if(missing(vars))
         stop("input at least one pop_vars.")
-    if(is.null(id_coords)) {
-        id_coords <- "id_coords"
-        coords_sf$id_coords <- seq_len(nrow(coords_sf))
-    } else {
-        if(! (id_coords %in% names(coords_sf))) {
-            coords_sf[[id_coords]] <- seq_len(nrow(coords_sf))
-        }
-    }
     ## verifying crs
     crs_coords <- sf::st_crs(coords_sf)
     crs_areal  <- sf::st_crs(areal_sf)
@@ -71,19 +56,15 @@ vdl <- function(coords_sf, areal_sf,
         warning("Making coordinates CRS compatible to areal data CRS.")
     }
 
-    if(is.list(list_vars)) {
-        all_vars <- c(names(list_vars),
-                      unlist(list_vars, use.names = FALSE))
-    } else {
-        all_vars <- list_vars
-    }
+    ## if(is.list(list_vars)) {
+    ##     all_vars <- c(names(list_vars),
+    ##                   unlist(list_vars, use.names = FALSE))
+    ## } else {
+    ##     all_vars <- list_vars
+    ## }
 
-    if(!all(all_vars %in% names(areal_sf)))
+    if(!all(vars %in% names(areal_sf)))
         stop("all variables inputed in pop_vars and avg_vars must be in areal_sf.")
-
-    areal_sf <- areal_sf[, all_vars]
-    areal_sf[["geom_2"]] <- sf::st_geometry(areal_sf) # auxiliar geometry
-    ## areal_sf <- transform(areal_sf, geom_2 = sf::st_geometry(areal_sf))
 
     sf_border <-
         tryCatch(
@@ -98,64 +79,10 @@ vdl <- function(coords_sf, areal_sf,
             }
         )
 
-    vor_sf <- vor_build(points_sf = coords_sf, poly_sf = sf_border)
-    vor_join <- vor_sf
-    vor_join <- transform(vor_join,
-                          cell_area = as.numeric(sf::st_area(sf::st_geometry(vor_join))))
-    vor_join <- sf::st_join(
-                        x = vor_join,
-                        y = areal_sf,
-                        join = sf::st_intersects
-                    )
-    vor_join[["inter_area"]] <- mapply(function(x, y) {
-        as.numeric(sf::st_area(
-                           sf::st_intersection(x, y)
-                       ))
-    },
-    x = sf::st_geometry(vor_join),
-    y = vor_join[["geom_2"]])
-
-    vor_join[["prop_inter"]] <- vor_join[["inter_area"]] / vor_join[["cell_area"]]
-    vor_join <- sf::st_set_geometry(x = vor_join, value = NULL)
-    vor_join[["geom_2"]] <- NULL
-    data.table::setDT(vor_join)
-
-    output <- split(x = vor_join, f = vor_join[[id_coords]])
-
-    prop_inter <- NULL
+    vor_sf <- vor_build(points_sf = coords_sf, poly_sf = sf_border)    
     
-    output <- lapply(output, function(x, l_vars) {
-        if(is.list(l_vars)) {
-            x[["prop_inter"]] <- x[["prop_inter"]] /sum(x[["prop_inter"]],
-                                                        na.rm = TRUE)
-            for(i in seq_along(l_vars)) {
-                pop_var <- names(l_vars)[i]
-                mu_var  <- l_vars[[i]]
-                if(! is.null(mu_var) )
-                    x[, c(mu_var) := Map(f = function(y, prop) {
-                        (get(pop_var) * y * prop) / sum(get(pop_var) * prop, na.rm = TRUE)
-                    }, y = .SD, prop = list(prop_inter)), .SDcols = mu_var]
-            }
-            x[, (names(l_vars)) := Map(function(y, prop) {y * prop},
-                                       y = .SD, prop = list(prop_inter)),
-              .SDcols = (names(l_vars))]
-            num_idx <- names(which(sapply(x, is.numeric), useNames = TRUE))
-            x[ , lapply(.SD, sum), .SDcols = num_idx, by = eval(id_coords)]
-        } else {
-            x[["prop_inter"]] <- x[["prop_inter"]]/sum(x[["prop_inter"]], na.rm = TRUE)
-            x[, (names(l_vars)) := Map(function(y, prop) {y * prop},
-                                       y = .SD, prop = list(prop_inter)),
-              .SDcols = (names(l_vars))]
-            num_idx <- names(which(sapply(x, is.numeric), useNames = TRUE))
-            x[ , lapply(.SD, sum), .SDcols = num_idx, by = eval(id_coords)]
-        }
-    },
-    l_vars = list_vars)
-
-    vor_sf <- vor_sf[c(id_coords, 'geometry')]
-
-    output <- data.table::rbindlist(output)
-    output <- merge(x = vor_sf, y = output, by = id_coords)
+    output <- sai(source = areal_sf, target = vor_sf,
+                  vars = vars)
 
     return(output)
 }
@@ -164,40 +91,29 @@ vdl <- function(coords_sf, areal_sf,
 ##'
 ##' @description Reminder, have to create an example.
 ##'
-##' @param coords_sf `sf` object representing point coordinates
-##' @param areal_sf `sf` object representing the areal data (e.g. spatial
-##'     polygons)
-##' @param id_coords `character` indicating the _id_ variable for
-##'     `coords_sf`. If not informed, the _row number_ is assumed to by the id.
+##' @param coords_sf \code{sf} POINT target dataset.
+##' @param areal_sf \code{sf} POLYGON source dataset.
 ##' @param res_var a \code{character} - the name of the variable in the
 ##'     \code{areal_sf} to be estimated in the \code{coords_sf}.
 ##' @param variance a \code{character} - the name of the variable varinace in
 ##'     the \code{areal_sf} to be estimated in the \code{coords_sf}.
+##' @param var_method a \code{character} representing the method to approximate
+##'     the variance of the SAI estimates. Possible values are "CS"
+##'     (Cauchy-Schwartz) or "MI" (Moran's I).
 ##' @param buff scalar `numeric`. Mostly for internal use.
 ##'
-##' @importFrom data.table .I .SD .N ':='
 ##'
 ##' @return a `sf` object, contaning the `id_coords` variable and the
 ##' `list_vars` for the `coords_sf` spatial data set.
 ##' @export
 ##'
 vdl_var <- function(coords_sf, areal_sf,
-                    id_coords = NULL,
                     res_var,
                     variance,
+                    var_method = "CS",
                     buff) {
     if(!all(inherits(coords_sf, "sf"), inherits(areal_sf, "sf")))
         stop("coords_sf and areal_sf must be sf objects.")
-
-    if(is.null(id_coords)) {
-        id_coords <- "id_coords"
-        coords_sf$id_coords <- seq_len(nrow(coords_sf))
-    } else {
-        if(! (id_coords %in% names(coords_sf))) {
-            warning("id_coords not in coords_sf. Making id equal to row number.")
-            coords_sf[[id_coords]] <- seq_len(nrow(coords_sf))
-        }
-    }
 
     ## verifying crs
     crs_coords <- sf::st_crs(coords_sf)
@@ -210,10 +126,6 @@ vdl_var <- function(coords_sf, areal_sf,
     if(!all(c(res_var, variance) %in% names(areal_sf)))
         stop(sprintf("%s and %s are not in areal_sf.", res_var, variance))
 
-    areal_sf <- areal_sf[, c(res_var, variance)]
-    areal_sf[["geom_2"]] <- sf::st_geometry(areal_sf) # auxiliar geometry
-    ## areal_sf <- transform(areal_sf, geom_2 = sf::st_geometry(areal_sf))
-
     sf_border <-
         tryCatch(
             expr = sf::st_union(sf::st_geometry(areal_sf)),
@@ -226,54 +138,10 @@ vdl_var <- function(coords_sf, areal_sf,
                     )
             }
         )
-
     vor_sf <- vor_build(points_sf = coords_sf, poly_sf = sf_border)
-    vor_join <- vor_sf
-    vor_join <- transform(vor_join,
-                          cell_area = as.numeric(sf::st_area(sf::st_geometry(vor_join))))
-    vor_join <- sf::st_join(
-                        x = vor_join,
-                        y = areal_sf,
-                        join = sf::st_intersects
-                    )
-    vor_join[["inter_area"]] <- mapply(function(x, y) {
-        as.numeric(sf::st_area(
-                           sf::st_intersection(x, y)
-                       ))
-    },
-    x = sf::st_geometry(vor_join),
-    y = vor_join[["geom_2"]])
-
-    vor_join[["prop_inter"]] <- vor_join[["inter_area"]] / vor_join[["cell_area"]]
-    vor_join <- sf::st_set_geometry(x = vor_join, value = NULL)
-    vor_join[["geom_2"]] <- NULL
-
-    output <- split(x = vor_join, f = vor_join[[id_coords]])
-
-    output <- vapply(output, function(x) {
-        id <- unique(x[[id_coords]])
-        N        <- sum(x[["prop_inter"]])
-        est_mean <- sum(x[[res_var]] * x[["prop_inter"]]) / N
-        var_aux  <- sum(x[[variance]] * (x[["prop_inter"]] / N) *
-                        (x[["prop_inter"]] / N))
-        if( nrow(x) > 1 ) {
-            est_var <- var_aux + 2 * sum(utils::combn((x[["prop_inter"]] / N) * sqrt(var_aux),
-                                                      m = 2, FUN = prod)) 
-        } else {
-            est_var <- var_aux
-        }
-        c(id,
-          est_mean,
-          est_var)
-    }, FUN.VALUE = vector(mode   = "numeric",
-                          length = 3L))
-
-    vor_sf <- vor_sf[c(id_coords, 'geometry')]
-    output <- as.data.frame(t(output))
-    colnames(output) <- c(id_coords, res_var, variance)
-    
-    output <- merge(x = vor_sf, y = output, by = id_coords)
-
+    output <- sai_var(source = areal_sf, target = vor_sf,
+                      vars = res_var, vars_var = variance,
+                      var_method = var_method)
     return(output)
 }
 

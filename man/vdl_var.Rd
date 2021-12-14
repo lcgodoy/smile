@@ -4,22 +4,22 @@
 \alias{vdl_var}
 \title{Voronoi Data Linkage - Single variable and variance}
 \usage{
-vdl_var(coords_sf, areal_sf, id_coords = NULL, res_var, variance, buff)
+vdl_var(coords_sf, areal_sf, res_var, variance, var_method = "CS", buff)
 }
 \arguments{
-\item{coords_sf}{\code{sf} object representing point coordinates}
+\item{coords_sf}{\code{sf} POINT target dataset.}
 
-\item{areal_sf}{\code{sf} object representing the areal data (e.g. spatial
-polygons)}
-
-\item{id_coords}{\code{character} indicating the \emph{id} variable for
-\code{coords_sf}. If not informed, the \emph{row number} is assumed to by the id.}
+\item{areal_sf}{\code{sf} POLYGON source dataset.}
 
 \item{res_var}{a \code{character} - the name of the variable in the
 \code{areal_sf} to be estimated in the \code{coords_sf}.}
 
 \item{variance}{a \code{character} - the name of the variable varinace in
 the \code{areal_sf} to be estimated in the \code{coords_sf}.}
+
+\item{var_method}{a \code{character} representing the method to approximate
+the variance of the SAI estimates. Possible values are "CS"
+(Cauchy-Schwartz) or "MI" (Moran's I).}
 
 \item{buff}{scalar \code{numeric}. Mostly for internal use.}
 }
