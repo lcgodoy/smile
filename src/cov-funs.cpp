@@ -514,7 +514,7 @@ double aux_gauss(arma::mat dist, double sigsq, double phi) {
 //'   \code{\link{mat_cov}}
 //'
 //' @keywords internal
-//' [Rcpp::export]]
+// [Rcpp::export]]
 arma::mat comp_gauss_cov(const List& cross_dists, int n,
 			 int n2, double sigsq, double phi) {
   arma::mat out(n, n2, arma::fill::zeros);

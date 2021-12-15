@@ -25,9 +25,7 @@ Imports:
     Rcpp,
     sf,
     mvtnorm,
-    Matrix,
-    stats,
-    utils
+    stats
 Depends: 
     R (>= 3.5)
 URL: https://lcgodoy.me/smile/, https://github.com/lcgodoy/smile/

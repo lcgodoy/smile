@@ -35,7 +35,6 @@ NULL
 #'   \code{\link{mat_cov}}
 #'
 #' @keywords internal
-#' [Rcpp::export]]
 NULL
 
 #' @title Matern covariance function (scalar - generic)
