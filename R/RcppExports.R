@@ -9,81 +9,39 @@
 #'
 #' @param mat_aux a numeric matrix.
 #' @return The mean of \code{mat_aux}.
+#' @keywords internal
 NULL
 
-#' @title Mean of a (Matern) covariance function (Internal use)
+#' @title Gaussian covariance function for a polygons.
 #'
-#' @description This is an auxilliary function for internal use. It helps to
-#'   numerically integrate a covariance function evaluated at a grid of points
-#'   within a polyigon and speed-up the computations.
+#' @description Computing the Gaussian covariance function between polygons.
 #'
-#' @param dists a numeric matrix representing the distance between spatial
-#'   entities.
-#' @param sigsq the \eqn{\sigma^2} parameter from the Matern covariance
-#'   function.
-#' @param phi the \eqn{\phi} parameter from the Matern covariance function,
-#'   controls the range of the spatial dependence.
-#' @param kappa the \eqn{\kappa} parameter from the Matern covariance function,
-#'   controls the differentiability of the process.
-#' 
-#' @return The mean of \code{mat_cov(dist, sigsq, phi, kappa)}.
-NULL
-
-#' @title Mean of a (Powered Exponential) covariance function (Internal use)
-#'
-#' @description This is an auxilliary function for internal use. It helps to
-#'   numerically integrate a covariance function evaluated at a grid of points
-#'   within a polyigon and speed-up the computations.
-#'
-#' @param dists a numeric matrix representing the distance between spatial
-#'   entities.
-#' @param sigsq the \eqn{\sigma^2} parameter from the Powered Exponential
-#'   covariance function.
-#' @param phi the \eqn{\phi} parameter from the Powered Exponential covariance
-#'   function, controls the range of the spatial dependence.
-#' @param kappa the \eqn{\kappa} parameter from the Powered Exponential
-#'   covariance function,
-#'   controls the differentiability of the process.
-#' 
-#' @return The mean of \code{pexp_cov(dist, sigsq, phi, kappa)}.
-NULL
-
-#' @title Mean of a (Gaussian) covariance function (Internal use)
-#'
-#' @description This is an auxilliary function for internal use. It helps to
-#'   numerically integrate a covariance function evaluated at a grid of points
-#'   within a polyigon and speed-up the computations.
-#'
-#' @param dists a numeric matrix representing the distance between spatial
-#'   entities.
+#' @param cross_dists a \code{list} such that each position contains the cross
+#'   distances between points within different polygons.
+#' @param n an ingeger representing number of polygons (note that, this is
+#'   different than the size of the list \code{cross_dists}
+#' @param n2 usually, equal to \code{n}, except when the function is being used
+#'   to calculate the "cross" covariance between two different partitions of
+#'   the same space.
 #' @param sigsq the \eqn{\sigma^2} parameter from the Gaussian covariance
 #'   function.
 #' @param phi the \eqn{\phi} parameter from the Gaussian covariance function,
 #'   controls the range of the spatial dependence.
 #' 
-#' @return The mean of \code{gauss_cov(dist, sigsq, phi)}.
-NULL
-
-#' @title Mean of a (Spherical) covariance function (Internal use)
+#' @return The gaussian covariance matrix associated with a set of
+#'   polygons.
 #'
-#' @description This is an auxilliary function for internal use. It helps to
-#'   numerically integrate a covariance function evaluated at a grid of points
-#'   within a polyigon and speed-up the computations.
+#' @seealso \code{\link{single_exp}}, \code{\link{single_matern}},
+#'   \code{\link{mat_cov}}
 #'
-#' @param dists a numeric matrix representing the distance between spatial
-#'   entities.
-#' @param sigsq the \eqn{\sigma^2} parameter from the Spherical covariance.
-#'   function.
-#' @param phi the \eqn{\phi} parameter from the Spherical covariance function,
-#'   controls the range of the spatial dependence.
-#' 
-#' @return The mean of \code{spher_cov(dist, sigsq, phi)}.
+#' @keywords internal
+#' [Rcpp::export]]
 NULL
 
 #' @title Matern covariance function (scalar - generic)
 #'
 #' @description Computing the Matern covariance function for a single distance
-#'   measure, addapted from \code{\link[geoR]{matern}}.
+#'   measure, addapted from \code{geoR}.
 #'
 #' @param d a scalar representing the distance on which it is desired to
 #'   evaluate the covariance function.
@@ -100,6 +58,7 @@ NULL
 #' @seealso \code{\link{single_matern}}, \code{\link{single_matern5}}
 #'   \code{\link{single_exp}}, \code{\link{mat_cov}}
 #' 
+#' @keywords internal
 single_matern <- function(d, sigsq, phi, kappa) {
     .Call(`_smile_single_matern`, d, sigsq, phi, kappa)
 }
@@ -122,6 +81,7 @@ single_matern <- function(d, sigsq, phi, kappa) {
 #' @seealso \code{\link{single_matern}}, \code{\link{single_matern5}}
 #'   \code{\link{single_exp}}, \code{\link{mat_cov}}
 #' 
+#' @keywords internal
 single_matern3 <- function(d, sigsq, phi) {
     .Call(`_smile_single_matern3`, d, sigsq, phi)
 }
@@ -145,6 +105,7 @@ single_matern3 <- function(d, sigsq, phi) {
 #' @seealso \code{\link{single_matern}}, \code{\link{single_matern3}}
 #'   \code{\link{single_exp}}, \code{\link{mat_cov}}
 #' 
+#' @keywords internal
 single_matern5 <- function(d, sigsq, phi) {
     .Call(`_smile_single_matern5`, d, sigsq, phi)
 }
@@ -169,6 +130,7 @@ single_matern5 <- function(d, sigsq, phi) {
 #'   \code{\link{single_matern3}}, \code{\link{single_matern5}},
 #'   \code{\link{mat_cov}}
 #' 
+#' @keywords internal
 single_exp <- function(d, sigsq, phi) {
     .Call(`_smile_single_exp`, d, sigsq, phi)
 }
@@ -193,8 +155,30 @@ single_exp <- function(d, sigsq, phi) {
 #'
 #' @seealso \code{\link{single_exp}}, \code{\link{single_matern}}
 #' 
+#' @keywords internal
 mat_cov <- function(dists, sigsq, phi, kappa) {
     .Call(`_smile_mat_cov`, dists, sigsq, phi, kappa)
+}
+
+#' @title Mean of a (Matern) covariance function (Internal use)
+#'
+#' @description This is an auxilliary function for internal use. It helps to
+#'   numerically integrate a covariance function evaluated at a grid of points
+#'   within a polyigon and speed-up the computations.
+#'
+#' @param dists a numeric matrix representing the distance between spatial
+#'   entities.
+#' @param sigsq the \eqn{\sigma^2} parameter from the Matern covariance
+#'   function.
+#' @param phi the \eqn{\phi} parameter from the Matern covariance function,
+#'   controls the range of the spatial dependence.
+#' @param kappa the \eqn{\kappa} parameter from the Matern covariance function,
+#'   controls the differentiability of the process.
+#' 
+#' @return The mean of \code{mat_cov(dist, sigsq, phi, kappa)}.
+#' @keywords internal
+aux_matern <- function(dist, sigsq, phi, kappa) {
+    .Call(`_smile_aux_matern`, dist, sigsq, phi, kappa)
 }
 
 #' @title Matern covariance function for a polygons.
@@ -222,6 +206,7 @@ mat_cov <- function(dists, sigsq, phi, kappa) {
 #' @seealso \code{\link{single_exp}}, \code{\link{single_matern}},
 #'   \code{\link{mat_cov}}
 #' 
+#' @keywords internal
 comp_mat_cov <- function(cross_dists, n, n2, sigsq, phi, kappa) {
     .Call(`_smile_comp_mat_cov`, cross_dists, n, n2, sigsq, phi, kappa)
 }
@@ -245,7 +230,8 @@ comp_mat_cov <- function(cross_dists, n, n2, sigsq, phi, kappa) {
 #' @seealso \code{\link{single_exp}}, \code{\link{single_matern}},
 #'   \code{\link{single_matern3}}, \code{\link{single_matern5}},
 #'   \code{\link{mat_cov}}
-#' 
+#'
+#' @keywords internal
 single_pexp <- function(d, sigsq, phi, kappa) {
     .Call(`_smile_single_pexp`, d, sigsq, phi, kappa)
 }
@@ -268,9 +254,31 @@ single_pexp <- function(d, sigsq, phi, kappa) {
 #'   and the given set of parameters.
 #'
 #' @seealso \code{\link{single_exp}}, \code{\link{single_matern}}
-#' 
+#' @keywords internal
 pexp_cov <- function(dists, sigsq, phi, kappa) {
     .Call(`_smile_pexp_cov`, dists, sigsq, phi, kappa)
+}
+
+#' @title Mean of a (Powered Exponential) covariance function (Internal use)
+#'
+#' @description This is an auxilliary function for internal use. It helps to
+#'   numerically integrate a covariance function evaluated at a grid of points
+#'   within a polyigon and speed-up the computations.
+#'
+#' @param dists a numeric matrix representing the distance between spatial
+#'   entities.
+#' @param sigsq the \eqn{\sigma^2} parameter from the Powered Exponential
+#'   covariance function.
+#' @param phi the \eqn{\phi} parameter from the Powered Exponential covariance
+#'   function, controls the range of the spatial dependence.
+#' @param kappa the \eqn{\kappa} parameter from the Powered Exponential
+#'   covariance function,
+#'   controls the differentiability of the process.
+#' 
+#' @return The mean of \code{pexp_cov(dist, sigsq, phi, kappa)}.
+#' @keywords internal
+aux_pexp <- function(dist, sigsq, phi, kappa) {
+    .Call(`_smile_aux_pexp`, dist, sigsq, phi, kappa)
 }
 
 #' @title Powered Exponential covariance function for a polygons.
@@ -296,8 +304,8 @@ pexp_cov <- function(dists, sigsq, phi, kappa) {
 #'
 #' @seealso \code{\link{single_exp}}, \code{\link{single_matern}},
 #'   \code{\link{mat_cov}}
-#' 
-#' @export
+#'
+#' @keywords internal
 comp_pexp_cov <- function(cross_dists, n, n2, sigsq, phi, kappa) {
     .Call(`_smile_comp_pexp_cov`, cross_dists, n, n2, sigsq, phi, kappa)
 }
@@ -320,7 +328,8 @@ comp_pexp_cov <- function(cross_dists, n, n2, sigsq, phi, kappa) {
 #' @seealso \code{\link{single_exp}}, \code{\link{single_matern}},
 #'   \code{\link{single_matern3}}, \code{\link{single_matern5}},
 #'   \code{\link{mat_cov}}
-#' 
+#'
+#' @keywords internal
 single_gauss <- function(d, sigsq, phi) {
     .Call(`_smile_single_gauss`, d, sigsq, phi)
 }
@@ -340,35 +349,30 @@ single_gauss <- function(d, sigsq, phi) {
 #'   and the given set of parameters.
 #'
 #' @seealso \code{\link{single_exp}}, \code{\link{single_matern}}
-#' 
+#'
+#' @keywords internal
 gauss_cov <- function(dists, sigsq, phi) {
     .Call(`_smile_gauss_cov`, dists, sigsq, phi)
 }
 
-#' @title Gaussian covariance function for a polygons.
+#' @title Mean of a (Gaussian) covariance function (Internal use)
 #'
-#' @description Computing the Gaussian covariance function between polygons.
+#' @description This is an auxilliary function for internal use. It helps to
+#'   numerically integrate a covariance function evaluated at a grid of points
+#'   within a polyigon and speed-up the computations.
 #'
-#' @param cross_dists a \code{list} such that each position contains the cross
-#'   distances between points within different polygons.
-#' @param n an ingeger representing number of polygons (note that, this is
-#'   different than the size of the list \code{cross_dists}
-#' @param n2 usually, equal to \code{n}, except when the function is being used
-#'   to calculate the "cross" covariance between two different partitions of
-#'   the same space.
+#' @param dists a numeric matrix representing the distance between spatial
+#'   entities.
 #' @param sigsq the \eqn{\sigma^2} parameter from the Gaussian covariance
 #'   function.
 #' @param phi the \eqn{\phi} parameter from the Gaussian covariance function,
 #'   controls the range of the spatial dependence.
 #' 
-#' @return The gaussian covariance matrix associated with a set of
-#'   polygons.
+#' @return The mean of \code{gauss_cov(dist, sigsq, phi)}.
 #'
-#' @seealso \code{\link{single_exp}}, \code{\link{single_matern}},
-#'   \code{\link{mat_cov}}
-#' 
-comp_gauss_cov <- function(cross_dists, n, n2, sigsq, phi) {
-    .Call(`_smile_comp_gauss_cov`, cross_dists, n, n2, sigsq, phi)
+#' @keywords internal
+aux_gauss <- function(dist, sigsq, phi) {
+    .Call(`_smile_aux_gauss`, dist, sigsq, phi)
 }
 
 #' @title Spherical covariance function (scalar)
@@ -389,7 +393,8 @@ comp_gauss_cov <- function(cross_dists, n, n2, sigsq, phi) {
 #' @seealso \code{\link{single_exp}}, \code{\link{single_matern}},
 #'   \code{\link{single_matern3}}, \code{\link{single_matern5}},
 #'   \code{\link{mat_cov}}
-#' 
+#'
+#' @keywords internal
 single_spher <- function(d, sigsq, phi) {
     .Call(`_smile_single_spher`, d, sigsq, phi)
 }
@@ -409,9 +414,30 @@ single_spher <- function(d, sigsq, phi) {
 #'   and the given set of parameters.
 #'
 #' @seealso \code{\link{single_exp}}, \code{\link{single_matern}}
-#' 
+#'
+#' @keywords internal
 spher_cov <- function(dists, sigsq, phi) {
     .Call(`_smile_spher_cov`, dists, sigsq, phi)
+}
+
+#' @title Mean of a (Spherical) covariance function (Internal use)
+#'
+#' @description This is an auxilliary function for internal use. It helps to
+#'   numerically integrate a covariance function evaluated at a grid of points
+#'   within a polyigon and speed-up the computations.
+#'
+#' @param dists a numeric matrix representing the distance between spatial
+#'   entities.
+#' @param sigsq the \eqn{\sigma^2} parameter from the Spherical covariance.
+#'   function.
+#' @param phi the \eqn{\phi} parameter from the Spherical covariance function,
+#'   controls the range of the spatial dependence.
+#' 
+#' @return The mean of \code{spher_cov(dist, sigsq, phi)}.
+#'
+#' @keywords internal
+aux_spher <- function(dist, sigsq, phi) {
+    .Call(`_smile_aux_spher`, dist, sigsq, phi)
 }
 
 #' @title Spherical covariance function for a polygons.
@@ -435,16 +461,14 @@ spher_cov <- function(dists, sigsq, phi) {
 #'
 #' @seealso \code{\link{single_exp}}, \code{\link{single_matern}},
 #'   \code{\link{mat_cov}}
-#' 
+#'
+#' @keywords internal
 comp_spher_cov <- function(cross_dists, n, n2, sigsq, phi) {
     .Call(`_smile_comp_spher_cov`, cross_dists, n, n2, sigsq, phi)
 }
 
-#' @title Internal use only
 #' @name aux_mat
-eucl_aux <- function(x, y) {
-    .Call(`_smile_eucl_aux`, x, y)
-}
+NULL
 
 #' @title Creatin a distance matrix
 #' 
@@ -452,7 +476,7 @@ eucl_aux <- function(x, y) {
 #'   import parallelDist in the future).
 #'
 #' @param my_mat a matrix representing a grid of points.
-#' 
+#' @keywords internal
 distmat <- function(my_mat) {
     .Call(`_smile_distmat`, my_mat)
 }
@@ -463,7 +487,8 @@ distmat <- function(my_mat) {
 #'
 #' @param m1 a matrix representing a grid of points within a polygon.
 #' @param m2 a matrix representing a grid of points within a polygon.
-#' 
+#'
+#' @keywords internal
 crossdist <- function(m1, m2) {
     .Call(`_smile_crossdist`, m1, m2)
 }
@@ -481,18 +506,19 @@ crossdist <- function(m1, m2) {
 #' @param y_grid internal use
 #' @param x_grid internal use
 #' @name aux_mat
+#' @keywords internal
 single_dists <- function(mat_list) {
     .Call(`_smile_single_dists`, mat_list)
 }
 
-#' @title Internal use only
-#' @name aux_mat
+#' @name aux_mat//'
+#' @keywords internal
 mult_dists <- function(mat_list1, mat_list2, return_single) {
     .Call(`_smile_mult_dists`, mat_list1, mat_list2, return_single)
 }
 
-#' @title Internal use only
 #' @name aux_mat
+#' @keywords internal
 pred_cdist <- function(mat_list, pred_mat) {
     .Call(`_smile_pred_cdist`, mat_list, pred_mat)
 }

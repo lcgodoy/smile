@@ -16,7 +16,7 @@ w_col <- function(source_unit, target) {
 ##'
 ##' @title Building weight matrix \strong{W} for Simple Areal Interpolation
 ##'     (SAI)
-##' @description internal use. \eqn{W_{ij} = \lvert A_i \cap B_j \rvert}.
+##' @description internal use. \eqn{W_{ij} = | A_i \, cap \, B_j |}.
 ##' @param source a \code{sf} object - source spatial data.
 ##' @param source_unit a single \code{geometry} from the source dataset.
 ##' @param source_dt a \code{data.frame} object representing the source dataset
@@ -33,6 +33,7 @@ w_col <- function(source_unit, target) {
 ##' @return A \eqn{n \times m} \code{numeric} matrix. Where \eqn{n} is the
 ##'     number of objservations in the target and \eqn{m} is the sample size in
 ##'     the source dataset.
+##' @keywords internal
 build_w <- function(source, target) {
   source <- sf::st_geometry(source)
   target <- sf::st_geometry(target)
@@ -63,6 +64,7 @@ est_w <- function(W, source_dt, target) {
 ##' @param variable a \code{character} representing one of the variables from
 ##'     \code{sf_dt}.
 ##' @return a \code{numeric} scalar.
+##' @keywords internal
 morans_i <- function(sf_dt, variable) {
     stopifnot(inherits(sf_dt, "sf"))
     stopifnot(inherits(variable, "character"))

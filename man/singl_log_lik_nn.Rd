@@ -48,3 +48,4 @@ profile likelihood
 \details{
 Internal use.
 }
+\keyword{internal}

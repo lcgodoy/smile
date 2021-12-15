@@ -2,6 +2,7 @@
 ##' @details internal use.
 ##' @param y response variable.
 ##' @param Vinv inverse of \eqn{V}
+##' @keywords internal
 est_mle <- function(y, Vinv) {
     n <- length(y)
     ones  <- matrix(1, nrow = n)
@@ -62,6 +63,7 @@ mult_dist_from_grids <- function(y_grid, x_grid, by) {
 ##'     \url{https://cran.r-project.org/web/packages/nngeo/index.html}
 ##' @param x a \code{sf} or \code{sfc} polygon.
 ##' @return a \code{sf} or \code{sfc} polygon.
+##' @keywords internal
 st_remove_holes <- function(x) {
     stopifnot(all(sf::st_is(x, "POLYGON") | sf::st_is(x, "MULTIPOLYGON")))
     geometry_is_polygon <- all(sf::st_is(x, "POLYGON"))

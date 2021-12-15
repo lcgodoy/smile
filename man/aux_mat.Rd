@@ -2,20 +2,14 @@
 % Please edit documentation in R/RcppExports.R, R/utils.R
 \name{aux_mat}
 \alias{aux_mat}
-\alias{eucl_aux}
 \alias{single_dists}
-\alias{mult_dists}
 \alias{pred_cdist}
 \alias{get_grid_list}
 \alias{dist_from_grids}
 \alias{mult_dist_from_grids}
 \title{Internal use only}
 \usage{
-eucl_aux(x, y)
-
 single_dists(mat_list)
-
-mult_dists(mat_list1, mat_list2, return_single)
 
 pred_cdist(mat_list, pred_mat)
 
@@ -26,17 +20,7 @@ dist_from_grids(y_grid, by)
 mult_dist_from_grids(y_grid, x_grid, by)
 }
 \arguments{
-\item{x}{internal use}
-
-\item{y}{internal use}
-
 \item{mat_list}{internal use}
-
-\item{mat_list1}{internal use}
-
-\item{mat_list2}{internal use}
-
-\item{return_single}{internal use}
 
 \item{pred_mat}{internal use}
 
@@ -47,13 +31,18 @@ mult_dist_from_grids(y_grid, x_grid, by)
 \item{y_grid}{internal use}
 
 \item{x_grid}{internal use}
+
+\item{mat_list1}{internal use}
+
+\item{mat_list2}{internal use}
+
+\item{x}{internal use}
+
+\item{y}{internal use}
+
+\item{return_single}{internal use}
 }
 \description{
 Internal use only
-
-Internal use only
-
-Internal use only
-
-Internal use only
 }
+\keyword{internal}

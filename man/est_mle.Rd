@@ -17,3 +17,4 @@ MLEs for fixed V.
 \details{
 internal use.
 }
+\keyword{internal}

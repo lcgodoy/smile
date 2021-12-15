@@ -37,3 +37,4 @@ polygons.
 \code{\link{single_exp}}, \code{\link{single_matern}},
 \code{\link{mat_cov}}
 }
+\keyword{internal}

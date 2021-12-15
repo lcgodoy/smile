@@ -38,3 +38,4 @@ Computing the Matern covariance function between polygons.
 \code{\link{single_exp}}, \code{\link{single_matern}},
 \code{\link{mat_cov}}
 }
+\keyword{internal}

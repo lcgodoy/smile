@@ -37,3 +37,4 @@ Evaluate the log-likelihood for a given set of parameters
 \details{
 Internal use.
 }
+\keyword{internal}

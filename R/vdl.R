@@ -7,6 +7,7 @@
 ##' @param poly_sf a `sf` polygon
 ##'
 ##' @return a `sf` polygon
+##' @keywords internal
 vor_build <- function(points_sf, poly_sf) {
     if(nrow(points_sf) > 1) {
         voronoi <- do.call(c, sf::st_geometry(points_sf))
@@ -39,7 +40,6 @@ vor_build <- function(points_sf, poly_sf) {
 ##'
 ##' @return a `sf` object for the `coords_sf` spatial data set.
 ##' @export
-##'
 vdl <- function(coords_sf, areal_sf,
                 vars,
                 buff) {
@@ -106,7 +106,6 @@ vdl <- function(coords_sf, areal_sf,
 ##' @return a `sf` object, contaning the `id_coords` variable and the
 ##' `list_vars` for the `coords_sf` spatial data set.
 ##' @export
-##'
 vdl_var <- function(coords_sf, areal_sf,
                     res_var,
                     variance,
@@ -153,6 +152,7 @@ vdl_var <- function(coords_sf, areal_sf,
 ##' @param ... additional options
 ##'
 ##' @return an `sf` object.
+##' @keywords internal
 transform.sf <- function (`_data`, ...) {
     e <- eval(substitute(list(...)), `_data`, parent.frame())
     tags <- names(e)

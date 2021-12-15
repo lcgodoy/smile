@@ -17,3 +17,4 @@ an \code{sf} object.
 \description{
 Internal usage.
 }
+\keyword{internal}

@@ -45,5 +45,6 @@ number of objservations in the target and \eqn{m} is the sample size in
 the source dataset.
 }
 \description{
-internal use. \eqn{W_{ij} = \lvert A_i \cap B_j \rvert}.
+internal use. \eqn{W_{ij} = | A_i \, cap \, B_j |}.
 }
+\keyword{internal}

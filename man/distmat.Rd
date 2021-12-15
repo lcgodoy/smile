@@ -13,3 +13,4 @@ distmat(my_mat)
 Internal use. For now it only supports euclidean distance. (May
 import parallelDist in the future).
 }
+\keyword{internal}

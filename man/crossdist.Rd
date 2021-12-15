@@ -14,3 +14,4 @@ crossdist(m1, m2)
 \description{
 Internal use.
 }
+\keyword{internal}

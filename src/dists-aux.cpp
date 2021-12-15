@@ -6,9 +6,7 @@
 // [[Rcpp::plugins(cpp11)]]
 using namespace Rcpp;
 
-//' @title Internal use only
 //' @name aux_mat
-// [[Rcpp::export]]
 double eucl_aux(double x, double y) {
   return sqrt( x*x + y*y );
 }
@@ -19,7 +17,7 @@ double eucl_aux(double x, double y) {
 //'   import parallelDist in the future).
 //'
 //' @param my_mat a matrix representing a grid of points.
-//' 
+//' @keywords internal
 // [[Rcpp::export]]
 arma::mat distmat(const arma::mat& my_mat) {
   int n = my_mat.n_rows, k = 0;
@@ -54,7 +52,8 @@ arma::mat distmat(const arma::mat& my_mat) {
 //'
 //' @param m1 a matrix representing a grid of points within a polygon.
 //' @param m2 a matrix representing a grid of points within a polygon.
-//' 
+//'
+//' @keywords internal
 // [[Rcpp::export]]
 arma::mat crossdist(const arma::mat& m1, const arma::mat& m2) {
 
@@ -85,6 +84,7 @@ arma::mat crossdist(const arma::mat& m1, const arma::mat& m2) {
 //' @param y_grid internal use
 //' @param x_grid internal use
 //' @name aux_mat
+//' @keywords internal
 // [[Rcpp::export]]
 List single_dists(const List& mat_list) {
   int n_out = mat_list.size(), k = 0;
@@ -99,8 +99,8 @@ List single_dists(const List& mat_list) {
   return out;
 }
 
-//' @title Internal use only
-//' @name aux_mat
+//' @name aux_mat//'
+//' @keywords internal
 // [[Rcpp::export]]
 List mult_dists(const List& mat_list1, const List& mat_list2,
 		const bool& return_single) {
@@ -121,8 +121,8 @@ List mult_dists(const List& mat_list1, const List& mat_list2,
   return out_cross;
 }
 
-//' @title Internal use only
 //' @name aux_mat
+//' @keywords internal
 // [[Rcpp::export]]
 List pred_cdist(const List& mat_list, const arma::mat& pred_mat) {
 

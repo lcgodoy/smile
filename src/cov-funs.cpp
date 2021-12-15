@@ -16,6 +16,7 @@ using namespace Rcpp;
 //'
 //' @param mat_aux a numeric matrix.
 //' @return The mean of \code{mat_aux}.
+//' @keywords internal
 double mean_mat(arma::mat mat_aux) {
   return std::accumulate(mat_aux.begin(), mat_aux.end(), 0.0) /
     (mat_aux.n_rows * mat_aux.n_cols);
@@ -24,7 +25,7 @@ double mean_mat(arma::mat mat_aux) {
 //' @title Matern covariance function (scalar - generic)
 //'
 //' @description Computing the Matern covariance function for a single distance
-//'   measure, addapted from \code{\link[geoR]{matern}}.
+//'   measure, addapted from \code{geoR}.
 //'
 //' @param d a scalar representing the distance on which it is desired to
 //'   evaluate the covariance function.
@@ -41,6 +42,7 @@ double mean_mat(arma::mat mat_aux) {
 //' @seealso \code{\link{single_matern}}, \code{\link{single_matern5}}
 //'   \code{\link{single_exp}}, \code{\link{mat_cov}}
 //' 
+//' @keywords internal
 // [[Rcpp::export]]
 double single_matern(double d, double sigsq,
 		     double phi, double kappa) {
@@ -72,6 +74,7 @@ double single_matern(double d, double sigsq,
 //' @seealso \code{\link{single_matern}}, \code{\link{single_matern5}}
 //'   \code{\link{single_exp}}, \code{\link{mat_cov}}
 //' 
+//' @keywords internal
 // [[Rcpp::export]]
 double single_matern3(double d, double sigsq,
 		      double phi) {
@@ -101,6 +104,7 @@ double single_matern3(double d, double sigsq,
 //' @seealso \code{\link{single_matern}}, \code{\link{single_matern3}}
 //'   \code{\link{single_exp}}, \code{\link{mat_cov}}
 //' 
+//' @keywords internal
 // [[Rcpp::export]]
 double single_matern5(double d, double sigsq,
 		      double phi) {
@@ -131,6 +135,7 @@ double single_matern5(double d, double sigsq,
 //'   \code{\link{single_matern3}}, \code{\link{single_matern5}},
 //'   \code{\link{mat_cov}}
 //' 
+//' @keywords internal
 // [[Rcpp::export]]
 double single_exp(double d, double sigsq, double phi) {
   double out = sigsq;
@@ -160,6 +165,7 @@ double single_exp(double d, double sigsq, double phi) {
 //'
 //' @seealso \code{\link{single_exp}}, \code{\link{single_matern}}
 //' 
+//' @keywords internal
 // [[Rcpp::export]]
 arma::mat mat_cov(const arma::mat& dists, double sigsq,
 		  double phi, double kappa) {
@@ -215,6 +221,8 @@ arma::mat mat_cov(const arma::mat& dists, double sigsq,
 //'   controls the differentiability of the process.
 //' 
 //' @return The mean of \code{mat_cov(dist, sigsq, phi, kappa)}.
+//' @keywords internal
+// [[Rcpp::export]]
 double aux_matern(arma::mat dist, double sigsq,
 		  double phi, double kappa) {
   return mean_mat(mat_cov(dist, sigsq, phi, kappa));
@@ -245,6 +253,7 @@ double aux_matern(arma::mat dist, double sigsq,
 //' @seealso \code{\link{single_exp}}, \code{\link{single_matern}},
 //'   \code{\link{mat_cov}}
 //' 
+//' @keywords internal
 // [[Rcpp::export]]
 arma::mat comp_mat_cov(const List& cross_dists, int n,
 		       int n2, double sigsq, double phi,
@@ -289,7 +298,8 @@ arma::mat comp_mat_cov(const List& cross_dists, int n,
 //' @seealso \code{\link{single_exp}}, \code{\link{single_matern}},
 //'   \code{\link{single_matern3}}, \code{\link{single_matern5}},
 //'   \code{\link{mat_cov}}
-//' 
+//'
+//' @keywords internal
 // [[Rcpp::export]]
 double single_pexp(double d, double sigsq, double phi, double kappa) {
   double out = sigsq;
@@ -317,7 +327,7 @@ double single_pexp(double d, double sigsq, double phi, double kappa) {
 //'   and the given set of parameters.
 //'
 //' @seealso \code{\link{single_exp}}, \code{\link{single_matern}}
-//' 
+//' @keywords internal
 // [[Rcpp::export]]
 arma::mat pexp_cov(const arma::mat& dists, double sigsq,
 		   double phi, double kappa) {
@@ -346,6 +356,8 @@ arma::mat pexp_cov(const arma::mat& dists, double sigsq,
 //'   controls the differentiability of the process.
 //' 
 //' @return The mean of \code{pexp_cov(dist, sigsq, phi, kappa)}.
+//' @keywords internal
+// [[Rcpp::export]]
 double aux_pexp(arma::mat dist, double sigsq,
 	       double phi, double kappa) {
   return mean_mat(pexp_cov(dist, sigsq, phi, kappa));
@@ -374,8 +386,8 @@ double aux_pexp(arma::mat dist, double sigsq,
 //'
 //' @seealso \code{\link{single_exp}}, \code{\link{single_matern}},
 //'   \code{\link{mat_cov}}
-//' 
-//' @export
+//'
+//' @keywords internal
 // [[Rcpp::export]]
 arma::mat comp_pexp_cov(const List& cross_dists, int n,
 			int n2, double sigsq, double phi, 
@@ -419,7 +431,8 @@ arma::mat comp_pexp_cov(const List& cross_dists, int n,
 //' @seealso \code{\link{single_exp}}, \code{\link{single_matern}},
 //'   \code{\link{single_matern3}}, \code{\link{single_matern5}},
 //'   \code{\link{mat_cov}}
-//' 
+//'
+//' @keywords internal
 // [[Rcpp::export]]
 double single_gauss(double d, double sigsq, double phi) {
   double out = sigsq;
@@ -444,7 +457,8 @@ double single_gauss(double d, double sigsq, double phi) {
 //'   and the given set of parameters.
 //'
 //' @seealso \code{\link{single_exp}}, \code{\link{single_matern}}
-//' 
+//'
+//' @keywords internal
 // [[Rcpp::export]]
 arma::mat gauss_cov(const arma::mat& dists, double sigsq, double phi) {
   int nr = dists.n_rows, nc = dists.n_cols;
@@ -470,6 +484,9 @@ arma::mat gauss_cov(const arma::mat& dists, double sigsq, double phi) {
 //'   controls the range of the spatial dependence.
 //' 
 //' @return The mean of \code{gauss_cov(dist, sigsq, phi)}.
+//'
+//' @keywords internal
+// [[Rcpp::export]]
 double aux_gauss(arma::mat dist, double sigsq, double phi) {
   return mean_mat(gauss_cov(dist, sigsq, phi));
 }
@@ -495,8 +512,9 @@ double aux_gauss(arma::mat dist, double sigsq, double phi) {
 //'
 //' @seealso \code{\link{single_exp}}, \code{\link{single_matern}},
 //'   \code{\link{mat_cov}}
-//' 
-// [[Rcpp::export]]
+//'
+//' @keywords internal
+//' [Rcpp::export]]
 arma::mat comp_gauss_cov(const List& cross_dists, int n,
 			 int n2, double sigsq, double phi) {
   arma::mat out(n, n2, arma::fill::zeros);
@@ -538,7 +556,8 @@ arma::mat comp_gauss_cov(const List& cross_dists, int n,
 //' @seealso \code{\link{single_exp}}, \code{\link{single_matern}},
 //'   \code{\link{single_matern3}}, \code{\link{single_matern5}},
 //'   \code{\link{mat_cov}}
-//' 
+//'
+//' @keywords internal
 // [[Rcpp::export]]
 double single_spher(double d, double sigsq, double phi) {
   double out = sigsq;
@@ -566,7 +585,8 @@ double single_spher(double d, double sigsq, double phi) {
 //'   and the given set of parameters.
 //'
 //' @seealso \code{\link{single_exp}}, \code{\link{single_matern}}
-//' 
+//'
+//' @keywords internal
 // [[Rcpp::export]]
 arma::mat spher_cov(const arma::mat& dists, double sigsq, double phi) {
   int nr = dists.n_rows, nc = dists.n_cols;
@@ -592,6 +612,9 @@ arma::mat spher_cov(const arma::mat& dists, double sigsq, double phi) {
 //'   controls the range of the spatial dependence.
 //' 
 //' @return The mean of \code{spher_cov(dist, sigsq, phi)}.
+//'
+//' @keywords internal
+// [[Rcpp::export]]
 double aux_spher(arma::mat dist, double sigsq, double phi) {
   return mean_mat(spher_cov(dist, sigsq, phi));
 }
@@ -617,7 +640,8 @@ double aux_spher(arma::mat dist, double sigsq, double phi) {
 //'
 //' @seealso \code{\link{single_exp}}, \code{\link{single_matern}},
 //'   \code{\link{mat_cov}}
-//' 
+//'
+//' @keywords internal
 // [[Rcpp::export]]
 arma::mat comp_spher_cov(const List& cross_dists, int n,
 			 int n2, double sigsq, double phi) {

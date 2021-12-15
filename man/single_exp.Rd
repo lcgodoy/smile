@@ -29,3 +29,4 @@ distance measure.
 \code{\link{single_matern3}}, \code{\link{single_matern5}},
 \code{\link{mat_cov}}
 }
+\keyword{internal}

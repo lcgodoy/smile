@@ -30,5 +30,6 @@ aggregate_aux(
 \item{join}{internal use}
 }
 \description{
-taken from \code{\link[sf]{aggregate.sf}}.
+{aggregate.sf} taken from \code{sf}.
 }
+\keyword{internal}

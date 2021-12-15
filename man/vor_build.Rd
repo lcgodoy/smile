@@ -18,3 +18,4 @@ a \code{sf} polygon
 voronoi tesselation of a given a set of points inside a polygon.
 This is an internal use function.
 }
+\keyword{internal}

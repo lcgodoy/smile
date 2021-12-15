@@ -6,6 +6,7 @@ vignette: >
   %\VignetteIndexEntry{5. Spatial covariance functions}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
+  \usepackage[utf8]{inputenc}
 ---
 
 ```{r, include = FALSE}
@@ -19,60 +20,57 @@ In this short vignette, we illustrate the family of spatial covariance functions
 implemented in this package. Note that, all of them are based on the assumptions
 of stationarity and isotropy of the underlying Gaussian random field
 (GRF). Also, the implementations (and definitions) are based on the families of
-spatial _correlation_ functions presented in @diggle2007model. The implemtations
-make use of the `RcppArmadillo` [@eddelbuettel2014rcpparmadillo] package and the
-STL library algorithms (C++ 11)^[for this problem, the implementation using the
-sequencial algorithms of the STL library was more effitient than those using the
-`RcppParallel` package].
+spatial _correlation_ functions presented in @diggle2007model. The
+implementations make use of the `RcppArmadillo` [@eddelbuettel2014rcpparmadillo]
+package and the STL library algorithms (C++ 11)^[for this problem, the
+implementation using the sequencial algorithms of the STL library was more
+effitient than those using the `RcppParallel` package].
 
-The first spatial covariance family implemented is the so-called Mat\'ern
-Covariance function, it is of form
+The first spatial covariance family implemented is the so-called Matérn
+Covariance function, which is defined as
 \[
-C(h; \sigma^2, \phi, \kappa) = \sigma^2 \frac{(h / \phi)^{\kappa} K_{\kappa}( h / \phi )}
-{ 2^{\kappa - 1} \Gamma(\kappa) },
+{\rm C}(h; \sigma^2, \phi, \kappa) = \sigma^2 \frac{(h / \phi)^{\kappa}
+K_{\kappa}( h / \phi )} { 2^{\kappa - 1} \Gamma(\kappa) }.
 \]
-where $h$ is the distance between two points, $\sigma^2$ is analogous to a
-variance parameter, $\phi$ is the scale parameter that controls the rech of the
-spatial dependence, and $\kappa$ is a shape parameter that controls the
-differentiability of the process. The function $K_{\kappa}(\cdot)$ is the
-$\kappa$-order Modified Bessel function of Second-Kind There are special cases
-of the Mat\'er family implemented on the package, when setting $\kappa$ to
-$1/2$, $3/2$, $5/2$, or $\infty$ the expression simplifies. The first and the
-last cases yields to the Exponential and Gaussian family, respectively.  
+Where $h$ is the distance between two points, $\sigma^2$ is a variance
+parameter, $\phi$ is the scale parameter that controls the reach of the spatial
+dependence, and $\kappa$ is a shape parameter that controls the smoothness of
+the process. The function $K_{\kappa}(\cdot)$ is the $\kappa$-order Modified
+Bessel function of Second-Kind. There are special cases of the Matérn family
+implemented on the package, when setting $\kappa$ to $1/2$, $3/2$, $5/2$, or
+$\to \infty$ the expression simplifies. The first and the last cases yield to
+the Exponential and Gaussian family, respectively.
 
 The second spatial covariance family implemented is the Powered Exponential
 Covariance function, it is defined as
 \[
-C(h; \sigma^2, \phi, \kappa) = \sigma^2 \exp \{ - (h / \phi)^{\kappa} \},
+{\rm C}(h; \sigma^2, \phi, \kappa) = \sigma^2 \exp \{ - (h / \phi)^{\kappa} \},
 \]
-where $h$ is the distance between two points, $\sigma^2$ is analogous to a
-variance parameter, $\phi$ is the scale parameter that controls the rech of the
-spatial dependence, and $\kappa$ is a shape parameter that controls the
-differentiability of the process.  
+where $h$ is the distance between two points, $\sigma^2$, $\phi$, and $\kappa$
+analogous to the Matérn function.
 
-The penultimate option is the Gaussian family of covariance functions, they are
-defined as
+The penultimate option is the Gaussian family of covariance functions. The
+expression associated with this family is written as
 \[
-C(h; \sigma^2, \phi) = \sigma^2 \exp \left\{ - \frac{h ^ 2}{2 \phi ^ 2} \right\},
+{\rm C}(h; \sigma^2, \phi) = \sigma^2 \exp \left\{ - \frac{h ^ 2}{2 \phi ^ 2} \right\},
 \]
-the parameters are analogous to those defined by the previous two families. Note
-that, this family has one less parameter as the previously defined ones.
+again, the parameters are analogous to what have defined before in this
+vignette.
 
 Lastly, we have implemented the Spherical family of covariance functions,
 defined as
 \[
-C(h; \sigma^2, \phi) = 
+{\rm C}(h; \sigma^2, \phi) = 
 \sigma^2 
 \begin{cases}
 1 - \frac{3}{2} (h / \phi) + \frac{1}{2} (h / \phi) ^ 3 & , \,
-0 \geq h \geq \phi \\
+0 \leq h \leq \phi \\
 0 & , \, h > \phi,
 \end{cases}
 \]
-where, again, $\sigma^2$ is a variance parameter, while $\phi > 0 $ is a
+where, again, $\sigma^2$ is a variance parameter, while $\phi > 0$ is a
 parameter with the same magnitude as the distances on which the function is
-being evaluated at. 
-
-All this functions will be useful in the upcoming vignette.
+being evaluated at and controls the speed of decay of the spatial covariances as
+we increase the distance between two points.
 
 # Reference

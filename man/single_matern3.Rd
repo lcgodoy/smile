@@ -28,3 +28,4 @@ measure, with \eqn{\kappa = 3/2}.
 \code{\link{single_matern}}, \code{\link{single_matern5}}
 \code{\link{single_exp}}, \code{\link{mat_cov}}
 }
+\keyword{internal}

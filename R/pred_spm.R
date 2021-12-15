@@ -200,7 +200,7 @@ predict_spm.spm_fit <- function(x, .aggregate = TRUE, ...) {
 ##' @param n_pts a \code{numeric} scalar standing for number of points to form a
 ##'     grid over the whole region to make the predictions
 ##' @param type \code{character} type of grid to be generated. See
-##'     \code{\link[sf]{st_sample}}.
+##'     \code{st_sample} in the package \code{sf}.
 ##' @param ... additional parameters
 ##'
 ##' @return an object of class \code{spm_pred}
@@ -444,12 +444,6 @@ predict_spm.sf <- function(x, spm_obj,
     return(output)
 }
 
-##' @name predict_spm
-##' @export
-predict_spm.matrix <- function(x, ...) {
-    stop("yet to be implemented.")
-}
-
 ##' @title Internal use only
 ##' @param x internal use
 ##' @param by internal use
@@ -458,5 +452,6 @@ predict_spm.matrix <- function(x, ...) {
 ##' @param do_union internal use
 ##' @param simplify internal use
 ##' @param join internal use
-##' @description taken from \code{\link[sf]{aggregate.sf}}.
+##' @description {aggregate.sf} taken from \code{sf}.
+##' @keywords internal
 aggregate_aux <- utils::getFromNamespace("aggregate.sf", "sf")

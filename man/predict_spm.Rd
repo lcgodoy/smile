@@ -4,7 +4,6 @@
 \alias{predict_spm}
 \alias{predict_spm.spm_fit}
 \alias{predict_spm.sf}
-\alias{predict_spm.matrix}
 \title{Prediction over the same or a different set of regions (or points).}
 \usage{
 predict_spm(x, ...)
@@ -12,8 +11,6 @@ predict_spm(x, ...)
 \method{predict_spm}{spm_fit}(x, .aggregate = TRUE, ...)
 
 \method{predict_spm}{sf}(x, spm_obj, .aggregate = TRUE, n_pts, type, ...)
-
-\method{predict_spm}{matrix}(x, ...)
 }
 \arguments{
 \item{x}{a \code{sf} object such that its geometris are either points or
@@ -33,7 +30,7 @@ this new partition of the study region.}
 grid over the whole region to make the predictions}
 
 \item{type}{\code{character} type of grid to be generated. See
-\code{\link[sf]{st_sample}}.}
+\code{st_sample} in the package \code{sf}.}
 }
 \value{
 an object of class \code{spm_pred}

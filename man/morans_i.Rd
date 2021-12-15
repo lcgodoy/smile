@@ -18,3 +18,4 @@ a \code{numeric} scalar.
 \description{
 Calculates the (global) Moran's I
 }
+\keyword{internal}

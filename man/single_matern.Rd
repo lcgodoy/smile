@@ -25,9 +25,10 @@ observations \code{d} apart of each other.
 }
 \description{
 Computing the Matern covariance function for a single distance
-measure, addapted from \code{\link[geoR]{matern}}.
+measure, addapted from \code{geoR}.
 }
 \seealso{
 \code{\link{single_matern}}, \code{\link{single_matern5}}
 \code{\link{single_exp}}, \code{\link{mat_cov}}
 }
+\keyword{internal}

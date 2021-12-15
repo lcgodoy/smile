@@ -31,3 +31,4 @@ distances.
 \seealso{
 \code{\link{single_exp}}, \code{\link{single_matern}}
 }
+\keyword{internal}
