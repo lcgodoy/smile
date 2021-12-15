@@ -93,7 +93,7 @@ $\tau$), we are forcing this parameter to be 0. Also, the `theta_st` argument
 (which takes the initial values for the parameters), must be a named vector.  If
 we input initial values for $\mu$, $\sigma^2$, $\phi$, and $\nu$ (or $\tau$),
 the likelihood is optimized numerically for all the parameters. If we omit $\mu$
-and $\sigma^2$, then a partial likelihood approach is used to find numerically
+and $\sigma^2$, then a profile likelihood approach is used to find numerically
 for the $\hat{\phi}$ and, if wished, $\hat{\nu}$. While, $\hat{\mu}$ and
 $\hat{\sigma}^2$ have closed form expressions [@ribeiro2007geostatistical].
 Additionally, the commented part of the code below shows how to proceed to

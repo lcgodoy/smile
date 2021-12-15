@@ -89,9 +89,9 @@ are unknown. The Likelihood of $Y(A_1, \ldots, A_n)$ can still be computed.
 
 In particular, if we use the parametrization $\nu = \tau / \sigma^2$, we have
 closed form for the Maximum Likelihood estimators both for $\mu$ and
-$\sigma^2$. Thus, we can optimize the partial likelihood for $\phi$ and $\nu$
+$\sigma^2$. Thus, we can optimize the profile likelihood for $\phi$ and $\nu$
 numerically. Then, we resort on conditional Normal properties again to compute
-the predictions in a new different set of regions. 
+the predictions in a new different set of regions.
 
 ## Spatial Areal Interpolation (SAI)
 
