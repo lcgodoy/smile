@@ -1,10 +1,9 @@
 ---
-title: "4. Theory"
-subtitle: Model-based approaches
+title: "4. Method"
 output: rmarkdown::html_vignette
 bibliography: biblio.bib
 vignette: >
-  %\VignetteIndexEntry{4. Theory}
+  %\VignetteIndexEntry{4. Method}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -59,15 +58,15 @@ where $\lvert \cdot \rvert$ returns the area of a polygon.
 Furthermore, it can be shown that (using Fubini's Theorem and some algebraic
 manipulation)
 \[
-{\rm Cov}(Y(A_i), Y(A_j)) = frac{\sigma^2}{\lvert A_i \rvert \lvert A_j \rvert}
+{\rm Cov}(Y(A_i), Y(A_j)) = \frac{\sigma^2}{\lvert A_i \rvert \lvert A_j \rvert}
 \int_{A_i \times A_j} \rho( \lVert \mathbf{s} - \mathbf{s}' \rVert; \, \phi,
 \kappa ) \, {\rm d} \mathbf{s} \, {\rm d} \mathbf{s}' + \mathbf{I}(i = j)
-\frac{\tau}{\lVert A_i \rVert},
+\frac{\tau}{\lvert A_i \rvert},
 \]
 where $\rho(\cdot ; \, \phi, \kappa)$ is a positive definite correlation
 function. Now, let ${\rm R}_{\kappa}(\phi)$ be a correlation matrix such that
 \[
-{\rm R}_{\kappa}(\phi)_{ij} = frac{1}{\lvert A_i \rvert \lvert A_j \rvert}
+{\rm R}_{\kappa}(\phi)_{ij} = \frac{1}{\lvert A_i \rvert \lvert A_j \rvert}
 \int_{A_i \times A_j} \rho( \lVert \mathbf{s} - \mathbf{s}' \rVert; \, \phi,
 \kappa ) \, {\rm d} \mathbf{s} \, {\rm d} \mathbf{s}',
 \]
@@ -93,7 +92,7 @@ $\sigma^2$. Thus, we can optimize the profile likelihood for $\phi$ and $\nu$
 numerically. Then, we resort on conditional Normal properties again to compute
 the predictions in a new different set of regions.
 
-## Spatial Areal Interpolation (SAI)
+## Areal Interpolation (AI)
 
 Areal interpolation is a nonparametric approach that interpolates $Y(A_i)$'s to
 construct $Y(B_j)$'s. Define an $m \times n$ matrix $\mathbf{W} = \{ w_{ij} \}$,
@@ -109,8 +108,8 @@ $\hat Y(B_1, \ldots, B_m)$ is constructed as
 \end{equation}
 The expectation and variance of the predictor are, respectively,
 \[
-  \E[\hat{Y}(B_1, \ldots, B_m)] = \mathbf{W}
-  \E[Y(A_1, \ldots, A_n)]
+  {\rm E}[\hat{Y}(B_1, \ldots, B_m)] = \mathbf{W}
+  {\rm E}[Y(A_1, \ldots, A_n)]
 \]
 and
 \begin{equation}

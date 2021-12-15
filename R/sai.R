@@ -14,8 +14,8 @@ w_col <- function(source_unit, target) {
 
 ##' @name weight_mat
 ##'
-##' @title Building weight matrix \strong{W} for Simple Areal Interpolation
-##'     (SAI)
+##' @title Building weight matrix \strong{W} for Areal Interpolation
+##' 
 ##' @description internal use. \eqn{W_{ij} = | A_i \, cap \, B_j |}.
 ##' @param source a \code{sf} object - source spatial data.
 ##' @param source_unit a single \code{geometry} from the source dataset.
@@ -27,7 +27,7 @@ w_col <- function(source_unit, target) {
 ##'     data.
 ##' @param W the weight matrix.
 ##' @param method a \code{character} representing the method to approximate the
-##'     variance of the SAI estimates. Possible values are "CS"
+##'     variance of the AI estimates. Possible values are "CS"
 ##'     (Cauchy-Schwartz) or "MI" (Moran's I).
 ##' @param rho_mi \code{numeric} calcuated Moran's I.
 ##' @return A \eqn{n \times m} \code{numeric} matrix. Where \eqn{n} is the
@@ -117,9 +117,9 @@ var_w <- function(W, var_vec, target,
 
     return(transform(target, se_est = se_est))
 }
-##' @name SAI
+##' @name AI
 ##'
-##' @title Simple Areal Interpolation
+##' @title Areal Interpolation
 ##' @param source a \code{sf} object - source spatial data.
 ##' @param target a \code{sf} object - target spatial data.
 ##' @param vars a \code{character} representing the variables (observed at the
@@ -128,14 +128,14 @@ var_w <- function(W, var_vec, target,
 ##'     the variable in the source dataset that stores the variances of the
 ##'     variable to be estimated at the target data.
 ##' @param var_method a \code{character} representing the method to approximate
-##'     the variance of the SAI estimates. Possible values are "CS"
+##'     the variance of the AI estimates. Possible values are "CS"
 ##'     (Cauchy-Schwartz) or "MI" (Moran's I).
 ##' 
 ##' @return the target (of type \code{sf}) with estimates of the variables
 ##'     observed at the source data.
 ##' @export
-sai <- function(source, target,
-                vars) {
+ai <- function(source, target,
+               vars) {
     stopifnot(inherits(source, "sf"))
     stopifnot(inherits(target, "sf"))
     stopifnot(inherits(vars, "character"))
@@ -148,11 +148,11 @@ sai <- function(source, target,
     return(out)
 }
 
-##' @name SAI
+##' @name AI
 ##' @export
-sai_var <- function(source, target,
-                    vars, vars_var,
-                    var_method = "CS") {
+ai_var <- function(source, target,
+                   vars, vars_var,
+                   var_method = "CS") {
     stopifnot(inherits(source, "sf"))
     stopifnot(inherits(target, "sf"))
     stopifnot(inherits(vars, "character"))

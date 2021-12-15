@@ -6,8 +6,7 @@
 \alias{build_w}
 \alias{est_w}
 \alias{var_w}
-\title{Building weight matrix \strong{W} for Simple Areal Interpolation
-(SAI)}
+\title{Building weight matrix \strong{W} for Areal Interpolation}
 \usage{
 w_col(source_unit, target)
 
@@ -34,7 +33,7 @@ column.}
 data.}
 
 \item{method}{a \code{character} representing the method to approximate the
-variance of the SAI estimates. Possible values are "CS"
+variance of the AI estimates. Possible values are "CS"
 (Cauchy-Schwartz) or "MI" (Moran's I).}
 
 \item{rho_mi}{\code{numeric} calcuated Moran's I.}

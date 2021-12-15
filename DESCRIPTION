@@ -30,8 +30,8 @@ Imports:
     utils
 Depends: 
     R (>= 3.5)
-URL: https://lcgodoy.me/smile, https://github.com/lcgodoy/smile
-BugReports: https://github.com/lcgodoy/smile/issues
+URL: https://lcgodoy.me/smile/, https://github.com/lcgodoy/smile/
+BugReports: https://github.com/lcgodoy/smile/issues/
 Suggests: 
     knitr,
     rmarkdown,

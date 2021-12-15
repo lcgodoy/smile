@@ -468,6 +468,7 @@ comp_spher_cov <- function(cross_dists, n, n2, sigsq, phi) {
 }
 
 #' @name aux_mat
+#' @keywords internal
 NULL
 
 #' @title Creatin a distance matrix

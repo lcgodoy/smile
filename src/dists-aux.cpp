@@ -7,6 +7,7 @@
 using namespace Rcpp;
 
 //' @name aux_mat
+//' @keywords internal
 double eucl_aux(double x, double y) {
   return sqrt( x*x + y*y );
 }

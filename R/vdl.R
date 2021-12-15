@@ -81,8 +81,8 @@ vdl <- function(coords_sf, areal_sf,
 
     vor_sf <- vor_build(points_sf = coords_sf, poly_sf = sf_border)    
     
-    output <- sai(source = areal_sf, target = vor_sf,
-                  vars = vars)
+    output <- ai(source = areal_sf, target = vor_sf,
+                 vars = vars)
 
     return(output)
 }
@@ -98,7 +98,7 @@ vdl <- function(coords_sf, areal_sf,
 ##' @param variance a \code{character} - the name of the variable varinace in
 ##'     the \code{areal_sf} to be estimated in the \code{coords_sf}.
 ##' @param var_method a \code{character} representing the method to approximate
-##'     the variance of the SAI estimates. Possible values are "CS"
+##'     the variance of the AI estimates. Possible values are "CS"
 ##'     (Cauchy-Schwartz) or "MI" (Moran's I).
 ##' @param buff scalar `numeric`. Mostly for internal use.
 ##'
@@ -138,9 +138,9 @@ vdl_var <- function(coords_sf, areal_sf,
             }
         )
     vor_sf <- vor_build(points_sf = coords_sf, poly_sf = sf_border)
-    output <- sai_var(source = areal_sf, target = vor_sf,
-                      vars = res_var, vars_var = variance,
-                      var_method = var_method)
+    output <- ai_var(source = areal_sf, target = vor_sf,
+                     vars = res_var, vars_var = variance,
+                     var_method = var_method)
     return(output)
 }
 

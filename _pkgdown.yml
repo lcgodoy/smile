@@ -24,7 +24,7 @@ navbar:
           href: articles/fit-and-pred.html
         - text: "3. Simple Areal Interpolation"
           href: articles/sai.html 
-        - text: "4. Theory"
+        - text: "4. Method"
           href: articles/theory.html 
         - text: "5. Spatial covariance functions"
           href: articles/sp-cov-functions.html

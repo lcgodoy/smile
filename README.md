@@ -29,15 +29,16 @@ The package accompanies a web page (powered by
    objects](https://lcgodoy.me/smile/articles/sf-to-spm.html);
 2. [Fitting models and making
    predictions](https://lcgodoy.me/smile/articles/fit-and-pred.html);
-3. [Simple Areal Interpolation](https://lcgodoy.me/smile/articles/sai.html);
-4. [Theory](https://lcgodoy.me/smile/articles/theory.html);
-5. [Spatial covariance functions](https://lcgodoy.me/smile/articles/sp-cov-funs.html);
+3. [Areal Interpolation](https://lcgodoy.me/smile/articles/sai.html);
+4. [Method](https://lcgodoy.me/smile/articles/theory.html);
+5. [Spatial covariance functions](https://lcgodoy.me/smile/articles/sp-cov-functions.html);
 
 ### Installation
 
-The package has not been submitted to [CRAN](https://CRAN.R-project.org)
-yet. Therefore, only the development version from [GitHub](https://github.com/)
-is available. If you are interested, you can installed using:
+The package is not on [CRAN](https://cran.r-project.org) yet. Therefore, only
+the development version from [GitHub](https://github.com/) is available. If you
+are interested, you can installed using:
 ```r
-install.packages("smile")
+## install.packages("smile")
+remotes::install_github("lcgodoy/smile")
 ```

@@ -18,7 +18,7 @@ vdl_var(coords_sf, areal_sf, res_var, variance, var_method = "CS", buff)
 the \code{areal_sf} to be estimated in the \code{coords_sf}.}
 
 \item{var_method}{a \code{character} representing the method to approximate
-the variance of the SAI estimates. Possible values are "CS"
+the variance of the AI estimates. Possible values are "CS"
 (Cauchy-Schwartz) or "MI" (Moran's I).}
 
 \item{buff}{scalar \code{numeric}. Mostly for internal use.}
