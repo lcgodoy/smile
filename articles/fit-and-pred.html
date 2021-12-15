@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <meta name="description" content="smile">
-<title>3. Fitting models and making predictions • smile</title>
+<title>2. Fitting models and making predictions • smile</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.1.0/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.1.0/bootstrap.bundle.min.js"></script><link href="../deps/_Roboto-0.4.0/font.css" rel="stylesheet">
@@ -14,7 +14,7 @@
 <link href="../deps/_Roboto%20Slab-0.4.0/font.css" rel="stylesheet">
 <!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
-<!-- bootstrap-toc --><script src="https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.1/dist/bootstrap-toc.min.js"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="3. Fitting models and making predictions">
+<!-- bootstrap-toc --><script src="https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.1/dist/bootstrap-toc.min.js"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="2. Fitting models and making predictions">
 <meta property="og:description" content="smile">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
@@ -52,9 +52,10 @@
   </a>
   <div class="dropdown-menu" aria-labelledby="dropdown--vignettes">
     <a class="dropdown-item" href="../articles/sf-to-spm.html">1. Converting sf objects to spm</a>
-    <a class="dropdown-item" href="../articles/sp-cov-functions.html">2. Spatial covariance functions</a>
-    <a class="dropdown-item" href="../articles/fit-and-pred.html">3. Fitting models and making predictions</a>
+    <a class="dropdown-item" href="../articles/fit-and-pred.html">2. Fitting models and making predictions</a>
+    <a class="dropdown-item" href="../articles/sai.html">3. Simple Areal Interpolation</a>
     <a class="dropdown-item" href="../articles/theory.html">4. Theory</a>
+    <a class="dropdown-item" href="../articles/sp-cov-functions.html">5. Spatial covariance functions</a>
   </div>
 </li>
 <li class="nav-item">
@@ -102,7 +103,7 @@
 </nav><div class="container template-article">
 <script src="fit-and-pred_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
   <main id="main"><div class="page-header">
-      <img src="" class="logo" alt=""><h1>3. Fitting models and making predictions</h1>
+      <img src="" class="logo" alt=""><h1>2. Fitting models and making predictions</h1>
             
       
       <small class="dont-index">Source: <a href="https://github.com/lcgodoy/smile/blob/HEAD/vignettes/fit-and-pred.Rmd" class="external-link"><code>vignettes/fit-and-pred.Rmd</code></a></small>
@@ -116,11 +117,11 @@
 <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-spatial.github.io/sf/" class="external-link">sf</a></span><span class="op">)</span>
 <span class="co">#&gt; Linking to GEOS 3.8.0, GDAL 3.0.4, PROJ 6.3.1</span></code></pre></div>
-<p>If interested in the theory involving this calculations, take a look at this <a href="https://lcgodoy.me/smile/articles/theory.html">vignette</a>.</p>
-<div class="section level1">
-<h1 id="application">Application<a class="anchor" aria-label="anchor" href="#application"></a>
-</h1>
-<p>To exemplify the fitting and predicting functions, we are going to use the data from <span class="citation">Johnson, Diggle, and Giorgi (2020)</span> again<a class="footnote-ref" tabindex="0" data-bs-toggle="popover" data-bs-content='&lt;p&gt;for more details about the data, take a look at the vignette &lt;a href="https://lcgodoy.me/smile/articles/sf-to-spm.html"&gt;sf-to-spm&lt;/a&gt;&lt;/p&gt;'><sup>1</sup></a>. First, in the code chunk below, we load the data and convert it to <code>smile</code> compatible classes. Since this is a toy example, we are going to generate a 500 points grid for the MSOA data and 5 points by polygon for the LSOA data.</p>
+<hr>
+<p>If interested in the theory involving this calculations, take a look at <a href="https://lcgodoy.me/smile/articles/theory.html">this vignette</a>.</p>
+<hr>
+<p>Considering the same setup used in the vignette about converting <code>sf</code> to <code>spm</code> <a href="https://lcgodoy.me/smile/articles/sf-to-spm.html">objects</a>, we are going to predict the Life Expecation at Birth (LEF) score (observed at the Middle Super Output Areas (MSOA), in Liverpool, into the Lower Super Output Area (LSOA). In this second level, we have the Life Expectancy at Birth for each area.</p>
+<p>The code below loads the data and converts the LSOA <code>sf</code> object into a <code>spm</code> object. In particular, we are going to use numerical integration (based on a 1000 points grid) with the precision of the integrals varying according to the size of each MSOA region. The name of the variable we are interested in, in the <code>liv_msoa</code>, is <code>"leb_est"</code>.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">liv_msoa</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">liv_lsoa</span><span class="op">)</span>
@@ -132,71 +133,85 @@
 <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_crs.html" class="external-link">st_crs</a></span><span class="op">(</span><span class="va">liv_lsoa</span><span class="op">)</span> <span class="op">&lt;-</span>
     <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_crs.html" class="external-link">st_crs</a></span><span class="op">(</span><span class="va">liv_lsoa</span><span class="op">)</span><span class="op">$</span><span class="va">input</span>
 
-<span class="co">## msoa to spm</span>
+<span class="co">## msoa from sf to spm</span>
 <span class="va">spm_msoa</span> <span class="op">&lt;-</span>
     <span class="fu"><a href="../reference/sf_to_spm.html">sf_to_spm</a></span><span class="op">(</span>sf_obj <span class="op">=</span> <span class="va">liv_msoa</span>,
-              n_pts  <span class="op">=</span> <span class="fl">500</span>,
+              n_pts  <span class="op">=</span> <span class="fl">1000</span>,
               type   <span class="op">=</span> <span class="st">"regular"</span>,
               by_polygon <span class="op">=</span> <span class="cn">FALSE</span>,
               poly_ids <span class="op">=</span> <span class="st">"msoa11cd"</span>,
-              var_ids  <span class="op">=</span> <span class="st">"leb_est"</span><span class="op">)</span>
-
-<span class="co">## lsoa to spm</span>
-<span class="va">spm_lsoa</span> <span class="op">&lt;-</span>
-    <span class="fu"><a href="../reference/sf_to_spm.html">sf_to_spm</a></span><span class="op">(</span>sf_obj <span class="op">=</span> <span class="va">liv_lsoa</span>,
-              n_pts  <span class="op">=</span> <span class="fl">5</span>,
-              type   <span class="op">=</span> <span class="st">"regular"</span>,
-              by_polygon <span class="op">=</span> <span class="cn">TRUE</span>,
-              poly_ids <span class="op">=</span> <span class="st">"lsoa11cd"</span>,
-              var_ids  <span class="op">=</span> <span class="st">"imdscore"</span><span class="op">)</span></code></pre></div>
-<p>The map below shows the LEB observed at the MSOAs.</p>
+              var_ids  <span class="op">=</span> <span class="st">"leb_est"</span><span class="op">)</span></code></pre></div>
+<p>Next, we assume the following model, at the grid level, drives the data<a class="footnote-ref" tabindex="0" data-bs-toggle="popover" data-bs-content='&lt;p&gt;To check how the model at the grid level relates to the data at the area level check the &lt;a href="https://lcgodoy.me/smile/articles/theory.html"&gt;Theory vignette&lt;/a&gt;&lt;/p&gt;'><sup>1</sup></a> <span class="math display">\[
+Y(\mathbf{s}) = \mu + S(\mathbf{s}) + \varepsilon(\mathbf{s}), \]</span> where <span class="math inline">\(S(\cdot) \sim {\rm GP}(0, {\rm C}(\cdot ; \, \boldsymbol{\theta}))\)</span>, and <span class="math inline">\(\varepsilon(\cdot) \overset{{\rm i.i.d.}}{\sim} {\rm N}(0, \tau)\)</span>, with <span class="math inline">\(S(\cdot) \pert \varepsilon(\cdot)\)</span>. The (auto) covariance function <span class="math inline">\({\rm C}(\cdot ; \, \boldsymbol{\theta} ) = \sigma^2 \rho(\cdot ; \, \boldsymbol{\theta})\)</span>. Where <span class="math inline">\(\rho(\cdot ; \, \boldsymbol{\theta})\)</span> is a stationary and isotropic covariance function. To check the families of functions available on the package, check <a href="https://lcgodoy.me/smile/articles/sp-cov-functions.html">this link</a>. Another important detail is that if we make <span class="math inline">\(\nu = \tau / \sigma^2\)</span>, the estimation process is slightly easier. The package allows for the two parametrizations.</p>
+<p>For this problem we are going to consider the the Mat'{e}rn correlation function. The model will be fitted with <span class="math inline">\(\kappa = .5, 1.5, 2.5\)</span>, this the parameter that control the smoothness of the spatial process. Also, we use the parametrization with <span class="math inline">\(\nu\)</span> instead of <span class="math inline">\(\tau\)</span>. Next, we evaluate the AIC associated with three models. The function <code>fit_spm</code> is used to fit the models. This function needs starting values for <span class="math inline">\(\phi\)</span> and <span class="math inline">\(\nu\)</span>, the covariance model to be used (in this case, <code>"matern"</code>). Note that, we are not inputting an initial value for <span class="math inline">\(\nu\)</span>. When not inputting an initial value for <span class="math inline">\(\nu\)</span>, we are forcing this parameter to be 0. This is done because there are identifiability issues associated with such parameter. The commented part of the code below shows how to proceed to estimate this parameter from the data. The argument <code>apply_exp</code> is a workaround for searching <span class="math inline">\(\phi\)</span> and <span class="math inline">\(\nu = \tau / \sigma^2\)</span> over the whole real line. The arguments <code>opt_method</code> and <code>control</code> are passed to the function <code>optim</code> in order to optimize the log likelihood associated with the data.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">liv_msoa</span>,
-       <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="va">leb_est</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
-    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">geom_sf</a></span><span class="op">(</span>color <span class="op">=</span> <span class="fl">1</span>, lwd <span class="op">=</span> <span class="fl">.1</span><span class="op">)</span> <span class="op">+</span>
-    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html" class="external-link">scale_fill_viridis_c</a></span><span class="op">(</span>option <span class="op">=</span> <span class="st">"H"</span><span class="op">)</span> <span class="op">+</span>
-    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_minimal</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
-<p><img src="fit-and-pred_files/figure-html/leb-msoa1-1.png" width="700"></p>
-<p>The map below displays the IMD observed at the LSOAs.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">liv_lsoa</span>,
-       <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="va">imdscore</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
-    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">geom_sf</a></span><span class="op">(</span>color <span class="op">=</span> <span class="fl">1</span>, lwd <span class="op">=</span> <span class="fl">.1</span><span class="op">)</span> <span class="op">+</span>
-    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html" class="external-link">scale_fill_viridis_c</a></span><span class="op">(</span>option <span class="op">=</span> <span class="st">"H"</span><span class="op">)</span> <span class="op">+</span>
-    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_minimal</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
-<p><img src="fit-and-pred_files/figure-html/imd-lsoa1-1.png" width="700"></p>
-<div class="section level2">
-<h2 id="fit-at-msoa-prediction-at-lsoa">Fit at MSOA, prediction at LSOA<a class="anchor" aria-label="anchor" href="#fit-at-msoa-prediction-at-lsoa"></a>
-</h2>
-<p>Using as starting parameters <span class="math inline">\(\alpha = 70\)</span> (average of <span class="math inline">\(Y\)</span>), <span class="math inline">\(\omega = 1\)</span> (can be seen as a nugget effect), <span class="math inline">\(\sigma^2\)</span> (variance parameter for the powered exponential family), and <span class="math inline">\(\phi = 1\)</span> (paramter that controls the range os spatial dependence, 1 here represents 1_km_). We are going to compute the Maximum Likelihood estimates considering a Powered Exponential covariance function to the data, with <span class="math inline">\(\kappa = 1.5\)</span><a class="footnote-ref" tabindex="0" data-bs-toggle="popover" data-bs-content="&lt;p&gt;This parameter is known to be hard to be estimated in the literature of geostatistics.&lt;/p&gt;"><sup>2</sup></a>. Note that, it is important for this inputing vector to be a named vector, because some functions track the parameters by their names.</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">theta_st_msoa</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"phi"</span> <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>
 
-<span class="va">fit_msoa</span> <span class="op">&lt;-</span>
+<span class="co">## 1) it is important to NAME the initial values for each parameter</span>
+<span class="co">## 2) to estimate "nu" from the data we only need to provide an initial value for such</span>
+<span class="co">## parameter</span>
+<span class="co">## 3) uncomment the code below to do so.</span>
+<span class="co">## 4) Note that it is possible to set the boundaries for the parameter space on</span>
+<span class="co">## which we want to optmize the likelihood.</span>
+<span class="co">## theta_st_msoa &lt;- c("phi" = 1, "nu" = 1)</span>
+<span class="co">## fit_msoa1 &lt;-</span>
+<span class="co">##     fit_spm(x = spm_msoa,</span>
+<span class="co">##             theta_st = theta_st_msoa,</span>
+<span class="co">##             model = "matern",</span>
+<span class="co">##             kappa = .5,</span>
+<span class="co">##             lower = c(1e-16, 1e-16),</span>
+<span class="co">##             upper = c(Inf, 1),</span>
+<span class="co">##             opt_method = "L-BFGS-B",</span>
+<span class="co">##             control   = list(maxit = 500))</span>
+
+<span class="va">fit_msoa1</span> <span class="op">&lt;-</span>
     <span class="fu"><a href="../reference/fit_spm.html">fit_spm</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">spm_msoa</span>,
             theta_st <span class="op">=</span> <span class="va">theta_st_msoa</span>,
-            model <span class="op">=</span> <span class="st">"pexp"</span>,
-            kappa <span class="op">=</span> <span class="fl">1</span>,
+            model <span class="op">=</span> <span class="st">"matern"</span>,
+            kappa <span class="op">=</span> <span class="fl">.5</span>,
+            apply_exp <span class="op">=</span> <span class="cn">TRUE</span>,
+            opt_method <span class="op">=</span> <span class="st">"L-BFGS-B"</span>,
+            control   <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>maxit <span class="op">=</span> <span class="fl">500</span><span class="op">)</span><span class="op">)</span>
+
+<span class="va">fit_msoa2</span> <span class="op">&lt;-</span>
+    <span class="fu"><a href="../reference/fit_spm.html">fit_spm</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">spm_msoa</span>,
+            theta_st <span class="op">=</span> <span class="va">theta_st_msoa</span>,
+            model <span class="op">=</span> <span class="st">"matern"</span>,
+            kappa <span class="op">=</span> <span class="fl">1.5</span>,
+            apply_exp <span class="op">=</span> <span class="cn">TRUE</span>,
+            opt_method <span class="op">=</span> <span class="st">"L-BFGS-B"</span>,
+            control   <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>maxit <span class="op">=</span> <span class="fl">500</span><span class="op">)</span><span class="op">)</span>
+
+<span class="va">fit_msoa3</span> <span class="op">&lt;-</span>
+    <span class="fu"><a href="../reference/fit_spm.html">fit_spm</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">spm_msoa</span>,
+            theta_st <span class="op">=</span> <span class="va">theta_st_msoa</span>,
+            model <span class="op">=</span> <span class="st">"matern"</span>,
+            kappa <span class="op">=</span> <span class="fl">2.5</span>,
             apply_exp <span class="op">=</span> <span class="cn">TRUE</span>,
             opt_method <span class="op">=</span> <span class="st">"L-BFGS-B"</span>,
             control   <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>maxit <span class="op">=</span> <span class="fl">500</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<p>After a few seconds, we get the Results. Now, we can use the function <code>summary_spm_fit</code> to get the summary of the results. The function prints a table containing the estimates, their standard errors, and <code>1 - sig</code> confidence interval based on the asymptotic normality of the MLEs. The function also prints a message indicating if the optimization algorithm has converged<a class="footnote-ref" tabindex="0" data-bs-toggle="popover" data-bs-content='&lt;p&gt;The default algorithm used by the package is the Nelder-Mead, this can easily be changed by setting the parameter &lt;code&gt;opt_method = "L-BFGS-B"&lt;/code&gt;, for example.&lt;/p&gt;'><sup>3</sup></a>.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/summary_spm_fit.html">summary_spm_fit</a></span><span class="op">(</span><span class="va">fit_msoa</span>, sig <span class="op">=</span> <span class="fl">.05</span><span class="op">)</span>
+<p>The AIC<a class="footnote-ref" tabindex="0" data-bs-toggle="popover" data-bs-content="&lt;p&gt;The BIC works for our models too.&lt;/p&gt;"><sup>2</sup></a> associated with each model is given below. According to this criterion, the best model is the one with <span class="math inline">\(\kappa = .5\)</span>.</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"m1"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/AIC.html" class="external-link">AIC</a></span><span class="op">(</span><span class="va">fit_msoa1</span><span class="op">)</span>, <span class="st">"m2"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/AIC.html" class="external-link">AIC</a></span><span class="op">(</span><span class="va">fit_msoa2</span><span class="op">)</span>, <span class="st">"m3"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/AIC.html" class="external-link">AIC</a></span><span class="op">(</span><span class="va">fit_msoa3</span><span class="op">)</span><span class="op">)</span>
+<span class="co">#&gt;       m1       m2       m3 </span>
+<span class="co">#&gt; 294.6131 295.7593 296.3325</span></code></pre></div>
+<p>We can retrieve the estimated parameters and the associated <code>(1 - sig)</code> % confidence intervals by using the function <code>summary_spm_fit</code> as follows</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/summary_spm_fit.html">summary_spm_fit</a></span><span class="op">(</span><span class="va">fit_msoa1</span>, sig <span class="op">=</span> <span class="fl">.05</span><span class="op">)</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt;  optimization algorithm converged: yes </span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt;     par   estimate        se               ci</span>
-<span class="co">#&gt; 1    mu 75.9369280 0.8408291 [74.289; 77.585]</span>
-<span class="co">#&gt; 2 sigsq 23.2646828 4.2140767 [15.005; 31.524]</span>
-<span class="co">#&gt; 3   phi  0.8714168 0.2283807   [0.424; 1.319]</span></code></pre></div>
-<p>Finally, now we are going to perform predictions of the LEB at the LSOA level. To do so, we use the function <code>predict_spm</code>. The <code>x</code> argument gives the sf on which we want to make the predictions according to the <code>sbm_obj</code>, which represents the estimated parameters. Now, take a look at the remaining arguments. The last two, are analogous to what we have seen for the function <code>sf_to_spm</code>. They are concerning the grid generated over the study region, now we going to make predicitons over this grid. I set it to 2500 to “approximate” a continuous region<a class="footnote-ref" tabindex="0" data-bs-toggle="popover" data-bs-content="&lt;p&gt;Be careful here, a very large number of points can result in intractable covariance matrices&lt;/p&gt;"><sup>4</sup></a>. The argument <code>.aggregate</code> if set to <code>TRUE</code>, computes the predictions over the polygons from the input <code>x</code> (in this case <code>liv_lsoa</code>). This function also works if the input is a <code>sf</code> object with POINT geometries. The objects returned by the function <code>pred_lsoa</code> are lists with the following elements: 1) <code>mu_pred</code> - a vector with the predicted average for each location in the generated grid; 2) <code>sig_pred</code> the variance covariance matrix associated with the same grid; 3) the predictions (and standard errors) organized in an <code>sf</code> object to facilitate the visualization of the predictions over a (almost) continuous space; and 4) <code>pred_agg</code> which is returned only if we set <code>.aggregate = TRUE</code>. The last one contains the predictions and their standard erros integrated over the “new regions”.</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">pred_lsoa</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/predict_spm.html">predict_spm</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">liv_lsoa</span>, spm_obj <span class="op">=</span> <span class="va">fit_msoa</span>,
-                         .aggregate <span class="op">=</span> <span class="cn">TRUE</span>, n_pts <span class="op">=</span> <span class="fl">2500</span>,
+<span class="co">#&gt; 1    mu 75.9734845 0.7588690 [74.486; 77.461]</span>
+<span class="co">#&gt; 2 sigsq 24.9253526 4.6461155 [15.819; 34.032]</span>
+<span class="co">#&gt; 3   phi  0.7419912 0.1916394   [0.366; 1.118]</span></code></pre></div>
+<p>Finally, we have almost everything we need to perform predictions at the LSOA areas. The function <code>predict_spm</code> calculates the predictions associated to the <code>spm_obj</code> (which contains the results associated with a fitted model) into a <code>sf</code> object <code>x</code>. We need to specify whether we want to “aggregate” (i.e. average) the predicted surface into the polygons associated with the <code>sf</code> data. The number of points and the type of integration for prediction need to be set as well. In this case we are specifying a finer grid because the LSOA areas are smaller than the MSOA areas.</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">pred_lsoa</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/predict_spm.html">predict_spm</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">liv_lsoa</span>, spm_obj <span class="op">=</span> <span class="va">fit_msoa1</span>,
+                         .aggregate <span class="op">=</span> <span class="cn">TRUE</span>, n_pts <span class="op">=</span> <span class="fl">3500</span>,
                          type <span class="op">=</span> <span class="st">"regular"</span><span class="op">)</span></code></pre></div>
-<p>Now, let’s make some data manipulation to make the visualization look nicer. We are going to stack all the data to make it easier to plot them all together using ggplot2. The next map whos the predictions.</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<p>The resulting object is a list with entries <code>"mu_pred"</code>, <code>"sig_pred"</code>, <code>"pred_grid"</code>, <code>"pred_agg"</code>. The first two positions correspond to the mean and covariance matrix at the predicted locations, respectively. <code>"pred_grid"</code> can be seen as the predicted surface over the study region, while <code>"pred_agg"</code> contains the (integrals) averages of such surface within each LSOA area. The chunk of code below plots the predicted surface.</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">aux_viz1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/vector.html" class="external-link">vector</a></span><span class="op">(</span>mode   <span class="op">=</span> <span class="st">"list"</span>,
                    length <span class="op">=</span> <span class="fl">4</span><span class="op">)</span>
 
@@ -227,12 +242,14 @@
     <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">geom_sf</a></span><span class="op">(</span>pch <span class="op">=</span> <span class="fl">15</span><span class="op">)</span> <span class="op">+</span>
     <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html" class="external-link">scale_fill_viridis_c</a></span><span class="op">(</span>option <span class="op">=</span> <span class="st">"H"</span><span class="op">)</span> <span class="op">+</span>
     <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html" class="external-link">scale_color_viridis_c</a></span><span class="op">(</span>option <span class="op">=</span> <span class="st">"H"</span><span class="op">)</span> <span class="op">+</span>
-    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/guides.html" class="external-link">guides</a></span><span class="op">(</span>color <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/guides.html" class="external-link">guides</a></span><span class="op">(</span>color <span class="op">=</span> <span class="st">"none"</span>,
+           fill <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span> <span class="op">+</span>
     <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">facet_wrap</a></span><span class="op">(</span><span class="va">surface</span> <span class="op">~</span> <span class="va">.</span><span class="op">)</span> <span class="op">+</span>
-    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_bw</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
+    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_bw</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>axis.text <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_blank</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p><img src="fit-and-pred_files/figure-html/manip-pred-1-1.png" width="700"></p>
-<p>The next one displays the standard errors for the predictions. Clearly, we have less variability in the neighborhoods on which we have small polygons.</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<p>Next, we plot the standard errors associated with the predictions.</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">aux_viz1</span><span class="op">[</span><span class="va">aux_viz1</span><span class="op">$</span><span class="va">variable</span> <span class="op">==</span> <span class="st">"se"</span>,<span class="op">]</span>,
        <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>fill  <span class="op">=</span> <span class="va">value</span>,
            color <span class="op">=</span> <span class="va">value</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
@@ -241,109 +258,20 @@
     <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">geom_sf</a></span><span class="op">(</span>pch <span class="op">=</span> <span class="fl">15</span><span class="op">)</span> <span class="op">+</span>
     <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html" class="external-link">scale_fill_viridis_c</a></span><span class="op">(</span>option <span class="op">=</span> <span class="st">"H"</span><span class="op">)</span> <span class="op">+</span>
     <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html" class="external-link">scale_color_viridis_c</a></span><span class="op">(</span>option <span class="op">=</span> <span class="st">"H"</span><span class="op">)</span> <span class="op">+</span>
-    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/guides.html" class="external-link">guides</a></span><span class="op">(</span>color <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/guides.html" class="external-link">guides</a></span><span class="op">(</span>color <span class="op">=</span> <span class="st">"none"</span>,
+           fill <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span> <span class="op">+</span>
     <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">facet_wrap</a></span><span class="op">(</span><span class="va">surface</span> <span class="op">~</span> <span class="va">.</span><span class="op">)</span> <span class="op">+</span>
-    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_bw</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
-<p><img src="fit-and-pred_files/figure-html/se-ggplot1-1.png" width="700"></p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/rm.html" class="external-link">rm</a></span><span class="op">(</span><span class="va">aux_viz1</span>, <span class="va">pred_lsoa</span>, <span class="va">fit_msoa</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/invisible.html" class="external-link">invisible</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/gc.html" class="external-link">gc</a></span><span class="op">(</span>full <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-</div>
-<div class="section level2">
-<h2 id="fit-at-lsoa-predict-at-msoa">Fit at LSOA, predict at MSOA<a class="anchor" aria-label="anchor" href="#fit-at-lsoa-predict-at-msoa"></a>
-</h2>
-<p>Using as starting parameters <span class="math inline">\(\alpha = 25\)</span> (average of <span class="math inline">\(Y\)</span>), <span class="math inline">\(\omega = 1\)</span> (can be seen as a nugget effect), <span class="math inline">\(\sigma^2\)</span> (variance parameter for the powered exponential family), and <span class="math inline">\(\phi = 1\)</span> (paramter that controls the range os spatial dependence, 1 here represents 1_km_). We are going to compute the Maximum Likelihood estimates considering a Matern covariance function to the data, with <span class="math inline">\(\kappa = 2.5\)</span>.</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">theta_st_lsoa</span> <span class="op">&lt;-</span>
-    <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"phi"</span> <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>
-
-<span class="va">fit_lsoa</span> <span class="op">&lt;-</span>
-    <span class="fu"><a href="../reference/fit_spm.html">fit_spm</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">spm_lsoa</span>,
-            theta_st <span class="op">=</span> <span class="va">theta_st_lsoa</span>,
-            model <span class="op">=</span> <span class="st">"matern"</span>,
-            kappa <span class="op">=</span> <span class="fl">.5</span>,
-            apply_exp <span class="op">=</span> <span class="cn">TRUE</span>,
-            opt_method <span class="op">=</span> <span class="st">"L-BFGS-B"</span>,
-            control   <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>maxit <span class="op">=</span> <span class="fl">500</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<p>After a few seconds, we get the Results. Now, we can use the function <code>summary_sspm_fit</code> again to summarise the estimated parameters.</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/summary_spm_fit.html">summary_spm_fit</a></span><span class="op">(</span><span class="va">fit_lsoa</span>, sig <span class="op">=</span> <span class="fl">.05</span><span class="op">)</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt;  optimization algorithm converged: yes </span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt;     par   estimate          se                 ci</span>
-<span class="co">#&gt; 1    mu  39.266667  3.14035085   [33.112; 45.422]</span>
-<span class="co">#&gt; 2 sigsq 573.099317 59.54439895 [456.394; 689.804]</span>
-<span class="co">#&gt; 3   phi   0.628386  0.08634069     [0.459; 0.798]</span></code></pre></div>
-<p>Now we are going to perform predictions of the IMD at the MSOA level. Since from now on the process is pretty much the exam, the explanation will be shorter.</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">pred_msoa</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/predict_spm.html">predict_spm</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">liv_msoa</span>, spm_obj <span class="op">=</span> <span class="va">fit_lsoa</span>,
-                         .aggregate <span class="op">=</span> <span class="cn">TRUE</span>, n_pts <span class="op">=</span> <span class="fl">2500</span>,
-                         type <span class="op">=</span> <span class="st">"regular"</span><span class="op">)</span></code></pre></div>
-<p>Now, let’s make some data manipulation to again. Note that, the predictions for this variable have more</p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">aux_viz2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/vector.html" class="external-link">vector</a></span><span class="op">(</span>mode   <span class="op">=</span> <span class="st">"list"</span>,
-                   length <span class="op">=</span> <span class="fl">4</span><span class="op">)</span>
-
-<span class="va">aux_viz2</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/transform.html" class="external-link">transform</a></span><span class="op">(</span><span class="va">pred_msoa</span><span class="op">$</span><span class="va">pred_grid</span><span class="op">[</span><span class="st">"mu_pred"</span><span class="op">]</span>,
-                           surface  <span class="op">=</span> <span class="st">"continuous"</span>,
-                           variable <span class="op">=</span> <span class="st">"prediction"</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">aux_viz2</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="st">"value"</span>
-<span class="va">aux_viz2</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/transform.html" class="external-link">transform</a></span><span class="op">(</span><span class="va">pred_msoa</span><span class="op">$</span><span class="va">pred_grid</span><span class="op">[</span><span class="st">"se_pred"</span><span class="op">]</span>,
-                           surface  <span class="op">=</span> <span class="st">"continuous"</span>,
-                           variable <span class="op">=</span> <span class="st">"se"</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">aux_viz2</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="st">"value"</span>
-<span class="va">aux_viz2</span><span class="op">[[</span><span class="fl">3</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/transform.html" class="external-link">transform</a></span><span class="op">(</span><span class="va">pred_msoa</span><span class="op">$</span><span class="va">pred_agg</span><span class="op">[</span><span class="st">"mu_pred"</span><span class="op">]</span>,
-                           surface  <span class="op">=</span> <span class="st">"aggregated"</span>,
-                           variable <span class="op">=</span> <span class="st">"prediction"</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">aux_viz2</span><span class="op">[[</span><span class="fl">3</span><span class="op">]</span><span class="op">]</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="st">"value"</span>
-<span class="va">aux_viz2</span><span class="op">[[</span><span class="fl">4</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/transform.html" class="external-link">transform</a></span><span class="op">(</span><span class="va">pred_msoa</span><span class="op">$</span><span class="va">pred_agg</span><span class="op">[</span><span class="st">"se_pred"</span><span class="op">]</span>,
-                           surface  <span class="op">=</span> <span class="st">"aggregated"</span>,
-                           variable <span class="op">=</span> <span class="st">"se"</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">aux_viz2</span><span class="op">[[</span><span class="fl">4</span><span class="op">]</span><span class="op">]</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="st">"value"</span>
-
-<span class="va">aux_viz2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/do.call.html" class="external-link">do.call</a></span><span class="op">(</span><span class="st">"rbind"</span>, <span class="va">aux_viz2</span><span class="op">)</span>
-
-<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">aux_viz2</span><span class="op">[</span><span class="va">aux_viz2</span><span class="op">$</span><span class="va">variable</span> <span class="op">==</span> <span class="st">"prediction"</span>,<span class="op">]</span>,
-       <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>fill  <span class="op">=</span> <span class="va">value</span>,
-           color <span class="op">=</span> <span class="va">value</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
-    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">geom_sf</a></span><span class="op">(</span>data <span class="op">=</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_geometry.html" class="external-link">st_geometry</a></span><span class="op">(</span><span class="va">pred_msoa</span><span class="op">$</span><span class="va">pred_agg</span><span class="op">)</span>, color <span class="op">=</span> <span class="fl">1</span>,
-            lwd <span class="op">=</span> <span class="fl">.1</span>, inherit.aes <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op">+</span>
-    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">geom_sf</a></span><span class="op">(</span>pch <span class="op">=</span> <span class="fl">15</span><span class="op">)</span> <span class="op">+</span>
-    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html" class="external-link">scale_fill_viridis_c</a></span><span class="op">(</span>option <span class="op">=</span> <span class="st">"H"</span><span class="op">)</span> <span class="op">+</span>
-    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html" class="external-link">scale_color_viridis_c</a></span><span class="op">(</span>option <span class="op">=</span> <span class="st">"H"</span><span class="op">)</span> <span class="op">+</span>
-    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/guides.html" class="external-link">guides</a></span><span class="op">(</span>color <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span> <span class="op">+</span>
-    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">facet_wrap</a></span><span class="op">(</span><span class="va">surface</span> <span class="op">~</span> <span class="va">.</span><span class="op">)</span> <span class="op">+</span>
-    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_bw</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
-<p><img src="fit-and-pred_files/figure-html/manip-pred-2-1.png" width="700"></p>
-<p>The next one displays the standard errors for the predictions.</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">aux_viz2</span><span class="op">[</span><span class="va">aux_viz2</span><span class="op">$</span><span class="va">variable</span> <span class="op">==</span> <span class="st">"se"</span>,<span class="op">]</span>,
-       <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>fill  <span class="op">=</span> <span class="va">value</span>,
-           color <span class="op">=</span> <span class="va">value</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
-    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">geom_sf</a></span><span class="op">(</span>data <span class="op">=</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_geometry.html" class="external-link">st_geometry</a></span><span class="op">(</span><span class="va">pred_msoa</span><span class="op">$</span><span class="va">pred_agg</span><span class="op">)</span>, color <span class="op">=</span> <span class="fl">1</span>,
-            lwd <span class="op">=</span> <span class="fl">.1</span>, inherit.aes <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op">+</span>
-    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">geom_sf</a></span><span class="op">(</span>pch <span class="op">=</span> <span class="fl">15</span><span class="op">)</span> <span class="op">+</span>
-    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html" class="external-link">scale_fill_viridis_c</a></span><span class="op">(</span>option <span class="op">=</span> <span class="st">"H"</span><span class="op">)</span> <span class="op">+</span>
-    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html" class="external-link">scale_color_viridis_c</a></span><span class="op">(</span>option <span class="op">=</span> <span class="st">"H"</span><span class="op">)</span> <span class="op">+</span>
-    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/guides.html" class="external-link">guides</a></span><span class="op">(</span>color <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span> <span class="op">+</span>
-    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">facet_wrap</a></span><span class="op">(</span><span class="va">surface</span> <span class="op">~</span> <span class="va">.</span><span class="op">)</span> <span class="op">+</span>
-    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_bw</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
+    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_bw</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>axis.text <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_blank</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p><img src="fit-and-pred_files/figure-html/se-ggplot2-1.png" width="700"></p>
-</div>
-</div>
-<div class="section level1 unnumbered">
+<pre><code><span class="co">#&gt; Warning in rm(aux_viz1, pred_lsoa, fit_msoa): object 'fit_msoa' not found</span></code></pre>
+<p>Lastly, the next chunk of code plots the observed and predicted LEB at the MSOAs and LSOAs, respectively.</p>
+<div class="section level1">
 <h1 id="reference">Reference<a class="anchor" aria-label="anchor" href="#reference"></a>
 </h1>
-<div id="refs" class="references">
-<div id="ref-johnson2020dealing">
-<p>Johnson, Olatunji, Peter Diggle, and Emanuele Giorgi. 2020. “Dealing with Spatial Misalignment to Model the Relationship Between Deprivation and Life Expectancy: A Model-Based Geostatistical Approach.” <em>International Journal of Health Geographics</em> 19 (1): 1–13.</p>
-</div>
-</div>
 </div>
 
-  </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
-    </nav></aside>
+  </main>
 </div>
 
 

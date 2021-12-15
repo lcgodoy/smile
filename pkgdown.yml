@@ -3,10 +3,11 @@ pkgdown: 2.0.1
 pkgdown_sha: ~
 articles:
   fit-and-pred: fit-and-pred.html
+  sai: sai.html
   sf-to-spm: sf-to-spm.html
   sp-cov-functions: sp-cov-functions.html
   theory: theory.html
-last_built: 2021-12-14T19:41Z
+last_built: 2021-12-15T04:14Z
 urls:
   reference: https://lcgodoy.me/smile/reference
   article: https://lcgodoy.me/smile/articles

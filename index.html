@@ -56,9 +56,10 @@
   </a>
   <div class="dropdown-menu" aria-labelledby="dropdown--vignettes">
     <a class="dropdown-item" href="articles/sf-to-spm.html">1. Converting sf objects to spm</a>
-    <a class="dropdown-item" href="articles/sp-cov-functions.html">2. Spatial covariance functions</a>
-    <a class="dropdown-item" href="articles/fit-and-pred.html">3. Fitting models and making predictions</a>
+    <a class="dropdown-item" href="articles/fit-and-pred.html">2. Fitting models and making predictions</a>
+    <a class="dropdown-item" href="articles/sai.html">3. Simple Areal Interpolation</a>
     <a class="dropdown-item" href="articles/theory.html">4. Theory</a>
+    <a class="dropdown-item" href="articles/sp-cov-functions.html">5. Spatial covariance functions</a>
   </div>
 </li>
 <li class="nav-item">
@@ -114,16 +115,31 @@
 </h2>
 <!-- badges: start -->
 
-<p>The goal of <code>smile</code> is to provide a tool to deal with spatially misaligned data. The package is based on the methodology presented in the paper <a href="https://ij-healthgeographics.biomedcentral.com/articles/10.1186/s12942-020-00200-w" class="external-link">Johnson et al. 2020</a></p>
-<p>This package is part of the Final Project of the Statistical Computing course from Professor Jun Yan, at UConn.</p>
+<p>The goal of <code>smile</code> is to provide an easy to use <code>R</code> package that functions to estimate, predict and interpolate areal data. For estimation and prediction we use a model-based approach assuming areal data to be an average of an underlying continuos Gaussian random field. For interpolation, we use the simple areal interpolation, which is a nonparametric approach. Also, we provide functions to quantify the uncertainty associated with the simple areal interpolation when the variance of the observed variables is known.</p>
+<p>The package accompanies a web page (powered by <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a>) and 5 vignettes.</p>
+<div class="section level3">
+<h3 id="vignettes">Vignettes<a class="anchor" aria-label="anchor" href="#vignettes"></a>
+</h3>
+<ol style="list-style-type: decimal">
+<li>
+<a href="https://lcgodoy.me/smile/articles/sf-to-spm.html">Converting <code>sf</code> to <code>spm</code> objects</a>;</li>
+<li>
+<a href="https://lcgodoy.me/smile/articles/fit-and-pred.html">Fitting models and making predictions</a>;</li>
+<li>
+<a href="https://lcgodoy.me/smile/articles/sai.html">Simple Areal Interpolation</a>;</li>
+<li>
+<a href="https://lcgodoy.me/smile/articles/theory.html">Theory</a>;</li>
+<li>
+<a href="https://lcgodoy.me/smile/articles/sp-cov-funs.html">Spatial covariance functions</a>;</li>
+</ol>
 </div>
-<div class="section level2">
-<h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
-</h2>
+<div class="section level3">
+<h3 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
+</h3>
 <p>The package has not been submitted to <a href="https://CRAN.R-project.org" class="external-link">CRAN</a> yet. Therefore, only the development version from <a href="https://github.com/" class="external-link">GitHub</a> is available. If you are interested, you can installed using:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># install.packages("devtools")</span>
-<span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"lcgodoy/spmismo"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"smile"</span><span class="op">)</span></code></pre></div>
+</div>
 </div>
 </div>
   </main><aside class="col-md-3"><div class="links">
@@ -161,8 +177,8 @@
 <h2 data-toc-skip>Dev status</h2>
 <ul class="list-unstyled">
 <li><a href="https://www.tidyverse.org/lifecycle/#experimental" class="external-link"><img src="https://img.shields.io/badge/lifecycle-experimental-orange.svg" alt="Lifecycle: experimental"></a></li>
-<li><a href="https://CRAN.R-project.org/package=spmismo" class="external-link"><img src="https://www.r-pkg.org/badges/version/spmismo" alt="CRAN status"></a></li>
-<li><a href="https://github.com/lcgodoy/spmismo/actions" class="external-link"><img src="https://github.com/lcgodoy/spmismo/workflows/R-CMD-check/badge.svg" alt="R-CMD-check"></a></li>
+<li><a href="https://CRAN.R-project.org/package=smile" class="external-link"><img src="https://www.r-pkg.org/badges/version/smile" alt="CRAN status"></a></li>
+<li><a href="https://github.com/lcgodoy/smile/actions" class="external-link"><img src="https://github.com/lcgodoy/spmismo/workflows/R-CMD-check/badge.svg" alt="R-CMD-check"></a></li>
 </ul>
 </div>
 

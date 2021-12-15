@@ -36,9 +36,10 @@ value."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/math
   </a>
   <div class="dropdown-menu" aria-labelledby="dropdown--vignettes">
     <a class="dropdown-item" href="../articles/sf-to-spm.html">1. Converting sf objects to spm</a>
-    <a class="dropdown-item" href="../articles/sp-cov-functions.html">2. Spatial covariance functions</a>
-    <a class="dropdown-item" href="../articles/fit-and-pred.html">3. Fitting models and making predictions</a>
+    <a class="dropdown-item" href="../articles/fit-and-pred.html">2. Fitting models and making predictions</a>
+    <a class="dropdown-item" href="../articles/sai.html">3. Simple Areal Interpolation</a>
     <a class="dropdown-item" href="../articles/theory.html">4. Theory</a>
+    <a class="dropdown-item" href="../articles/sp-cov-functions.html">5. Spatial covariance functions</a>
   </div>
 </li>
 <li class="active nav-item">
@@ -101,13 +102,13 @@ value.</p>
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>d</dt>
-<dd><p>maximun distance for spatial dependence</p></dd>
+<dd><p>maximun distance for spatial dependence equal to <code>cut</code>.</p></dd>
 <dt>kappa</dt>
-<dd><p>parameter</p></dd>
+<dd><p>smoothness parameter associated with the Matern cov. function.</p></dd>
 <dt>range</dt>
-<dd><p>? Marcos help needed here</p></dd>
+<dd><p>Minimum and maximum distance to be considered.</p></dd>
 <dt>cut</dt>
-<dd><p>? Marcos help needed here</p></dd>
+<dd><p>Spatial correlation at a distance <code>d</code>.</p></dd>
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>

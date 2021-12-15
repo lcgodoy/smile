@@ -52,9 +52,10 @@
   </a>
   <div class="dropdown-menu" aria-labelledby="dropdown--vignettes">
     <a class="dropdown-item" href="../articles/sf-to-spm.html">1. Converting sf objects to spm</a>
-    <a class="dropdown-item" href="../articles/sp-cov-functions.html">2. Spatial covariance functions</a>
-    <a class="dropdown-item" href="../articles/fit-and-pred.html">3. Fitting models and making predictions</a>
+    <a class="dropdown-item" href="../articles/fit-and-pred.html">2. Fitting models and making predictions</a>
+    <a class="dropdown-item" href="../articles/sai.html">3. Simple Areal Interpolation</a>
     <a class="dropdown-item" href="../articles/theory.html">4. Theory</a>
+    <a class="dropdown-item" href="../articles/sp-cov-functions.html">5. Spatial covariance functions</a>
   </div>
 </li>
 <li class="nav-item">
@@ -103,6 +104,7 @@
 <script src="theory_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
   <main id="main"><div class="page-header">
       <img src="" class="logo" alt=""><h1>4. Theory</h1>
+            <h3 data-toc-skip class="subtitle">Model-based approaches</h3>
             
       
       <small class="dont-index">Source: <a href="https://github.com/lcgodoy/smile/blob/HEAD/vignettes/theory.Rmd" class="external-link"><code>vignettes/theory.Rmd</code></a></small>
@@ -111,134 +113,83 @@
 
     
     
-<blockquote>
-<p>What I did for this package was based on the work from <span class="citation">Johnson, Diggle, and Giorgi (2020)</span>.</p>
-</blockquote>
-<div class="section level1">
-<h1 id="theoretical-background">Theoretical Background<a class="anchor" aria-label="anchor" href="#theoretical-background"></a>
-</h1>
 <div class="section level2">
-<h2 id="univariate-y-and-no-x">Univariate <span class="math inline">\(Y\)</span> and no <span class="math inline">\(X\)</span><a class="anchor" aria-label="anchor" href="#univariate-y-and-no-x"></a>
+<h2 id="general-setup">General setup<a class="anchor" aria-label="anchor" href="#general-setup"></a>
 </h2>
-<p>Let <span class="math inline">\(\{ U(\mathbf{x}) \,:\, x \in D \subset \mathbb{R}^2 \}\)</span> (being <span class="math inline">\(D\)</span> the whole region of study, tipically a city) be a stationary and isotropic Gaussian Random Field <span class="citation">(Rue and Held 2005)</span> with mean constant and equal to zero over the space and covariance function <span class="math inline">\(C(h; \mathbf{\theta})\)</span>, where <span class="math inline">\(h\)</span> is the euclidean distance between two given points within <span class="math inline">\(D\)</span>, and <span class="math inline">\(\mathbf{\theta}\)</span> is the vector of parameters controling the spatial covariance structure of such process. Now, let <span class="math inline">\(\mathbf{Y}\)</span> to be a random variable observed at a partition of <span class="math inline">\(D\)</span> defined as <span class="math inline">\(A = \{A_1, \dots, A_n \}\)</span>. Then, we define <span class="math display">\[
-Y( A_i ) = \alpha + U( A_i ) + \epsilon_i, \, i = 1, ..., n,
+<p>Let us set up the notations first. Suppose a there exists a partition of a region <span class="math inline">\({\rm D} \in {\cal R}^2\)</span> (e.g., a city). This partition is denoted by <span class="math inline">\(A_i\)</span>, <span class="math inline">\(i = 1, \ldots, n\)</span>. Moreover, there exists another parition of the same city, denoted <span class="math inline">\(B_j\)</span>, where <span class="math inline">\(j = 1, \ldots, m\)</span>. These partitions can be seen as two different administrative divisions within the same city. It is common for different government agencies to release data for different divisions of a same city, country, or state.</p>
+</div>
+<div class="section level2">
+<h2 id="model-based-approach">Model-based approach<a class="anchor" aria-label="anchor" href="#model-based-approach"></a>
+</h2>
+<p>Assume we observe a random variable <span class="math inline">\(Y(\cdot)\)</span> at each region <span class="math inline">\(A_i\)</span> and we are interested in predict/estimate this variable in each of the regions <span class="math inline">\(B_j\)</span>. Now suppose the random variable <span class="math inline">\(Y(\cdot)\)</span> varies continuously over <span class="math inline">\({\rm D}\)</span> and is defined as follows <span class="math display">\[
+Y(\mathbf{s}) = \mu + S(\mathbf{s}) + \varepsilon(\mathbf{s}), \, \mathbf{s} \in
+{\rm D} \subset {\cal R}^2.
 \]</span> where <span class="math display">\[
-U ( A_i ) = \frac{ 1 }{ \lvert A_i \rvert } \int_{A_i} U ( x ) \, dx,
-\]</span> and <span class="math inline">\(\epsilon_i \overset{iid}{\sim} N(0, \omega)\)</span>. Also, we assume <span class="math inline">\(\epsilon \perp U\)</span>. The expected value for <span class="math inline">\(Y( A_i )\)</span> is <span class="math display">\[
-E[ Y ( A_i  )  ] = \alpha,
-\]</span> while its variance/covarianca matrix is given as follows <span class="math display">\[\begin{align*}
-Cov[ Y ( A_i ), Y ( A_j ) ] &amp; = Cov[\alpha + U( A_i ) + \epsilon_i, \alpha + U(
-A_j ) + \epsilon_j] \\
-&amp; = Cov[ U( A_i ), U( A_j ) ] 
-= Cov \left[ \frac{1}{\lvert A_i \rvert} \int_{A_i} U ( \mathbf{s}_1 ) \, d\mathbf{s}_1,
-\frac{1}{\lvert A_j \rvert} \int_{A_j} U ( \mathbf{s}_2 ) \, d\mathbf{s}_2 \right] \\
-&amp; =
-\frac{1}{\lvert A_i \rvert \lvert A_j \rvert} \int_{A_j} \int_{A_i}
-Cov \left[ U ( \mathbf{s}_2 ),
-U ( \mathbf{s}_2 )  \right]
-\, d\mathbf{s}_1 \, d\mathbf{s}_2 \\
-&amp; = 
-\frac{1}{\lvert A_i \rvert \lvert A_j \rvert} \int_{A_j} \int_{A_i}
-C( \lVert \mathbf{s}_1 - \mathbf{s}_2 \rVert ; \theta) d\mathbf{s}_1 \, d\mathbf{s}_2 
-= f(A_i, A_j ; \theta).
-\end{align*}\]</span> First, note that the Covariance function is a integral. Implying that, in the manipulations above, we are simply switching the order of the integrals. This is valid as long as the integrals are well defined (not equal to infinity). Additionally, when <span class="math inline">\(i = j\)</span>, the variance at the region <span class="math inline">\(A_i\)</span> is <span class="math display">\[
-Var[ Y ( A_i ) ] = Cov[ Y ( A_i ), Y ( A_i ) ] = ... = \omega + \frac{1}{\lvert
-A_i \rvert^2} \int_{A_i} \int_{A_i} C( \lVert \mathbf{s}_1 - \mathbf{s}_2 \rVert
-; \theta) d\mathbf{s}_1 \, d\mathbf{s}_2.
-\]</span></p>
+ S(\cdot) \sim {\rm GP}(0, \sigma^2 \rho(\cdot; \, \phi, \kappa)) \;
+ \text{ and } \;
+\varepsilon(\cdot) \overset{{\rm i.i.d.}}{\sim} {\rm N}(0, \sigma^2 \rho(\cdot;
+\, \phi, \kappa)),
+\]</span> with <span class="math inline">\(S\)</span> and <span class="math inline">\(\varepsilon\)</span> independent of each other. For now, let’s make the unrealistic assumption that all those parameters are known. Then, our assumption is that the observed data is as follows <span class="math display">\[\begin{align*}
+Y(A_i) &amp; = \frac{1}{\lvert A_i \rvert} \int_{A_i} Y(\mathbf{s}) \, {\rm d}
+\mathbf{s} \\
+&amp; = \frac{1}{\lvert A_i \rvert} \int_{A_i} [\mu + S(\mathbf{s}) +
+\varepsilon(\mathbf{s})] \, {\rm d} \mathbf{s} \\
+&amp; = \mu + \frac{1}{\lvert A_i \rvert} \int_{A_i} S(\mathbf{s}) {\rm d}
+\mathbf{s} + \frac{1}{\lvert A_i \rvert} \int_{A_i} \varepsilon(\mathbf{s}) {\rm
+d} \mathbf{s},
+\end{align*}\]</span> where <span class="math inline">\(\lvert \cdot \rvert\)</span> returns the area of a polygon. Furthermore, it can be shown that (using Fubini’s Theorem and some algebraic manipulation) <span class="math display">\[
+{\rm Cov}(Y(A_i), Y(A_j)) = frac{\sigma^2}{\lvert A_i \rvert \lvert A_j \rvert}
+\int_{A_i \times A_j} \rho( \lVert \mathbf{s} - \mathbf{s}' \rVert; \, \phi,
+\kappa ) \, {\rm d} \mathbf{s} \, {\rm d} \mathbf{s}' + \mathbf{I}(i = j)
+\frac{\tau}{\lVert A_i \rVert},
+\]</span> where <span class="math inline">\(\rho(\cdot ; \, \phi, \kappa)\)</span> is a positive definite correlation function. Now, let <span class="math inline">\({\rm R}_{\kappa}(\phi)\)</span> be a correlation matrix such that <span class="math display">\[
+{\rm R}_{\kappa}(\phi)_{ij} = frac{1}{\lvert A_i \rvert \lvert A_j \rvert}
+\int_{A_i \times A_j} \rho( \lVert \mathbf{s} - \mathbf{s}' \rVert; \, \phi,
+\kappa ) \, {\rm d} \mathbf{s} \, {\rm d} \mathbf{s}',
+\]</span> thus, <span class="math display">\[
+Y(A_1, \cdots, A_n) \sim {\rm N}( \mu \mathbf{1}_n, \sigma^2 {\rm
+R}_{\kappa}(\phi) + \tau {\rm diag}(\lvert A_1 \rvert^{-1}, \ldots, \lvert A_1
+\rvert^{-1})).
+\]</span> Then, if we assume <span class="math inline">\((Y^{\top}(A_1, \cdots, A_n), Y^{\top}(B_1, \cdots, A_m)^{\top})\)</span> to be jointly normal, we use can the conditional mean of <span class="math inline">\(Y^{\top}(B_1, \cdots, A_m)^{\top}\)</span> given <span class="math inline">\(Y^{\top}(A_1, \cdots, A_n)\)</span> to estimate the observed random variable in the partition <span class="math inline">\(B_1, \ldots, B_m\)</span>.</p>
+<hr>
+<p>Now, suppose the parameters <span class="math inline">\(\boldsymbol{\theta} = (\mu, \sigma^2, \phi, \tau)\)</span> are unknown. The Likelihood of <span class="math inline">\(Y(A_1, \ldots, A_n)\)</span> can still be computed.</p>
+<p>In particular, if we use the parametrization <span class="math inline">\(\nu = \tau / \sigma^2\)</span>, we have closed form for the Maximum Likelihood estimators both for <span class="math inline">\(\mu\)</span> and <span class="math inline">\(\sigma^2\)</span>. Thus, we can optimize the partial likelihood for <span class="math inline">\(\phi\)</span> and <span class="math inline">\(\nu\)</span> numerically. Then, we resort on conditional Normal properties again to compute the predictions in a new different set of regions.</p>
 </div>
 <div class="section level2">
-<h2 id="multivariate-y-and-no-x">Multivariate <span class="math inline">\(Y\)</span> and no <span class="math inline">\(X\)</span><a class="anchor" aria-label="anchor" href="#multivariate-y-and-no-x"></a>
+<h2 id="spatial-areal-interpolation-sai">Spatial Areal Interpolation (SAI)<a class="anchor" aria-label="anchor" href="#spatial-areal-interpolation-sai"></a>
 </h2>
-<p>Consider the process <span class="math inline">\(\{ U(\mathbf{x}) \,:\, x \in D \subset \mathbb{R}^2 \}\)</span> having the same process as the one defined in the previous section, and a region of study <span class="math inline">\(D\)</span>. Now, let <span class="math inline">\(\mathbf{Y}\)</span> to be a <em>p</em>-dimensional random variable observed at a partition of <span class="math inline">\(D\)</span> defined as <span class="math inline">\(A = \{A_1, \dots, A_n \}\)</span>. Then, we define <span class="math display">\[
-Y ( A_i )_k = \alpha_k + U( A_i ) + V_k, \, i = 1, \ldots, n, k = 1, \ldots, p,
-\]</span> with <span class="math inline">\(U \perp V\)</span>, and <span class="math display">\[
-V_k \overset{iid}{\sim} N\left(\mathbf{0}, \Omega \right),
-\]</span> where <span class="math inline">\(\Omega\)</span> is a covariance matrix (not necessarily a diagonal matrix). Then, using similar calculations, we have <span class="math display">\[
-Y \sim N( \mathbf{1}_n \otimes \mathbf{\alpha}, 
-\mathbf{J}_p \otimes \Sigma_{A} + \mathbf{I}_n \otimes \Omega ),
-\]</span> where <span class="math inline">\(\Sigma_{A}\)</span> is defined analogously as the variance and covariance matrix of the univariate <span class="math inline">\(Y\)</span>, <span class="math inline">\(\mathbf{1}_n\)</span> is a vector of ones, <span class="math inline">\(\mathbf{J}_p\)</span> is a matrix of ones, and <span class="math inline">\(\mathbf{I}_n\)</span> is a identity matrix.</p>
-</div>
-<div class="section level2">
-<h2 id="p-dimensional-y-and-univariate-x">
-<span class="math inline">\(p\)</span>-dimensional <span class="math inline">\(Y\)</span> and univariate <span class="math inline">\(X\)</span><a class="anchor" aria-label="anchor" href="#p-dimensional-y-and-univariate-x"></a>
-</h2>
-<p>Let <span class="math inline">\(\{ U(\mathbf{x}) \,:\, x \in D \subset \mathbb{R}^2 \}\)</span> (being <span class="math inline">\(D\)</span> the whole region of study) be a stationary and isotropic Gaussian Random Field with covariance function <span class="math inline">\(C(h; \mathbf{\theta})\)</span>, where <span class="math inline">\(h\)</span> is the euclidean distance between any two points within <span class="math inline">\(D\)</span>, and <span class="math inline">\(\mathbf{\theta}\)</span> is the vector of parameters controling the spatial structure of <span class="math inline">\(U(\mathbf{x})\)</span>. Now, let <span class="math inline">\(\mathbf{Y}\)</span> to be a <span class="math inline">\(p\)</span>-dimensional random variable observed at a partition of <span class="math inline">\(D\)</span> defined as <span class="math inline">\(A = \{A_1, \dots, A_n \}\)</span> and <span class="math inline">\(\mathbf{X}\)</span> to be a random variable observed at a different partition of the same space denoted by <span class="math inline">\(B = \{B_1, \dots, B_m \}\)</span>. We define each of these variables as follows <span class="math display">\[\begin{equation}
-\label{eq:model_1}
-\left \{
-\begin{array}{l}
-Y_{ij} = \alpha_j + \beta_j U( A_i ) + V_{ij}, \, i = 1, \dots, n; \, j = 1, \dots, p \\
-X_{k} = \gamma + U( B_k ) + T_{k}, \, k = 1, \dots, m;
-\end{array} \right.
-\end{equation}\]</span> where <span class="math display">\[
-\begin{array}{l}
-U( A_i ) = \lvert A_i \rvert ^ {-1} \int_{A_i} U(\mathbf{s}) \, d \mathbf{s} \\
-U( B_k ) = \lvert B_k \rvert ^ {-1} \int_{B_k} U(\mathbf{s}) \, d \mathbf{s} \\
-V_{i} = (V_{i1}, \dots, V_{ip})' \overset{iid}{\sim} N(\mathbf{0}, \Omega) \\
-T_{k} = \overset{iid}{\sim} N(0, \tau^2) \\
-T_{k} \perp V_{i} , \quad T_{k} \perp U, \quad V_{i} \perp U, \; 
-\forall \, i = 1, \dots, n, \, j = 1, \dots , m
-\end{array}
-\]</span> where <span class="math inline">\(\Omega\)</span> is a <span class="math inline">\(p \times p\)</span> matrix with entries <span class="math inline">\(\omega_{ij}\)</span>.</p>
-<p>Now, we have that the covariance structure of the underlying process on the observed polygons belonging to the partition <span class="math inline">\(A\)</span> is defined as <span class="math display">\[
-( \Sigma_A )_{ij} = \frac{1}{\lvert A_i \rvert \lvert A_j \rvert} \int_{A_i}
-\int_{A_j} C(\Vert \mathbf{s}_1 - \mathbf{s}_1 \Vert) \, d \mathbf{s}_2 d
-\mathbf{s}_2 = f(A_i, A_j ; \theta),
-\]</span> while the entries of the covariance matrix for the same process over the regions belonging to <span class="math inline">\(B\)</span> are given by <span class="math display">\[
-( \Sigma_B )_{kl} = \frac{1}{\lvert B_k \rvert \lvert B_l \rvert} \int_{B_k}
-\int_{B_l} C(\Vert \mathbf{s}_1 - \mathbf{s}_1 \Vert) \, d \mathbf{s}_2 d
-\mathbf{s}_2 = f(B_k, B_l ; \theta),
-\]</span> with <span class="math inline">\(f( \cdot ; \theta)\)</span> defined similarly.</p>
-<p>The covariance between <span class="math inline">\(Y_{ij}\)</span> and <span class="math inline">\(Y_{i'j'}\)</span> is <span class="math display">\[
-Cov(Y_{ij}, Y_{i'j'}) = \beta_j \beta_{j'} f(A_i, A_{i'} ; \theta),
-\]</span> Therefore, the covariance matrix associated with the random variable <span class="math inline">\(\mathbf{Y}\)</span> is <span class="math display">\[
-\Sigma_Y = \mathbf{\beta} \mathbf{\beta}^{\top} \otimes \Sigma_A +
-\Omega \otimes \mathbf{I}_n \, \in \, 
-\mathbb{R}^{(p \cdot n) \times (p \cdot n)},
-\]</span> and <span class="math display">\[
-\Sigma_X = \Sigma_B + \tau^2 \cdot \mathbf{I}_n \, \in \, 
-\mathbb{R}^{(p \cdot n) \times (p \cdot n)}.
-\]</span></p>
-<p>Moreover, the following “cross” covariance relationship between <span class="math inline">\(Y_{j}\)</span> and <span class="math inline">\(X\)</span> has entries <span class="math display">\[
-(D_j)_{ik} = Cov(Y_{ij}, X_{k}) = \beta_j f(A_i, B_k ; \theta),
-\]</span> where <span class="math inline">\(D_j\)</span> is <span class="math inline">\(n \times m\)</span>. Thus, we define the “cross”-covariance as <span class="math display">\[
-D = \begin{pmatrix}
-D_1 &amp; \cdots &amp; D_p
-\end{pmatrix}^{\top} \, \in \, \mathbb{R}^{ (p \cdot n) \times m}
-\]</span></p>
-<p>We can write the joint log-likelihood as <span class="math display">\[
-l_{\mathbf{Y}\mathbf{X}}(\theta) = 
-l_{\mathbf{Y}|\mathbf{X}}(\theta) +
-l_{\mathbf{X}}(\theta),
-\]</span> being here <span class="math inline">\(\theta\)</span> the vector of unknown parameters. With <span class="math display">\[
-(\mathbf{Y} | \mathbf{X} = \mathbf{x}) \sim N(\mu_{Y|X}, \Sigma_{Y|X}),
-\]</span> where <span class="math display">\[\begin{align*}
-&amp; \mu_{Y|X} = \mathbf{1}_n \otimes \mathbf{\alpha} + 
-D \Sigma^{-1}_X ( \mathbf{x} - \gamma \cdot \mathbf{1}_m)  \, \in \, 
-\mathbb{R}^{p \cdot } \\
-&amp; \Sigma_{Y|X} = \Sigma_Y - D \Sigma^{-1}_X D^{\top}  \, \in \, 
-\mathbb{R}^{(p \cdot n) \times (p \cdot n)},
-\end{align*}\]</span> come from standard theoremos involving the multivariate normal <span class="citation">(Ravishanker and Dey 2020)</span>.</p>
-</div>
-</div>
-<div class="section level1">
-<h1 id="limitations-and-further-work">Limitations and Further Work<a class="anchor" aria-label="anchor" href="#limitations-and-further-work"></a>
-</h1>
-<p>It is known from the literature of geostatistics, that the small scale variance parameters are hard to be estimated due to identifiability problems, unless the researcher knows, for example, the ratio of the variance and this effect. This parameters, for the considered models, are <span class="math inline">\(\omega\)</span>, <span class="math inline">\(\tau^2\)</span>, and <span class="math inline">\(\Omega\)</span>. This last one is not properly a nugget effect, since it can also includes terms of covariance between variables.</p>
-<p>Different methods of estimation need to be implemented and the problem needs to be further examined.</p>
+<p>Areal interpolation is a nonparametric approach that interpolates <span class="math inline">\(Y(A_i)\)</span>’s to construct <span class="math inline">\(Y(B_j)\)</span>’s. Define an <span class="math inline">\(m \times n\)</span> matrix <span class="math inline">\(\mathbf{W} = \{ w_{ij} \}\)</span>, where <span class="math inline">\(w_{ij}\)</span> is the weight associated with the polygon <span class="math inline">\(A_i\)</span> in constructing <span class="math inline">\(Y(B_j)\)</span>. The weights are <span class="math inline">\(w_{ij} = \lvert A_i \cap B_j \rvert / \lvert B_j \rvert\)</span> <span class="citation">(Goodchild and Lam 1980; Gotway and Young 2002)</span>. The interpolation for <span class="math inline">\(\hat Y(B_1, \ldots, B_m)\)</span> is constructed as <span class="math display">\[\begin{equation}
+  \label{eq:np-est}
+  \hat{Y}(B_1, \ldots, B_m) = \mathbf{W}
+  Y(A_1, \ldots, A_n).
+\end{equation}\]</span> The expectation and variance of the predictor are, respectively, <span class="math display">\[
+  \E[\hat{Y}(B_1, \ldots, B_m)] = \mathbf{W}
+  \E[Y(A_1, \ldots, A_n)]
+\]</span> and <span class="math display">\[\begin{equation}
+  \label{eq:np-matcov}
+  \textrm{Var}[\hat{Y}(B_1, \ldots, B_m)] = \mathbf{W}
+  \textrm{Var}[Y(A_1, \ldots, A_n)] \mathbf{W}^{\top}.
+\end{equation}\]</span> In practice, the covariance matrix <span class="math inline">\(\textrm{Var}[Y(A_1, \ldots, A_n)]\)</span> is unknown and, consequently needs to be estimated.</p>
+<p>The variance each predictor <span class="math inline">\(\text{Var}[\hat Y(B_i)]\)</span> is needed as an uncertainty measure. It relies on both the variances of <span class="math inline">\(Y(A_j)\)</span>’s and their covariances: <span class="math display">\[\begin{align}
+  \label{eq:np-single-var}
+  \textrm{Var}[\hat{Y}(B_i)] 
+  = \sum_{i = 1}^n w^2_{ij} \textrm{Var} \left [ Y(A_i) \right ] + 2 \sum_{l
+  \neq i} w_{ij} w_{il} \textrm{Cov} \left[ Y(A_i), Y(A_l) \right].
+\end{align}\]</span> The variances are often observed in survey data, but the covariances are not. For practical purpose, we propose an approximation for <span class="math inline">\(\textrm{Cov}[ Y(A_i), Y(A_l)]\)</span> based on Moran’s I, a global spatial autocorrelation. Specifically, let <span class="math inline">\(\rho_I\)</span> be the Moran’s I calculated with a weight matrix constructed with first-degree neighbors. That is, <span class="math inline">\(\rho_I\)</span> is the average of the pairwise correlation for all neighboring pairs. For regions <span class="math inline">\(A_i\)</span> and <span class="math inline">\(A_l\)</span>, if they are neighbors of each other, our approximation is <span class="math display">\[\begin{align}
+  \label{eq:cova}
+  \textrm{Cov} \left[ Y(A_i), Y(A_l) \right]
+  = \rho_I \sqrt{\text{Var}[Y(A_i)]  \text{Var}[Y(A_l)]}.
+\end{align}\]</span> The covariance between non-neighboring <span class="math inline">\(A_i\)</span> and <span class="math inline">\(A_l\)</span> is discarded. The final uncertainty approximation for <span class="math inline">\(\textrm{Var}[\hat{Y}(B_i)]\)</span> will be an underestimate. Alternatively, we can derive, at least, an upper bound for the variance of the estimates by using a simple application from the Cauchy–Schwartz inequality, in which case, <span class="math inline">\(\rho_I\)</span> is replaced with~1.</p>
 </div>
 <div class="section level1 unnumbered">
 <h1 id="reference">Reference<a class="anchor" aria-label="anchor" href="#reference"></a>
 </h1>
 <div id="refs" class="references">
-<div id="ref-johnson2020dealing">
-<p>Johnson, Olatunji, Peter Diggle, and Emanuele Giorgi. 2020. “Dealing with Spatial Misalignment to Model the Relationship Between Deprivation and Life Expectancy: A Model-Based Geostatistical Approach.” <em>International Journal of Health Geographics</em> 19 (1): 1–13.</p>
+<div id="ref-goodchild1980areal">
+<p>Goodchild, Michael F, and Nina Siu-Ngan Lam. 1980. “Areal Interpolation: A Variant of the Traditional Spatial Problem.” <em>Geo-Processing</em> 1: 279–312.</p>
 </div>
-<div id="ref-ravishanker2020first">
-<p>Ravishanker, Nalini, and Dipak K Dey. 2020. “A First Course in Linear Model Theory.” In, 156. CRC Press.</p>
-</div>
-<div id="ref-rue2005gaussian">
-<p>Rue, Havard, and Leonhard Held. 2005. <em>Gaussian Markov Random Fields: Theory and Applications</em>. Chapman; Hall/CRC.</p>
+<div id="ref-gotway2002combining">
+<p>Gotway, Carol A, and Linda J Young. 2002. “Combining Incompatible Spatial Data.” <em>Journal of the American Statistical Association</em> 97 (458): 632–48.</p>
 </div>
 </div>
 </div>

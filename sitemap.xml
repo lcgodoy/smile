@@ -13,6 +13,9 @@
     <loc>https://lcgodoy.me/smile/articles/index.html</loc>
   </url>
   <url>
+    <loc>https://lcgodoy.me/smile/articles/sai.html</loc>
+  </url>
+  <url>
     <loc>https://lcgodoy.me/smile/articles/sf-to-spm.html</loc>
   </url>
   <url>
@@ -83,6 +86,12 @@
   </url>
   <url>
     <loc>https://lcgodoy.me/smile/reference/morans_i.html</loc>
+  </url>
+  <url>
+    <loc>https://lcgodoy.me/smile/reference/nyc_comd.html</loc>
+  </url>
+  <url>
+    <loc>https://lcgodoy.me/smile/reference/nyc_surv.html</loc>
   </url>
   <url>
     <loc>https://lcgodoy.me/smile/reference/pexp_cov.html</loc>
