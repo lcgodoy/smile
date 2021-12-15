@@ -1,9 +1,9 @@
 ---
-title: "3. Fitting models and making predictions"
+title: "2. Fitting models and making predictions"
 output: rmarkdown::html_vignette
 bibliography: biblio.bib
 vignette: >
-  %\VignetteIndexEntry{3. Fitting models and making predictions}
+  %\VignetteIndexEntry{2. Fitting models and making predictions}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -21,18 +21,24 @@ library(ggplot2)
 library(sf)
 ```
 
-If interested in the theory involving this calculations, take a look at this
-[vignette](https://lcgodoy.me/smile/articles/theory.html).
+---
 
-# Application
+If interested in the theory involving this calculations, take a look at [this
+vignette](https://lcgodoy.me/smile/articles/theory.html).
 
-To exemplify the fitting and predicting functions, we are going to use the data
-from @johnson2020dealing again^[for more details about the data, take a look at
-the vignette [sf-to-spm](https://lcgodoy.me/smile/articles/sf-to-spm.html)]. 
-First, in the code chunk below, we load the data and convert it to `smile` 
-compatible classes. Since this is a toy example, we are going to generate a 500 
-points grid for the MSOA data and 5 points by polygon for the LSOA data.
+---
 
+Considering the same setup used in the vignette about converting `sf` to `spm`
+[objects](https://lcgodoy.me/smile/articles/sf-to-spm.html), we are going to
+predict the Life Expecation at Birth (LEF) score (observed at the Middle Super
+Output Areas (MSOA), in Liverpool, into the Lower Super Output Area (LSOA). In
+this second level, we have the Life Expectancy at Birth for each area.
+
+The code below loads the data and converts the LSOA `sf` object into a `spm`
+object. In particular, we are going to use numerical integration (based on a 1000
+points grid) with the precision of the integrals varying according to the size
+of each MSOA region. The name of the variable we are interested in, in the
+`liv_msoa`, is `"leb_est"`.
 ```{R load-data}
 data(liv_msoa)
 data(liv_lsoa)
@@ -44,106 +50,127 @@ st_crs(liv_msoa) <-
 st_crs(liv_lsoa) <-
     st_crs(liv_lsoa)$input
 
-## msoa to spm
+## msoa from sf to spm
 spm_msoa <-
     sf_to_spm(sf_obj = liv_msoa,
-              n_pts  = 500,
+              n_pts  = 1000,
               type   = "regular",
               by_polygon = FALSE,
               poly_ids = "msoa11cd",
               var_ids  = "leb_est")
-
-## lsoa to spm
-spm_lsoa <-
-    sf_to_spm(sf_obj = liv_lsoa,
-              n_pts  = 5,
-              type   = "regular",
-              by_polygon = TRUE,
-              poly_ids = "lsoa11cd",
-              var_ids  = "imdscore")
 ```
 
-The map below shows the LEB observed at the MSOAs.
-```{R leb-msoa1}
-ggplot(data = liv_msoa,
-       aes(fill = leb_est)) +
-    geom_sf(color = 1, lwd = .1) +
-    scale_fill_viridis_c(option = "H") +
-    theme_minimal()
-```
+Next, we assume the following model, at the grid level, drives the data^[To
+check how the model at the grid level relates to the data at the area level
+check the [Theory vignette](https://lcgodoy.me/smile/articles/theory.html)] \[
+Y(\mathbf{s}) = \mu + S(\mathbf{s}) + \varepsilon(\mathbf{s}), \] where
+$S(\cdot) \sim {\rm GP}(0, {\rm C}(\cdot ; \, \boldsymbol{\theta}))$, and
+$\varepsilon(\cdot) \overset{{\rm i.i.d.}}{\sim} {\rm N}(0, \tau)$, with
+$S(\cdot) \pert \varepsilon(\cdot)$. The (auto) covariance function ${\rm
+C}(\cdot ; \, \boldsymbol{\theta} ) = \sigma^2 \rho(\cdot ; \,
+\boldsymbol{\theta})$. Where $\rho(\cdot ; \, \boldsymbol{\theta})$ is a
+stationary and isotropic covariance function. To check the families of functions
+available on the package, check [this
+link](https://lcgodoy.me/smile/articles/sp-cov-functions.html). Another
+important detail is that if we make $\nu = \tau / \sigma^2$, the estimation
+process is slightly easier. The package allows for the two parametrizations.
 
-The map below displays the IMD observed at the LSOAs.
-```{R imd-lsoa1}
-ggplot(data = liv_lsoa,
-       aes(fill = imdscore)) +
-    geom_sf(color = 1, lwd = .1) +
-    scale_fill_viridis_c(option = "H") +
-    theme_minimal()
-```
-
-## Fit at MSOA, prediction at LSOA
-
-Using as starting parameters $\alpha = 70$ (average of $Y$), $\omega = 1$ (can
-be seen as a nugget effect), $\sigma^2$ (variance parameter for the powered
-exponential family), and $\phi = 1$ (paramter that controls the range os spatial
-dependence, 1 here represents 1_km_). We are going to compute the Maximum
-Likelihood estimates considering a Powered Exponential covariance function to
-the data, with $\kappa = 1.5$^[This parameter is known to be hard to be
-estimated in the literature of geostatistics.].  Note that, it is important for
-this inputing vector to be a named vector, because some functions track the
-parameters by their names. 
+For this problem we are going to consider the the Mat\'{e}rn correlation
+function. The model will be fitted with $\kappa = .5, 1.5, 2.5$, this the
+parameter that control the smoothness of the spatial process. Also, we use the
+parametrization with $\nu$ instead of $\tau$. Next, we evaluate the AIC
+associated with three models. The function `fit_spm` is used to fit the
+models. This function needs starting values for $\phi$ and $\nu$, the covariance
+model to be used (in this case, `"matern"`). Note that, we are not inputting an
+initial value for $\nu$. When not inputting an initial value for $\nu$, we are
+forcing this parameter to be 0. This is done because there are identifiability
+issues associated with such parameter. The commented part of the code below
+shows how to proceed to estimate this parameter from the data. The argument
+`apply_exp` is a workaround for searching $\phi$ and $\nu = \tau / \sigma^2$
+over the whole real line. The arguments `opt_method` and `control` are passed to
+the function `optim` in order to optimize the log likelihood associated with the
+data.
 ```{R fit-pred-1}
 theta_st_msoa <- c("phi" = 1)
 
-fit_msoa <-
+## 1) it is important to NAME the initial values for each parameter
+## 2) to estimate "nu" from the data we only need to provide an initial value for such
+## parameter
+## 3) uncomment the code below to do so.
+## 4) Note that it is possible to set the boundaries for the parameter space on
+## which we want to optmize the likelihood.
+## theta_st_msoa <- c("phi" = 1, "nu" = 1)
+## fit_msoa1 <-
+##     fit_spm(x = spm_msoa,
+##             theta_st = theta_st_msoa,
+##             model = "matern",
+##             kappa = .5,
+##             lower = c(1e-16, 1e-16),
+##             upper = c(Inf, 1),
+##             opt_method = "L-BFGS-B",
+##             control   = list(maxit = 500))
+
+fit_msoa1 <-
     fit_spm(x = spm_msoa,
             theta_st = theta_st_msoa,
-            model = "pexp",
-            kappa = 1,
+            model = "matern",
+            kappa = .5,
+            apply_exp = TRUE,
+            opt_method = "L-BFGS-B",
+            control   = list(maxit = 500))
+
+fit_msoa2 <-
+    fit_spm(x = spm_msoa,
+            theta_st = theta_st_msoa,
+            model = "matern",
+            kappa = 1.5,
+            apply_exp = TRUE,
+            opt_method = "L-BFGS-B",
+            control   = list(maxit = 500))
+
+fit_msoa3 <-
+    fit_spm(x = spm_msoa,
+            theta_st = theta_st_msoa,
+            model = "matern",
+            kappa = 2.5,
             apply_exp = TRUE,
             opt_method = "L-BFGS-B",
             control   = list(maxit = 500))
 ```
 
-After a few seconds, we get the Results. Now, we can use the function
-`summary_spm_fit` to get the summary of the results. The function prints a
-table containing the estimates, their standard errors, and `1 - sig` confidence
-interval based on the asymptotic normality of the MLEs. The function also prints
-a message indicating if the optimization algorithm has converged^[The default
-algorithm used by the package is the Nelder-Mead, this can easily be changed by
-setting the parameter `opt_method = "L-BFGS-B"`, for example.].
-```{R summary-fit1}
-summary_spm_fit(fit_msoa, sig = .05)
+The AIC^[The BIC works for our models too.] associated with each model is given
+below. According to this criterion, the best model is the one with $\kappa =
+.5$.
+```{r AIC, echo = TRUE, eval = TRUE}
+c("m1" = AIC(fit_msoa1), "m2" = AIC(fit_msoa2), "m3" = AIC(fit_msoa3))
 ```
 
-Finally, now we are going to perform predictions of the LEB at the LSOA
-level. To do so, we use the function `predict_spm`. The `x` argument gives the
-sf on which we want to make the predictions according to the `sbm_obj`, which
-represents the estimated parameters. Now, take a look at the remaining
-arguments. The last two, are analogous to what we have seen for the function
-`sf_to_spm`. They are concerning the grid generated over the study region, now
-we going to make predicitons over this grid. I set it to 2500 to "approximate" a
-continuous region^[Be careful here, a very large number of points can result in
-intractable covariance matrices]. The argument `.aggregate` if set to `TRUE`,
-computes the predictions over the polygons from the input `x` (in this case
-`liv_lsoa`). This function also works if the input is a `sf` object with POINT
-geometries. The objects returned by the function `pred_lsoa` are lists with the
-following elements: 1) `mu_pred` - a vector with the predicted average for each
-location in the generated grid; 2) `sig_pred` the variance covariance matrix
-associated with the same grid; 3) the predictions (and standard errors)
-organized in an `sf` object to facilitate the visualization of the predictions
-over a (almost) continuous space; and 4) `pred_agg` which is returned only if we
-set `.aggregate = TRUE`. The last one contains the predictions and their
-standard erros integrated over the "new regions".
+We can retrieve the estimated parameters and the associated `(1 - sig)` %
+confidence intervals by using the function `summary_spm_fit` as follows
+```{R summary-fit1}
+summary_spm_fit(fit_msoa1, sig = .05)
+```
+
+Finally, we have almost everything we need to perform predictions at the LSOA
+areas. The function `predict_spm` calculates the predictions associated to the
+`spm_obj` (which contains the results associated with a fitted model) into a
+`sf` object `x`. We need to specify whether we want to "aggregate"
+(i.e. average) the predicted surface into the polygons associated with the `sf`
+data. The number of points and the type of integration for prediction need to be
+set as well. In this case we are specifying a finer grid because the LSOA areas
+are smaller than the MSOA areas.
 ```{R predict-fit1}
-pred_lsoa <- predict_spm(x = liv_lsoa, spm_obj = fit_msoa,
-                         .aggregate = TRUE, n_pts = 2500,
+pred_lsoa <- predict_spm(x = liv_lsoa, spm_obj = fit_msoa1,
+                         .aggregate = TRUE, n_pts = 3500,
                          type = "regular")
 ```
 
-Now, let's make some data manipulation to make the visualization look nicer. We
-are going to stack all the data to make it easier to plot them all together
-using ggplot2. The next map whos the predictions.
+The resulting object is a list with entries `"mu_pred"`, `"sig_pred"`,
+`"pred_grid"`, `"pred_agg"`. The first two positions correspond to the mean and
+covariance matrix at the predicted locations, respectively. `"pred_grid"` can be
+seen as the predicted surface over the study region, while `"pred_agg"` contains
+the (integrals) averages of such surface within each LSOA area. The chunk of
+code below plots the predicted surface.
 ```{R manip-pred-1}
 aux_viz1 <- vector(mode   = "list",
                    length = 4)
@@ -175,14 +202,15 @@ ggplot(data = aux_viz1[aux_viz1$variable == "prediction",],
     geom_sf(pch = 15) +
     scale_fill_viridis_c(option = "H") +
     scale_color_viridis_c(option = "H") +
-    guides(color = "none") +
+    guides(color = "none",
+           fill = "none") +
     facet_wrap(surface ~ .) +
-    theme_bw()
+    theme_bw() +
+    theme(axis.text = element_blank())
 ```
 
-The next one displays the standard errors for the predictions. Clearly, we have
-less variability in the neighborhoods on which we have small polygons.
-```{R se-ggplot1}
+Next, we plot the standard errors associated with the predictions.
+```{R se-ggplot2}
 ggplot(data = aux_viz1[aux_viz1$variable == "se",],
        aes(fill  = value,
            color = value)) +
@@ -191,104 +219,19 @@ ggplot(data = aux_viz1[aux_viz1$variable == "se",],
     geom_sf(pch = 15) +
     scale_fill_viridis_c(option = "H") +
     scale_color_viridis_c(option = "H") +
-    guides(color = "none") +
+    guides(color = "none",
+           fill = "none") +
     facet_wrap(surface ~ .) +
-    theme_bw()
+    theme_bw() +
+    theme(axis.text = element_blank())
 ```
 
-```{R rm-obj1, echo = TRUE}
+```{R rm-obj1, echo = FALSE}
 rm(aux_viz1, pred_lsoa, fit_msoa)
 invisible(gc(full = TRUE))
 ```
 
-## Fit at LSOA, predict at MSOA
-
-Using as starting parameters $\alpha = 25$ (average of $Y$), $\omega = 1$ (can
-be seen as a nugget effect), $\sigma^2$ (variance parameter for the powered
-exponential family), and $\phi = 1$ (paramter that controls the range os spatial
-dependence, 1 here represents 1_km_). We are going to compute the Maximum
-Likelihood estimates considering a Matern covariance function to the data, with
-$\kappa = 2.5$.
-
-```{R fit-pred-2}
-theta_st_lsoa <-
-    c("phi" = 1)
-
-fit_lsoa <-
-    fit_spm(x = spm_lsoa,
-            theta_st = theta_st_lsoa,
-            model = "matern",
-            kappa = .5,
-            apply_exp = TRUE,
-            opt_method = "L-BFGS-B",
-            control   = list(maxit = 500))
-```
-
-After a few seconds, we get the Results. Now, we can use the function
-`summary_sspm_fit` again to summarise the estimated parameters. 
-```{R summary-fit2}
-summary_spm_fit(fit_lsoa, sig = .05)
-```
-
-Now we are going to perform predictions of the IMD at the MSOA level. Since from
-now on the process is pretty much the exam, the explanation will be shorter.
-```{R predict-fit2}
-pred_msoa <- predict_spm(x = liv_msoa, spm_obj = fit_lsoa,
-                         .aggregate = TRUE, n_pts = 2500,
-                         type = "regular")
-```
-
-Now, let's make some data manipulation to again. Note that, the predictions for
-this variable have more
-```{R manip-pred-2}
-aux_viz2 <- vector(mode   = "list",
-                   length = 4)
-
-aux_viz2[[1]] <- transform(pred_msoa$pred_grid["mu_pred"],
-                           surface  = "continuous",
-                           variable = "prediction")
-names(aux_viz2[[1]])[1] <- "value"
-aux_viz2[[2]] <- transform(pred_msoa$pred_grid["se_pred"],
-                           surface  = "continuous",
-                           variable = "se")
-names(aux_viz2[[2]])[1] <- "value"
-aux_viz2[[3]] <- transform(pred_msoa$pred_agg["mu_pred"],
-                           surface  = "aggregated",
-                           variable = "prediction")
-names(aux_viz2[[3]])[1] <- "value"
-aux_viz2[[4]] <- transform(pred_msoa$pred_agg["se_pred"],
-                           surface  = "aggregated",
-                           variable = "se")
-names(aux_viz2[[4]])[1] <- "value"
-
-aux_viz2 <- do.call("rbind", aux_viz2)
-
-ggplot(data = aux_viz2[aux_viz2$variable == "prediction",],
-       aes(fill  = value,
-           color = value)) +
-    geom_sf(data = st_geometry(pred_msoa$pred_agg), color = 1,
-            lwd = .1, inherit.aes = FALSE) +
-    geom_sf(pch = 15) +
-    scale_fill_viridis_c(option = "H") +
-    scale_color_viridis_c(option = "H") +
-    guides(color = "none") +
-    facet_wrap(surface ~ .) +
-    theme_bw()
-```
-
-The next one displays the standard errors for the predictions. 
-```{R se-ggplot2}
-ggplot(data = aux_viz2[aux_viz2$variable == "se",],
-       aes(fill  = value,
-           color = value)) +
-    geom_sf(data = st_geometry(pred_msoa$pred_agg), color = 1,
-            lwd = .1, inherit.aes = FALSE) +
-    geom_sf(pch = 15) +
-    scale_fill_viridis_c(option = "H") +
-    scale_color_viridis_c(option = "H") +
-    guides(color = "none") +
-    facet_wrap(surface ~ .) +
-    theme_bw()
-```
+Lastly, the next chunk of code plots the observed and predicted LEB at the MSOAs
+and LSOAs, respectively.
 
 # Reference

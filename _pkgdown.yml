@@ -7,7 +7,7 @@ template:
     base_font: {google: "Roboto"}
     heading_font: {google: "Roboto Slab"}
     code_font: {google: "JetBrains Mono"}
-    btn-link-color: "#0054AD"
+    link-color: "#0054AD"
 
 navbar:
   bg: primary
@@ -20,12 +20,14 @@ navbar:
       menu:
         - text: "1. Converting sf objects to spm"
           href: articles/sf-to-spm.html
-        - text: "2. Spatial covariance functions"
-          href: articles/sp-cov-functions.html
-        - text: "3. Fitting models and making predictions"
-          href: articles/fit-and-pred.html 
+        - text: "2. Fitting models and making predictions"
+          href: articles/fit-and-pred.html
+        - text: "3. Simple Areal Interpolation"
+          href: articles/sai.html 
         - text: "4. Theory"
-          href: articles/theory.html
+          href: articles/theory.html 
+        - text: "5. Spatial covariance functions"
+          href: articles/sp-cov-functions.html
     - text: "Reference"
       icon: fa-search fa-lg
       href: reference/index.html

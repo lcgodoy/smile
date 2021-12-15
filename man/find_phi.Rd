@@ -7,13 +7,13 @@
 find_phi(d, kappa = 0.5, range = c(1e-04, 1), cut = 0.05)
 }
 \arguments{
-\item{d}{maximun distance for spatial dependence}
+\item{d}{maximun distance for spatial dependence equal to \code{cut}.}
 
-\item{kappa}{parameter}
+\item{kappa}{smoothness parameter associated with the Matern cov. function.}
 
-\item{range}{? Marcos help needed here}
+\item{range}{Minimum and maximum distance to be considered.}
 
-\item{cut}{? Marcos help needed here}
+\item{cut}{Spatial correlation at a distance \code{d}.}
 }
 \value{
 \code{real number}

@@ -1,0 +1,102 @@
+---
+title: "3. Simple Areal Interpolation"
+output: rmarkdown::html_vignette
+bibliography: biblio.bib
+vignette: >
+  %\VignetteIndexEntry{3. Simple Areal Interpolation}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+Often, in an applied setting, it is interesting to compute estimates (and
+quantify its associated uncertainty) of socioeconomic and demographic variables
+for different administrative regions within the same city. Computing estimates
+is trivial when applying the Simple Areal Interpolation [@@goodchild1980areal]
+approach. However, a common criticism regarding this method is that it does not
+provide uncertainty measures associated along with the estimates
+[@bradley2016bayesian]. Our package provides the simple areal interpolation
+along with an approximation and an upper bound for the variance of the estimates
+when the variance associated with the observed data is known, which is common
+when working with survey data. To illustrate how does it work, we are going to
+use NYC data. In particular, we are going to show how to estimate a variable
+observed at census tracts in the Public Use Microdata Areas (PUMAs).
+
+To load the data and the packages needed for this tutorial run the chunk of code
+below.
+```{r load-data}
+library(sf)
+library(smile)
+library(ggplot2)
+
+data(nyc_surv)
+data(nyc_comd)
+```
+
+Since the `nyc_surv` data proves a "margin of error" instead of a variance, we
+are going to use the piece of code below to approximate the variance assuming
+the margin of error was calculated using a 95% confidence interval based on the
+Normal distribution.
+```{r var_calc}
+nyc_surv <- transform(nyc_surv,
+                      my_var = moe / qnorm(p = .975))
+nyc_surv <- transform(nyc_surv, my_var = my_var * my_var)
+```
+Now, to estimate a variable observed at the `nyc_surv` dataset into the
+`nyc_comd` data we can run the following command:
+```{r est-1, eval = FALSE}
+estimate_comd <-
+    sai(source = nyc_surv, target = nyc_comd,
+        vars = "estimate")
+```
+
+where `source` is the "source" dataset, i.e., the one on which we observe the
+variable we wish to estimate at the `target` dataset. The argument `vars` is a
+`character` (scalar or vector) containing the name of the variables at the
+`source` that are going to be estimated at the `target`. This function does not
+quantify the uncertainty associated with the estimates, though. In order to get
+an uncertainty measure associated with the estimates, we need to use the
+function `sai_var` (see the chunk of code below). The function is quite similar
+to the before mentioned `sai` function. The differences are: 1) `vars` must be a
+scalar when using `sai_var`; 2) the argument `my_var` is another length 1
+`character` indicating the name of the variable that contains the variance of
+the observed variable in the source dataset; and 3) the argument `var_method`
+indicates whether we are going to use the Moran's I (`var_method = "MI"`) to
+approximate the autocorrelation between areas and, therefore, approximate the
+variance of the estimates or the Cauchy--Schwartz (`var_method = "CS"`)
+inequality to calculate an upper bound for such variances. The output of the
+`sai_var` function is the `target` (`sf data.frame`) with two additional
+columns, `est` and `se_est`, representing the estimated variable and its
+corresponding (approximate) standard error.
+```{r est-2}
+estimate_comd <-
+    sai_var(source = nyc_surv, target = nyc_comd,
+            vars = "estimate", vars_var = "my_var",
+            var_method = "MI")
+```
+
+The next piece of code uses `ggplot2` to plot the observed and estimated
+variable at two different sets of regions.
+```{r ggplot-obs-est}
+viz_dt <-
+    rbind(
+        transform(nyc_surv, source = "Observed", est = estimate)[c("source", "est")],
+        transform(estimate_comd, source = "Predicted")[c("source", "est")]
+    )
+
+ggplot(data = viz_dt,
+       aes(fill = est)) +
+    geom_sf(color = 1, lwd = .1) +
+    scale_fill_viridis_c(option = "H") +
+    theme_bw() +
+    facet_wrap( ~ source) +
+    theme(axis.text = element_blank())
+```
+
+# Reference

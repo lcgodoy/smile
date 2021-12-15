@@ -250,7 +250,7 @@ rm(list = ls(pattern = "^msoa_spm")); invisible(gc(verbose = FALSE, full = TRUE)
 
 ggplot(data = to_plot,
        aes(color = msoa11cd)) +
-    guides(color = FALSE) +
+    guides(color = "none") +
     geom_sf(pch = 15) +
     scale_color_viridis_d(option = "H") +
     facet_grid(by_polygon ~ type, labeller = label_both) +

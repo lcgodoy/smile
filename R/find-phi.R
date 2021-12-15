@@ -4,14 +4,13 @@
 #' between points wihtin a given distance \code{d} is at most a given
 #' value.
 #'
-#' @param d maximun distance for spatial dependence
-#' @param kappa parameter
-#' @param range ? Marcos help needed here
-#' @param cut ? Marcos help needed here
+#' @param d maximun distance for spatial dependence equal to \code{cut}.
+#' @param kappa smoothness parameter associated with the Matern cov. function.
+#' @param range Minimum and maximum distance to be considered.
+#' @param cut Spatial correlation at a distance \code{d}.
 #'
 #' @return \code{real number}
 #' @export
-#'
 find_phi <- function(d, kappa = 0.5, 
                      range = c(1e-04, 1), 
                      cut = 0.05) {    

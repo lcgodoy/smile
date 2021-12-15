@@ -1,9 +1,9 @@
 ---
-title: "2. Spatial covariance functions"
+title: "5. Spatial covariance functions"
 output: rmarkdown::html_vignette
 bibliography: biblio.bib
 vignette: >
-  %\VignetteIndexEntry{2. Spatial covariance functions}
+  %\VignetteIndexEntry{5. Spatial covariance functions}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -14,23 +14,16 @@ knitr::opts_chunk$set(
   comment = "#>"
 )
 ```
-<!-- To exemplify the covariance functions, we are going to use the data from -->
-<!-- @johnson2020dealing again^[for more details about the data, take a look at the -->
-<!-- vignette -->
-<!-- [sf-to-spm](https://lcgodoy.me/smile/articles/sf_to_spm.html)]. First, in the -->
-<!-- code cunk below, we load the data and convert it to a `smile` compatible -->
-<!-- class. Since this is a toy example, we are going to generate a 500 points grid -->
-<!-- for the data. -->
 
-in this short vignette, we illustrate the family of spatial covariance functions
+In this short vignette, we illustrate the family of spatial covariance functions
 implemented in this package. Note that, all of them are based on the assumptions
-of stationarity and isotropy of the underlying Gaussian Random Field
+of stationarity and isotropy of the underlying Gaussian random field
 (GRF). Also, the implementations (and definitions) are based on the families of
 spatial _correlation_ functions presented in @diggle2007model. The implemtations
 make use of the `RcppArmadillo` [@eddelbuettel2014rcpparmadillo] package and the
 STL library algorithms (C++ 11)^[for this problem, the implementation using the
-sequencial algorithms of the STL library were more effitient than those using
-the `RcppParallel` package].
+sequencial algorithms of the STL library was more effitient than those using the
+`RcppParallel` package].
 
 The first spatial covariance family implemented is the so-called Mat\'ern
 Covariance function, it is of form
@@ -78,7 +71,7 @@ C(h; \sigma^2, \phi) =
 \]
 where, again, $\sigma^2$ is a variance parameter, while $\phi > 0 $ is a
 parameter with the same magnitude as the distances on which the function is
-being evaluated at.  
+being evaluated at. 
 
 All this functions will be useful in the upcoming vignette.
 

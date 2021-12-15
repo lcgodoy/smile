@@ -3,8 +3,7 @@ Title: Spatial Misalignment: Interpolation, Linkage, and Estimation
 Version: 1.0.0
 Authors@R: 
     person(given = "Lucas",
-           middle = "da Cunha",
-           family = "Godoy",
+           family = "da Cunha Godoy",
            role = c("aut", "cre"),
            email = "lucasdac.godoy@gmail.com",
            comment = c(ORCID = "0000-0003-4265-972X"))
