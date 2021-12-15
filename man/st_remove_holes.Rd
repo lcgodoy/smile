@@ -14,6 +14,6 @@ a \code{sf} or \code{sfc} polygon.
 }
 \description{
 internal use. Taken from
-\url{https://cran.r-project.org/web/packages/nngeo/}
+\url{https://github.com/michaeldorman/nngeo/}
 }
 \keyword{internal}

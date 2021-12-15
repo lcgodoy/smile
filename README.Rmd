@@ -14,9 +14,9 @@ knitr::opts_chunk$set(
 ## **S**patial **M**isalignment: **I**nterpolation, **L**inkage, and **E**stimation
 
 <!-- badges: start -->
-[![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
-[![CRAN status](https://www.r-pkg.org/badges/version/smile)](https://CRAN.R-project.org/package=smile)
 [![R-CMD-check](https://github.com/lcgodoy/spmismo/workflows/R-CMD-check/badge.svg)](https://github.com/lcgodoy/smile/actions)
+[![CRAN status](https://www.r-pkg.org/badges/version/smile)](https://CRAN.R-project.org/package=smile)
+`r lifecycle::badge("experimental")`
 <!-- badges: end -->
 
 The goal of `smile` is to provide an easy to use `R` package that functions to

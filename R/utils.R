@@ -60,7 +60,7 @@ mult_dist_from_grids <- function(y_grid, x_grid, by) {
 
 ##' @title Remove holes from a \code{sfc} POLYGON
 ##' @description internal use. Taken from
-##'     \url{https://cran.r-project.org/web/packages/nngeo/}
+##'     \url{https://github.com/michaeldorman/nngeo/}
 ##' @param x a \code{sf} or \code{sfc} polygon.
 ##' @return a \code{sf} or \code{sfc} polygon.
 ##' @keywords internal
