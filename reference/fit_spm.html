@@ -137,11 +137,10 @@ so covalled exponential covariance function.</p></dd>
 that cannot assume negative values should be exponentiate or not.</p></dd>
 <dt>opt_method</dt>
 <dd><p>a <code>character</code> scalar indicating the optimization
-algorithm to be used. For details, see <code><a href="https://rdrr.io/r/stats/optim.html" class="external-link">optim</a></code>.</p></dd>
+algorithm to be used. For details, see optim.</p></dd>
 <dt>control_opt</dt>
 <dd><p>a named <code>list</code> containing the control arguments for
-the optimization algorithm to be used. For details, see
-<code><a href="https://rdrr.io/r/stats/optim.html" class="external-link">optim</a></code>.</p></dd>
+the optimization algorithm to be used. For details, see optim.</p></dd>
 <dt>comp_hess</dt>
 <dd><p>a <code>boolean</code> indicating whether the Hessian matrix
 should be computed.</p></dd>
@@ -161,22 +160,21 @@ compute a grid-search over \(phi\).</p></dd>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>This function uses the <code><a href="https://rdrr.io/r/stats/optim.html" class="external-link">optim</a></code> optimization
+    <p>This function uses the <code>optim</code> function optimization
 algorithms to find the Maximum Likelihood estimators, and their standard
 errors, from a model adapted from. The function allows the user to input
-the control parameters from the <code><a href="https://rdrr.io/r/stats/optim.html" class="external-link">optim</a></code> function
-through the argument <code>control_opt</code>, which is a named
-list. Additionally, the one can input lower and upper boundaries for the
-optimization problem, as well as the preferred optimization algorithm
-(as long as it is available for <code><a href="https://rdrr.io/r/stats/optim.html" class="external-link">optim</a></code>). The
-preferred algorithm is selected by the argument <code>opt_method</code>. In
-addition to the control of the optimization, the user can select a
-covariance function among the following: Matern, Exponential, Powered
-Exponential, Gaussian, and Spherical. The parameter <code>apply_exp</code> is
-a <code>logical</code> scalar such that, if set to <code>TRUE</code>, the \(\exp\)
-function is applied to the nonnegative parameters, allowing the
-optimization algorithm to search for all the parameters over the real
-numbers.</p><div class="sourceCode"><pre><code>The model assumes \deqn{Y(\mathbf{s}) = \mu + S(\mathbf{s})} at the
+the control parameters from the optim function through the argument
+<code>control_opt</code>, which is a named list. Additionally, the one can
+input lower and upper boundaries for the optimization problem, as well
+as the preferred optimization algorithm (as long as it is available for
+<code>optim</code>). The preferred algorithm is selected by the argument
+<code>opt_method</code>. In addition to the control of the optimization, the
+user can select a covariance function among the following: Matern,
+Exponential, Powered Exponential, Gaussian, and Spherical. The parameter
+<code>apply_exp</code> is a <code>logical</code> scalar such that, if set to
+<code>TRUE</code>, the \(\exp\) function is applied to the nonnegative
+parameters, allowing the optimization algorithm to search for all the
+parameters over the real numbers.</p><div class="sourceCode"><pre><code>The model assumes \deqn{Y(\mathbf{s}) = \mu + S(\mathbf{s})} at the
 point level.  Where \eqn{S ~ GP(0, \sigma^2 C(\lVert \mathbf{s} -
     \mathbf{s}_2 \rVert; \theta))}.  Further, the observed data is supposed
 to be \eqn{Y(B) = \lvert B \rvert^{-1} \int_{B} Y(\mathbf{s}) \,

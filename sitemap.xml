@@ -37,10 +37,19 @@
     <loc>https://lcgodoy.me/smile/reference/aggregate_aux.html</loc>
   </url>
   <url>
+    <loc>https://lcgodoy.me/smile/reference/aux_gauss.html</loc>
+  </url>
+  <url>
     <loc>https://lcgodoy.me/smile/reference/aux_mat.html</loc>
   </url>
   <url>
-    <loc>https://lcgodoy.me/smile/reference/comp_gauss_cov.html</loc>
+    <loc>https://lcgodoy.me/smile/reference/aux_matern.html</loc>
+  </url>
+  <url>
+    <loc>https://lcgodoy.me/smile/reference/aux_pexp.html</loc>
+  </url>
+  <url>
+    <loc>https://lcgodoy.me/smile/reference/aux_spher.html</loc>
   </url>
   <url>
     <loc>https://lcgodoy.me/smile/reference/comp_mat_cov.html</loc>
@@ -134,9 +143,6 @@
   </url>
   <url>
     <loc>https://lcgodoy.me/smile/reference/single_spher.html</loc>
-  </url>
-  <url>
-    <loc>https://lcgodoy.me/smile/reference/smile.html</loc>
   </url>
   <url>
     <loc>https://lcgodoy.me/smile/reference/spher_cov.html</loc>
