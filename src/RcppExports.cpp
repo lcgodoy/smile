@@ -205,6 +205,21 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// comp_gauss_cov
+arma::mat comp_gauss_cov(const List& cross_dists, int n, int n2, double sigsq, double phi);
+RcppExport SEXP _smile_comp_gauss_cov(SEXP cross_distsSEXP, SEXP nSEXP, SEXP n2SEXP, SEXP sigsqSEXP, SEXP phiSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const List& >::type cross_dists(cross_distsSEXP);
+    Rcpp::traits::input_parameter< int >::type n(nSEXP);
+    Rcpp::traits::input_parameter< int >::type n2(n2SEXP);
+    Rcpp::traits::input_parameter< double >::type sigsq(sigsqSEXP);
+    Rcpp::traits::input_parameter< double >::type phi(phiSEXP);
+    rcpp_result_gen = Rcpp::wrap(comp_gauss_cov(cross_dists, n, n2, sigsq, phi));
+    return rcpp_result_gen;
+END_RCPP
+}
 // single_spher
 double single_spher(double d, double sigsq, double phi);
 RcppExport SEXP _smile_single_spher(SEXP dSEXP, SEXP sigsqSEXP, SEXP phiSEXP) {
@@ -334,6 +349,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_smile_single_gauss", (DL_FUNC) &_smile_single_gauss, 3},
     {"_smile_gauss_cov", (DL_FUNC) &_smile_gauss_cov, 3},
     {"_smile_aux_gauss", (DL_FUNC) &_smile_aux_gauss, 3},
+    {"_smile_comp_gauss_cov", (DL_FUNC) &_smile_comp_gauss_cov, 5},
     {"_smile_single_spher", (DL_FUNC) &_smile_single_spher, 3},
     {"_smile_spher_cov", (DL_FUNC) &_smile_spher_cov, 3},
     {"_smile_aux_spher", (DL_FUNC) &_smile_aux_spher, 3},

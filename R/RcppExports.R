@@ -12,31 +12,6 @@
 #' @keywords internal
 NULL
 
-#' @title Gaussian covariance function for a polygons.
-#'
-#' @description Computing the Gaussian covariance function between polygons.
-#'
-#' @param cross_dists a \code{list} such that each position contains the cross
-#'   distances between points within different polygons.
-#' @param n an ingeger representing number of polygons (note that, this is
-#'   different than the size of the list \code{cross_dists}
-#' @param n2 usually, equal to \code{n}, except when the function is being used
-#'   to calculate the "cross" covariance between two different partitions of
-#'   the same space.
-#' @param sigsq the \eqn{\sigma^2} parameter from the Gaussian covariance
-#'   function.
-#' @param phi the \eqn{\phi} parameter from the Gaussian covariance function,
-#'   controls the range of the spatial dependence.
-#' 
-#' @return The gaussian covariance matrix associated with a set of
-#'   polygons.
-#'
-#' @seealso \code{\link{single_exp}}, \code{\link{single_matern}},
-#'   \code{\link{mat_cov}}
-#'
-#' @keywords internal
-NULL
-
 #' @title Matern covariance function (scalar - generic)
 #'
 #' @description Computing the Matern covariance function for a single distance
@@ -372,6 +347,33 @@ gauss_cov <- function(dists, sigsq, phi) {
 #' @keywords internal
 aux_gauss <- function(dist, sigsq, phi) {
     .Call(`_smile_aux_gauss`, dist, sigsq, phi)
+}
+
+#' @title Gaussian covariance function for a polygons.
+#'
+#' @description Computing the Gaussian covariance function between polygons.
+#'
+#' @param cross_dists a \code{list} such that each position contains the cross
+#'   distances between points within different polygons.
+#' @param n an ingeger representing number of polygons (note that, this is
+#'   different than the size of the list \code{cross_dists}
+#' @param n2 usually, equal to \code{n}, except when the function is being used
+#'   to calculate the "cross" covariance between two different partitions of
+#'   the same space.
+#' @param sigsq the \eqn{\sigma^2} parameter from the Gaussian covariance
+#'   function.
+#' @param phi the \eqn{\phi} parameter from the Gaussian covariance function,
+#'   controls the range of the spatial dependence.
+#' 
+#' @return The gaussian covariance matrix associated with a set of
+#'   polygons.
+#'
+#' @seealso \code{\link{single_exp}}, \code{\link{single_matern}},
+#'   \code{\link{mat_cov}}
+#' 
+#' @keywords internal
+comp_gauss_cov <- function(cross_dists, n, n2, sigsq, phi) {
+    .Call(`_smile_comp_gauss_cov`, cross_dists, n, n2, sigsq, phi)
 }
 
 #' @title Spherical covariance function (scalar)

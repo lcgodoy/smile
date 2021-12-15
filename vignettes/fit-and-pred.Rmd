@@ -37,7 +37,7 @@ this second level, we have the Life Expectancy at Birth for each area. This data
 was taken from @johnson2020dealing.
 
 The code below loads the data and converts the LSOA `sf` object into a `spm`
-object. In particular, we are going to use numerical integration (based on a 1000
+object. In particular, we are going to use numerical integration (based on a 500
 points grid) with the precision of the integrals varying according to the size
 of each MSOA region. The name of the variable we are interested in, in the
 `liv_msoa`, is `"leb_est"`.
@@ -55,7 +55,7 @@ st_crs(liv_lsoa) <-
 ## msoa from sf to spm
 spm_msoa <-
     sf_to_spm(sf_obj = liv_msoa,
-              n_pts  = 1000,
+              n_pts  = 500,
               type   = "regular",
               by_polygon = FALSE,
               poly_ids = "msoa11cd",
@@ -67,9 +67,8 @@ check how the model at the grid level relates to the data at the area level
 check the [Theory vignette](https://lcgodoy.me/smile/articles/theory.html)] 
 \[
 	Y(\mathbf{s}) = \mu + S(\mathbf{s}) + \varepsilon(\mathbf{s}), 
-\] where
-
-$S(\cdot) \sim {\rm GP}(0, {\rm C}(\cdot ; \, \boldsymbol{\theta}))$, and
+\] 
+where $S(\cdot) \sim {\rm GP}(0, {\rm C}(\cdot ; \, \boldsymbol{\theta}))$, and
 $\varepsilon(\cdot) \overset{{\rm i.i.d.}}{\sim} {\rm N}(0, \tau)$, with
 $S(\cdot) \perp \varepsilon(\cdot)$. The form of the covariance functions
 considered here are written as follows ${\rm C}(\cdot ; \, \boldsymbol{\theta} )
@@ -136,7 +135,7 @@ fit_msoa1 <-
 fit_msoa2 <-
     fit_spm(x = spm_msoa,
             theta_st = theta_st_msoa,
-            model = "matern",
+            model = "gaussian",
             kappa = 1.5,
             apply_exp = TRUE,
             opt_method = "L-BFGS-B",
