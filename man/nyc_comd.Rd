@@ -10,6 +10,8 @@ A \code{sf} data frame with 71 rows and 3 variables:
 \item{boro_cd}{unique identifier}
 \item{shape_area}{Shape Area}
 \item{shape_length}{Shape Length}
+\item{est}{median income estimated using areal interpolation}
+\item{se_est}{standard error associated with the estimates}
 }
 }
 \usage{

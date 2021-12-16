@@ -65,17 +65,7 @@
 ##'     \item{boro_cd}{unique identifier}
 ##'     \item{shape_area}{Shape Area}
 ##'     \item{shape_length}{Shape Length}
+##'     \item{est}{median income estimated using areal interpolation}
+##'     \item{se_est}{standard error associated with the estimates}
 ##'   }
 "nyc_comd"
-
-##' @title Auxilliary dataset - Internal use
-##'
-##' @description Used to decrease compilation time.
-##'
-##' @format A \code{sf} data frame with 2199 rows and 2 variables:
-##' \describe{
-##'     \item{source}{dataset identifier}
-##'     \item{estimate}{estimated median income in NYC}
-##'   }
-##' @keywords internal
-"viz_dt"
