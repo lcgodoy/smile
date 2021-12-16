@@ -11,7 +11,8 @@ vignette: >
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>"
+  comment = "#>",
+  eval = FALSE
 )
 ```
 
@@ -96,5 +97,21 @@ ggplot(data = viz_dt,
     facet_wrap( ~ source) +
     theme(axis.text = element_blank())
 ```
+
+```{r ggplot-obs-est-viz, eval = TRUE, echo = FALSE}
+data(viz_dt)
+
+ggplot(data = viz_dt,
+       aes(fill = estimate / 1000)) +
+    geom_sf(color = 1, lwd = .1) +
+    scale_fill_viridis_c(option = "H",
+                         name = "median \n income",
+                         label = \(x) paste0(x, "K")) +
+    theme_bw() +
+    facet_wrap( ~ source) +
+    theme(axis.text = element_blank(),
+          axis.ticks = element_blank())
+```
+
 
 # Reference

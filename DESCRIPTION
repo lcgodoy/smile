@@ -9,7 +9,7 @@ Authors@R:
            comment = c(ORCID = "0000-0003-4265-972X"))
 Description: Provides functions to estimate, predict and interpolate
         areal data. For estimation and prediction we assume areal data is an
-	average of an underlying continuos spatial process.
+	average of an underlying continuous spatial process.
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
