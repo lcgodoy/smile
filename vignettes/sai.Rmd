@@ -31,7 +31,7 @@ Public Use Microdata Areas (PUMAs) in NYC.
 
 To load the data and the packages needed for this tutorial run the chunk of code
 below.
-```{r load-data}
+```{r load-data, eval = TRUE}
 library(sf)
 library(smile)
 library(ggplot2)

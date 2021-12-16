@@ -94,14 +94,14 @@ we input initial values for $\mu$, $\sigma^2$, $\phi$, and $\nu$ (or $\tau$),
 the likelihood is optimized numerically for all the parameters. If we omit $\mu$
 and $\sigma^2$, then a profile likelihood approach is used to find numerically
 for the $\hat{\phi}$ and, if wished, $\hat{\nu}$. While, $\hat{\mu}$ and
-$\hat{\sigma}^2$ have closed form expressions [@ribeiro2007geostatistical].
-Additionally, the commented part of the code below shows how to proceed to
-estimate $\nu$, an equivalently $\tau$, from the data. The argument `apply_exp`
-is a workaround for parameters that cannot be negative. The arguments
-`opt_method` and `control` are passed to the function `optim` in order to
-optimize the log likelihood associated with the data. `opt_method` controls the
-optimization algorithm to be used, while `control` inputs control arguments for
-such optimization algorithms, for more details see
+$\hat{\sigma}^2$ have closed form expressions [@diggle2007model].  Additionally,
+the commented part of the code below shows how to proceed to estimate $\nu$, an
+equivalently $\tau$, from the data. The argument `apply_exp` is a workaround for
+parameters that cannot be negative. The arguments `opt_method` and `control` are
+passed to the function `optim` in order to optimize the log likelihood
+associated with the data. `opt_method` controls the optimization algorithm to be
+used, while `control` inputs control arguments for such optimization algorithms,
+for more details see
 [optim](https://stat.ethz.ch/R-manual/R-devel/library/stats/html/optim.html).
 ```{R fit-pred-1}
 theta_st_msoa <- c("phi" = 1)
