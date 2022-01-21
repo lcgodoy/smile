@@ -36,7 +36,7 @@
       <span class="navbar-toggler-icon"></span>
     </button>
 
-    <div id="navbar" class="collapse navbar-collapse ms-2">
+    <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto">
 <li class="nav-item">
   <a class="nav-link" href="../index.html">
@@ -101,6 +101,9 @@
     
   </div>
 </nav><div class="container template-article">
+
+
+
 <script src="theory_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
   <main id="main"><div class="page-header">
       <img src="" class="logo" alt=""><h1>4. Method</h1>
@@ -112,14 +115,14 @@
 
     
     
-<div class="section level2">
-<h2 id="general-setup">General setup<a class="anchor" aria-label="anchor" href="#general-setup"></a>
-</h2>
+<div class="section level3">
+<h3 id="general-setup">General setup<a class="anchor" aria-label="anchor" href="#general-setup"></a>
+</h3>
 <p>Let us set up the notations first. Suppose a there exists a partition of a region <span class="math inline">\({\rm D} \in {\cal R}^2\)</span> (e.g., a city). This partition is denoted by <span class="math inline">\(A_i\)</span>, <span class="math inline">\(i = 1, \ldots, n\)</span>. Moreover, there exists another parition of the same city, denoted <span class="math inline">\(B_j\)</span>, where <span class="math inline">\(j = 1, \ldots, m\)</span>. These partitions can be seen as two different administrative divisions within the same city. It is common for different government agencies to release data for different divisions of a same city, country, or state.</p>
 </div>
-<div class="section level2">
-<h2 id="model-based-approach">Model-based approach<a class="anchor" aria-label="anchor" href="#model-based-approach"></a>
-</h2>
+<div class="section level3">
+<h3 id="model-based-approach">Model-based approach<a class="anchor" aria-label="anchor" href="#model-based-approach"></a>
+</h3>
 <p>Assume we observe a random variable <span class="math inline">\(Y(\cdot)\)</span> at each region <span class="math inline">\(A_i\)</span> and we are interested in predict/estimate this variable in each of the regions <span class="math inline">\(B_j\)</span>. Now suppose the random variable <span class="math inline">\(Y(\cdot)\)</span> varies continuously over <span class="math inline">\({\rm D}\)</span> and is defined as follows <span class="math display">\[
 Y(\mathbf{s}) = \mu + S(\mathbf{s}) + \varepsilon(\mathbf{s}), \, \mathbf{s} \in
 {\rm D} \subset {\cal R}^2.
@@ -154,9 +157,9 @@ R}_{\kappa}(\phi) + \tau {\rm diag}(\lvert A_1 \rvert^{-1}, \ldots, \lvert A_1
 <p>Now, suppose the parameters <span class="math inline">\(\boldsymbol{\theta} = (\mu, \sigma^2, \phi, \tau)\)</span> are unknown. The Likelihood of <span class="math inline">\(Y(A_1, \ldots, A_n)\)</span> can still be computed.</p>
 <p>In particular, if we use the parametrization <span class="math inline">\(\nu = \tau / \sigma^2\)</span>, we have closed form for the Maximum Likelihood estimators both for <span class="math inline">\(\mu\)</span> and <span class="math inline">\(\sigma^2\)</span>. Thus, we can optimize the profile likelihood for <span class="math inline">\(\phi\)</span> and <span class="math inline">\(\nu\)</span> numerically. Then, we resort on conditional Normal properties again to compute the predictions in a new different set of regions.</p>
 </div>
-<div class="section level2">
-<h2 id="areal-interpolation-ai">Areal Interpolation (AI)<a class="anchor" aria-label="anchor" href="#areal-interpolation-ai"></a>
-</h2>
+<div class="section level3">
+<h3 id="areal-interpolation-ai">Areal Interpolation (AI)<a class="anchor" aria-label="anchor" href="#areal-interpolation-ai"></a>
+</h3>
 <p>Areal interpolation is a nonparametric approach that interpolates <span class="math inline">\(Y(A_i)\)</span>’s to construct <span class="math inline">\(Y(B_j)\)</span>’s. Define an <span class="math inline">\(m \times n\)</span> matrix <span class="math inline">\(\mathbf{W} = \{ w_{ij} \}\)</span>, where <span class="math inline">\(w_{ij}\)</span> is the weight associated with the polygon <span class="math inline">\(A_i\)</span> in constructing <span class="math inline">\(Y(B_j)\)</span>. The weights are <span class="math inline">\(w_{ij} = \lvert A_i \cap B_j \rvert / \lvert B_j \rvert\)</span> <span class="citation">(Goodchild and Lam 1980; Gotway and Young 2002)</span>. The interpolation for <span class="math inline">\(\hat Y(B_1, \ldots, B_m)\)</span> is constructed as <span class="math display">\[\begin{equation}
   \label{eq:np-est}
   \hat{Y}(B_1, \ldots, B_m) = \mathbf{W}
@@ -180,9 +183,9 @@ R}_{\kappa}(\phi) + \tau {\rm diag}(\lvert A_1 \rvert^{-1}, \ldots, \lvert A_1
   = \rho_I \sqrt{\text{Var}[Y(A_i)]  \text{Var}[Y(A_l)]}.
 \end{align}\]</span> The covariance between non-neighboring <span class="math inline">\(A_i\)</span> and <span class="math inline">\(A_l\)</span> is discarded. The final uncertainty approximation for <span class="math inline">\(\textrm{Var}[\hat{Y}(B_i)]\)</span> will be an underestimate. Alternatively, we can derive, at least, an upper bound for the variance of the estimates by using a simple application from the Cauchy–Schwartz inequality, in which case, <span class="math inline">\(\rho_I\)</span> is replaced with~1.</p>
 </div>
-<div class="section level1 unnumbered">
-<h1 id="reference">Reference<a class="anchor" aria-label="anchor" href="#reference"></a>
-</h1>
+<div class="section level2">
+<h2 id="reference">Reference<a class="anchor" aria-label="anchor" href="#reference"></a>
+</h2>
 <div id="refs" class="references">
 <div id="ref-goodchild1980areal">
 <p>Goodchild, Michael F, and Nina Siu-Ngan Lam. 1980. “Areal Interpolation: A Variant of the Traditional Spatial Problem.” <em>Geo-Processing</em> 1: 279–312.</p>

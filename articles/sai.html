@@ -36,7 +36,7 @@
       <span class="navbar-toggler-icon"></span>
     </button>
 
-    <div id="navbar" class="collapse navbar-collapse ms-2">
+    <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto">
 <li class="nav-item">
   <a class="nav-link" href="../index.html">
@@ -101,6 +101,9 @@
     
   </div>
 </nav><div class="container template-article">
+
+
+
 <script src="sai_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
   <main id="main"><div class="page-header">
       <img src="" class="logo" alt=""><h1>3. Areal Interpolation</h1>
@@ -116,7 +119,7 @@
 <p>To load the data and the packages needed for this tutorial run the chunk of code below.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-spatial.github.io/sf/" class="external-link">sf</a></span><span class="op">)</span>
-<span class="co">#&gt; Linking to GEOS 3.8.0, GDAL 3.0.4, PROJ 6.3.1</span>
+<span class="co">#&gt; Linking to GEOS 3.8.0, GDAL 3.0.4, PROJ 6.3.1; sf_use_s2() is TRUE</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://lcgodoy.me/smile/">smile</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span>
 
@@ -157,9 +160,9 @@
     <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>axis.text <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_blank</a></span><span class="op">(</span><span class="op">)</span>,
           axis.ticks <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_blank</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p><img src="sai_files/figure-html/ggplot-obs-est-viz-1.png" width="700"></p>
-<div class="section level1 unnumbered">
-<h1 id="reference">Reference<a class="anchor" aria-label="anchor" href="#reference"></a>
-</h1>
+<div class="section level2">
+<h2 id="reference">Reference<a class="anchor" aria-label="anchor" href="#reference"></a>
+</h2>
 <div id="refs" class="references">
 <div id="ref-bradley2016bayesian">
 <p>Bradley, Jonathan R., Christopher K. Wikle, and Scott H. Holan. 2016. “Bayesian Spatial Change of Support for Count-Valued Survey Data with Application to the American Community Survey.” <em>Journal of the American Statistical Association</em> 111 (514): 472–87. <a href="https://doi.org/10.1080/01621459.2015.1117471" class="external-link">https://doi.org/10.1080/01621459.2015.1117471</a>.</p>

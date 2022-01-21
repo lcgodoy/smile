@@ -36,7 +36,7 @@
       <span class="navbar-toggler-icon"></span>
     </button>
 
-    <div id="navbar" class="collapse navbar-collapse ms-2">
+    <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto">
 <li class="nav-item">
   <a class="nav-link" href="../index.html">
@@ -101,6 +101,9 @@
     
   </div>
 </nav><div class="container template-article">
+
+
+
 <script src="fit-and-pred_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
   <main id="main"><div class="page-header">
       <img src="" class="logo" alt=""><h1>2. Fitting models and making predictions</h1>
@@ -119,7 +122,7 @@
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://lcgodoy.me/smile/">smile</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-spatial.github.io/sf/" class="external-link">sf</a></span><span class="op">)</span>
-<span class="co">#&gt; Linking to GEOS 3.8.0, GDAL 3.0.4, PROJ 6.3.1</span></code></pre></div>
+<span class="co">#&gt; Linking to GEOS 3.8.0, GDAL 3.0.4, PROJ 6.3.1; sf_use_s2() is TRUE</span></code></pre></div>
 <p>Considering the same setup used in the vignette about converting <code>sf</code> to <code>spm</code> <a href="https://lcgodoy.me/smile/articles/sf-to-spm.html">objects</a>, we are going to predict the Life Expecation at Birth (LEF) score (observed at the Middle Super Output Areas (MSOA), in Liverpool, into the Lower Super Output Area (LSOA). In this second level, we have the Life Expectancy at Birth for each area. This data was taken from <span class="citation">Johnson, Diggle, and Giorgi (2020)</span>.</p>
 <p>The code below loads the data and converts the LSOA <code>sf</code> object into a <code>spm</code> object. In particular, we are going to use numerical integration (based on a 500 points grid) with the precision of the integrals varying according to the size of each MSOA region. The name of the variable we are interested in, in the <code>liv_msoa</code>, is <code>"leb_est"</code>.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
@@ -195,7 +198,7 @@
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"m1"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/AIC.html" class="external-link">AIC</a></span><span class="op">(</span><span class="va">fit_msoa1</span><span class="op">)</span>, <span class="st">"m2"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/AIC.html" class="external-link">AIC</a></span><span class="op">(</span><span class="va">fit_msoa2</span><span class="op">)</span>, <span class="st">"m3"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/AIC.html" class="external-link">AIC</a></span><span class="op">(</span><span class="va">fit_msoa3</span><span class="op">)</span><span class="op">)</span>
 <span class="co">#&gt;       m1       m2       m3 </span>
-<span class="co">#&gt; 297.0969 299.7139 298.4918</span></code></pre></div>
+<span class="co">#&gt; 297.2350 298.9097 298.0852</span></code></pre></div>
 <p>We can retrieve the estimated parameters and the associated <code>(1 - sig)</code> % confidence intervals by using the function <code>summary_spm_fit</code> as follows</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/summary_spm_fit.html">summary_spm_fit</a></span><span class="op">(</span><span class="va">fit_msoa1</span>, sig <span class="op">=</span> <span class="fl">.05</span><span class="op">)</span>
@@ -203,9 +206,9 @@
 <span class="co">#&gt;  optimization algorithm converged: yes </span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt;     par   estimate        se               ci</span>
-<span class="co">#&gt; 1    mu 75.8880075 0.7785144 [74.362; 77.414]</span>
-<span class="co">#&gt; 2 sigsq 23.2649659 4.2263462 [14.981; 31.548]</span>
-<span class="co">#&gt; 3   phi  0.7933449 0.2031639   [0.395; 1.192]</span></code></pre></div>
+<span class="co">#&gt; 1    mu 75.9480864 0.7768578 [74.425; 77.471]</span>
+<span class="co">#&gt; 2 sigsq 23.5940525 4.2974738 [15.171; 32.017]</span>
+<span class="co">#&gt; 3   phi  0.7803598 0.2009168   [0.387; 1.174]</span></code></pre></div>
 <p>Finally, we have almost everything we need to perform predictions at the LSOA areas. The function <code>predict_spm</code> calculates the predictions associated to the <code>spm_obj</code> (which contains the results associated with a fitted model) into a <code>sf</code> object given as an input for the argument <code>x</code>. We need to specify whether we want to “aggregate” (i.e. average) the predicted surface over the polygons associated with the <code>sf</code> data. The number of points and the type of integration for prediction need to be set as well. In this case we are specifying a finer grid (3500 points) because the LSOA areas are smaller than the MSOA areas.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">pred_lsoa</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/predict_spm.html">predict_spm</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">liv_lsoa</span>, spm_obj <span class="op">=</span> <span class="va">fit_msoa1</span>,
@@ -265,9 +268,9 @@
     <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_bw</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
     <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>axis.text <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_blank</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p><img src="fit-and-pred_files/figure-html/se-ggplot2-1.png" width="700"></p>
-<div class="section level1 unnumbered">
-<h1 id="reference">Reference<a class="anchor" aria-label="anchor" href="#reference"></a>
-</h1>
+<div class="section level2">
+<h2 id="reference">Reference<a class="anchor" aria-label="anchor" href="#reference"></a>
+</h2>
 <div id="refs" class="references">
 <div id="ref-diggle2007model">
 <p>Diggle, PJ, and Paulo Justiniano Ribeiro. 2007. “Model-Based Geostatistics (Springer Series in Statistics).” In, 51–56. Springer.</p>

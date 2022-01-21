@@ -36,7 +36,7 @@
       <span class="navbar-toggler-icon"></span>
     </button>
 
-    <div id="navbar" class="collapse navbar-collapse ms-2">
+    <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto">
 <li class="nav-item">
   <a class="nav-link" href="../index.html">
@@ -101,6 +101,9 @@
     
   </div>
 </nav><div class="container template-article">
+
+
+
 <script src="sf-to-spm_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
   <main id="main"><div class="page-header">
       <img src="" class="logo" alt=""><h1>1. Converting sf objects to spm</h1>
@@ -116,7 +119,7 @@
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://lcgodoy.me/smile/">smile</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-spatial.github.io/sf/" class="external-link">sf</a></span><span class="op">)</span>
-<span class="co">#&gt; Linking to GEOS 3.8.0, GDAL 3.0.4, PROJ 6.3.1</span></code></pre></div>
+<span class="co">#&gt; Linking to GEOS 3.8.0, GDAL 3.0.4, PROJ 6.3.1; sf_use_s2() is TRUE</span></code></pre></div>
 <p>Often, in an applied setting, it is desirable to change the spatial support of some variables in order to conduct either association or regression analysis. This package provides functions to deal with this problem under two different approaches, a model-based one and a (non-parametric) spatial interpolation.</p>
 <p>The purpose of this vignette is to illustrate how to convert <code>sf</code><span class="citation">(Pebesma 2018)</span> objects to objects support by the <code>smile</code> package. Besides these two packages, we are going to use the <code>ggplot2</code><span class="citation">(Wickham 2011)</span> package for the data visualization.</p>
 <p>This vignette is useful when the user wants to pursue the model-based approach. This methodology is based on the assumption that areal data (e.g., variables measured at census tracts) are composed by averages of a continuous underlying process <span class="citation">(Gelfand, Zhu, and Carlin 2001; Moraga et al. 2017, @johnson2020dealing; Wilson and Wakefield 2020)</span>. In practice, there exists an identifiability problem when estimating some variance parameters, which can be seen either as small scale variation (nugget effect) or measurement errors. When fitting models, the users may chose to ignore the measurement error associated with the problem. Model fitting and prediction are explained in the vignette available on <a href="https://lcgodoy.me/smile/articles/fit-and-pred.html">this link</a>.</p>
@@ -221,9 +224,9 @@ E}[Y(\mathbf{s})] \, {\rm d} \mathbf{s} \\
               poly_ids <span class="op">=</span> <span class="st">"msoa11cd"</span>, var_ids <span class="op">=</span> <span class="st">"leb_est"</span><span class="op">)</span></code></pre></div>
 <p>Finally, the Figure below displays the grids associated with each of the possible combinations of the parameters <code>type</code> and <code>by_polygon</code> when calling the <code>sf_to_spm</code> function. <!-- Next, we illustrate how do different values of `type` and `by_polygon` affect --> <!-- the final result of the `sf_to_spm` call. In all examples we are going to use a --> <!-- grid of 305 points (multiple of the number of polygons observed). The "sparsity" --> <!-- of the points forming the grid helps to see the differences caused by the --> <!-- different inputs for the function. The panel below displays every possible --> <!-- combination of the parameters `type` and `by_polygon`. Although there is no --> <!-- "right" choice for these parameters, we advise using `type` as `"regular"` or --> <!-- `"hexagonal"` with by `by_polygon = FALSE`. Also, it is import to make sure --> <!-- that, after generating the grid, your grid is in a finer resolution than your --> <!-- smallest polygon, that is, to make sure that there exists no points lying in --> <!-- more than one polygon. --> <img src="sf-to-spm_files/figure-html/sf-to-spm2-1.png" width="700"></p>
 <p>For details on fitting models and making precitions, see <a href="https://lcgodoy.me/smile/articles/fit-and-pred.html">this vignette</a>.</p>
-<div class="section level1 unnumbered">
-<h1 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
-</h1>
+<div class="section level2">
+<h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
+</h2>
 <div id="refs" class="references">
 <div id="ref-gelfand2001change">
 <p>Gelfand, Alan E, Li Zhu, and Bradley P Carlin. 2001. “On the Change of Support Problem for Spatio-Temporal Data.” <em>Biostatistics</em> 2 (1): 31–45.</p>
