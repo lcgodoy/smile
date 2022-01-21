@@ -111,12 +111,13 @@ var_w <- function(W, var_vec, target,
         cov_mat <- cov_mat * mat_aux
     }
     
-    se_est <- (W %*% cov_mat) |>
+    se_est <- (W %*% tcrossprod(cov_mat, W)) |>
         diag() |>
         sqrt()
 
     return(transform(target, se_est = se_est))
 }
+
 ##' @name AI
 ##'
 ##' @title Areal Interpolation
