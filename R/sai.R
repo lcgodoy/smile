@@ -97,7 +97,7 @@ morans_i <- function(sf_dt, variable) {
 ##' @name weight_mat
 var_w <- function(W, var_vec, target,
                   method = "CS", rho_mi) {
-    if(method == "MI")
+    if(grepl("^MI", method))
         stopifnot(!missing(rho_mi))
 
     stopifnot(NCOL(var_vec) == 1)
@@ -108,9 +108,12 @@ var_w <- function(W, var_vec, target,
 
     if(method == "MI") {
         mat_aux <- rho_mi * (tcrossprod(rep(1, .m)) - diag(.m))
+        diag(mat_aux) <- 1
         cov_mat <- cov_mat * mat_aux
+    } else if(method == "MI2") {
+        cov_mat <- cov_mat * rho_mi
     }
-    
+
     se_est <- (W %*% tcrossprod(cov_mat, W)) |>
         diag() |>
         sqrt()
@@ -160,7 +163,7 @@ ai_var <- function(source, target,
     stopifnot(inherits(vars_var, "character"))
     stopifnot(inherits(var_method, "character"))
     stopifnot(length(vars) == 1 & length(vars_var) == 1)
-    stopifnot(var_method %in% c("CS", "MI"))
+    stopifnot(var_method %in% c("CS", "MI", "MI2", "all"))
     
     source_dt <- sf::st_drop_geometry(source)
     W <- build_w(source, target)
@@ -170,13 +173,43 @@ ai_var <- function(source, target,
     estimates <- W %*% as.matrix(source_dt[vars])
     target <- transform(target, est = as.numeric(estimates))
     if( var_method == "MI" ) {
-        rho <- morans_i(source, vars_var)
+        rho <- morans_i(source, vars)
         target <- var_w(W, source_dt[[vars_var]],
                         target, method = var_method,
                         rho_mi = rho)
+    } else if( var_method == "MI2" ) {
+        rho <- morans_i(source, vars)
+        adj_mat <- sf::st_intersects(x = sf::st_geometry(source),
+                                     sparse = FALSE) |>
+            as.numeric() |>
+            matrix(ncol = nrow(source))
+        rho <- rho * adj_mat
+        diag(rho) <- 1
+        target <- var_w(W, source_dt[[vars_var]],
+                        target, method = var_method,
+                        rho_mi = rho)
+    } else if(var_method == "all") {
+        cov_mat <- tcrossprod(sqrt(source_dt[[vars_var]]))
+        .m <- NROW(cov_mat)
+        rho <- morans_i(source, vars)
+        adj_mat <- sf::st_intersects(x = sf::st_geometry(source),
+                                     sparse = FALSE) |>
+            as.numeric() |>
+            matrix(ncol = nrow(source))
+        rho2 <- rho * adj_mat
+        cov_mat1 <- rho * (tcrossprod(rep(1, .m)) - diag(.m))
+        diag(cov_mat1) <- 1
+        cov_mat1 <- cov_mat * cov_mat1
+        cov_mat2 <- cov_mat * rho2
+        target <-
+            transform(target,
+                      se_cs  = sqrt(diag(W %*% tcrossprod(cov_mat, W))),
+                      se_mi  = sqrt(diag(W %*% tcrossprod(cov_mat1, W))),
+                      se_mi2 = sqrt(diag(W %*% tcrossprod(cov_mat2, W))))
     } else {
         target <- var_w(W, source_dt[[vars_var]],
                         target, method = var_method)
     }
     
+    return(target)
 }
