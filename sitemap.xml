@@ -31,10 +31,16 @@
     <loc>https://lcgodoy.me/smile/index.html</loc>
   </url>
   <url>
+    <loc>https://lcgodoy.me/smile/news/index.html</loc>
+  </url>
+  <url>
     <loc>https://lcgodoy.me/smile/reference/AI.html</loc>
   </url>
   <url>
     <loc>https://lcgodoy.me/smile/reference/aggregate_aux.html</loc>
+  </url>
+  <url>
+    <loc>https://lcgodoy.me/smile/reference/aux_cs.html</loc>
   </url>
   <url>
     <loc>https://lcgodoy.me/smile/reference/aux_gauss.html</loc>
@@ -52,6 +58,9 @@
     <loc>https://lcgodoy.me/smile/reference/aux_spher.html</loc>
   </url>
   <url>
+    <loc>https://lcgodoy.me/smile/reference/comp_cs_cov.html</loc>
+  </url>
+  <url>
     <loc>https://lcgodoy.me/smile/reference/comp_gauss_cov.html</loc>
   </url>
   <url>
@@ -65,6 +74,9 @@
   </url>
   <url>
     <loc>https://lcgodoy.me/smile/reference/crossdist.html</loc>
+  </url>
+  <url>
+    <loc>https://lcgodoy.me/smile/reference/cs_cov.html</loc>
   </url>
   <url>
     <loc>https://lcgodoy.me/smile/reference/distmat.html</loc>
@@ -125,6 +137,9 @@
   </url>
   <url>
     <loc>https://lcgodoy.me/smile/reference/singl_log_plik.html</loc>
+  </url>
+  <url>
+    <loc>https://lcgodoy.me/smile/reference/single_cs.html</loc>
   </url>
   <url>
     <loc>https://lcgodoy.me/smile/reference/single_exp.html</loc>

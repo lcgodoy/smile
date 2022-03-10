@@ -29,7 +29,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">smile</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -198,7 +198,7 @@
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"m1"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/AIC.html" class="external-link">AIC</a></span><span class="op">(</span><span class="va">fit_msoa1</span><span class="op">)</span>, <span class="st">"m2"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/AIC.html" class="external-link">AIC</a></span><span class="op">(</span><span class="va">fit_msoa2</span><span class="op">)</span>, <span class="st">"m3"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/AIC.html" class="external-link">AIC</a></span><span class="op">(</span><span class="va">fit_msoa3</span><span class="op">)</span><span class="op">)</span>
 <span class="co">#&gt;       m1       m2       m3 </span>
-<span class="co">#&gt; 295.4948 298.6476 297.1848</span></code></pre></div>
+<span class="co">#&gt; 297.4202 298.8096 298.1431</span></code></pre></div>
 <p>We can retrieve the estimated parameters and the associated <code>(1 - sig)</code> % confidence intervals by using the function <code>summary_spm_fit</code> as follows</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/summary_spm_fit.html">summary_spm_fit</a></span><span class="op">(</span><span class="va">fit_msoa1</span>, sig <span class="op">=</span> <span class="fl">.05</span><span class="op">)</span>
@@ -206,9 +206,9 @@
 <span class="co">#&gt;  optimization algorithm converged: yes </span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt;     par   estimate        se               ci</span>
-<span class="co">#&gt; 1    mu 75.8298807 0.7897165 [74.282; 77.378]</span>
-<span class="co">#&gt; 2 sigsq 22.8013375 4.1338548 [14.699; 30.904]</span>
-<span class="co">#&gt; 3   phi  0.8105791 0.2111602   [0.397; 1.224]</span></code></pre></div>
+<span class="co">#&gt; 1    mu 75.9392461 0.7846043 [74.401; 77.477]</span>
+<span class="co">#&gt; 2 sigsq 23.4161251 4.2537797 [15.079; 31.753]</span>
+<span class="co">#&gt; 3   phi  0.7929889 0.2027698   [0.396; 1.190]</span></code></pre></div>
 <p>Finally, we have almost everything we need to perform predictions at the LSOA areas. The function <code>predict_spm</code> calculates the predictions associated to the <code>spm_obj</code> (which contains the results associated with a fitted model) into a <code>sf</code> object given as an input for the argument <code>x</code>. We need to specify whether we want to “aggregate” (i.e. average) the predicted surface over the polygons associated with the <code>sf</code> data. The number of points and the type of integration for prediction need to be set as well. In this case we are specifying a finer grid (3500 points) because the LSOA areas are smaller than the MSOA areas.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">pred_lsoa</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/predict_spm.html">predict_spm</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">liv_lsoa</span>, spm_obj <span class="op">=</span> <span class="va">fit_msoa1</span>,
