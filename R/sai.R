@@ -131,6 +131,8 @@ var_w <- function(W, var_vec, target,
 ##' @param vars_var a scalar of type \code{character} representing the name of
 ##'     the variable in the source dataset that stores the variances of the
 ##'     variable to be estimated at the target data.
+##' @param sc_vars boolean indicating whether `vars` should be scaled by its
+##'     observed variance (if available).
 ##' @param var_method a \code{character} representing the method to approximate
 ##'     the variance of the AI estimates. Possible values are "CS"
 ##'     (Cauchy-Schwartz) or "MI" (Moran's I).
@@ -152,10 +154,12 @@ ai <- function(source, target,
     return(out)
 }
 
+## change vars to x, and vars_var to vars_x
 ##' @name AI
 ##' @export
 ai_var <- function(source, target,
                    vars, vars_var,
+                   sc_vars = FALSE,
                    var_method = "CS") {
     stopifnot(inherits(source, "sf"))
     stopifnot(inherits(target, "sf"))
@@ -163,7 +167,8 @@ ai_var <- function(source, target,
     stopifnot(inherits(vars_var, "character"))
     stopifnot(inherits(var_method, "character"))
     stopifnot(length(vars) == 1 & length(vars_var) == 1)
-    stopifnot(var_method %in% c("CS", "MI", "MI2", "all"))
+    stopifnot(var_method %in% c("CS", "MI", "MI2",
+                                "LB", "all"))
     
     source_dt <- sf::st_drop_geometry(source)
     W <- build_w(source, target)
@@ -173,12 +178,22 @@ ai_var <- function(source, target,
     estimates <- W %*% as.matrix(source_dt[vars])
     target <- transform(target, est = as.numeric(estimates))
     if( var_method == "MI" ) {
-        rho <- morans_i(source, vars)
+        if(sc_vars) {
+            source[["sc_var"]] <- source[[vars]] / sqrt(source[[vars_var]])
+            rho <- morans_i(source, "sc_var")
+        } else {
+            rho <- morans_i(source, vars)
+        }
         target <- var_w(W, source_dt[[vars_var]],
                         target, method = var_method,
                         rho_mi = rho)
     } else if( var_method == "MI2" ) {
-        rho <- morans_i(source, vars)
+        if(sc_vars) {
+            source[["sc_var"]] <- source[[vars]] / sqrt(source[[vars_var]])
+            rho <- morans_i(source, "sc_var")
+        } else {
+            rho <- morans_i(source, vars)
+        }
         adj_mat <- sf::st_intersects(x = sf::st_geometry(source),
                                      sparse = FALSE) |>
             as.numeric() |>
@@ -188,24 +203,39 @@ ai_var <- function(source, target,
         target <- var_w(W, source_dt[[vars_var]],
                         target, method = var_method,
                         rho_mi = rho)
+    } else if(var_method == "LB") {
+        cov_mat <- diag(source_dt[[vars_var]])
+        target <-
+            transform(target,
+                      se_est = sqrt(diag(W %*% tcrossprod(cov_mat, W))))
     } else if(var_method == "all") {
-        cov_mat <- tcrossprod(sqrt(source_dt[[vars_var]]))
+        cov_mat  <- tcrossprod(sqrt(source_dt[[vars_var]]))
+        cov_mat0 <- diag(source_dt[[vars_var]])
         .m <- NROW(cov_mat)
-        rho <- morans_i(source, vars)
+        if(sc_vars) {
+            source[["sc_var"]] <- source[[vars]] / sqrt(source[[vars_var]])
+            rho <- morans_i(source, "sc_var")
+        } else {
+            rho <- morans_i(source, vars)
+        }
         adj_mat <- sf::st_intersects(x = sf::st_geometry(source),
                                      sparse = FALSE) |>
             as.numeric() |>
             matrix(ncol = nrow(source))
         rho2 <- rho * adj_mat
+        diag(rho2) <- 1
         cov_mat1 <- rho * (tcrossprod(rep(1, .m)) - diag(.m))
         diag(cov_mat1) <- 1
         cov_mat1 <- cov_mat * cov_mat1
         cov_mat2 <- cov_mat * rho2
         target <-
             transform(target,
+                      se_lb  = sqrt(diag(W %*% tcrossprod(cov_mat0, W))),
                       se_cs  = sqrt(diag(W %*% tcrossprod(cov_mat, W))),
                       se_mi  = sqrt(diag(W %*% tcrossprod(cov_mat1, W))),
-                      se_mi2 = sqrt(diag(W %*% tcrossprod(cov_mat2, W))))
+                      se_mi2 = sqrt(diag(W %*% tcrossprod(cov_mat2, W)))) |>
+            transform(se_itp = (rho * with(target, se_cs)) +
+                          ((1 - rho) * with(target, se_lb)))
     } else {
         target <- var_w(W, source_dt[[vars_var]],
                         target, method = var_method)

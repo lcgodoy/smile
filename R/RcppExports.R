@@ -468,6 +468,97 @@ comp_spher_cov <- function(cross_dists, n, n2, sigsq, phi) {
     .Call(`_smile_comp_spher_cov`, cross_dists, n, n2, sigsq, phi)
 }
 
+#' @title Cubic spline covariance function (scalar)
+#'
+#' @description Computing the Spherical covariance function for a single
+#'   distance measure.
+#'
+#' @param d a scalar representing the distance on which it is desired to
+#'   evaluate the covariance function.
+#' @param sigsq the \eqn{\sigma^2} parameter from the Spherical covariance.
+#'   function.
+#' @param phi the \eqn{\phi} parameter from the Spherical covariance function,
+#'   controls the range of the spatial dependence.
+#'
+#' @return a scalar representing the (gaussian) covariance between two
+#'   observations \code{d} apart of each other.
+#' 
+#' @seealso \code{\link{single_exp}}, \code{\link{single_matern}},
+#'   \code{\link{single_matern3}}, \code{\link{single_matern5}},
+#'   \code{\link{mat_cov}}
+#'
+#' @keywords internal
+single_cs <- function(d, sigsq, phi) {
+    .Call(`_smile_single_cs`, d, sigsq, phi)
+}
+
+#' @title Computing the Cubic spline covariance function for a single distance
+#'   measure.
+#'
+#' @param dists a numeric matrix representing the distance between spatial
+#'   entities.
+#' @param sigsq the \eqn{\sigma^2} parameter from the Spherical covariance.
+#'   function.
+#' @param phi the \eqn{\phi} parameter from the Spherical covariance function,
+#'   controls the range of the spatial dependence.
+#''
+#' @return The Spherical covariance function (for a stationary and
+#'   isotropic process) associated with the provided distances (\code{dists})
+#'   and the given set of parameters.
+#'
+#'
+#' @keywords internal
+cs_cov <- function(dists, sigsq, phi) {
+    .Call(`_smile_cs_cov`, dists, sigsq, phi)
+}
+
+#' @title Mean of a (Cubic spline) covariance function (Internal use)
+#'
+#' @description This is an auxilliary function for internal use. It helps to
+#'   numerically integrate a covariance function evaluated at a grid of points
+#'   within a polyigon and speed-up the computations.
+#'
+#' @param dists a numeric matrix representing the distance between spatial
+#'   entities.
+#' @param sigsq the \eqn{\sigma^2} parameter from the Spherical covariance.
+#'   function.
+#' @param phi the \eqn{\phi} parameter from the Spherical covariance function,
+#'   controls the range of the spatial dependence.
+#' 
+#' @return The mean of \code{spher_cov(dist, sigsq, phi)}.
+#'
+#' @keywords internal
+aux_cs <- function(dist, sigsq, phi) {
+    .Call(`_smile_aux_cs`, dist, sigsq, phi)
+}
+
+#' @title Cubic spline covariance function for a polygons.
+#'
+#' @description Computing the Spherical covariance function between polygons.
+#'
+#' @param cross_dists a \code{list} such that each position contains the cross
+#'   distances between points within different polygons.
+#' @param n an ingeger representing number of polygons (note that, this is
+#'   different than the size of the list \code{cross_dists}
+#' @param n2 usually, equal to \code{n}, except when the function is being used
+#'   to calculate the "cross" covariance between two different partitions of
+#'   the same space.
+#' @param sigsq the \eqn{\sigma^2} parameter from the Spherical covariance
+#'   function.
+#' @param phi the \eqn{\phi} parameter from the Spherical covariance function,
+#'   controls the range of the spatial dependence.
+#' 
+#' @return The spherical covariance matrix associated with a set of
+#'   polygons.
+#'
+#' @seealso \code{\link{single_exp}}, \code{\link{single_matern}},
+#'   \code{\link{mat_cov}}
+#'
+#' @keywords internal
+comp_cs_cov <- function(cross_dists, n, n2, sigsq, phi) {
+    .Call(`_smile_comp_cs_cov`, cross_dists, n, n2, sigsq, phi)
+}
+
 #' @name aux_mat
 #' @keywords internal
 NULL

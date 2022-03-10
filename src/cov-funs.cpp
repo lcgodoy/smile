@@ -48,8 +48,8 @@ double single_matern(double d, double sigsq,
 		     double phi, double kappa) {
   double out = sigsq;
   if(d > 0) {
-    out =
-      sigsq * (pow(2, 1 - kappa) / ::tgamma(kappa)) *
+    out *=
+      (pow(2, 1 - kappa) / ::tgamma(kappa)) *
       pow(d / phi, kappa) *
       Rf_bessel_k(d / phi, kappa, 1);
   } 
@@ -140,7 +140,7 @@ double single_matern5(double d, double sigsq,
 double single_exp(double d, double sigsq, double phi) {
   double out = sigsq;
   if(d > 0) {
-    out = sigsq * exp(- d / phi);
+    out *= exp(- d / phi);
   }
   return out;
 }
@@ -304,7 +304,7 @@ arma::mat comp_mat_cov(const List& cross_dists, int n,
 double single_pexp(double d, double sigsq, double phi, double kappa) {
   double out = sigsq;
   if(d > 0) {
-    out = sigsq * exp( - pow( (d / phi) , kappa));
+    out *= exp( - pow( (d / phi) , kappa));
   }
   return out;
 }
@@ -437,7 +437,7 @@ arma::mat comp_pexp_cov(const List& cross_dists, int n,
 double single_gauss(double d, double sigsq, double phi) {
   double out = sigsq;
   if(d > 0) {
-    out = sigsq * exp( - .5 * pow( (d / phi) , 2));
+    out *= exp( - .5 * pow( (d / phi) , 2));
   }
   return out;
 }
@@ -561,11 +561,10 @@ arma::mat comp_gauss_cov(const List& cross_dists, int n,
 // [[Rcpp::export]]
 double single_spher(double d, double sigsq, double phi) {
   double out = sigsq;
-  if(d < phi) {
+  if(d > phi) {
     out = 0;
   } else if(d > 0) {
-    out = sigsq *
-      (1 - ( (2 / M_PI) * sqrt(1 - pow( (d / phi) , 2) ) ) + asin( (d / phi) )  );
+    out *= (1 - 1.5 * (d / phi) + .5 * pow(d / phi, 3));
   }
   return out;
 }
@@ -596,7 +595,6 @@ arma::mat spher_cov(const arma::mat& dists, double sigsq, double phi) {
 					sigsq, phi));
   return out;
 }
-
 
 //' @title Mean of a (Spherical) covariance function (Internal use)
 //'
@@ -666,3 +664,129 @@ arma::mat comp_spher_cov(const List& cross_dists, int n,
   return out;
 }
 
+//' @title Cubic spline covariance function (scalar)
+//'
+//' @description Computing the Spherical covariance function for a single
+//'   distance measure.
+//'
+//' @param d a scalar representing the distance on which it is desired to
+//'   evaluate the covariance function.
+//' @param sigsq the \eqn{\sigma^2} parameter from the Spherical covariance.
+//'   function.
+//' @param phi the \eqn{\phi} parameter from the Spherical covariance function,
+//'   controls the range of the spatial dependence.
+//'
+//' @return a scalar representing the (gaussian) covariance between two
+//'   observations \code{d} apart of each other.
+//' 
+//' @seealso \code{\link{single_exp}}, \code{\link{single_matern}},
+//'   \code{\link{single_matern3}}, \code{\link{single_matern5}},
+//'   \code{\link{mat_cov}}
+//'
+//' @keywords internal
+// [[Rcpp::export]]
+double single_cs(double d, double sigsq, double phi) {
+  double out = sigsq;
+  if(d <= .5 * phi) {
+    out *= (1 - 6 * pow(d / phi, 2) + 6 * pow(d / phi, 3));
+  } else if(.5 * phi <= d && d < phi) {
+    out *= (2 * pow(1 - (d / phi), 3));
+  } else {
+    out = 0;
+  }
+  return out;
+}
+
+//' @title Computing the Cubic spline covariance function for a single distance
+//'   measure.
+//'
+//' @param dists a numeric matrix representing the distance between spatial
+//'   entities.
+//' @param sigsq the \eqn{\sigma^2} parameter from the Spherical covariance.
+//'   function.
+//' @param phi the \eqn{\phi} parameter from the Spherical covariance function,
+//'   controls the range of the spatial dependence.
+//''
+//' @return The Spherical covariance function (for a stationary and
+//'   isotropic process) associated with the provided distances (\code{dists})
+//'   and the given set of parameters.
+//'
+//'
+//' @keywords internal
+// [[Rcpp::export]]
+arma::mat cs_cov(const arma::mat& dists, double sigsq, double phi) {
+  int nr = dists.n_rows, nc = dists.n_cols;
+  arma::mat out(nr, nc, arma::fill::zeros);
+  std::transform(dists.begin(), dists.end(),
+		 out.begin(), std::bind(&single_cs, std::placeholders::_1,
+					sigsq, phi));
+  return out;
+}
+
+//' @title Mean of a (Cubic spline) covariance function (Internal use)
+//'
+//' @description This is an auxilliary function for internal use. It helps to
+//'   numerically integrate a covariance function evaluated at a grid of points
+//'   within a polyigon and speed-up the computations.
+//'
+//' @param dists a numeric matrix representing the distance between spatial
+//'   entities.
+//' @param sigsq the \eqn{\sigma^2} parameter from the Spherical covariance.
+//'   function.
+//' @param phi the \eqn{\phi} parameter from the Spherical covariance function,
+//'   controls the range of the spatial dependence.
+//' 
+//' @return The mean of \code{spher_cov(dist, sigsq, phi)}.
+//'
+//' @keywords internal
+// [[Rcpp::export]]
+double aux_cs(arma::mat dist, double sigsq, double phi) {
+  return mean_mat(cs_cov(dist, sigsq, phi));
+}
+
+//' @title Cubic spline covariance function for a polygons.
+//'
+//' @description Computing the Spherical covariance function between polygons.
+//'
+//' @param cross_dists a \code{list} such that each position contains the cross
+//'   distances between points within different polygons.
+//' @param n an ingeger representing number of polygons (note that, this is
+//'   different than the size of the list \code{cross_dists}
+//' @param n2 usually, equal to \code{n}, except when the function is being used
+//'   to calculate the "cross" covariance between two different partitions of
+//'   the same space.
+//' @param sigsq the \eqn{\sigma^2} parameter from the Spherical covariance
+//'   function.
+//' @param phi the \eqn{\phi} parameter from the Spherical covariance function,
+//'   controls the range of the spatial dependence.
+//' 
+//' @return The spherical covariance matrix associated with a set of
+//'   polygons.
+//'
+//' @seealso \code{\link{single_exp}}, \code{\link{single_matern}},
+//'   \code{\link{mat_cov}}
+//'
+//' @keywords internal
+// [[Rcpp::export]]
+arma::mat comp_cs_cov(const List& cross_dists, int n,
+		      int n2, double sigsq, double phi) {
+  arma::mat out(n, n2, arma::fill::zeros);
+  if(n == n2) {
+      arma::uvec lw_idx = arma::trimatl_ind( arma::size(out) );
+      arma::vec aux(cross_dists.size(), arma::fill::zeros);
+      
+      std::transform(cross_dists.begin(), cross_dists.end(),
+		     aux.begin(),
+		     std::bind(&aux_cs, std::placeholders::_1,
+			       sigsq, phi));
+      
+      out.elem(lw_idx) = aux;
+      out = arma::symmatl(out);
+  } else {
+    std::transform(cross_dists.begin(), cross_dists.end(),
+		   out.begin(),
+		   std::bind(&aux_cs, std::placeholders::_1,
+			     sigsq, phi));
+  }
+  return out;
+}

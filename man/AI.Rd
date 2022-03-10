@@ -8,7 +8,7 @@
 \usage{
 ai(source, target, vars)
 
-ai_var(source, target, vars, vars_var, var_method = "CS")
+ai_var(source, target, vars, vars_var, sc_vars = FALSE, var_method = "CS")
 }
 \arguments{
 \item{source}{a \code{sf} object - source spatial data.}
@@ -21,6 +21,9 @@ source) to be estimated at the target data.}
 \item{vars_var}{a scalar of type \code{character} representing the name of
 the variable in the source dataset that stores the variances of the
 variable to be estimated at the target data.}
+
+\item{sc_vars}{boolean indicating whether \code{vars} should be scaled by its
+observed variance (if available).}
 
 \item{var_method}{a \code{character} representing the method to approximate
 the variance of the AI estimates. Possible values are "CS"
