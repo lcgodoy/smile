@@ -14,7 +14,7 @@ city (or state) on another division of the same region."><!-- mathjax --><script
     
     <a class="navbar-brand me-2" href="../index.html">smile</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.2</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -102,7 +102,7 @@ city (or state) on another division of the same region.</p>
 <span class="fu">predict_spm</span><span class="op">(</span><span class="va">x</span>, .aggregate <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span>
 
 <span class="co"># S3 method for sf</span>
-<span class="fu">predict_spm</span><span class="op">(</span><span class="va">x</span>, <span class="va">spm_obj</span>, .aggregate <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">n_pts</span>, <span class="va">type</span>, <span class="va">...</span><span class="op">)</span></code></pre></div>
+<span class="fu">predict_spm</span><span class="op">(</span><span class="va">x</span>, <span class="va">spm_obj</span>, <span class="va">n_pts</span>, <span class="va">type</span>, outer_poly <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">id_var</span>, <span class="va">...</span><span class="op">)</span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -126,6 +126,13 @@ grid over the whole region to make the predictions</p></dd>
 <dt>type</dt>
 <dd><p><code>character</code> type of grid to be generated. See
 <code>st_sample</code> in the package <code>sf</code>.</p></dd>
+<dt>outer_poly</dt>
+<dd><p>(object) <code>sf geometry</code> storing the "outer map" we
+want to compute the predictions in.</p></dd>
+<dt>id_var</dt>
+<dd><p>if <code>x</code> is a set of <code>POLYGONS</code> (areal data) instead
+of a set of points, the <code>id_var</code> is the name (or index) of the
+unique identifier associated to each polygon.</p></dd>
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>

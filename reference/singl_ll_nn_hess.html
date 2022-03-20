@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">smile</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.2</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -97,6 +97,7 @@
   <span class="va">npix</span>,
   <span class="va">model</span>,
   kappa <span class="op">=</span> <span class="cn">NULL</span>,
+  tr <span class="op">=</span> <span class="cn">NULL</span>,
   apply_exp <span class="op">=</span> <span class="cn">FALSE</span>
 <span class="op">)</span></code></pre></div>
     </div>
@@ -124,6 +125,8 @@ use. Possible values are <code>c("matern", "pexp", "gaussian",
 <dt>kappa</dt>
 <dd><p>\(\kappa\) parameter. Not necessary if <code>mode</code> is
 <code>"gaussian"</code> or <code>"spherical"</code></p></dd>
+<dt>tr</dt>
+<dd><p>taper range</p></dd>
 <dt>apply_exp</dt>
 <dd><p>a <code>logical</code> indicater wheter the exponential
 transformation should be applied to variance parameters. This

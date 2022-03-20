@@ -58,6 +58,12 @@
     <loc>https://lcgodoy.me/smile/reference/aux_spher.html</loc>
   </url>
   <url>
+    <loc>https://lcgodoy.me/smile/reference/aux_tapmat.html</loc>
+  </url>
+  <url>
+    <loc>https://lcgodoy.me/smile/reference/aux_w1.html</loc>
+  </url>
+  <url>
     <loc>https://lcgodoy.me/smile/reference/comp_cs_cov.html</loc>
   </url>
   <url>
@@ -71,6 +77,12 @@
   </url>
   <url>
     <loc>https://lcgodoy.me/smile/reference/comp_spher_cov.html</loc>
+  </url>
+  <url>
+    <loc>https://lcgodoy.me/smile/reference/comp_tapmat_cov.html</loc>
+  </url>
+  <url>
+    <loc>https://lcgodoy.me/smile/reference/comp_w1_cov.html</loc>
   </url>
   <url>
     <loc>https://lcgodoy.me/smile/reference/crossdist.html</loc>
@@ -163,6 +175,18 @@
     <loc>https://lcgodoy.me/smile/reference/single_spher.html</loc>
   </url>
   <url>
+    <loc>https://lcgodoy.me/smile/reference/single_tapmat.html</loc>
+  </url>
+  <url>
+    <loc>https://lcgodoy.me/smile/reference/single_tapmat1.html</loc>
+  </url>
+  <url>
+    <loc>https://lcgodoy.me/smile/reference/single_tapmat3.html</loc>
+  </url>
+  <url>
+    <loc>https://lcgodoy.me/smile/reference/single_w1.html</loc>
+  </url>
+  <url>
     <loc>https://lcgodoy.me/smile/reference/spher_cov.html</loc>
   </url>
   <url>
@@ -170,6 +194,9 @@
   </url>
   <url>
     <loc>https://lcgodoy.me/smile/reference/summary_spm_fit.html</loc>
+  </url>
+  <url>
+    <loc>https://lcgodoy.me/smile/reference/tapmat_cov.html</loc>
   </url>
   <url>
     <loc>https://lcgodoy.me/smile/reference/transform.sf.html</loc>
@@ -182,6 +209,9 @@
   </url>
   <url>
     <loc>https://lcgodoy.me/smile/reference/vor_build.html</loc>
+  </url>
+  <url>
+    <loc>https://lcgodoy.me/smile/reference/w1_cov.html</loc>
   </url>
   <url>
     <loc>https://lcgodoy.me/smile/reference/weight_mat.html</loc>
