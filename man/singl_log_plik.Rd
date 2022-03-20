@@ -4,7 +4,16 @@
 \alias{singl_log_plik}
 \title{Evaluate log-lik}
 \usage{
-singl_log_plik(theta, .dt, dists, npix, model, kappa = NULL, apply_exp = FALSE)
+singl_log_plik(
+  theta,
+  .dt,
+  dists,
+  npix,
+  model,
+  kappa = NULL,
+  tr = NULL,
+  apply_exp = FALSE
+)
 }
 \arguments{
 \item{theta}{a \code{vector} of size 2 containing the parameters associated
@@ -23,10 +32,12 @@ each polygon. (Ordered by the id variables for the polygons).}
 
 \item{model}{a \code{character} indicating which covariance function to
 use. Possible values are \code{c("matern", "pexp", "gaussian",
-    "spherical")}.}
+    "spherical", "cs", "w1", "tapmat")}.}
 
 \item{kappa}{\eqn{\kappa} parameter. Not necessary if \code{mode} is
 \code{"gaussian"} or \code{"spherical"}}
+
+\item{tr}{\eqn{\theta_r} taper range.}
 
 \item{apply_exp}{a \code{logical} indicater wheter the exponential
 transformation should be applied to variance parameters. This

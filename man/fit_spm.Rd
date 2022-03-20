@@ -13,6 +13,7 @@ fit_spm(x, ...)
   model,
   theta_st,
   kappa = NULL,
+  tr = NULL,
   apply_exp = FALSE,
   opt_method = "Nelder-Mead",
   control_opt = list(),
@@ -20,7 +21,7 @@ fit_spm(x, ...)
   ...
 )
 
-fit_spm2(x, model, kappa, comp_hess = TRUE, phi_min, phi_max, nphi = 10)
+fit_spm2(x, model, kappa, tr, comp_hess = TRUE, phi_min, phi_max, nphi = 10)
 }
 \arguments{
 \item{x}{an object of type \code{spm}. Note that, the dimension of
@@ -44,6 +45,8 @@ informed, it is automatically set to .5. On the other hand, if the user
 choses the Powered Exponential family and do not inform \code{kappa},
 then it is set to 1. In both cases, the covariance function becomes the
 so covalled exponential covariance function.}
+
+\item{tr}{tapper range}
 
 \item{apply_exp}{a \code{logical} scalar indicating wheter the parameters
 that cannot assume negative values should be exponentiate or not.}

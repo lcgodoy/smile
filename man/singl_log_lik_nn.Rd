@@ -11,6 +11,7 @@ singl_log_lik_nn(
   npix,
   model,
   kappa = NULL,
+  tr = NULL,
   apply_exp = FALSE
 )
 }
@@ -29,7 +30,7 @@ each polygon. (Ordered by the id variables for the polygons).}
 
 \item{model}{a \code{character} indicating which covariance function to
 use. Possible values are \code{c("matern", "pexp", "gaussian",
-    "spherical")}.}
+    "spherical", "cs", "w1", "tapmat")}.}
 
 \item{kappa}{\eqn{\kappa} parameter. Not necessary if \code{mode} is
 \code{"gaussian"} or \code{"spherical"}}

@@ -10,7 +10,7 @@ predict_spm(x, ...)
 
 \method{predict_spm}{spm_fit}(x, .aggregate = TRUE, ...)
 
-\method{predict_spm}{sf}(x, spm_obj, .aggregate = TRUE, n_pts, type, ...)
+\method{predict_spm}{sf}(x, spm_obj, n_pts, type, outer_poly = NULL, id_var, ...)
 }
 \arguments{
 \item{x}{a \code{sf} object such that its geometris are either points or
@@ -31,6 +31,13 @@ grid over the whole region to make the predictions}
 
 \item{type}{\code{character} type of grid to be generated. See
 \code{st_sample} in the package \code{sf}.}
+
+\item{outer_poly}{(object) \code{sf geometry} storing the "outer map" we
+want to compute the predictions in.}
+
+\item{id_var}{if \code{x} is a set of \code{POLYGONS} (areal data) instead
+of a set of points, the \code{id_var} is the name (or index) of the
+unique identifier associated to each polygon.}
 }
 \value{
 an object of class \code{spm_pred}

@@ -328,6 +328,150 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// single_w1
+double single_w1(double d, double sigsq, double phi);
+RcppExport SEXP _smile_single_w1(SEXP dSEXP, SEXP sigsqSEXP, SEXP phiSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< double >::type d(dSEXP);
+    Rcpp::traits::input_parameter< double >::type sigsq(sigsqSEXP);
+    Rcpp::traits::input_parameter< double >::type phi(phiSEXP);
+    rcpp_result_gen = Rcpp::wrap(single_w1(d, sigsq, phi));
+    return rcpp_result_gen;
+END_RCPP
+}
+// w1_cov
+arma::mat w1_cov(const arma::mat& dists, double sigsq, double phi);
+RcppExport SEXP _smile_w1_cov(SEXP distsSEXP, SEXP sigsqSEXP, SEXP phiSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const arma::mat& >::type dists(distsSEXP);
+    Rcpp::traits::input_parameter< double >::type sigsq(sigsqSEXP);
+    Rcpp::traits::input_parameter< double >::type phi(phiSEXP);
+    rcpp_result_gen = Rcpp::wrap(w1_cov(dists, sigsq, phi));
+    return rcpp_result_gen;
+END_RCPP
+}
+// aux_w1
+double aux_w1(arma::mat dist, double sigsq, double phi);
+RcppExport SEXP _smile_aux_w1(SEXP distSEXP, SEXP sigsqSEXP, SEXP phiSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::mat >::type dist(distSEXP);
+    Rcpp::traits::input_parameter< double >::type sigsq(sigsqSEXP);
+    Rcpp::traits::input_parameter< double >::type phi(phiSEXP);
+    rcpp_result_gen = Rcpp::wrap(aux_w1(dist, sigsq, phi));
+    return rcpp_result_gen;
+END_RCPP
+}
+// comp_w1_cov
+arma::mat comp_w1_cov(const List& cross_dists, int n, int n2, double sigsq, double phi);
+RcppExport SEXP _smile_comp_w1_cov(SEXP cross_distsSEXP, SEXP nSEXP, SEXP n2SEXP, SEXP sigsqSEXP, SEXP phiSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const List& >::type cross_dists(cross_distsSEXP);
+    Rcpp::traits::input_parameter< int >::type n(nSEXP);
+    Rcpp::traits::input_parameter< int >::type n2(n2SEXP);
+    Rcpp::traits::input_parameter< double >::type sigsq(sigsqSEXP);
+    Rcpp::traits::input_parameter< double >::type phi(phiSEXP);
+    rcpp_result_gen = Rcpp::wrap(comp_w1_cov(cross_dists, n, n2, sigsq, phi));
+    return rcpp_result_gen;
+END_RCPP
+}
+// single_tapmat
+double single_tapmat(double d, double sigsq, double phi, double kappa, double theta);
+RcppExport SEXP _smile_single_tapmat(SEXP dSEXP, SEXP sigsqSEXP, SEXP phiSEXP, SEXP kappaSEXP, SEXP thetaSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< double >::type d(dSEXP);
+    Rcpp::traits::input_parameter< double >::type sigsq(sigsqSEXP);
+    Rcpp::traits::input_parameter< double >::type phi(phiSEXP);
+    Rcpp::traits::input_parameter< double >::type kappa(kappaSEXP);
+    Rcpp::traits::input_parameter< double >::type theta(thetaSEXP);
+    rcpp_result_gen = Rcpp::wrap(single_tapmat(d, sigsq, phi, kappa, theta));
+    return rcpp_result_gen;
+END_RCPP
+}
+// single_tapmat1
+double single_tapmat1(double d, double sigsq, double phi, double theta);
+RcppExport SEXP _smile_single_tapmat1(SEXP dSEXP, SEXP sigsqSEXP, SEXP phiSEXP, SEXP thetaSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< double >::type d(dSEXP);
+    Rcpp::traits::input_parameter< double >::type sigsq(sigsqSEXP);
+    Rcpp::traits::input_parameter< double >::type phi(phiSEXP);
+    Rcpp::traits::input_parameter< double >::type theta(thetaSEXP);
+    rcpp_result_gen = Rcpp::wrap(single_tapmat1(d, sigsq, phi, theta));
+    return rcpp_result_gen;
+END_RCPP
+}
+// single_tapmat3
+double single_tapmat3(double d, double sigsq, double phi, double theta);
+RcppExport SEXP _smile_single_tapmat3(SEXP dSEXP, SEXP sigsqSEXP, SEXP phiSEXP, SEXP thetaSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< double >::type d(dSEXP);
+    Rcpp::traits::input_parameter< double >::type sigsq(sigsqSEXP);
+    Rcpp::traits::input_parameter< double >::type phi(phiSEXP);
+    Rcpp::traits::input_parameter< double >::type theta(thetaSEXP);
+    rcpp_result_gen = Rcpp::wrap(single_tapmat3(d, sigsq, phi, theta));
+    return rcpp_result_gen;
+END_RCPP
+}
+// tapmat_cov
+arma::mat tapmat_cov(const arma::mat& dists, double sigsq, double phi, double kappa, double theta);
+RcppExport SEXP _smile_tapmat_cov(SEXP distsSEXP, SEXP sigsqSEXP, SEXP phiSEXP, SEXP kappaSEXP, SEXP thetaSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const arma::mat& >::type dists(distsSEXP);
+    Rcpp::traits::input_parameter< double >::type sigsq(sigsqSEXP);
+    Rcpp::traits::input_parameter< double >::type phi(phiSEXP);
+    Rcpp::traits::input_parameter< double >::type kappa(kappaSEXP);
+    Rcpp::traits::input_parameter< double >::type theta(thetaSEXP);
+    rcpp_result_gen = Rcpp::wrap(tapmat_cov(dists, sigsq, phi, kappa, theta));
+    return rcpp_result_gen;
+END_RCPP
+}
+// aux_tapmat
+double aux_tapmat(arma::mat dist, double sigsq, double phi, double kappa, double theta);
+RcppExport SEXP _smile_aux_tapmat(SEXP distSEXP, SEXP sigsqSEXP, SEXP phiSEXP, SEXP kappaSEXP, SEXP thetaSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::mat >::type dist(distSEXP);
+    Rcpp::traits::input_parameter< double >::type sigsq(sigsqSEXP);
+    Rcpp::traits::input_parameter< double >::type phi(phiSEXP);
+    Rcpp::traits::input_parameter< double >::type kappa(kappaSEXP);
+    Rcpp::traits::input_parameter< double >::type theta(thetaSEXP);
+    rcpp_result_gen = Rcpp::wrap(aux_tapmat(dist, sigsq, phi, kappa, theta));
+    return rcpp_result_gen;
+END_RCPP
+}
+// comp_tapmat_cov
+arma::mat comp_tapmat_cov(const List& cross_dists, int n, int n2, double sigsq, double phi, double kappa, double theta);
+RcppExport SEXP _smile_comp_tapmat_cov(SEXP cross_distsSEXP, SEXP nSEXP, SEXP n2SEXP, SEXP sigsqSEXP, SEXP phiSEXP, SEXP kappaSEXP, SEXP thetaSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const List& >::type cross_dists(cross_distsSEXP);
+    Rcpp::traits::input_parameter< int >::type n(nSEXP);
+    Rcpp::traits::input_parameter< int >::type n2(n2SEXP);
+    Rcpp::traits::input_parameter< double >::type sigsq(sigsqSEXP);
+    Rcpp::traits::input_parameter< double >::type phi(phiSEXP);
+    Rcpp::traits::input_parameter< double >::type kappa(kappaSEXP);
+    Rcpp::traits::input_parameter< double >::type theta(thetaSEXP);
+    rcpp_result_gen = Rcpp::wrap(comp_tapmat_cov(cross_dists, n, n2, sigsq, phi, kappa, theta));
+    return rcpp_result_gen;
+END_RCPP
+}
 // distmat
 arma::mat distmat(const arma::mat& my_mat);
 RcppExport SEXP _smile_distmat(SEXP my_matSEXP) {
@@ -412,6 +556,16 @@ static const R_CallMethodDef CallEntries[] = {
     {"_smile_cs_cov", (DL_FUNC) &_smile_cs_cov, 3},
     {"_smile_aux_cs", (DL_FUNC) &_smile_aux_cs, 3},
     {"_smile_comp_cs_cov", (DL_FUNC) &_smile_comp_cs_cov, 5},
+    {"_smile_single_w1", (DL_FUNC) &_smile_single_w1, 3},
+    {"_smile_w1_cov", (DL_FUNC) &_smile_w1_cov, 3},
+    {"_smile_aux_w1", (DL_FUNC) &_smile_aux_w1, 3},
+    {"_smile_comp_w1_cov", (DL_FUNC) &_smile_comp_w1_cov, 5},
+    {"_smile_single_tapmat", (DL_FUNC) &_smile_single_tapmat, 5},
+    {"_smile_single_tapmat1", (DL_FUNC) &_smile_single_tapmat1, 4},
+    {"_smile_single_tapmat3", (DL_FUNC) &_smile_single_tapmat3, 4},
+    {"_smile_tapmat_cov", (DL_FUNC) &_smile_tapmat_cov, 5},
+    {"_smile_aux_tapmat", (DL_FUNC) &_smile_aux_tapmat, 5},
+    {"_smile_comp_tapmat_cov", (DL_FUNC) &_smile_comp_tapmat_cov, 7},
     {"_smile_distmat", (DL_FUNC) &_smile_distmat, 1},
     {"_smile_crossdist", (DL_FUNC) &_smile_crossdist, 2},
     {"_smile_single_dists", (DL_FUNC) &_smile_single_dists, 1},

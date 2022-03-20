@@ -11,6 +11,7 @@ singl_ll_nn_hess(
   npix,
   model,
   kappa = NULL,
+  tr = NULL,
   apply_exp = FALSE
 )
 }
@@ -35,6 +36,8 @@ use. Possible values are \code{c("matern", "pexp", "gaussian",
 
 \item{kappa}{\eqn{\kappa} parameter. Not necessary if \code{mode} is
 \code{"gaussian"} or \code{"spherical"}}
+
+\item{tr}{taper range}
 
 \item{apply_exp}{a \code{logical} indicater wheter the exponential
 transformation should be applied to variance parameters. This

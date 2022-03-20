@@ -10,9 +10,10 @@
 ##'     each polygon. (Ordered by the id variables for the polygons).
 ##' @param model a \code{character} indicating which covariance function to
 ##'     use. Possible values are \code{c("matern", "pexp", "gaussian",
-##'     "spherical")}.
+##'     "spherical", "cs", "w1", "tapmat")}.
 ##' @param kappa \eqn{\kappa} parameter. Not necessary if \code{model} is
 ##'     \code{"gaussian"} or \code{"spherical"}
+##' @param tr \eqn{\theta_r} taper range.
 ##' @param apply_exp a \code{logical} indicater wheter the exponential
 ##'     transformation should be applied to variance parameters. This
 ##'     facilitates the optimization process.
@@ -20,7 +21,8 @@
 ##' @return a scalar representing \code{-log.lik}.
 ##' @keywords internal
 singl_log_lik <- function(theta, .dt, dists, npix, model,
-                          kappa = NULL, apply_exp = FALSE) {
+                          kappa = NULL, tr = NULL,
+                          apply_exp = FALSE) {
 
     if(! apply_exp & any(theta[3:4] < 0 )) {
         return(NA_real_)
@@ -72,6 +74,26 @@ singl_log_lik <- function(theta, .dt, dists, npix, model,
                                            n = .n, n2 = .n,
                                            phi = phi,
                                            sigsq = sigsq)
+           },
+           "cs" = {
+               varcov_u1 <- comp_cs_cov(cross_dists = dists,
+                                        n = .n, n2 = .n,
+                                        phi = phi,
+                                        sigsq = sigsq)
+           },
+           "w1" = {
+               varcov_u1 <- comp_w1_cov(cross_dists = dists,
+                                        n = .n, n2 = .n,
+                                        phi = phi,
+                                        sigsq = sigsq)
+           },
+           "tapmat" = {
+               varcov_u1 <- comp_tapmat_cov(cross_dists = dists,
+                                            n = .n, n2 = .n,
+                                            phi = phi,
+                                            sigsq = sigsq,
+                                            kappa = kappa,
+                                            theta = tr)
            })
     
     varcov_y  <- varcov_u1 + diag(tausq / npix,
@@ -113,9 +135,10 @@ singl_log_lik <- function(theta, .dt, dists, npix, model,
 ##'     each polygon. (Ordered by the id variables for the polygons).
 ##' @param model a \code{character} indicating which covariance function to
 ##'     use. Possible values are \code{c("matern", "pexp", "gaussian",
-##'     "spherical")}.
+##'     "spherical", "cs", "w1", "tapmat")}.
 ##' @param kappa \eqn{\kappa} parameter. Not necessary if \code{mode} is
 ##'     \code{"gaussian"} or \code{"spherical"}
+##' @param tr \eqn{\theta_r} taper range.
 ##' @param apply_exp a \code{logical} indicater wheter the exponential
 ##'     transformation should be applied to variance parameters. This
 ##'     facilitates the optimization process.
@@ -123,7 +146,8 @@ singl_log_lik <- function(theta, .dt, dists, npix, model,
 ##' @return a scalar representing \code{-log.lik}.
 ##' @keywords internal
 singl_log_plik <- function(theta, .dt, dists, npix, model,
-                          kappa = NULL, apply_exp = FALSE) {
+                           kappa = NULL, tr = NULL,
+                           apply_exp = FALSE) {
     
     if(! apply_exp & any(theta < 0 )) {
         return(NA_real_)
@@ -162,17 +186,43 @@ singl_log_plik <- function(theta, .dt, dists, npix, model,
                                            n = .n, n2 = .n,
                                            phi = phi,
                                            sigsq = 1)
+           },
+           "cs" = {
+               varcov_u1 <- comp_cs_cov(cross_dists = dists,
+                                        n = .n, n2 = .n,
+                                        phi = phi,
+                                        sigsq = 1)
+           },
+           "w1" = {
+               varcov_u1 <- comp_w1_cov(cross_dists = dists,
+                                        n = .n, n2 = .n,
+                                        phi = phi,
+                                        sigsq = 1)
+           },
+           "tapmat" = {
+               varcov_u1 <- comp_tapmat_cov(cross_dists = dists,
+                                            n = .n, n2 = .n,
+                                            phi = phi,
+                                            sigsq = 1,
+                                            kappa = kappa,
+                                            theta = tr)
            })
     
     
     V <- varcov_u1 + diag(nu / npix,
                           nrow = .n, ncol = .n)
-    chol_v <- chol(V)
-    inv_v  <- chol2inv(chol_v)
-    mles   <- est_mle(.dt, inv_v)
-    log_lik_y <- .5 * (.n * log(2 * pi) + .n * log(mles[length(mles)]) +
-                       2 * sum(log(diag(chol_v))) + .n)
-
+    chol_v <- try(chol(V))
+    if(inherits(chol_v, "try-error")) {
+        inv_v <- solve(V)
+        mles   <- est_mle(.dt, inv_v)
+        log_lik_y <- .5 * (.n * log(2 * pi) + .n * log(mles[length(mles)]) +
+                           2 * log(det(V)) + .n)
+    } else {
+        inv_v  <- chol2inv(chol_v)
+        mles   <- est_mle(.dt, inv_v)
+        log_lik_y <- .5 * (.n * log(2 * pi) + .n * log(mles[length(mles)]) +
+                           2 * sum(log(diag(chol_v))) + .n)
+    }
     return( log_lik_y )
 }
 
@@ -191,7 +241,7 @@ singl_log_plik <- function(theta, .dt, dists, npix, model,
 ##'     each polygon. (Ordered by the id variables for the polygons).
 ##' @param model a \code{character} indicating which covariance function to
 ##'     use. Possible values are \code{c("matern", "pexp", "gaussian",
-##'     "spherical")}.
+##'     "spherical", "cs", "w1", "tapmat")}.
 ##' @param kappa \eqn{\kappa} parameter. Not necessary if \code{mode} is
 ##'     \code{"gaussian"} or \code{"spherical"}
 ##' @param apply_exp a \code{logical} indicater wheter the exponential
@@ -201,7 +251,8 @@ singl_log_plik <- function(theta, .dt, dists, npix, model,
 ##' @return a scalar representing \code{-log.lik}.
 ##' @keywords internal
 singl_log_lik_nn <- function(theta, .dt, dists, npix, model,
-                             kappa = NULL, apply_exp = FALSE) {
+                             kappa = NULL,
+                             tr = NULL, apply_exp = FALSE) {
     
     if(! apply_exp & theta < 0 ) {
         return(NA_real_)
@@ -241,14 +292,42 @@ singl_log_lik_nn <- function(theta, .dt, dists, npix, model,
                                            n = .n, n2 = .n,
                                            phi = phi,
                                            sigsq = 1)
+           },
+           "cs" = {
+               varcov_u1 <- comp_cs_cov(cross_dists = dists,
+                                        n = .n, n2 = .n,
+                                        phi = phi,
+                                        sigsq = 1)
+           },
+           "w1" = {
+               varcov_u1 <- comp_w1_cov(cross_dists = dists,
+                                        n = .n, n2 = .n,
+                                        phi = phi,
+                                        sigsq = 1)
+           },
+           "tapmat" = {
+               varcov_u1 <- comp_tapmat_cov(cross_dists = dists,
+                                            n = .n, n2 = .n,
+                                            phi = phi,
+                                            sigsq = 1,
+                                            kappa = kappa,
+                                            theta = tr)
            })
     
     V <- varcov_u1
-    chol_v <- chol(V)
-    inv_v  <- chol2inv(chol_v)
-    mles   <- est_mle(.dt, inv_v)
-    log_lik_y <- .5 * (.n * log(2 * pi) + .n * log(mles[length(mles)]) +
-                       2 * sum(log(diag(chol_v))) + .n)
+    chol_v <- try(chol(V))
+    if(inherits(chol_v, "try-error")) {
+        inv_v <- solve(V)
+        mles   <- est_mle(.dt, inv_v)
+        log_lik_y <- .5 * (.n * log(2 * pi) + .n * log(mles[length(mles)]) +
+                           2 * log(det(V)) + .n)
+    } else {
+        inv_v  <- chol2inv(chol_v)
+        mles   <- est_mle(.dt, inv_v)
+        log_lik_y <- .5 * (.n * log(2 * pi) + .n * log(mles[length(mles)]) +
+                           2 * sum(log(diag(chol_v))) + .n)
+    }
+    
     return( log_lik_y )
 }
 
@@ -362,6 +441,7 @@ singl_log_lik_nn <- function(theta, .dt, dists, npix, model,
 ##'     "spherical")}.
 ##' @param kappa \eqn{\kappa} parameter. Not necessary if \code{mode} is
 ##'     \code{"gaussian"} or \code{"spherical"}
+##' @param tr taper range
 ##' @param apply_exp a \code{logical} indicater wheter the exponential
 ##'     transformation should be applied to variance parameters. This
 ##'     facilitates the optimization process.
@@ -369,8 +449,8 @@ singl_log_lik_nn <- function(theta, .dt, dists, npix, model,
 ##' @return a scalar representing \code{-log.lik}.
 ##' @keywords internal
 singl_ll_nn_hess <- function(theta, .dt, dists, npix, model,
-                             kappa = NULL, apply_exp = FALSE) {
-
+                             kappa = NULL, tr = NULL,
+                             apply_exp = FALSE) {
     npar <- length(theta)
     
     mu    <- theta[1]
@@ -412,6 +492,26 @@ singl_ll_nn_hess <- function(theta, .dt, dists, npix, model,
                                            n = .n, n2 = .n,
                                            phi = phi,
                                            sigsq = sigsq)
+           },
+           "w1" = {
+               varcov_u1 <- comp_w1_cov(cross_dists = dists,
+                                        n = .n, n2 = .n,
+                                        phi = phi,
+                                        sigsq = sigsq)
+           },
+           "cs" = {
+               varcov_u1 <- comp_cs_cov(cross_dists = dists,
+                                        n = .n, n2 = .n,
+                                        phi = phi,
+                                        sigsq = sigsq)
+           },
+           "tapmat" = {
+               varcov_u1 <- comp_tapmat_cov(cross_dists = dists,
+                                            n = .n, n2 = .n,
+                                            phi = phi,
+                                            sigsq = sigsq,
+                                            kappa = kappa,
+                                            theta = tr)
            })
     log_lik_y <- mvtnorm::dmvnorm(x = matrix(.dt, nrow = 1),
                                   mean  = matrix(rep(mu, .n),

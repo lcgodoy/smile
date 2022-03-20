@@ -559,6 +559,220 @@ comp_cs_cov <- function(cross_dists, n, n2, sigsq, phi) {
     .Call(`_smile_comp_cs_cov`, cross_dists, n, n2, sigsq, phi)
 }
 
+#' @title Matern Wendland-1 covariance unction(scalar - generic)
+#'
+#' @description adapted from Furrer et al. 2006.
+#'
+#' @param d a scalar representing the distance on which it is desired to
+#'   evaluate the covariance function.
+#' @param sigsq the \eqn{\sigma^2} parameter from the Matern covariance
+#'   function.
+#' @param phi the \eqn{\phi} parameter from the Matern covariance function,
+#'   controls the range of the spatial dependence.
+#' 
+#' @return a scalar representing the (wendland) covariance between two
+#'   observations \code{d} apart of each other.
+#' 
+#' @keywords internal
+single_w1 <- function(d, sigsq, phi) {
+    .Call(`_smile_single_w1`, d, sigsq, phi)
+}
+
+#' @title Wendland-1 covariance function for a given distance matrix.
+#'
+#' @description Computing the Matern covariance function for a matrix of
+#'   distances.
+#'
+#' @param dists a numeric matrix representing the distance between spatial
+#'   entities.
+#' @param sigsq the \eqn{\sigma^2} parameter from the Matern covariance
+#'   function.
+#' @param phi the \eqn{\phi} parameter from the Matern covariance function,' 
+#' @return The matern covariance function (for a stationary and isotropic
+#'   process) associated with the provided distances (\code{dists}) and the
+#'   given set of parameters.
+#' 
+#' @keywords internal
+w1_cov <- function(dists, sigsq, phi) {
+    .Call(`_smile_w1_cov`, dists, sigsq, phi)
+}
+
+#' @title Mean of a (Wendland-1) covariance function (Internal use)
+#'
+#' @description This is an auxilliary function for internal use. It helps to
+#'   numerically integrate a covariance function evaluated at a grid of points
+#'   within a polyigon and speed-up the computations.
+#'
+#' @param dists a numeric matrix representing the distance between spatial
+#'   entities.
+#' @param sigsq the \eqn{\sigma^2} parameter from the Matern covariance
+#'   function.
+#' @param phi the \eqn{\phi} parameter from the Matern covariance function,
+#' @return The mean of \code{mat_cov(dist, sigsq, phi, kappa)}.
+#' @keywords internal
+aux_w1 <- function(dist, sigsq, phi) {
+    .Call(`_smile_aux_w1`, dist, sigsq, phi)
+}
+
+#' @title Wendland-1 covariance function for a polygons.
+#'
+#' @description Computing the Matern covariance function between polygons.
+#'
+#' @param cross_dists a \code{list} such that each position contains the cross
+#'   distances between points within different polygons.
+#' @param n an ingeger representing number of polygons (note that, this is
+#'   different than the size of the list \code{cross_dists}
+#' @param n2 usually, equal to \code{n}, except when the function is being used
+#'   to calculate the "cross" covariance between two different partitions of
+#'   the same space.
+#' @param sigsq the \eqn{\sigma^2} parameter from the Matern covariance
+#'   function.
+#' @param phi the \eqn{\phi} parameter from the Matern covariance function,' 
+#' @return The wendland-1 covariance matrix associated with a set of polygons.
+#' 
+#' @keywords internal
+comp_w1_cov <- function(cross_dists, n, n2, sigsq, phi) {
+    .Call(`_smile_comp_w1_cov`, cross_dists, n, n2, sigsq, phi)
+}
+
+#' @title Matern (tappered) covariance function (scalar - generic)
+#'
+#' @description Computing the Matern covariance function for a single distance
+#'   measure, addapted from \code{geoR} using Wendland-1 as a tapper.
+#'
+#' @param d a scalar representing the distance on which it is desired to
+#'   evaluate the covariance function.
+#' @param sigsq the \eqn{\sigma^2} parameter from the Matern covariance
+#'   function.
+#' @param phi the \eqn{\phi} parameter from the Matern covariance function,
+#'   controls the range of the spatial dependence.
+#' @param kappa the \eqn{\kappa} parameter from the Matern covariance function,
+#'   controls the differentiability of the process.
+#'
+#' @param theta the \eqn{\theta} tapper range.
+#'
+#' @return a scalar representing the (tappered matern) covariance between two
+#'   observations \code{d} apart of each other.
+#' 
+#' @seealso \code{\link{single_matern}}, \code{\link{single_matern5}}
+#'   \code{\link{single_exp}}, \code{\link{mat_cov}}
+#' 
+#' @keywords internal
+single_tapmat <- function(d, sigsq, phi, kappa, theta) {
+    .Call(`_smile_single_tapmat`, d, sigsq, phi, kappa, theta)
+}
+
+#' @title Tappered Matern covariance function (scalar - kappa = 1/2)
+#'
+#' @description Computing the Matern covariance function for a single distance
+#'   measure, with \eqn{\kappa = 3/2}.
+#'
+#' @param d a scalar representing the distance on which it is desired to
+#'   evaluate the covariance function.
+#' @param sigsq the \eqn{\sigma^2} parameter from the Matern covariance
+#'   function.
+#' @param phi the \eqn{\phi} parameter from the Matern covariance function,
+#'   controls the range of the spatial dependence.
+#' @param theta \eqn{\theta} taper range.
+#'
+#' @return a scalar representing the (tappered matern) covariance between two
+#'   observations \code{d} apart of each other.
+#' 
+#' @seealso \code{\link{single_matern}}, \code{\link{single_matern5}}
+#'   \code{\link{single_exp}}, \code{\link{mat_cov}}
+#' 
+#' @keywords internal
+single_tapmat1 <- function(d, sigsq, phi, theta) {
+    .Call(`_smile_single_tapmat1`, d, sigsq, phi, theta)
+}
+
+#' @title Tappered Matern covariance function (scalar - kappa = 3/2)
+#'
+#' @description Computing the Matern covariance function for a single distance
+#'   measure, with \eqn{\kappa = 3/2}.
+#'
+#' @param d a scalar representing the distance on which it is desired to
+#'   evaluate the covariance function.
+#' @param sigsq the \eqn{\sigma^2} parameter from the Matern covariance
+#'   function.
+#' @param phi the \eqn{\phi} parameter from the Matern covariance function,
+#'   controls the range of the spatial dependence.
+#' @param theta \eqn{\theta} taper range.
+#'
+#' @return a scalar representing the (tappered matern) covariance between two
+#'   observations \code{d} apart of each other.
+#' 
+#' @seealso \code{\link{single_matern}}, \code{\link{single_matern5}}
+#'   \code{\link{single_exp}}, \code{\link{mat_cov}}
+#' 
+#' @keywords internal
+single_tapmat3 <- function(d, sigsq, phi, theta) {
+    .Call(`_smile_single_tapmat3`, d, sigsq, phi, theta)
+}
+
+#' @title Tappered Matern  covariance function for a given distance matrix.
+#'
+#' @description Computing the tappered Matern covariance function for a matrix
+#'   of
+#'   distances.
+#'
+#' @param dists a numeric matrix representing the distance between spatial
+#'   entities.
+#' @param sigsq the \eqn{\sigma^2} parameter from the Matern covariance
+#'   function.
+#' @param phi the \eqn{\phi} parameter from the Matern covariance function,'
+#' @param kappa smoothness parameter
+#' @param theta \eqn{\theta} taper range.
+#' 
+#' @return The tappered matern covariance function (for a stationary and isotropic
+#'   process) associated with the provided distances (\code{dists}) and the
+#'   given set of parameters.
+#' 
+#' @keywords internal
+tapmat_cov <- function(dists, sigsq, phi, kappa, theta) {
+    .Call(`_smile_tapmat_cov`, dists, sigsq, phi, kappa, theta)
+}
+
+#' @title Mean of a (Matern - Wendland-1 tapper) covariance function (Internal use)
+#'
+#' @description This is an auxilliary function for internal use. It helps to
+#'   numerically integrate a covariance function evaluated at a grid of points
+#'   within a polyigon and speed-up the computations.
+#'
+#' @param dists a numeric matrix representing the distance between spatial
+#'   entities.
+#' @param sigsq the \eqn{\sigma^2} parameter from the Matern covariance
+#'   function.
+#' @param phi the \eqn{\phi} parameter from the Matern covariance function,
+#' @param kappa
+#' @param theta
+#' @return The mean of \code{mat_cov(dist, sigsq, phi, kappa)}.
+#' @keywords internal
+aux_tapmat <- function(dist, sigsq, phi, kappa, theta) {
+    .Call(`_smile_aux_tapmat`, dist, sigsq, phi, kappa, theta)
+}
+
+#' @title Wendland-1 covariance function for a polygons.
+#'
+#' @description Computing the Matern covariance function between polygons.
+#'
+#' @param cross_dists a \code{list} such that each position contains the cross
+#'   distances between points within different polygons.
+#' @param n an ingeger representing number of polygons (note that, this is
+#'   different than the size of the list \code{cross_dists}
+#' @param n2 usually, equal to \code{n}, except when the function is being used
+#'   to calculate the "cross" covariance between two different partitions of
+#'   the same space.
+#' @param sigsq the \eqn{\sigma^2} parameter from the Matern covariance
+#'   function.
+#' @param phi the \eqn{\phi} parameter from the Matern covariance function,' 
+#' @return The wendland-1 covariance matrix associated with a set of polygons.
+#' 
+#' @keywords internal
+comp_tapmat_cov <- function(cross_dists, n, n2, sigsq, phi, kappa, theta) {
+    .Call(`_smile_comp_tapmat_cov`, cross_dists, n, n2, sigsq, phi, kappa, theta)
+}
+
 #' @name aux_mat
 #' @keywords internal
 NULL

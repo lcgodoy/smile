@@ -42,6 +42,7 @@ fit_spm <- function(x, ...) UseMethod("fit_spm")
 ##'     choses the Powered Exponential family and do not inform \code{kappa},
 ##'     then it is set to 1. In both cases, the covariance function becomes the
 ##'     so covalled exponential covariance function.
+##' @param tr tapper range
 ##' @param theta_st a \code{numeric} (named) vector containing the initial
 ##'     parameters.
 ##' @param apply_exp a \code{logical} scalar indicating wheter the parameters
@@ -65,6 +66,7 @@ fit_spm <- function(x, ...) UseMethod("fit_spm")
 ##' @export
 fit_spm.spm <- function(x, model, theta_st,
                         kappa = NULL,
+                        tr = NULL,
                         apply_exp = FALSE,
                         opt_method  = "Nelder-Mead",
                         control_opt = list(),
@@ -89,6 +91,7 @@ fit_spm.spm <- function(x, model, theta_st,
                          npix    = x$npix,
                          model   = model,
                          kappa   = kappa,
+                         tr      = tr,
                          apply_exp = apply_exp,
                          ...)
     } else if(npar == 1) {
@@ -103,6 +106,7 @@ fit_spm.spm <- function(x, model, theta_st,
                          npix    = x$npix,
                          model   = model,
                          kappa   = kappa,
+                         tr      = tr,
                          apply_exp = apply_exp,
                          ...)
     }
@@ -153,6 +157,26 @@ fit_spm.spm <- function(x, model, theta_st,
                                    n = .n, n2 = .n,
                                    phi   = estimates["phi"],
                                    sigsq = 1)
+           },
+           "w1" = {
+               V <- comp_w1_cov(x$dists,
+                                n = .n, n2 = .n,
+                                phi   = estimates["phi"],
+                                sigsq = 1)
+           },
+           "cs" = {
+               V <- comp_cs_cov(x$dists,
+                                n = .n, n2 = .n,
+                                phi   = estimates["phi"],
+                                sigsq = 1)
+           },
+           "tapmat" = {
+               V <- comp_tapmat_cov(x$dists,
+                                    n = .n, n2 = .n,
+                                    phi   = estimates["phi"],
+                                    sigsq = 1,
+                                    kappa = kappa,
+                                    theta = tr)
            })
     
     ones_n <- matrix(rep(1, .n), ncol = 1L)
@@ -176,6 +200,7 @@ fit_spm.spm <- function(x, model, theta_st,
                                   npix = x$npix,
                                   model = model,
                                   kappa = kappa,
+                                  tr    = tr,
                                   apply_exp = FALSE)
             )
         } else {
@@ -198,6 +223,7 @@ fit_spm.spm <- function(x, model, theta_st,
                                   npix = x$npix,
                                   model = model,
                                   kappa = kappa,
+                                  tr    = tr,
                                   apply_exp = FALSE)
             )
         } else {
@@ -215,7 +241,8 @@ fit_spm.spm <- function(x, model, theta_st,
         log_lik   = - op_val$value,
         call_data = x,
         model     = model,
-        kappa     = kappa
+        kappa     = kappa,
+        taper_rg  = tr
     )
 
     class(output) <- append(class(output), "spm_fit")
@@ -368,6 +395,7 @@ summary_spm_fit <- function(x, sig = .05) {
 ##' @name fit_spm
 ##' @export
 fit_spm2 <- function(x, model, kappa,
+                     tr,
                      comp_hess = TRUE, 
                      phi_min, phi_max, nphi = 10) {
     stopifnot(NCOL(x$var) == 1)
@@ -449,6 +477,26 @@ fit_spm2 <- function(x, model, kappa,
                                    n = .n, n2 = .n,
                                    phi   = phi_out,
                                    sigsq = 1)
+           },
+           "w1" = {
+               V <- comp_w1_cov(x$dists,
+                                n = .n, n2 = .n,
+                                phi   = phi_out,
+                                sigsq = 1)
+           },
+           "cs" = {
+               V <- comp_cs_cov(x$dists,
+                                n = .n, n2 = .n,
+                                phi   = phi_out,
+                                sigsq = 1)
+           },
+           "tapmat" = {
+               V <- comp_tapmat_cov(x$dists,
+                                    n = .n, n2 = .n,
+                                    phi   = phi_out,
+                                    sigsq = 1,
+                                    kappa = kappa,
+                                    theta = tr)
            })
     
     ones_n <- matrix(rep(1, .n), ncol = 1L)
@@ -470,6 +518,7 @@ fit_spm2 <- function(x, model, kappa,
                               npix = x$npix,
                               model = model,
                               kappa = kappa,
+                              tr    = tr,
                               apply_exp = FALSE)
         )
     } else {
