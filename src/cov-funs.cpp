@@ -810,7 +810,7 @@ arma::mat comp_cs_cov(const List& cross_dists, int n,
 double single_w1(double d, double sigsq, double phi) {
   double out = sigsq, aux = d / phi;
   if(aux < 1) {
-    out *= (1 - aux) * (1 - aux) * (1 + .5 * aux);
+    out *= pow(1 - aux, 4) * (1 + 4 * aux);
   } else {
     out *= 0;
   }
