@@ -60,6 +60,8 @@ fit_spm <- function(x, ...) UseMethod("fit_spm")
 ##' @param nphi a \code{numeric} scalar indicating the number of values to
 ##'     compute a grid-search over \eqn{phi}.
 ##' @param ... additionnal parameters, either passed to \code{optim}.
+##'
+##' @import Matrix
 ##' 
 ##' @return a \code{spm_fit} object.
 ##' 
@@ -153,30 +155,42 @@ fit_spm.spm <- function(x, model, theta_st,
                                    sigsq = 1)
            },
            "spherical" = {
-               V <- comp_spher_cov(x$dists,
-                                   n = .n, n2 = .n,
-                                   phi   = estimates["phi"],
-                                   sigsq = 1)
+               V <- Matrix(
+                   comp_spher_cov(x$dists,
+                                  n = .n, n2 = .n,
+                                  phi   = estimates["phi"],
+                                  sigsq = 1),
+                   sparse = TRUE
+               )
            },
            "w1" = {
-               V <- comp_w1_cov(x$dists,
-                                n = .n, n2 = .n,
-                                phi   = estimates["phi"],
-                                sigsq = 1)
+               V <- Matrix(
+                   comp_w1_cov(x$dists,
+                               n = .n, n2 = .n,
+                               phi   = estimates["phi"],
+                               sigsq = 1),
+                   sparse = TRUE
+               )
            },
            "cs" = {
-               V <- comp_cs_cov(x$dists,
-                                n = .n, n2 = .n,
-                                phi   = estimates["phi"],
-                                sigsq = 1)
+               V <- Matrix(
+                   comp_cs_cov(x$dists,
+                               n = .n, n2 = .n,
+                               phi   = estimates["phi"],
+                               sigsq = 1),
+                   sparse = TRUE
+               )
            },
            "tapmat" = {
-               V <- comp_tapmat_cov(x$dists,
-                                    n = .n, n2 = .n,
-                                    phi   = estimates["phi"],
-                                    sigsq = 1,
-                                    kappa = kappa,
-                                    theta = tr)
+               V <- Matrix(
+                   comp_tapmat_cov(x$dists,
+                                   n = .n, n2 = .n,
+                                   phi   = estimates["phi"],
+                                   sigsq = 1,
+                                   kappa = kappa,
+                                   theta = tr),
+                   sparse = TRUE
+               )
            })
     
     ones_n <- matrix(rep(1, .n), ncol = 1L)
@@ -209,7 +223,7 @@ fit_spm.spm <- function(x, model, theta_st,
         
     } else if(npar == 1) {
         inv_v <- chol2inv(chol(V))
-        mles <- est_mle(x$var, inv_v)
+        mles  <- est_mle(x$var, inv_v)
         estimates <- c(mles, 
                        "phi" = unname(estimates["phi"]))
         if(comp_hess) {
@@ -473,30 +487,42 @@ fit_spm2 <- function(x, model, kappa,
                                    sigsq = 1)
            },
            "spherical" = {
-               V <- comp_spher_cov(x$dists,
-                                   n = .n, n2 = .n,
-                                   phi   = phi_out,
-                                   sigsq = 1)
+               V <- Matrix(
+                   comp_spher_cov(x$dists,
+                                  n = .n, n2 = .n,
+                                  phi   = phi_out,
+                                  sigsq = 1),
+                   sparse = TRUE
+               )
            },
            "w1" = {
-               V <- comp_w1_cov(x$dists,
-                                n = .n, n2 = .n,
-                                phi   = phi_out,
-                                sigsq = 1)
+               V <- Matrix(
+                   comp_w1_cov(x$dists,
+                               n = .n, n2 = .n,
+                               phi   = phi_out,
+                               sigsq = 1),
+                   sparse = TRUE
+               )
            },
            "cs" = {
-               V <- comp_cs_cov(x$dists,
-                                n = .n, n2 = .n,
-                                phi   = phi_out,
-                                sigsq = 1)
+               V <- Matrix(
+                   comp_cs_cov(x$dists,
+                               n = .n, n2 = .n,
+                               phi   = phi_out,
+                               sigsq = 1),
+                   sparse = TRUE
+               )
            },
            "tapmat" = {
-               V <- comp_tapmat_cov(x$dists,
-                                    n = .n, n2 = .n,
-                                    phi   = phi_out,
-                                    sigsq = 1,
-                                    kappa = kappa,
-                                    theta = tr)
+               V <- Matrix(
+                   comp_tapmat_cov(x$dists,
+                                   n = .n, n2 = .n,
+                                   phi   = phi_out,
+                                   sigsq = 1,
+                                   kappa = kappa,
+                                   theta = tr),
+                   sparse = TRUE
+               )
            })
     
     ones_n <- matrix(rep(1, .n), ncol = 1L)

@@ -182,30 +182,42 @@ singl_log_plik <- function(theta, .dt, dists, npix, model,
                                            sigsq = 1)
            },
            "spherical" = {
-               varcov_u1 <- comp_spher_cov(cross_dists = dists,
-                                           n = .n, n2 = .n,
-                                           phi = phi,
-                                           sigsq = 1)
+               varcov_u1 <- Matrix(
+                   comp_spher_cov(cross_dists = dists,
+                                  n = .n, n2 = .n,
+                                  phi = phi,
+                                  sigsq = 1),
+                   sparse = TRUE
+               )
            },
            "cs" = {
-               varcov_u1 <- comp_cs_cov(cross_dists = dists,
-                                        n = .n, n2 = .n,
-                                        phi = phi,
-                                        sigsq = 1)
+               varcov_u1 <- Matrix(
+                   comp_cs_cov(cross_dists = dists,
+                               n = .n, n2 = .n,
+                               phi = phi,
+                               sigsq = 1),
+                   sparse = TRUE
+               )
            },
            "w1" = {
-               varcov_u1 <- comp_w1_cov(cross_dists = dists,
-                                        n = .n, n2 = .n,
-                                        phi = phi,
-                                        sigsq = 1)
+               varcov_u1 <- Matrix(
+                   comp_w1_cov(cross_dists = dists,
+                               n = .n, n2 = .n,
+                               phi = phi,
+                               sigsq = 1),
+                   sparse = TRUE
+               )
            },
            "tapmat" = {
-               varcov_u1 <- comp_tapmat_cov(cross_dists = dists,
-                                            n = .n, n2 = .n,
-                                            phi = phi,
-                                            sigsq = 1,
-                                            kappa = kappa,
-                                            theta = tr)
+               varcov_u1 <- Matrix(
+                   comp_tapmat_cov(cross_dists = dists,
+                                   n = .n, n2 = .n,
+                                   phi = phi,
+                                   sigsq = 1,
+                                   kappa = kappa,
+                                   theta = tr),
+                   sparse = TRUE
+               )
            })
     
     
@@ -288,42 +300,54 @@ singl_log_lik_nn <- function(theta, .dt, dists, npix, model,
                                            sigsq = 1)
            },
            "spherical" = {
-               varcov_u1 <- comp_spher_cov(cross_dists = dists,
-                                           n = .n, n2 = .n,
-                                           phi = phi,
-                                           sigsq = 1)
+               varcov_u1 <- Matrix(
+                   comp_spher_cov(cross_dists = dists,
+                                  n = .n, n2 = .n,
+                                  phi = phi,
+                                  sigsq = 1),
+                   sparse = TRUE
+               )
            },
            "cs" = {
-               varcov_u1 <- comp_cs_cov(cross_dists = dists,
-                                        n = .n, n2 = .n,
-                                        phi = phi,
-                                        sigsq = 1)
+               varcov_u1 <- Matrix(
+                   comp_cs_cov(cross_dists = dists,
+                               n = .n, n2 = .n,
+                               phi = phi,
+                               sigsq = 1),
+                   sparse = TRUE
+               )
            },
            "w1" = {
-               varcov_u1 <- comp_w1_cov(cross_dists = dists,
-                                        n = .n, n2 = .n,
-                                        phi = phi,
-                                        sigsq = 1)
+               varcov_u1 <- Matrix(
+                   comp_w1_cov(cross_dists = dists,
+                               n = .n, n2 = .n,
+                               phi = phi,
+                               sigsq = 1),
+                   sparse = TRUE
+               )
            },
            "tapmat" = {
-               varcov_u1 <- comp_tapmat_cov(cross_dists = dists,
-                                            n = .n, n2 = .n,
-                                            phi = phi,
-                                            sigsq = 1,
-                                            kappa = kappa,
-                                            theta = tr)
+               varcov_u1 <- Matrix(
+                   comp_tapmat_cov(cross_dists = dists,
+                                   n = .n, n2 = .n,
+                                   phi = phi,
+                                   sigsq = 1,
+                                   kappa = kappa,
+                                   theta = tr),
+                   sparse = TRUE
+               )
            })
     
     V <- varcov_u1
     chol_v <- try(chol(V))
     if(inherits(chol_v, "try-error")) {
         inv_v <- solve(V)
-        mles   <- est_mle(.dt, inv_v)
+        mles <- est_mle(.dt, inv_v)
         log_lik_y <- .5 * (.n * log(2 * pi) + .n * log(mles[length(mles)]) +
                            2 * log(det(V)) + .n)
     } else {
-        inv_v  <- chol2inv(chol_v)
-        mles   <- est_mle(.dt, inv_v)
+        inv_v <- chol2inv(chol_v)
+        mles <- est_mle(.dt, inv_v)
         log_lik_y <- .5 * (.n * log(2 * pi) + .n * log(mles[length(mles)]) +
                            2 * sum(log(diag(chol_v))) + .n)
     }

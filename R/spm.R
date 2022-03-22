@@ -143,7 +143,7 @@ print.spm <- function(x, ...) {
 }
 
 
-##' @export
-summary.spm <- function(object, ...) {
-    print.spm(object, ...)
-}
+## ##' @export
+## summary.spm <- function(object, ...) {
+##     print.spm(object, ...)
+## }

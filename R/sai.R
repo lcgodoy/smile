@@ -3,7 +3,7 @@ w_col <- function(source_unit, target) {
     source_unit <- sf::st_sfc(source_unit,
                               crs = sf::st_crs(target))
     ints <- sf::st_intersects(target, source_unit,
-                          sparse = FALSE)
+                              sparse = FALSE)
     out <- vector(mode = "numeric",
                   length = length(target))
     out[ints] <- as.numeric(

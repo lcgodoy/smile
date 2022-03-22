@@ -9,8 +9,8 @@ est_mle <- function(y, Vinv) {
     IVinv <- crossprod(ones, Vinv)
     mu    <- as.numeric((IVinv %*% y) / (IVinv %*% ones))
     y     <- matrix(y - mu, ncol = 1)
-    sigsq <- (crossprod(y, Vinv) %*% y) / n
-    out   <- c("mu" = unique(mu), "sigsq" = sigsq)
+    sigsq <- as.numeric((crossprod(y, Vinv) %*% y) / n)
+    out   <- c("mu" = mu, "sigsq" = sigsq)
     return(out)
 }
 
