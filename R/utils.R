@@ -96,3 +96,44 @@ st_remove_holes <- function(x) {
         geom = sf::st_sf(dat, geom)
     return(geom)
 }
+
+#' Find phi parameter for the Exponential spatial auto-correlation function
+#'
+#' Function designed to find the phi paramter such that the correlation
+#' between points wihtin a given distance \code{d} is at most a given
+#' value.
+#'
+#' @param d maximun distance for spatial dependence equal to \code{cut}.
+#' @param kappa smoothness parameter associated with the Matern cov. function.
+#' @param range Minimum and maximum distance to be considered.
+#' @param family covariance function family
+#' @param cut Spatial correlation at a distance \code{d}.
+#'
+#' @return \code{real number}
+#' @export
+find_phi <- function(d, kappa, family = "matern",
+                     range = c(1e-04, 1000), cut = 0.05) {
+    if(family %in% c("matern", "w1", "cs",
+                     "spher", "pexp",
+                     "gaussian")) {
+        out <- stats::uniroot(f = function(x, d, kappa, cut) {
+            if(family == "matern") {
+                out <- single_matern(d, 1, x, kappa)
+            } else if(family == "w1") {
+                out <- single_w1(d, 1, x)
+            } else if(family == "cs") {
+                out <- single_cs(d, 1, x)
+            } else if(family == "pexp") {
+                out <- single_pexp(d, 1, x, kappa)
+            } else if(family == "gauss") {
+                out <- single_gauss(d, 1, x)
+            } else {
+                out <- single_spher(d, 1, x)
+            }
+            out - cut
+        }, interval = range, d = d, kappa = kappa, cut = cut)
+        out$root
+    } else {
+        - d / log(cut)
+    }
+}
