@@ -30,9 +30,12 @@ singl_log_lik <- function(theta, .dt, dists, npix, model,
 
     mu    <- theta[1]
     sigsq <- theta[2]
-    tausq <- theta[3]
-    phi   <- theta[4]
 
+    if(length(theta) == 4) {
+        tausq <- theta[3]
+        phi   <- theta[4]
+    } else
+        phi <- theta[3]
     ## tausq <- matrix(nrow = p, ncol = p)
     ## tausq[upper.tri(tausq, diag = TRUE)] <-
     ##     theta[(p + 1):((p + 1) + .5*(p * ( p  + 1 )) - 1)]
@@ -41,7 +44,8 @@ singl_log_lik <- function(theta, .dt, dists, npix, model,
     ## phi   <- theta[((p + 1) + .5*(p * ( p  + 1 )) + 1)]
 
     if(apply_exp) {
-        tausq <- exp(tausq)
+        if(length(theta) == 4)
+            tausq <- exp(tausq)
         sigsq <- exp(sigsq)
         phi   <- exp(phi)
     }
