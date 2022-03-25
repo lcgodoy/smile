@@ -416,7 +416,7 @@ fit_spm2 <- function(x, model, kappa,
     stopifnot(inherits(x, "spm"))
     stopifnot(length(nphi) == 1)
     stopifnot(model %in% c("matern", "pexp", "gaussian",
-                           "spherical"))
+                           "spherical", "cs", "w1"))
     if(! missing(kappa))
         stopifnot(length(kappa) == 1)
     
