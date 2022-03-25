@@ -24,7 +24,7 @@ singl_log_lik <- function(theta, .dt, dists, npix, model,
                           kappa = NULL, tr = NULL,
                           apply_exp = FALSE) {
 
-    if(! apply_exp & any(theta[3:4] < 0 )) {
+    if(! apply_exp & any(rev(theta)[1:2] < 0 )) {
         return(NA_real_)
     }
 
