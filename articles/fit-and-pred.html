@@ -9,9 +9,9 @@
 <title>2. Fitting models and making predictions • smile</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.1.0/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.1.0/bootstrap.bundle.min.js"></script><link href="../deps/_Roboto-0.4.0/font.css" rel="stylesheet">
-<link href="../deps/_JetBrains%20Mono-0.4.0/font.css" rel="stylesheet">
-<link href="../deps/_Roboto%20Slab-0.4.0/font.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.1.0/bootstrap.bundle.min.js"></script><link href="../deps/_Roboto-0.4.1/font.css" rel="stylesheet">
+<link href="../deps/_JetBrains%20Mono-0.4.1/font.css" rel="stylesheet">
+<link href="../deps/_Roboto%20Slab-0.4.1/font.css" rel="stylesheet">
 <!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- bootstrap-toc --><script src="https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.1/dist/bootstrap-toc.min.js"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="2. Fitting models and making predictions">
@@ -198,7 +198,7 @@
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"m1"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/AIC.html" class="external-link">AIC</a></span><span class="op">(</span><span class="va">fit_msoa1</span><span class="op">)</span>, <span class="st">"m2"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/AIC.html" class="external-link">AIC</a></span><span class="op">(</span><span class="va">fit_msoa2</span><span class="op">)</span>, <span class="st">"m3"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/AIC.html" class="external-link">AIC</a></span><span class="op">(</span><span class="va">fit_msoa3</span><span class="op">)</span><span class="op">)</span>
 <span class="co">#&gt;       m1       m2       m3 </span>
-<span class="co">#&gt; 293.8797 298.7154 296.3745</span></code></pre></div>
+<span class="co">#&gt; 297.7683 301.0633 299.5877</span></code></pre></div>
 <p>We can retrieve the estimated parameters and the associated <code>(1 - sig)</code> % confidence intervals by using the function <code>summary_spm_fit</code> as follows</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/summary_spm_fit.html">summary_spm_fit</a></span><span class="op">(</span><span class="va">fit_msoa1</span>, sig <span class="op">=</span> <span class="fl">.05</span><span class="op">)</span>
@@ -206,9 +206,9 @@
 <span class="co">#&gt;  optimization algorithm converged: yes </span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt;     par   estimate        se               ci</span>
-<span class="co">#&gt; 1    mu 75.8825236 0.8004114 [74.314; 77.451]</span>
-<span class="co">#&gt; 2 sigsq 22.0245850 3.9880393 [14.208; 29.841]</span>
-<span class="co">#&gt; 3   phi  0.8466236 0.2191170   [0.417; 1.276]</span></code></pre></div>
+<span class="co">#&gt; 1    mu 75.9501457 0.8016382 [74.379; 77.521]</span>
+<span class="co">#&gt; 2 sigsq 23.8052171 4.3204564 [15.337; 32.273]</span>
+<span class="co">#&gt; 3   phi  0.8061911 0.2088062   [0.397; 1.215]</span></code></pre></div>
 <p>Finally, we have almost everything we need to perform predictions at the LSOA areas. The function <code>predict_spm</code> calculates the predictions associated to the <code>spm_obj</code> (which contains the results associated with a fitted model) into a <code>sf</code> object given as an input for the argument <code>x</code>. We need to specify whether we want to “aggregate” (i.e. average) the predicted surface over the polygons associated with the <code>sf</code> data. The number of points and the type of integration for prediction need to be set as well. In this case we are specifying a finer grid (3500 points) because the LSOA areas are smaller than the MSOA areas.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">pred_lsoa</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/predict_spm.html">predict_spm</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">liv_lsoa</span>, spm_obj <span class="op">=</span> <span class="va">fit_msoa1</span>, id_var <span class="op">=</span> <span class="st">"lsoa11cd"</span><span class="op">)</span>
