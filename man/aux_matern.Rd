@@ -4,7 +4,7 @@
 \alias{aux_matern}
 \title{Mean of a (Matern) covariance function (Internal use)}
 \usage{
-aux_matern(dist, sigsq, phi, kappa)
+aux_matern(dist, sigsq, phi, nu)
 }
 \arguments{
 \item{sigsq}{the \eqn{\sigma^2} parameter from the Matern covariance
@@ -13,14 +13,14 @@ function.}
 \item{phi}{the \eqn{\phi} parameter from the Matern covariance function,
 controls the range of the spatial dependence.}
 
-\item{kappa}{the \eqn{\kappa} parameter from the Matern covariance function,
+\item{nu}{the \eqn{\nu} parameter from the Matern covariance function,
 controls the differentiability of the process.}
 
 \item{dists}{a numeric matrix representing the distance between spatial
 entities.}
 }
 \value{
-The mean of \code{mat_cov(dist, sigsq, phi, kappa)}.
+The mean of \code{mat_cov(dist, sigsq, phi, nu)}.
 }
 \description{
 This is an auxilliary function for internal use. It helps to

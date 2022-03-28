@@ -10,8 +10,10 @@ singl_log_lik_nn(
   dists,
   npix,
   model,
-  kappa = NULL,
+  nu = NULL,
   tr = NULL,
+  kappa = 1,
+  mu2 = 1.5,
   apply_exp = FALSE
 )
 }
@@ -30,10 +32,15 @@ each polygon. (Ordered by the id variables for the polygons).}
 
 \item{model}{a \code{character} indicating which covariance function to
 use. Possible values are \code{c("matern", "pexp", "gaussian",
-    "spherical", "cs", "w1", "tapmat")}.}
+    "spherical", "cs", "gw", "tapmat")}.}
 
-\item{kappa}{\eqn{\kappa} parameter. Not necessary if \code{mode} is
+\item{nu}{\eqn{\nu} parameter. Not necessary if \code{mode} is
 \code{"gaussian"} or \code{"spherical"}}
+
+\item{kappa}{\eqn{\kappa \in \{0, \ldots, 3 \}} parameter for the GW cov
+function.}
+
+\item{mu2}{the smoothness parameter \eqn{\mu} for the GW function.}
 
 \item{apply_exp}{a \code{logical} indicater wheter the exponential
 transformation should be applied to variance parameters. This

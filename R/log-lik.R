@@ -10,10 +10,13 @@
 ##'     each polygon. (Ordered by the id variables for the polygons).
 ##' @param model a \code{character} indicating which covariance function to
 ##'     use. Possible values are \code{c("matern", "pexp", "gaussian",
-##'     "spherical", "cs", "w1", "tapmat")}.
-##' @param kappa \eqn{\kappa} parameter. Not necessary if \code{model} is
+##'     "spherical", "cs", "gw", "tapmat")}.
+##' @param nu \eqn{\nu} parameter. Not necessary if \code{model} is
 ##'     \code{"gaussian"} or \code{"spherical"}
 ##' @param tr \eqn{\theta_r} taper range.
+##' @param kappa \eqn{\kappa \in \{0, \ldots, 3 \}} parameter for the GW cov
+##'     function.
+##' @param mu2 the smoothness parameter \eqn{\mu} for the GW function.
 ##' @param apply_exp a \code{logical} indicater wheter the exponential
 ##'     transformation should be applied to variance parameters. This
 ##'     facilitates the optimization process.
@@ -21,7 +24,8 @@
 ##' @return a scalar representing \code{-log.lik}.
 ##' @keywords internal
 singl_log_lik <- function(theta, .dt, dists, npix, model,
-                          kappa = NULL, tr = NULL,
+                          nu = NULL, tr = NULL,
+                          kappa = 1, mu2 = 1.5,
                           apply_exp = FALSE) {
 
     if(! apply_exp & any(rev(theta)[1:2] < 0 )) {
@@ -58,14 +62,14 @@ singl_log_lik <- function(theta, .dt, dists, npix, model,
                                          n = .n, n2 = .n,
                                          phi = phi,
                                          sigsq = sigsq,
-                                         kappa = kappa)
+                                         nu = nu)
            },
            "pexp" = {
                varcov_u1 <- comp_pexp_cov(cross_dists = dists,
                                           n = .n, n2 = .n,
                                           phi = phi,
                                           sigsq = sigsq,
-                                          kappa = kappa)
+                                          nu = nu)
            },
            "gaussian" = {
                varcov_u1 <- comp_gauss_cov(cross_dists = dists,
@@ -85,18 +89,20 @@ singl_log_lik <- function(theta, .dt, dists, npix, model,
                                         phi = phi,
                                         sigsq = sigsq)
            },
-           "w1" = {
-               varcov_u1 <- comp_w1_cov(cross_dists = dists,
+           "gw" = {
+               varcov_u1 <- comp_gw_cov(cross_dists = dists,
                                         n = .n, n2 = .n,
                                         phi = phi,
-                                        sigsq = sigsq)
+                                        sigsq = sigsq,
+                                        kappa = kappa,
+                                        mu    = mu2)
            },
            "tapmat" = {
                varcov_u1 <- comp_tapmat_cov(cross_dists = dists,
                                             n = .n, n2 = .n,
                                             phi = phi,
                                             sigsq = sigsq,
-                                            kappa = kappa,
+                                            nu = nu,
                                             theta = tr)
            })
     
@@ -139,10 +145,13 @@ singl_log_lik <- function(theta, .dt, dists, npix, model,
 ##'     each polygon. (Ordered by the id variables for the polygons).
 ##' @param model a \code{character} indicating which covariance function to
 ##'     use. Possible values are \code{c("matern", "pexp", "gaussian",
-##'     "spherical", "cs", "w1", "tapmat")}.
-##' @param kappa \eqn{\kappa} parameter. Not necessary if \code{mode} is
+##'     "spherical", "cs", "gw", "tapmat")}.
+##' @param nu \eqn{\nu} parameter. Not necessary if \code{mode} is
 ##'     \code{"gaussian"} or \code{"spherical"}
 ##' @param tr \eqn{\theta_r} taper range.
+##' @param kappa \eqn{\kappa \in \{0, \ldots, 3 \}} parameter for the GW cov
+##'     function.
+##' @param mu2 the smoothness parameter \eqn{\mu} for the GW function.
 ##' @param apply_exp a \code{logical} indicater wheter the exponential
 ##'     transformation should be applied to variance parameters. This
 ##'     facilitates the optimization process.
@@ -150,7 +159,8 @@ singl_log_lik <- function(theta, .dt, dists, npix, model,
 ##' @return a scalar representing \code{-log.lik}.
 ##' @keywords internal
 singl_log_plik <- function(theta, .dt, dists, npix, model,
-                           kappa = NULL, tr = NULL,
+                           nu = NULL, tr = NULL,
+                           kappa = 1, mu2 = 1.5,
                            apply_exp = FALSE) {
     
     if(! apply_exp & any(theta < 0 )) {
@@ -170,14 +180,14 @@ singl_log_plik <- function(theta, .dt, dists, npix, model,
                                          n = .n, n2 = .n,
                                          phi = phi,
                                          sigsq = 1,
-                                         kappa = kappa)
+                                         nu = nu)
            },
            "pexp" = {
                varcov_u1 <- comp_pexp_cov(cross_dists = dists,
                                           n = .n, n2 = .n,
                                           phi = phi,
                                           sigsq = 1,
-                                          kappa = kappa)
+                                          nu = nu)
            },
            "gaussian" = {
                varcov_u1 <- comp_gauss_cov(cross_dists = dists,
@@ -203,12 +213,14 @@ singl_log_plik <- function(theta, .dt, dists, npix, model,
                    sparse = TRUE
                )
            },
-           "w1" = {
+           "gw" = {
                varcov_u1 <- Matrix(
-                   comp_w1_cov(cross_dists = dists,
+                   comp_gw_cov(cross_dists = dists,
                                n = .n, n2 = .n,
                                phi = phi,
-                               sigsq = 1),
+                               sigsq = 1,
+                               kappa = kappa,
+                               mu    = mu2),
                    sparse = TRUE
                )
            },
@@ -218,7 +230,7 @@ singl_log_plik <- function(theta, .dt, dists, npix, model,
                                    n = .n, n2 = .n,
                                    phi = phi,
                                    sigsq = 1,
-                                   kappa = kappa,
+                                   nu = nu,
                                    theta = tr),
                    sparse = TRUE
                )
@@ -257,9 +269,12 @@ singl_log_plik <- function(theta, .dt, dists, npix, model,
 ##'     each polygon. (Ordered by the id variables for the polygons).
 ##' @param model a \code{character} indicating which covariance function to
 ##'     use. Possible values are \code{c("matern", "pexp", "gaussian",
-##'     "spherical", "cs", "w1", "tapmat")}.
-##' @param kappa \eqn{\kappa} parameter. Not necessary if \code{mode} is
+##'     "spherical", "cs", "gw", "tapmat")}.
+##' @param nu \eqn{\nu} parameter. Not necessary if \code{mode} is
 ##'     \code{"gaussian"} or \code{"spherical"}
+##' @param kappa \eqn{\kappa \in \{0, \ldots, 3 \}} parameter for the GW cov
+##'     function.
+##' @param mu2 the smoothness parameter \eqn{\mu} for the GW function.
 ##' @param apply_exp a \code{logical} indicater wheter the exponential
 ##'     transformation should be applied to variance parameters. This
 ##'     facilitates the optimization process.
@@ -267,8 +282,9 @@ singl_log_plik <- function(theta, .dt, dists, npix, model,
 ##' @return a scalar representing \code{-log.lik}.
 ##' @keywords internal
 singl_log_lik_nn <- function(theta, .dt, dists, npix, model,
-                             kappa = NULL,
-                             tr = NULL, apply_exp = FALSE) {
+                             nu = NULL, tr = NULL,
+                             kappa = 1, mu2 = 1.5,
+                             apply_exp = FALSE) {
     
     if(! apply_exp & theta < 0 ) {
         return(NA_real_)
@@ -288,14 +304,14 @@ singl_log_lik_nn <- function(theta, .dt, dists, npix, model,
                                          n = .n, n2 = .n,
                                          phi = phi,
                                          sigsq = 1,
-                                         kappa = kappa)
+                                         nu = nu)
            },
            "pexp" = {
                varcov_u1 <- comp_pexp_cov(cross_dists = dists,
                                           n = .n, n2 = .n,
                                           phi = phi,
                                           sigsq = 1,
-                                          kappa = kappa)
+                                          nu = nu)
            },
            "gaussian" = {
                varcov_u1 <- comp_gauss_cov(cross_dists = dists,
@@ -321,12 +337,14 @@ singl_log_lik_nn <- function(theta, .dt, dists, npix, model,
                    sparse = TRUE
                )
            },
-           "w1" = {
+           "gw" = {
                varcov_u1 <- Matrix(
-                   comp_w1_cov(cross_dists = dists,
+                   comp_gw_cov(cross_dists = dists,
                                n = .n, n2 = .n,
                                phi = phi,
-                               sigsq = 1),
+                               sigsq = 1,
+                               kappa = kappa,
+                               mu    = mu2),
                    sparse = TRUE
                )
            },
@@ -336,7 +354,7 @@ singl_log_lik_nn <- function(theta, .dt, dists, npix, model,
                                    n = .n, n2 = .n,
                                    phi = phi,
                                    sigsq = 1,
-                                   kappa = kappa,
+                                   nu = nu,
                                    theta = tr),
                    sparse = TRUE
                )
@@ -378,7 +396,7 @@ singl_log_lik_nn <- function(theta, .dt, dists, npix, model,
 ## ##' @param model a \code{character} indicating which covariance function to
 ## ##'     use. Possible values are \code{c("matern", "pexp", "gaussian",
 ## ##'     "spherical")}.
-## ##' @param kappa \eqn{\kappa} parameter. Not necessary if \code{mode} is
+## ##' @param nu \eqn{\nu} parameter. Not necessary if \code{mode} is
 ## ##'     \code{"gaussian"} or \code{"spherical"}
 ## ##' @param apply_exp a \code{logical} indicater wheter the exponential
 ## ##'     transformation should be applied to variance parameters. This
@@ -386,7 +404,7 @@ singl_log_lik_nn <- function(theta, .dt, dists, npix, model,
 ## ##' 
 ## ##' @return a scalar representing \code{-log.lik}.
 ## singl_log_rel <- function(theta, .dt, dists, npix, model,
-##                           kappa = NULL, apply_exp = FALSE) {    
+##                           nu = NULL, apply_exp = FALSE) {    
 ##     if(! apply_exp & any(theta[(p + 1):length(theta)] < 0 )) {
 ##         return(NA_real_)
 ##     }
@@ -411,14 +429,14 @@ singl_log_lik_nn <- function(theta, .dt, dists, npix, model,
 ##                                          n = .n, n2 = .n,
 ##                                          phi = phi,
 ##                                          sigsq = 1,
-##                                          kappa = kappa)
+##                                          nu = nu)
 ##            },
 ##            "pexp" = {
 ##                varcov_u1 <- comp_pexp_cov(cross_dists = dists,
 ##                                           n = .n, n2 = .n,
 ##                                           phi = phi,
 ##                                           sigsq = 1,
-##                                           kappa = kappa)
+##                                           nu = nu)
 ##            },
 ##            "gaussian" = {
 ##                varcov_u1 <- comp_gauss_cov(cross_dists = dists,
@@ -467,9 +485,12 @@ singl_log_lik_nn <- function(theta, .dt, dists, npix, model,
 ##' @param model a \code{character} indicating which covariance function to
 ##'     use. Possible values are \code{c("matern", "pexp", "gaussian",
 ##'     "spherical")}.
-##' @param kappa \eqn{\kappa} parameter. Not necessary if \code{mode} is
+##' @param nu \eqn{\nu} parameter. Not necessary if \code{mode} is
 ##'     \code{"gaussian"} or \code{"spherical"}
 ##' @param tr taper range
+##' @param kappa \eqn{\kappa \in \{0, \ldots, 3 \}} parameter for the GW cov
+##'     function.
+##' @param mu2 the smoothness parameter \eqn{\mu} for the GW function.
 ##' @param apply_exp a \code{logical} indicater wheter the exponential
 ##'     transformation should be applied to variance parameters. This
 ##'     facilitates the optimization process.
@@ -477,7 +498,8 @@ singl_log_lik_nn <- function(theta, .dt, dists, npix, model,
 ##' @return a scalar representing \code{-log.lik}.
 ##' @keywords internal
 singl_ll_nn_hess <- function(theta, .dt, dists, npix, model,
-                             kappa = NULL, tr = NULL,
+                             nu = NULL, tr = NULL,
+                             kappa = 1, mu2 = 1.5,
                              apply_exp = FALSE) {
     npar <- length(theta)
     
@@ -500,14 +522,14 @@ singl_ll_nn_hess <- function(theta, .dt, dists, npix, model,
                                          n = .n, n2 = .n,
                                          phi = phi,
                                          sigsq = sigsq,
-                                         kappa = kappa)
+                                         nu = nu)
            },
            "pexp" = {
                varcov_u1 <- comp_pexp_cov(cross_dists = dists,
                                           n = .n, n2 = .n,
                                           phi = phi,
                                           sigsq = sigsq,
-                                          kappa = kappa)
+                                          nu = nu)
            },
            "gaussian" = {
                varcov_u1 <- comp_gauss_cov(cross_dists = dists,
@@ -521,11 +543,13 @@ singl_ll_nn_hess <- function(theta, .dt, dists, npix, model,
                                            phi = phi,
                                            sigsq = sigsq)
            },
-           "w1" = {
-               varcov_u1 <- comp_w1_cov(cross_dists = dists,
+           "gw" = {
+               varcov_u1 <- comp_gw_cov(cross_dists = dists,
                                         n = .n, n2 = .n,
                                         phi = phi,
-                                        sigsq = sigsq)
+                                        sigsq = sigsq,
+                                        kappa = kappa,
+                                        mu    = mu2)
            },
            "cs" = {
                varcov_u1 <- comp_cs_cov(cross_dists = dists,
@@ -538,7 +562,7 @@ singl_ll_nn_hess <- function(theta, .dt, dists, npix, model,
                                             n = .n, n2 = .n,
                                             phi = phi,
                                             sigsq = sigsq,
-                                            kappa = kappa,
+                                            nu = nu,
                                             theta = tr)
            })
     log_lik_y <- mvtnorm::dmvnorm(x = matrix(.dt, nrow = 1),

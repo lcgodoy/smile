@@ -4,7 +4,7 @@
 \alias{single_tapmat}
 \title{Matern (tappered) covariance function (scalar - generic)}
 \usage{
-single_tapmat(d, sigsq, phi, kappa, theta)
+single_tapmat(d, sigsq, phi, nu, theta)
 }
 \arguments{
 \item{d}{a scalar representing the distance on which it is desired to
@@ -16,8 +16,8 @@ function.}
 \item{phi}{the \eqn{\phi} parameter from the Matern covariance function,
 controls the range of the spatial dependence.}
 
-\item{kappa}{the \eqn{\kappa} parameter from the Matern covariance function,
-controls the differentiability of the process.}
+\item{nu}{the smoothness parameter \eqn{\nu} from the Matern covariance
+function, controls the differentiability of the process.}
 
 \item{theta}{the \eqn{\theta} tapper range.}
 }

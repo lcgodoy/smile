@@ -80,7 +80,7 @@ important detail is that, if we make $\nu = \tau / \sigma^2$, the estimation
 process is slightly easier. The package allows for the two parametrizations.
 
 For this problem we are going to consider the the Matérn covariance
-function. The model will be fitted with $\kappa = .5, 1.5, 2.5$, this the
+function. The model will be fitted with $\nu = .5, 1.5, 2.5$, this the
 parameter controls the smoothness of the spatial process. Also, for simplicity,
 we are going to ignore $\tau$. Next, we evaluate the AIC associated with three
 models. The function `fit_spm` fits the models and needs starting values for
@@ -117,7 +117,7 @@ theta_st_msoa <- c("phi" = 1)
 ##     fit_spm(x = spm_msoa,
 ##             theta_st = theta_st_msoa,
 ##             model = "matern",
-##             kappa = .5,
+##             nu = .5,
 ##             lower = c(1e-16, 1e-16),
 ##             upper = c(Inf, 1),
 ##             opt_method = "L-BFGS-B",
@@ -127,7 +127,7 @@ fit_msoa1 <-
     fit_spm(x = spm_msoa,
             theta_st = theta_st_msoa,
             model = "matern",
-            kappa = .5,
+            nu = .5,
             apply_exp = TRUE,
             opt_method = "L-BFGS-B",
             control   = list(maxit = 500))
@@ -136,22 +136,22 @@ fit_msoa2 <-
     fit_spm(x = spm_msoa,
             theta_st = theta_st_msoa,
             model = "gaussian",
-            kappa = 1.5,
+            nu = 1.5,
             apply_exp = TRUE,
             opt_method = "L-BFGS-B",
-            control   = list(maxit = 500))
+            control    = list(maxit = 500))
 
 fit_msoa3 <-
     fit_spm(x = spm_msoa,
             theta_st = theta_st_msoa,
             model = "matern",
-            kappa = 2.5,
+            nu = 2.5,
             apply_exp = TRUE,
             opt_method = "L-BFGS-B",
             control   = list(maxit = 500))
 ```
 The AIC^[BIC works for our models too.] associated with each model is given
-below. According to this criterion, the best model is the one with $\kappa =
+below. According to this criterion, the best model is the one with $\nu =
 .5$.
 ```{r AIC, echo = TRUE, eval = TRUE}
 c("m1" = AIC(fit_msoa1), "m2" = AIC(fit_msoa2), "m3" = AIC(fit_msoa3))

@@ -104,34 +104,36 @@ st_remove_holes <- function(x) {
 #' value.
 #'
 #' @param d maximun distance for spatial dependence equal to \code{cut}.
-#' @param kappa smoothness parameter associated with the Matern cov. function.
+#' @param nu smoothness parameter associated with the Matern cov. function.
+#' @param kappa par GW
+#' @param mu2 smoothness GW
 #' @param range Minimum and maximum distance to be considered.
 #' @param family covariance function family
 #' @param cut Spatial correlation at a distance \code{d}.
 #'
 #' @return \code{real number}
 #' @export
-find_phi <- function(d, kappa, family = "matern",
+find_phi <- function(d, nu, kappa, mu2, family = "matern",
                      range = c(1e-04, 1000), cut = 0.05) {
-    if(family %in% c("matern", "w1", "cs",
+    if(family %in% c("matern", "gw", "cs",
                      "spher", "pexp",
                      "gaussian")) {
-        out <- stats::uniroot(f = function(x, d, kappa, cut) {
+        out <- stats::uniroot(f = function(x, d, nu, cut) {
             if(family == "matern") {
-                out <- single_matern(d, 1, x, kappa)
-            } else if(family == "w1") {
-                out <- single_w1(d, 1, x)
+                out <- single_matern(d, 1, x, nu)
+            } else if(family == "gw") {
+                out <- single_gw(d, 1, x, kappa, mu2)
             } else if(family == "cs") {
                 out <- single_cs(d, 1, x)
             } else if(family == "pexp") {
-                out <- single_pexp(d, 1, x, kappa)
+                out <- single_pexp(d, 1, x, nu)
             } else if(family == "gauss") {
                 out <- single_gauss(d, 1, x)
             } else {
                 out <- single_spher(d, 1, x)
             }
             out - cut
-        }, interval = range, d = d, kappa = kappa, cut = cut)
+        }, interval = range, d = d, nu = nu, cut = cut)
         out$root
     } else {
         - d / log(cut)

@@ -12,8 +12,10 @@ fit_spm(x, ...)
   x,
   model,
   theta_st,
-  kappa = NULL,
+  nu = NULL,
   tr = NULL,
+  kappa = 1,
+  mu2 = 1.5,
   apply_exp = FALSE,
   opt_method = "Nelder-Mead",
   control_opt = list(),
@@ -21,7 +23,18 @@ fit_spm(x, ...)
   ...
 )
 
-fit_spm2(x, model, kappa, tr, comp_hess = TRUE, phi_min, phi_max, nphi = 10)
+fit_spm2(
+  x,
+  model,
+  nu,
+  tr,
+  kappa = 1,
+  mu2 = 1.5,
+  comp_hess = TRUE,
+  phi_min,
+  phi_max,
+  nphi = 10
+)
 }
 \arguments{
 \item{x}{an object of type \code{spm}. Note that, the dimension of
@@ -32,21 +45,26 @@ being analyzed, and 2) if the input is a \code{spm} object.}
 
 \item{model}{a \code{character} scalar indicating the family of the
 covariance function to be used. The options are \code{c("matern",
-    "pexp", "gaussian", "spherical")}.}
+    "pexp", "gaussian", "spherical", "gw")}.}
 
 \item{theta_st}{a \code{numeric} (named) vector containing the initial
 parameters.}
 
-\item{kappa}{a \code{numeric} value indicating either the \eqn{\kappa}
+\item{nu}{a \code{numeric} value indicating either the \eqn{\nu}
 paramater from the Matern covariance function (controlling the process
 differentiability), or the "pexp" for the Powered Exponential family. If
-the \code{model} chosen by the user is Matern and \code{kappa} is not
+the \code{model} chosen by the user is Matern and \code{nu} is not
 informed, it is automatically set to .5. On the other hand, if the user
-choses the Powered Exponential family and do not inform \code{kappa},
+choses the Powered Exponential family and do not inform \code{nu},
 then it is set to 1. In both cases, the covariance function becomes the
 so covalled exponential covariance function.}
 
 \item{tr}{tapper range}
+
+\item{kappa}{\eqn{\kappa \in \{0, \ldots, 3 \}} parameter for the GW cov
+function.}
+
+\item{mu2}{the smoothness parameter \eqn{\mu} for the GW function.}
 
 \item{apply_exp}{a \code{logical} scalar indicating wheter the parameters
 that cannot assume negative values should be exponentiate or not.}

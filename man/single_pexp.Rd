@@ -4,7 +4,7 @@
 \alias{single_pexp}
 \title{Powered Exponential covariance function (scalar)}
 \usage{
-single_pexp(d, sigsq, phi, kappa)
+single_pexp(d, sigsq, phi, nu)
 }
 \arguments{
 \item{d}{a scalar representing the distance on which it is desired to
@@ -16,7 +16,7 @@ function.}
 \item{phi}{the \eqn{\phi} parameter from the Exponential covariance function,
 controls the range of the spatial dependence.}
 
-\item{kappa}{the \eqn{\kappa \in (0, 2]} parameter representing the "power"}
+\item{nu}{the \eqn{\nu \in (0, 2]} parameter representing the "power"}
 }
 \value{
 a scalar representing the (exponential) covariance between two

@@ -2,9 +2,9 @@
 % Please edit documentation in R/RcppExports.R
 \name{tapmat_cov}
 \alias{tapmat_cov}
-\title{Tappered Matern  covariance function for a given distance matrix.}
+\title{Tappered Matern covariance function for a given distance matrix.}
 \usage{
-tapmat_cov(dists, sigsq, phi, kappa, theta)
+tapmat_cov(dists, sigsq, phi, nu, theta)
 }
 \arguments{
 \item{dists}{a numeric matrix representing the distance between spatial
@@ -15,7 +15,7 @@ function.}
 
 \item{phi}{the \eqn{\phi} parameter from the Matern covariance function,'}
 
-\item{kappa}{smoothness parameter}
+\item{nu}{smoothness parameter}
 
 \item{theta}{\eqn{\theta} taper range.}
 }

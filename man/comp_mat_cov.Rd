@@ -4,7 +4,7 @@
 \alias{comp_mat_cov}
 \title{Matern covariance function for a polygons.}
 \usage{
-comp_mat_cov(cross_dists, n, n2, sigsq, phi, kappa)
+comp_mat_cov(cross_dists, n, n2, sigsq, phi, nu)
 }
 \arguments{
 \item{cross_dists}{a \code{list} such that each position contains the cross
@@ -23,9 +23,9 @@ function.}
 \item{phi}{the \eqn{\phi} parameter from the Matern covariance function,
 controls the range of the spatial dependence.}
 
-\item{kappa}{the \eqn{\kappa} parameter from the Matern covariance function,
+\item{nu}{the \eqn{\nu} parameter from the Matern covariance function,
 controls the differentiability of the process. Note that, if we set
-\code{kappa = .5}, then the calculations are based on the exponential
+\code{nu = .5}, then the calculations are based on the exponential
 covariance function.}
 }
 \value{

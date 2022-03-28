@@ -21,48 +21,48 @@ predict_spm.spm_fit <- function(x, .aggregate = TRUE, ...) {
     ## can be turned in to a function to make to code cleaner
     switch(x$model,
            "matern" = {
-               if(is.null(x$kappa))
-                   x$kappa <- .5
+               if(is.null(x$nu))
+                   x$nu <- .5
 
                sig_y <- comp_mat_cov(x$call_data$dists,
                                      n = n_obs, n2 = n_obs,
                                      phi   = x$estimate["phi"],
                                      ## sigsq = x$estimate["sigsq"],
                                      sigsq = 1,
-                                     kappa = x$kappa)
+                                     nu = x$nu)
                d_mat <- comp_mat_cov(cross_dists = u_res_pred,
                                      n = n_obs, n2 = n_pred,
                                      phi   = x$estimate["phi"],
                                      sigsq = x$estimate["sigsq"],
-                                     kappa = x$kappa)
+                                     nu = x$nu)
                sig_pred <- mat_cov(dists = u_pred,
                                    phi   = x$estimate["phi"],
                                    ## sigsq = x$estimate["sigsq"],
                                    sigsq = 1,
-                                   kappa = x$kappa)
+                                   nu = x$nu)
            },
            "pexp" = {
-               if(is.null(x$kappa))
-                   x$kappa <- 1
+               if(is.null(x$nu))
+                   x$nu <- 1
 
                sig_y <- comp_pexp_cov(x$call_data$dists,
                                       n = n_obs, n2 = n_obs,
                                       phi   = x$estimate["phi"],
                                       ## sigsq = x$estimate["sigsq"],
                                       sigsq = 1,
-                                      kappa = x$kappa)
+                                      nu = x$nu)
                
                d_mat <- comp_pexp_cov(cross_dists = u_res_pred,
                                       n = n_obs, n2 = n_pred,
                                       phi   = x$estimate["phi"],
                                       sigsq = x$estimate["sigsq"],
-                                      kappa = x$kappa)
+                                      nu = x$nu)
                
                sig_pred <- pexp_cov(dists = u_pred,
                                     phi   = x$estimate["phi"],
                                     ## sigsq = x$estimate["sigsq"],
                                     sigsq = 1,
-                                    kappa = x$kappa)
+                                    nu = x$nu)
            },
            "gaussian" = {
                sig_y <- comp_gauss_cov(x$call_data$dists,
@@ -133,29 +133,35 @@ predict_spm.spm_fit <- function(x, .aggregate = TRUE, ...) {
                    sparse = TRUE
                )
            },
-           "w1" = {
+           "gw" = {
                sig_y <- Matrix(
-                   comp_w1_cov(x$call_data$dists, 
+                   comp_gw_cov(x$call_data$dists, 
                                n = n_obs, n2 = n_obs,
                                phi   = x$estimate["phi"],
                                ## sigsq = x$estimate["sigsq"]
-                               sigsq = 1),
+                               sigsq = 1,
+                               kappa = x$gw_pars[1],
+                               mu    = x$gw_pars[2]),
                    sparse = TRUE
                )
                
                d_mat <- Matrix(
-                   comp_w1_cov(cross_dists = u_res_pred,
+                   comp_gw_cov(cross_dists = u_res_pred,
                                n = n_obs, n2 = n_pred,
                                phi   = x$estimate["phi"],
-                               sigsq = x$estimate["sigsq"]),
+                               sigsq = x$estimate["sigsq"],
+                               kappa = x$gw_pars[1],
+                               mu    = x$gw_pars[2]),
                    sparse = TRUE
                )
                
                sig_pred <- Matrix(
-                   w1_cov(dists = u_pred,
+                   gw_cov(dists = u_pred,
                           phi   = x$estimate["phi"],
                           ## sigsq = x$estimate["sigsq"]
-                          sigsq = 1),
+                          sigsq = 1,
+                          kappa = x$gw_pars[1],
+                          mu    = x$gw_pars[2]),
                    sparse = TRUE
                )
            },
@@ -166,7 +172,7 @@ predict_spm.spm_fit <- function(x, .aggregate = TRUE, ...) {
                                    phi   = x$estimate["phi"],
                                    ## sigsq = x$estimate["sigsq"]
                                    sigsq = 1,
-                                   kappa = x$kappa,
+                                   nu = x$nu,
                                    theta = x$taper_rg),
                    sparse = TRUE
                )
@@ -176,7 +182,7 @@ predict_spm.spm_fit <- function(x, .aggregate = TRUE, ...) {
                                    n = n_obs, n2 = n_pred,
                                    phi   = x$estimate["phi"],
                                    sigsq = x$estimate["sigsq"],
-                                   kappa = x$kappa,
+                                   nu = x$nu,
                                    theta = x$taper_rg),
                    sparse = TRUE
                )
@@ -186,7 +192,7 @@ predict_spm.spm_fit <- function(x, .aggregate = TRUE, ...) {
                               phi   = x$estimate["phi"],
                               ## sigsq = x$estimate["sigsq"]
                               sigsq = 1,
-                              kappa = x$kappa,
+                              nu = x$nu,
                               theta = x$taper_rg),
                    sparse = TRUE
                )
@@ -377,15 +383,15 @@ predict_spm.sf <- function(x, spm_obj,
     
     switch(spm_obj$model,
            "matern" = {
-               if(is.null(spm_obj$kappa))
-                   spm_obj$kappa <- .5
+               if(is.null(spm_obj$nu))
+                   spm_obj$nu <- .5
 
                sig_y <- comp_mat_cov(spm_obj$call_data$dists,
                                      n = n_obs, n2 = n_obs,
                                      phi   = spm_obj$estimate["phi"],
                                      ## sigsq = spm_obj$estimate["sigsq"],
                                      sigsq = 1,
-                                     kappa = spm_obj$kappa)
+                                     nu = spm_obj$nu)
                
                if(all(grepl("POINT", sf::st_geometry_type(x)))) {
                    sig_pred <-
@@ -393,64 +399,64 @@ predict_spm.sf <- function(x, spm_obj,
                                phi   = spm_obj$estimate["phi"],
                                ## sigsq = spm_obj$estimate["sigsq"],
                                sigsq = 1,
-                               kappa = spm_obj$kappa)
+                               nu = spm_obj$nu)
                    d_mat <- comp_mat_cov(cross_dists = u_res_pred,
                                          n = n_obs, n2 = n_pred,
                                          phi   = spm_obj$estimate["phi"],
                                          sigsq = spm_obj$estimate["sigsq"],
-                                         kappa = spm_obj$kappa)
+                                         nu = spm_obj$nu)
                } else {
                    d_mat <- comp_mat_cov(cross_dists = u_res_pred,
                                          n = n_pred, n2 = n_obs,
                                          phi   = spm_obj$estimate["phi"],
                                          sigsq = spm_obj$estimate["sigsq"],
-                                         kappa = spm_obj$kappa)
+                                         nu = spm_obj$nu)
                    sig_pred <-
                        comp_mat_cov(cross_dists = u_pred,
                                     n = n_pred, n2 = n_pred,
                                     phi   = spm_obj$estimate["phi"],
                                     ## sigsq = spm_obj$estimate["sigsq"],
                                     sigsq = 1,
-                                    kappa = spm_obj$kappa)
+                                    nu = spm_obj$nu)
                }
            },
            "pexp" = {
-               if(is.null(spm_obj$kappa))
-                   spm_obj$kappa <- 1
+               if(is.null(spm_obj$nu))
+                   spm_obj$nu <- 1
 
                sig_y <- comp_pexp_cov(spm_obj$call_data$dists,
                                       n = n_obs, n2 = n_obs,
                                       phi   = spm_obj$estimate["phi"],
                                       ## sigsq = spm_obj$estimate["sigsq"],
                                       sigsq = 1,
-                                      kappa = spm_obj$kappa)
+                                      nu = spm_obj$nu)
                if(all(grepl("POINT", sf::st_geometry_type(x)))) {
                    d_mat <-
                        comp_pexp_cov(cross_dists = u_res_pred,
                                      n = n_obs, n2 = n_pred,
                                      phi   = spm_obj$estimate["phi"],
                                      sigsq = spm_obj$estimate["sigsq"],
-                                     kappa = spm_obj$kappa)
+                                     nu = spm_obj$nu)
                    sig_pred <-
                        pexp_cov(dists = u_pred,
                                 phi   = spm_obj$estimate["phi"],
                                 ## sigsq = spm_obj$estimate["sigsq"],
                                 sigsq = 1,
-                                kappa = spm_obj$kappa)
+                                nu = spm_obj$nu)
                } else {
                    d_mat <-
                        comp_pexp_cov(cross_dists = u_res_pred,
                                      n = n_pred, n2 = n_obs,
                                      phi   = spm_obj$estimate["phi"],
                                      sigsq = spm_obj$estimate["sigsq"],
-                                     kappa = spm_obj$kappa)
+                                     nu = spm_obj$nu)
                    sig_pred <-
                        comp_pexp_cov(cross_dists = u_pred,
                                      n = n_pred, n2 = n_pred,
                                      phi   = spm_obj$estimate["phi"],
                                      ## sigsq = spm_obj$estimate["sigsq"],
                                      sigsq = 1,
-                                     kappa = spm_obj$kappa)
+                                     nu = spm_obj$nu)
                }
            },
            "gaussian" = {
@@ -566,43 +572,53 @@ predict_spm.sf <- function(x, spm_obj,
                    )
                }
            },
-           "w1" = {
+           "gw" = {
                sig_y <- Matrix(
-                   comp_w1_cov(spm_obj$call_data$dists, 
+                   comp_gw_cov(spm_obj$call_data$dists, 
                                n = n_obs, n2 = n_obs,
                                phi   = spm_obj$estimate["phi"],
-                               sigsq = 1),
+                               sigsq = 1,
+                               kappa = spm_obj$gw_pars[1],
+                               mu    = spm_obj$gw_pars[2]),
                    sparse = TRUE
                )
                if(all(grepl("POINT", sf::st_geometry_type(x)))) {
                    d_mat <- Matrix(
-                       comp_w1_cov(cross_dists = u_res_pred,
+                       comp_gw_cov(cross_dists = u_res_pred,
                                    n = n_obs, n2 = n_pred,
                                    phi   = spm_obj$estimate["phi"],
-                                   sigsq = spm_obj$estimate["sigsq"]),
+                                   sigsq = spm_obj$estimate["sigsq"],
+                                   kappa = spm_obj$gw_pars[1],
+                                   mu    = spm_obj$gw_pars[2]),
                        sparse = TRUE
                    )
                    sig_pred <- Matrix(
-                       w1_cov(dists = u_pred,
+                       gw_cov(dists = u_pred,
                               phi   = spm_obj$estimate["phi"],
                               ## sigsq = spm_obj$estimate["sigsq"]
-                              sigsq = 1),
+                              sigsq = 1,
+                              kappa = spm_obj$gw_pars[1],
+                              mu    = spm_obj$gw_pars[2]),
                        sparse = TRUE
                    )
                } else {
                    d_mat <- Matrix(
-                       comp_w1_cov(cross_dists = u_res_pred,
+                       comp_gw_cov(cross_dists = u_res_pred,
                                    n = n_pred, n2 = n_obs,
                                    phi   = spm_obj$estimate["phi"],
-                                   sigsq = spm_obj$estimate["sigsq"]),
+                                   sigsq = spm_obj$estimate["sigsq"],
+                                   kappa = spm_obj$gw_pars[1],
+                                   mu    = spm_obj$gw_pars[2]),
                        sparse = TRUE
                    )
                    sig_pred <- Matrix(
-                       comp_w1_cov(cross_dists = u_pred,
+                       comp_gw_cov(cross_dists = u_pred,
                                    n = n_pred, n2 = n_pred,
                                    phi   = spm_obj$estimate["phi"],
                                    ## sigsq = spm_obj$estimate["sigsq"],
-                                   sigsq = 1),
+                                   sigsq = 1,
+                                   kappa = spm_obj$gw_pars[1],
+                                   mu    = spm_obj$gw_pars[2]),
                        sparse = TRUE
                    )
                }
@@ -614,7 +630,7 @@ predict_spm.sf <- function(x, spm_obj,
                                    phi   = spm_obj$estimate["phi"],
                                    ## sigsq = spm_obj$estimate["sigsq"]
                                    sigsq = 1,
-                                   kappa = spm_obj$kappa,
+                                   nu = spm_obj$nu,
                                    theta = spm_obj$taper_rg),
                    sparse = TRUE
                )
@@ -624,7 +640,7 @@ predict_spm.sf <- function(x, spm_obj,
                                        n = n_obs, n2 = n_pred,
                                        phi   = spm_obj$estimate["phi"],
                                        sigsq = spm_obj$estimate["sigsq"],
-                                       kappa = spm_obj$kappa,
+                                       nu = spm_obj$nu,
                                        theta = spm_obj$taper_rg),
                        sparse = TRUE
                    )
@@ -633,7 +649,7 @@ predict_spm.sf <- function(x, spm_obj,
                                   phi   = spm_obj$estimate["phi"],
                                   ## sigsq = spm_obj$estimate["sigsq"]
                                   sigsq = 1,
-                                  kappa = spm_obj$kappa,
+                                  nu = spm_obj$nu,
                                   theta = spm_obj$taper_rg),
                        sparse = TRUE
                    )
@@ -643,7 +659,7 @@ predict_spm.sf <- function(x, spm_obj,
                                        n = n_pred, n2 = n_obs,
                                        phi   = spm_obj$estimate["phi"],
                                        sigsq = spm_obj$estimate["sigsq"],
-                                       kappa = spm_obj$kappa,
+                                       nu = spm_obj$nu,
                                        theta = spm_obj$taper_rg),
                        sparse = TRUE
                    )
@@ -652,7 +668,7 @@ predict_spm.sf <- function(x, spm_obj,
                                        phi   = spm_obj$estimate["phi"],
                                        ## sigsq = spm_obj$estimate["sigsq"]
                                        sigsq = 1,
-                                       kappa = spm_obj$kappa,
+                                       nu = spm_obj$nu,
                                        theta = spm_obj$taper_rg),
                        sparse = TRUE
                    )

@@ -33,18 +33,21 @@ fit_spm <- function(x, ...) UseMethod("fit_spm")
 ##'     being analyzed, and 2) if the input is a \code{spm} object.
 ##' @param model a \code{character} scalar indicating the family of the
 ##'     covariance function to be used. The options are \code{c("matern",
-##'     "pexp", "gaussian", "spherical")}.
-##' @param kappa a \code{numeric} value indicating either the \eqn{\kappa}
+##'     "pexp", "gaussian", "spherical", "gw")}.
+##' @param theta_st a \code{numeric} (named) vector containing the initial
+##'     parameters.
+##' @param nu a \code{numeric} value indicating either the \eqn{\nu}
 ##'     paramater from the Matern covariance function (controlling the process
 ##'     differentiability), or the "pexp" for the Powered Exponential family. If
-##'     the \code{model} chosen by the user is Matern and \code{kappa} is not
+##'     the \code{model} chosen by the user is Matern and \code{nu} is not
 ##'     informed, it is automatically set to .5. On the other hand, if the user
-##'     choses the Powered Exponential family and do not inform \code{kappa},
+##'     choses the Powered Exponential family and do not inform \code{nu},
 ##'     then it is set to 1. In both cases, the covariance function becomes the
 ##'     so covalled exponential covariance function.
 ##' @param tr tapper range
-##' @param theta_st a \code{numeric} (named) vector containing the initial
-##'     parameters.
+##' @param kappa \eqn{\kappa \in \{0, \ldots, 3 \}} parameter for the GW cov
+##'     function.
+##' @param mu2 the smoothness parameter \eqn{\mu} for the GW function.
 ##' @param apply_exp a \code{logical} scalar indicating wheter the parameters
 ##'     that cannot assume negative values should be exponentiate or not.
 ##' @param opt_method a \code{character} scalar indicating the optimization
@@ -67,8 +70,9 @@ fit_spm <- function(x, ...) UseMethod("fit_spm")
 ##' 
 ##' @export
 fit_spm.spm <- function(x, model, theta_st,
-                        kappa = NULL,
+                        nu = NULL,
                         tr = NULL,
+                        kappa = 1, mu2 = 1.5,
                         apply_exp = FALSE,
                         opt_method  = "Nelder-Mead",
                         control_opt = list(),
@@ -77,8 +81,12 @@ fit_spm.spm <- function(x, model, theta_st,
     stopifnot(!is.null(names(theta_st)))
     stopifnot(NCOL(x$var) == 1)
     stopifnot(inherits(x, "spm"))
-    if(! missing(kappa))
-        stopifnot(length(kappa) == 1)
+    if(! missing(nu))
+        stopifnot(length(nu) == 1)
+    stopifnot(model %in% c("matern", "pexp", "gaussian",
+                           "spherical", "cs", "gw"))
+    if(model == "gw")
+        stopifnot(mu2 >= 1)
     npar <- length(theta_st)
     p    <- npar + 2L
     if(npar == 2) {
@@ -92,8 +100,10 @@ fit_spm.spm <- function(x, model, theta_st,
                          dists   = x$dists,
                          npix    = x$npix,
                          model   = model,
-                         kappa   = kappa,
-                         tr      = tr,
+                         nu = nu,
+                         tr = tr,
+                         kappa = kappa,
+                         mu2 = mu2,
                          apply_exp = apply_exp,
                          ...)
     } else if(npar == 1) {
@@ -107,8 +117,10 @@ fit_spm.spm <- function(x, model, theta_st,
                          dists   = x$dists,
                          npix    = x$npix,
                          model   = model,
-                         kappa   = kappa,
-                         tr      = tr,
+                         nu = nu,
+                         tr = tr,
+                         kappa = kappa,
+                         mu2 = mu2,
                          apply_exp = apply_exp,
                          ...)
     }
@@ -129,24 +141,24 @@ fit_spm.spm <- function(x, model, theta_st,
     ## can be turned in to a function to make to code cleaner
     switch(model,
            "matern" = {
-               if(is.null(kappa))
-                   kappa <- .5
+               if(is.null(nu))
+                   nu <- .5
 
                V <- comp_mat_cov(x$dists,
                                  n = .n, n2 = .n,
                                  phi   = estimates["phi"],
                                  sigsq = 1,
-                                 kappa = kappa)
+                                 nu = nu)
            },
            "pexp" = {
-               if(is.null(kappa))
-                   kappa <- 1
+               if(is.null(nu))
+                   nu <- 1
 
                V <- comp_pexp_cov(x$dists,
                                   n = .n, n2 = .n,
                                   phi   = estimates["phi"],
                                   sigsq = 1,
-                                  kappa = kappa)
+                                  nu = nu)
            },
            "gaussian" = {
                V <- comp_gauss_cov(x$dists,
@@ -163,12 +175,14 @@ fit_spm.spm <- function(x, model, theta_st,
                    sparse = TRUE
                )
            },
-           "w1" = {
+           "gw" = {
                V <- Matrix(
-                   comp_w1_cov(x$dists,
+                   comp_gw_cov(x$dists,
                                n = .n, n2 = .n,
                                phi   = estimates["phi"],
-                               sigsq = 1),
+                               sigsq = 1,
+                               kappa = kappa,
+                               mu    = mu2),
                    sparse = TRUE
                )
            },
@@ -187,7 +201,7 @@ fit_spm.spm <- function(x, model, theta_st,
                                    n = .n, n2 = .n,
                                    phi   = estimates["phi"],
                                    sigsq = 1,
-                                   kappa = kappa,
+                                   nu = nu,
                                    theta = tr),
                    sparse = TRUE
                )
@@ -213,8 +227,10 @@ fit_spm.spm <- function(x, model, theta_st,
                                   dists = x$dists,
                                   npix = x$npix,
                                   model = model,
+                                  nu = nu,
+                                  tr = tr,
                                   kappa = kappa,
-                                  tr    = tr,
+                                  mu2 = mu2,
                                   apply_exp = FALSE)
             )
         } else {
@@ -236,8 +252,10 @@ fit_spm.spm <- function(x, model, theta_st,
                                   dists = x$dists,
                                   npix = x$npix,
                                   model = model,
+                                  nu = nu,
+                                  tr = tr,
                                   kappa = kappa,
-                                  tr    = tr,
+                                  mu2 = mu2,
                                   apply_exp = FALSE)
             )
         } else {
@@ -255,8 +273,9 @@ fit_spm.spm <- function(x, model, theta_st,
         log_lik   = - op_val$value,
         call_data = x,
         model     = model,
-        kappa     = kappa,
-        taper_rg  = tr
+        nu        = nu,
+        taper_rg  = tr,
+        gw_pars   = c(kappa, mu2)
     )
 
     class(output) <- append(class(output), "spm_fit")
@@ -266,7 +285,7 @@ fit_spm.spm <- function(x, model, theta_st,
 
 ## ##' @name fit_spm
 ## fit_spm2 <- function(x, model, theta_st,
-##                      kappa = NULL,
+##                      nu = NULL,
 ##                      apply_exp = FALSE,
 ##                      opt_method  = "Nelder-Mead",
 ##                      control_opt = list(),
@@ -285,7 +304,7 @@ fit_spm.spm <- function(x, model, theta_st,
 ##                      dists   = x$dists,
 ##                      npix    = x$npix,
 ##                      model   = model,
-##                      kappa   = kappa,
+##                      nu   = nu,
 ##                      apply_exp = apply_exp,
 ##                      ...)
 ##     estimates <- op_val$par
@@ -302,22 +321,22 @@ fit_spm.spm <- function(x, model, theta_st,
 ##     ## can be turned in to a function to make to code cleaner
 ##     switch(model,
 ##            "matern" = {
-##                if(is.null(kappa))
-##                    kappa <- .5
+##                if(is.null(nu))
+##                    nu <- .5
 ##                V <- comp_mat_cov(x$dists,
 ##                                  n = .n, n2 = .n,
 ##                                  phi   = estimates["phi"],
 ##                                  sigsq = 1,
-##                                  kappa = kappa)
+##                                  nu = nu)
 ##            },
 ##            "pexp" = {
-##                if(is.null(kappa))
-##                    kappa <- 1
+##                if(is.null(nu))
+##                    nu <- 1
 ##                V <- comp_pexp_cov(x$dists,
 ##                                   n = .n, n2 = .n,
 ##                                   phi   = estimates["phi"],
 ##                                   sigsq = 1,
-##                                   kappa = kappa)
+##                                   nu = nu)
 ##            },
 ##            "gaussian" = {
 ##                V <- comp_gauss_cov(x$dists,
@@ -349,7 +368,7 @@ fit_spm.spm <- function(x, model, theta_st,
 ##                              dists = x$dists,
 ##                              npix = x$npix,
 ##                              model = model,
-##                              kappa = kappa,
+##                              nu = nu,
 ##                              apply_exp = FALSE)
 ##         )
 ##     } else {
@@ -362,7 +381,7 @@ fit_spm.spm <- function(x, model, theta_st,
 ##                            "yes", "no"),
 ##         call_data = x,
 ##         model     = model,
-##         kappa     = kappa
+##         nu     = nu
 ##     )
 ##     class(output) <- append(class(output), "spm_fit")
 ##     return(output)
@@ -408,17 +427,20 @@ summary_spm_fit <- function(x, sig = .05) {
 
 ##' @name fit_spm
 ##' @export
-fit_spm2 <- function(x, model, kappa,
+fit_spm2 <- function(x, model, nu,
                      tr,
+                     kappa = 1, mu2 = 1.5,
                      comp_hess = TRUE, 
                      phi_min, phi_max, nphi = 10) {
     stopifnot(NCOL(x$var) == 1)
     stopifnot(inherits(x, "spm"))
     stopifnot(length(nphi) == 1)
     stopifnot(model %in% c("matern", "pexp", "gaussian",
-                           "spherical", "cs", "w1"))
-    if(! missing(kappa))
-        stopifnot(length(kappa) == 1)
+                           "spherical", "cs", "gw"))
+    if(model == "gw")
+        stopifnot(mu2 >= 1)
+    if(! missing(nu))
+        stopifnot(length(nu) == 1)
     
     my_phi <- seq(from = phi_min,
                   to   = phi_max,
@@ -431,7 +453,8 @@ fit_spm2 <- function(x, model, kappa,
     for( i in seq_along(my_phi) ) {
         pl[i] <- singl_log_lik_nn(my_phi[i], .dt = x$var,
                                   dists = x$dists, npix = 1,
-                                  model = model, kappa = kappa)
+                                  model = model, nu = nu,
+                                  kappa = kappa, mu2 = mu2)
     }
 
     k <- which.min(pl[seq_len(nphi)])
@@ -451,7 +474,8 @@ fit_spm2 <- function(x, model, kappa,
         pl[i + nphi] <- 
             singl_log_lik_nn(my_phi2[i], .dt = x$var,
                              dists = x$dists, npix = 1,
-                             model = model, kappa = kappa)
+                             model = model, nu = nu,
+                             kappa = kappa, mu2 = mu2)
     }
 
     phi_out <- c(my_phi, my_phi2)[which.min(pl)]
@@ -461,24 +485,24 @@ fit_spm2 <- function(x, model, kappa,
     ## can be turned in to a function to make to code cleaner
     switch(model,
            "matern" = {
-               if(is.null(kappa))
-                   kappa <- .5
+               if(is.null(nu))
+                   nu <- .5
 
                V <- comp_mat_cov(x$dists,
                                  n = .n, n2 = .n,
                                  phi   = phi_out,
                                  sigsq = 1,
-                                 kappa = kappa)
+                                 nu = nu)
            },
            "pexp" = {
-               if(is.null(kappa))
-                   kappa <- 1
+               if(is.null(nu))
+                   nu <- 1
 
                V <- comp_pexp_cov(x$dists,
                                   n = .n, n2 = .n,
                                   phi   = phi_out,
                                   sigsq = 1,
-                                  kappa = kappa)
+                                  nu = nu)
            },
            "gaussian" = {
                V <- comp_gauss_cov(x$dists,
@@ -495,12 +519,14 @@ fit_spm2 <- function(x, model, kappa,
                    sparse = TRUE
                )
            },
-           "w1" = {
+           "gw" = {
                V <- Matrix(
-                   comp_w1_cov(x$dists,
+                   comp_gw_cov(x$dists,
                                n = .n, n2 = .n,
                                phi   = phi_out,
-                               sigsq = 1),
+                               sigsq = 1,
+                               kappa = kappa,
+                               mu    = mu2),
                    sparse = TRUE
                )
            },
@@ -519,7 +545,7 @@ fit_spm2 <- function(x, model, kappa,
                                    n = .n, n2 = .n,
                                    phi   = phi_out,
                                    sigsq = 1,
-                                   kappa = kappa,
+                                   nu = nu,
                                    theta = tr),
                    sparse = TRUE
                )
@@ -543,8 +569,10 @@ fit_spm2 <- function(x, model, kappa,
                               dists = x$dists,
                               npix = x$npix,
                               model = model,
-                              kappa = kappa,
+                              nu = nu,
                               tr    = tr,
+                              kappa = kappa,
+                              mu2   = mu2,
                               apply_exp = FALSE)
         )
     } else {
@@ -560,7 +588,8 @@ fit_spm2 <- function(x, model, kappa,
         log_lik   = - pl[which.min(pl)],
         call_data = x,
         model     = model,
-        kappa     = kappa
+        nu        = nu,
+        gw_pars   = c(kappa, mu2)
     )
     
     class(output) <- append(class(output), "spm_fit")

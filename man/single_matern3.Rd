@@ -2,7 +2,7 @@
 % Please edit documentation in R/RcppExports.R
 \name{single_matern3}
 \alias{single_matern3}
-\title{Matern covariance function (scalar - kappa = 3/2)}
+\title{Matern covariance function (scalar - nu = 3/2)}
 \usage{
 single_matern3(d, sigsq, phi)
 }
@@ -22,7 +22,7 @@ observations \code{d} apart of each other.
 }
 \description{
 Computing the Matern covariance function for a single distance
-measure, with \eqn{\kappa = 3/2}.
+measure, with \eqn{\nu = 3/2}.
 }
 \seealso{
 \code{\link{single_matern}}, \code{\link{single_matern5}}

@@ -4,12 +4,24 @@
 \alias{find_phi}
 \title{Find phi parameter for the Exponential spatial auto-correlation function}
 \usage{
-find_phi(d, kappa, family = "matern", range = c(1e-04, 1000), cut = 0.05)
+find_phi(
+  d,
+  nu,
+  kappa,
+  mu2,
+  family = "matern",
+  range = c(1e-04, 1000),
+  cut = 0.05
+)
 }
 \arguments{
 \item{d}{maximun distance for spatial dependence equal to \code{cut}.}
 
-\item{kappa}{smoothness parameter associated with the Matern cov. function.}
+\item{nu}{smoothness parameter associated with the Matern cov. function.}
+
+\item{kappa}{par GW}
+
+\item{mu2}{smoothness GW}
 
 \item{family}{covariance function family}
 
