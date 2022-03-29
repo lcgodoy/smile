@@ -386,7 +386,11 @@ predict_spm.sf <- function(x, spm_obj,
                                      ## sigsq = spm_obj$estimate["sigsq"],
                                      sigsq = 1,
                                      kappa = spm_obj$kappa)
-               
+               d_mat <- comp_mat_cov(cross_dists = u_res_pred,
+                                     n = n_obs, n2 = n_pred,
+                                     phi   = spm_obj$estimate["phi"],
+                                     sigsq = spm_obj$estimate["sigsq"],
+                                     kappa = spm_obj$kappa)
                if(all(grepl("POINT", sf::st_geometry_type(x)))) {
                    sig_pred <-
                        mat_cov(dists = u_pred,
@@ -394,17 +398,7 @@ predict_spm.sf <- function(x, spm_obj,
                                ## sigsq = spm_obj$estimate["sigsq"],
                                sigsq = 1,
                                kappa = spm_obj$kappa)
-                   d_mat <- comp_mat_cov(cross_dists = u_res_pred,
-                                         n = n_obs, n2 = n_pred,
-                                         phi   = spm_obj$estimate["phi"],
-                                         sigsq = spm_obj$estimate["sigsq"],
-                                         kappa = spm_obj$kappa)
                } else {
-                   d_mat <- comp_mat_cov(cross_dists = u_res_pred,
-                                         n = n_pred, n2 = n_obs,
-                                         phi   = spm_obj$estimate["phi"],
-                                         sigsq = spm_obj$estimate["sigsq"],
-                                         kappa = spm_obj$kappa)
                    sig_pred <-
                        comp_mat_cov(cross_dists = u_pred,
                                     n = n_pred, n2 = n_pred,
@@ -424,13 +418,13 @@ predict_spm.sf <- function(x, spm_obj,
                                       ## sigsq = spm_obj$estimate["sigsq"],
                                       sigsq = 1,
                                       kappa = spm_obj$kappa)
+               d_mat <-
+                   comp_pexp_cov(cross_dists = u_res_pred,
+                                 n = n_obs, n2 = n_pred,
+                                 phi   = spm_obj$estimate["phi"],
+                                 sigsq = spm_obj$estimate["sigsq"],
+                                 kappa = spm_obj$kappa)
                if(all(grepl("POINT", sf::st_geometry_type(x)))) {
-                   d_mat <-
-                       comp_pexp_cov(cross_dists = u_res_pred,
-                                     n = n_obs, n2 = n_pred,
-                                     phi   = spm_obj$estimate["phi"],
-                                     sigsq = spm_obj$estimate["sigsq"],
-                                     kappa = spm_obj$kappa)
                    sig_pred <-
                        pexp_cov(dists = u_pred,
                                 phi   = spm_obj$estimate["phi"],
@@ -438,12 +432,6 @@ predict_spm.sf <- function(x, spm_obj,
                                 sigsq = 1,
                                 kappa = spm_obj$kappa)
                } else {
-                   d_mat <-
-                       comp_pexp_cov(cross_dists = u_res_pred,
-                                     n = n_pred, n2 = n_obs,
-                                     phi   = spm_obj$estimate["phi"],
-                                     sigsq = spm_obj$estimate["sigsq"],
-                                     kappa = spm_obj$kappa)
                    sig_pred <-
                        comp_pexp_cov(cross_dists = u_pred,
                                      n = n_pred, n2 = n_pred,
@@ -459,21 +447,17 @@ predict_spm.sf <- function(x, spm_obj,
                                        phi   = spm_obj$estimate["phi"],
                                        ## sigsq = spm_obj$estimate["sigsq"]
                                        sigsq = 1)
+               d_mat <- comp_gauss_cov(cross_dists = u_res_pred,
+                                       n = n_obs, n2 = n_pred,
+                                       phi   = spm_obj$estimate["phi"],
+                                       sigsq = spm_obj$estimate["sigsq"])
                if(all(grepl("POINT", sf::st_geometry_type(x)))) {
-                   d_mat <- comp_gauss_cov(cross_dists = u_res_pred,
-                                           n = n_obs, n2 = n_pred,
-                                           phi   = spm_obj$estimate["phi"],
-                                           sigsq = spm_obj$estimate["sigsq"])
                    sig_pred <-
                        gauss_cov(dists = u_pred,
                                  phi   = spm_obj$estimate["phi"],
                                  ## sigsq = spm_obj$estimate["sigsq"]
                                  sigsq = 1)
                } else {
-                   d_mat <- comp_gauss_cov(cross_dists = u_res_pred,
-                                           n = n_pred, n2 = n_obs,
-                                           phi   = spm_obj$estimate["phi"],
-                                           sigsq = spm_obj$estimate["sigsq"])
                    sig_pred <-
                        comp_gauss_cov(cross_dists = u_pred,
                                       n = n_pred, n2 = n_pred,
@@ -491,14 +475,14 @@ predict_spm.sf <- function(x, spm_obj,
                                   sigsq = 1),
                    sparse = TRUE
                )
+               d_mat <- Matrix(
+                   comp_spher_cov(cross_dists = u_res_pred,
+                                  n = n_obs, n2 = n_pred,
+                                  phi   = spm_obj$estimate["phi"],
+                                  sigsq = spm_obj$estimate["sigsq"]),
+                   sparse = TRUE
+               )
                if(all(grepl("POINT", sf::st_geometry_type(x)))) {
-                   d_mat <- Matrix(
-                       comp_spher_cov(cross_dists = u_res_pred,
-                                      n = n_obs, n2 = n_pred,
-                                      phi   = spm_obj$estimate["phi"],
-                                      sigsq = spm_obj$estimate["sigsq"]),
-                       sparse = TRUE
-                   )
                    sig_pred <- Matrix(
                        spher_cov(dists = u_pred,
                                  phi   = spm_obj$estimate["phi"],
@@ -507,14 +491,6 @@ predict_spm.sf <- function(x, spm_obj,
                        sparse = TRUE
                    )
                } else {
-                   d_mat <- Matrix(
-                       comp_spher_cov(cross_dists = u_res_pred,
-                                      n = n_pred, n2 = n_obs,
-                                      phi   = spm_obj$estimate["phi"],
-                                      ## sigsq = spm_obj$estimate["sigsq"]
-                                      sigsq = 1),
-                       sparse = TRUE
-                   )
                    sig_pred <- Matrix(
                        comp_spher_cov(cross_dists = u_pred,
                                       n = n_pred, n2 = n_pred,
@@ -533,14 +509,14 @@ predict_spm.sf <- function(x, spm_obj,
                                sigsq = 1),
                    sparse = TRUE
                )
+               d_mat <- Matrix(
+                   comp_cs_cov(cross_dists = u_res_pred,
+                               n = n_obs, n2 = n_pred,
+                               phi   = spm_obj$estimate["phi"],
+                               sigsq = spm_obj$estimate["sigsq"]),
+                   sparse = TRUE
+               )
                if(all(grepl("POINT", sf::st_geometry_type(x)))) {
-                   d_mat <- Matrix(
-                       comp_cs_cov(cross_dists = u_res_pred,
-                                   n = n_obs, n2 = n_pred,
-                                   phi   = spm_obj$estimate["phi"],
-                                   sigsq = spm_obj$estimate["sigsq"]),
-                       sparse = TRUE
-                   )
                    sig_pred <- Matrix(
                        cs_cov(dists = u_pred,
                               phi   = spm_obj$estimate["phi"],
@@ -549,13 +525,6 @@ predict_spm.sf <- function(x, spm_obj,
                        sparse = TRUE
                    )
                } else {
-                   d_mat <- Matrix(
-                       comp_cs_cov(cross_dists = u_res_pred,
-                                   n = n_pred, n2 = n_obs,
-                                   phi   = spm_obj$estimate["phi"],
-                                   sigsq = spm_obj$estimate["sigsq"]),
-                       sparse = TRUE
-                   )
                    sig_pred <- Matrix(
                        comp_cs_cov(cross_dists = u_pred,
                                    n = n_pred, n2 = n_pred,
@@ -574,14 +543,14 @@ predict_spm.sf <- function(x, spm_obj,
                                sigsq = 1),
                    sparse = TRUE
                )
+               d_mat <- Matrix(
+                   comp_w1_cov(cross_dists = u_res_pred,
+                               n = n_obs, n2 = n_pred,
+                               phi   = spm_obj$estimate["phi"],
+                               sigsq = spm_obj$estimate["sigsq"]),
+                   sparse = TRUE
+               )
                if(all(grepl("POINT", sf::st_geometry_type(x)))) {
-                   d_mat <- Matrix(
-                       comp_w1_cov(cross_dists = u_res_pred,
-                                   n = n_obs, n2 = n_pred,
-                                   phi   = spm_obj$estimate["phi"],
-                                   sigsq = spm_obj$estimate["sigsq"]),
-                       sparse = TRUE
-                   )
                    sig_pred <- Matrix(
                        w1_cov(dists = u_pred,
                               phi   = spm_obj$estimate["phi"],
@@ -590,13 +559,6 @@ predict_spm.sf <- function(x, spm_obj,
                        sparse = TRUE
                    )
                } else {
-                   d_mat <- Matrix(
-                       comp_w1_cov(cross_dists = u_res_pred,
-                                   n = n_pred, n2 = n_obs,
-                                   phi   = spm_obj$estimate["phi"],
-                                   sigsq = spm_obj$estimate["sigsq"]),
-                       sparse = TRUE
-                   )
                    sig_pred <- Matrix(
                        comp_w1_cov(cross_dists = u_pred,
                                    n = n_pred, n2 = n_pred,
@@ -618,16 +580,16 @@ predict_spm.sf <- function(x, spm_obj,
                                    theta = spm_obj$taper_rg),
                    sparse = TRUE
                )
+               d_mat <- Matrix(
+                   comp_tapmat_cov(cross_dists = u_res_pred,
+                                   n = n_obs, n2 = n_pred,
+                                   phi   = spm_obj$estimate["phi"],
+                                   sigsq = spm_obj$estimate["sigsq"],
+                                   kappa = spm_obj$kappa,
+                                   theta = spm_obj$taper_rg),
+                   sparse = TRUE
+               )
                if(all(grepl("POINT", sf::st_geometry_type(x)))) {
-                   d_mat <- Matrix(
-                       comp_tapmat_cov(cross_dists = u_res_pred,
-                                       n = n_obs, n2 = n_pred,
-                                       phi   = spm_obj$estimate["phi"],
-                                       sigsq = spm_obj$estimate["sigsq"],
-                                       kappa = spm_obj$kappa,
-                                       theta = spm_obj$taper_rg),
-                       sparse = TRUE
-                   )
                    sig_pred <- Matrix(
                        tapmat_cov(dists = u_pred,
                                   phi   = spm_obj$estimate["phi"],
@@ -638,15 +600,6 @@ predict_spm.sf <- function(x, spm_obj,
                        sparse = TRUE
                    )
                } else {
-                   d_mat <- Matrix(
-                       comp_tapmat_cov(cross_dists = u_res_pred,
-                                       n = n_pred, n2 = n_obs,
-                                       phi   = spm_obj$estimate["phi"],
-                                       sigsq = spm_obj$estimate["sigsq"],
-                                       kappa = spm_obj$kappa,
-                                       theta = spm_obj$taper_rg),
-                       sparse = TRUE
-                   )
                    sig_pred <- Matrix(
                        comp_tapmat_cov(cross_dists = u_pred,
                                        phi   = spm_obj$estimate["phi"],
@@ -696,25 +649,14 @@ predict_spm.sf <- function(x, spm_obj,
         
         sig_pred <- spm_obj$estimate["sigsq"] * sig_pred
     }
-    
     ## sig_y_inv <- solve(sig_y)
     sig_y_inv <- chol2inv(chol(sig_y))
-    
     mean_y <- matrix(rep(spm_obj$estimate["mu"], n_obs),
                      ncol = 1)
-
     mean_pred <- matrix(rep(spm_obj$estimate["mu"], n_pred),
                         ncol = 1)
-
-    if(all(grepl("POINT", sf::st_geometry_type(x)))) {
-        dt_yinv <- crossprod(d_mat, sig_y_inv)
-        sig_pred_y <- sig_pred - (dt_yinv %*% d_mat)
-    }
-    else {
-        dt_yinv  <- d_mat %*% sig_y_inv    
-        sig_pred_y <- sig_pred - tcrossprod(dt_yinv, d_mat)
-    }
-    
+    dt_yinv <- crossprod(d_mat, sig_y_inv)
+    sig_pred_y <- sig_pred - (dt_yinv %*% d_mat)
     mean_pred_y <- mean_pred +
         dt_yinv %*% (spm_obj$call_data$var - mean_y)
 
