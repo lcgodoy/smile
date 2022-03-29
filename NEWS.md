@@ -13,3 +13,7 @@
 
 * fixed Wendland (1) covariance function
 * support for sparse covariance matrices through the `Matrix` package
+
+# smile 1.0.3.1
+
+* bug fixes for prediction
