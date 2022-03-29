@@ -96,7 +96,6 @@ List single_dists(const List& mat_list) {
       k += 1;
     }
   }
-  
   return out;
 }
 
@@ -109,7 +108,7 @@ List mult_dists(const List& mat_list1, const List& mat_list2,
   List out_cross(n1 * n2);
   for(int i = 0; i < n1; i++) {
     for(int j = 0; j < n2; j++) {
-      out_cross[k] = crossdist(mat_list1[i], mat_list2[j]);
+      out_cross[k] = crossdist(mat_list1[j], mat_list2[i]);
       k += 1;
     }
   }
@@ -118,7 +117,6 @@ List mult_dists(const List& mat_list1, const List& mat_list2,
 			      Rcpp::Named("dists_2") = single_dists(mat_list2),
 			      Rcpp::Named("cross")   = out_cross);
   }
-
   return out_cross;
 }
 
