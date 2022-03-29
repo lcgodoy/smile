@@ -42,7 +42,6 @@ dist_from_grids <- function(y_grid,  by) {
 mult_dist_from_grids <- function(y_grid, x_grid, by) {
     y_list <- sf::st_coordinates(y_grid)
     
-
     y_list <- split(x = as.data.frame(y_list),
                     f = factor(y_grid[[by[2]]],
                                levels = unique(y_grid[[by[1]]])))
