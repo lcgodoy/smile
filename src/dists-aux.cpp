@@ -106,8 +106,8 @@ List mult_dists(const List& mat_list1, const List& mat_list2,
 		const bool& return_single) {
   int n1 = mat_list1.size(), n2 = mat_list2.size(), k = 0;
   List out_cross(n1 * n2);
-  for(int i = 0; i < n1; i++) {
-    for(int j = 0; j < n2; j++) {
+  for(int i = 0; i < n2; i++) {
+    for(int j = 0; j < n1; j++) {
       out_cross[k] = crossdist(mat_list1[j], mat_list2[i]);
       k += 1;
     }
