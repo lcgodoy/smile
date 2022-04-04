@@ -4,7 +4,7 @@
 \alias{comp_pexp_cov}
 \title{Powered Exponential covariance function for a polygons.}
 \usage{
-comp_pexp_cov(cross_dists, n, n2, sigsq, phi, kappa)
+comp_pexp_cov(cross_dists, n, n2, sigsq, phi, nu)
 }
 \arguments{
 \item{cross_dists}{a \code{list} such that each position contains the cross
@@ -23,7 +23,7 @@ covariance function.}
 \item{phi}{the \eqn{\phi} parameter from the Powered Exponential covariance
 function, controls the range of the spatial dependence.}
 
-\item{kappa}{the \eqn{\kappa \in (0, 2]} parameter representing the "power"}
+\item{nu}{the \eqn{\nu \in (0, 2]} parameter representing the "power"}
 }
 \value{
 The powered exponential covariance matrix associated with a set of

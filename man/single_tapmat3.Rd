@@ -2,7 +2,7 @@
 % Please edit documentation in R/RcppExports.R
 \name{single_tapmat3}
 \alias{single_tapmat3}
-\title{Tappered Matern covariance function (scalar - kappa = 3/2)}
+\title{Tappered Matern covariance function (scalar - nu = 3/2)}
 \usage{
 single_tapmat3(d, sigsq, phi, theta)
 }
@@ -24,7 +24,7 @@ observations \code{d} apart of each other.
 }
 \description{
 Computing the Matern covariance function for a single distance
-measure, with \eqn{\kappa = 3/2}.
+measure, with \eqn{\nu = 3/2}.
 }
 \seealso{
 \code{\link{single_matern}}, \code{\link{single_matern5}}

@@ -4,7 +4,7 @@
 \alias{mat_cov}
 \title{Matern covariance function for a given distance matrix.}
 \usage{
-mat_cov(dists, sigsq, phi, kappa)
+mat_cov(dists, sigsq, phi, nu)
 }
 \arguments{
 \item{dists}{a numeric matrix representing the distance between spatial
@@ -16,7 +16,7 @@ function.}
 \item{phi}{the \eqn{\phi} parameter from the Matern covariance function,
 controls the range of the spatial dependence.}
 
-\item{kappa}{the \eqn{\kappa} parameter from the Matern covariance function,
+\item{nu}{the \eqn{\nu} parameter from the Matern covariance function,
 controls the differentiability of the process.}
 }
 \value{

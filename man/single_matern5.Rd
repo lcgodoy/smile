@@ -2,7 +2,7 @@
 % Please edit documentation in R/RcppExports.R
 \name{single_matern5}
 \alias{single_matern5}
-\title{Matern covariance function (scalar - kappa = 5/2)}
+\title{Matern covariance function (scalar - nu = 5/2)}
 \usage{
 single_matern5(d, sigsq, phi)
 }
@@ -22,7 +22,7 @@ observations \code{d} apart of each other.
 }
 \description{
 Computing the Matern covariance function for a single distance
-measure, with \eqn{\kappa = 5/2}.
+measure, with \eqn{\nu = 5/2}.
 }
 \seealso{
 \code{\link{single_matern}}, \code{\link{single_matern3}}

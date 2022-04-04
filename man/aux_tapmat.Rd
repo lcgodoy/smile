@@ -4,7 +4,7 @@
 \alias{aux_tapmat}
 \title{Mean of a (Matern - Wendland-1 tapper) covariance function (Internal use)}
 \usage{
-aux_tapmat(dist, sigsq, phi, kappa, theta)
+aux_tapmat(dist, sigsq, phi, nu, theta)
 }
 \arguments{
 \item{sigsq}{the \eqn{\sigma^2} parameter from the Matern covariance
@@ -16,7 +16,7 @@ function.}
 entities.}
 }
 \value{
-The mean of \code{mat_cov(dist, sigsq, phi, kappa)}.
+The mean of \code{mat_cov(dist, sigsq, phi, nu)}.
 }
 \description{
 This is an auxilliary function for internal use. It helps to

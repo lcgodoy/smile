@@ -4,7 +4,7 @@
 \alias{aux_pexp}
 \title{Mean of a (Powered Exponential) covariance function (Internal use)}
 \usage{
-aux_pexp(dist, sigsq, phi, kappa)
+aux_pexp(dist, sigsq, phi, nu)
 }
 \arguments{
 \item{sigsq}{the \eqn{\sigma^2} parameter from the Powered Exponential
@@ -13,7 +13,7 @@ covariance function.}
 \item{phi}{the \eqn{\phi} parameter from the Powered Exponential covariance
 function, controls the range of the spatial dependence.}
 
-\item{kappa}{the \eqn{\kappa} parameter from the Powered Exponential
+\item{nu}{the \eqn{\nu} parameter from the Powered Exponential
 covariance function,
 controls the differentiability of the process.}
 
@@ -21,7 +21,7 @@ controls the differentiability of the process.}
 entities.}
 }
 \value{
-The mean of \code{pexp_cov(dist, sigsq, phi, kappa)}.
+The mean of \code{pexp_cov(dist, sigsq, phi, nu)}.
 }
 \description{
 This is an auxilliary function for internal use. It helps to

@@ -4,7 +4,7 @@
 \alias{single_matern}
 \title{Matern covariance function (scalar - generic)}
 \usage{
-single_matern(d, sigsq, phi, kappa)
+single_matern(d, sigsq, phi, nu)
 }
 \arguments{
 \item{d}{a scalar representing the distance on which it is desired to
@@ -16,7 +16,7 @@ function.}
 \item{phi}{the \eqn{\phi} parameter from the Matern covariance function,
 controls the range of the spatial dependence.}
 
-\item{kappa}{the \eqn{\kappa} parameter from the Matern covariance function,
+\item{nu}{the \eqn{\nu} parameter from the Matern covariance function,
 controls the differentiability of the process.}
 }
 \value{

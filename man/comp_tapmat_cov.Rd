@@ -4,7 +4,7 @@
 \alias{comp_tapmat_cov}
 \title{Wendland-1 covariance function for a polygons.}
 \usage{
-comp_tapmat_cov(cross_dists, n, n2, sigsq, phi, kappa, theta)
+comp_tapmat_cov(cross_dists, n, n2, sigsq, phi, nu, theta)
 }
 \arguments{
 \item{cross_dists}{a \code{list} such that each position contains the cross
@@ -20,7 +20,12 @@ the same space.}
 \item{sigsq}{the \eqn{\sigma^2} parameter from the Matern covariance
 function.}
 
-\item{phi}{the \eqn{\phi} parameter from the Matern covariance function,'}
+\item{phi}{the \eqn{\phi} parameter from the Matern covariance function}
+
+\item{nu}{the smoothness parameter \eqn{\nu} parameter from the Matern
+covariance function}
+
+\item{theta}{the taper distance.}
 }
 \value{
 The wendland-1 covariance matrix associated with a set of polygons.

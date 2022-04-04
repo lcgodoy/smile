@@ -23,7 +23,7 @@ NULL
 #'   function.
 #' @param phi the \eqn{\phi} parameter from the Matern covariance function,
 #'   controls the range of the spatial dependence.
-#' @param kappa the \eqn{\kappa} parameter from the Matern covariance function,
+#' @param nu the \eqn{\nu} parameter from the Matern covariance function,
 #'   controls the differentiability of the process.
 #'
 #' @return a scalar representing the (matern) covariance between two
@@ -33,14 +33,14 @@ NULL
 #'   \code{\link{single_exp}}, \code{\link{mat_cov}}
 #' 
 #' @keywords internal
-single_matern <- function(d, sigsq, phi, kappa) {
-    .Call(`_smile_single_matern`, d, sigsq, phi, kappa)
+single_matern <- function(d, sigsq, phi, nu) {
+    .Call(`_smile_single_matern`, d, sigsq, phi, nu)
 }
 
-#' @title Matern covariance function (scalar - kappa = 3/2)
+#' @title Matern covariance function (scalar - nu = 3/2)
 #'
 #' @description Computing the Matern covariance function for a single distance
-#'   measure, with \eqn{\kappa = 3/2}.
+#'   measure, with \eqn{\nu = 3/2}.
 #'
 #' @param d a scalar representing the distance on which it is desired to
 #'   evaluate the covariance function.
@@ -60,10 +60,10 @@ single_matern3 <- function(d, sigsq, phi) {
     .Call(`_smile_single_matern3`, d, sigsq, phi)
 }
 
-#' @title Matern covariance function (scalar - kappa = 5/2)
+#' @title Matern covariance function (scalar - nu = 5/2)
 #'
 #' @description Computing the Matern covariance function for a single distance
-#'   measure, with \eqn{\kappa = 5/2}.
+#'   measure, with \eqn{\nu = 5/2}.
 #'
 #' @param d a scalar representing the distance on which it is desired to
 #'   evaluate the covariance function.
@@ -120,7 +120,7 @@ single_exp <- function(d, sigsq, phi) {
 #'   function.
 #' @param phi the \eqn{\phi} parameter from the Matern covariance function,
 #'   controls the range of the spatial dependence.
-#' @param kappa the \eqn{\kappa} parameter from the Matern covariance function,
+#' @param nu the \eqn{\nu} parameter from the Matern covariance function,
 #'   controls the differentiability of the process.
 #' 
 #' @return The matern covariance function (for a stationary and isotropic
@@ -130,8 +130,8 @@ single_exp <- function(d, sigsq, phi) {
 #' @seealso \code{\link{single_exp}}, \code{\link{single_matern}}
 #' 
 #' @keywords internal
-mat_cov <- function(dists, sigsq, phi, kappa) {
-    .Call(`_smile_mat_cov`, dists, sigsq, phi, kappa)
+mat_cov <- function(dists, sigsq, phi, nu) {
+    .Call(`_smile_mat_cov`, dists, sigsq, phi, nu)
 }
 
 #' @title Mean of a (Matern) covariance function (Internal use)
@@ -146,13 +146,13 @@ mat_cov <- function(dists, sigsq, phi, kappa) {
 #'   function.
 #' @param phi the \eqn{\phi} parameter from the Matern covariance function,
 #'   controls the range of the spatial dependence.
-#' @param kappa the \eqn{\kappa} parameter from the Matern covariance function,
+#' @param nu the \eqn{\nu} parameter from the Matern covariance function,
 #'   controls the differentiability of the process.
 #' 
-#' @return The mean of \code{mat_cov(dist, sigsq, phi, kappa)}.
+#' @return The mean of \code{mat_cov(dist, sigsq, phi, nu)}.
 #' @keywords internal
-aux_matern <- function(dist, sigsq, phi, kappa) {
-    .Call(`_smile_aux_matern`, dist, sigsq, phi, kappa)
+aux_matern <- function(dist, sigsq, phi, nu) {
+    .Call(`_smile_aux_matern`, dist, sigsq, phi, nu)
 }
 
 #' @title Matern covariance function for a polygons.
@@ -170,9 +170,9 @@ aux_matern <- function(dist, sigsq, phi, kappa) {
 #'   function.
 #' @param phi the \eqn{\phi} parameter from the Matern covariance function,
 #'   controls the range of the spatial dependence.
-#' @param kappa the \eqn{\kappa} parameter from the Matern covariance function,
+#' @param nu the \eqn{\nu} parameter from the Matern covariance function,
 #'   controls the differentiability of the process. Note that, if we set
-#'   \code{kappa = .5}, then the calculations are based on the exponential
+#'   \code{nu = .5}, then the calculations are based on the exponential
 #'   covariance function.
 #' 
 #' @return The matern covariance matrix associated with a set of polygons.
@@ -181,8 +181,8 @@ aux_matern <- function(dist, sigsq, phi, kappa) {
 #'   \code{\link{mat_cov}}
 #' 
 #' @keywords internal
-comp_mat_cov <- function(cross_dists, n, n2, sigsq, phi, kappa) {
-    .Call(`_smile_comp_mat_cov`, cross_dists, n, n2, sigsq, phi, kappa)
+comp_mat_cov <- function(cross_dists, n, n2, sigsq, phi, nu) {
+    .Call(`_smile_comp_mat_cov`, cross_dists, n, n2, sigsq, phi, nu)
 }
 
 #' @title Powered Exponential covariance function (scalar)
@@ -196,7 +196,7 @@ comp_mat_cov <- function(cross_dists, n, n2, sigsq, phi, kappa) {
 #'   function.
 #' @param phi the \eqn{\phi} parameter from the Exponential covariance function,
 #'   controls the range of the spatial dependence.
-#' @param kappa the \eqn{\kappa \in (0, 2]} parameter representing the "power"
+#' @param nu the \eqn{\nu \in (0, 2]} parameter representing the "power"
 #'
 #' @return a scalar representing the (exponential) covariance between two
 #'   observations \code{d} apart of each other.
@@ -206,8 +206,8 @@ comp_mat_cov <- function(cross_dists, n, n2, sigsq, phi, kappa) {
 #'   \code{\link{mat_cov}}
 #'
 #' @keywords internal
-single_pexp <- function(d, sigsq, phi, kappa) {
-    .Call(`_smile_single_pexp`, d, sigsq, phi, kappa)
+single_pexp <- function(d, sigsq, phi, nu) {
+    .Call(`_smile_single_pexp`, d, sigsq, phi, nu)
 }
 
 #' @title Powered Exponential covariance function for a given distance matrix.
@@ -221,7 +221,7 @@ single_pexp <- function(d, sigsq, phi, kappa) {
 #'   function.
 #' @param phi the \eqn{\phi} parameter from the Exponential covariance function,
 #'   controls the range of the spatial dependence.
-#' @param kappa the \eqn{\kappa \in (0, 2]} parameter representing the "power"
+#' @param nu the \eqn{\nu \in (0, 2]} parameter representing the "power"
 #' 
 #' @return The powered exponential covariance function (for a stationary and
 #'   isotropic process) associated with the provided distances (\code{dists})
@@ -229,8 +229,8 @@ single_pexp <- function(d, sigsq, phi, kappa) {
 #'
 #' @seealso \code{\link{single_exp}}, \code{\link{single_matern}}
 #' @keywords internal
-pexp_cov <- function(dists, sigsq, phi, kappa) {
-    .Call(`_smile_pexp_cov`, dists, sigsq, phi, kappa)
+pexp_cov <- function(dists, sigsq, phi, nu) {
+    .Call(`_smile_pexp_cov`, dists, sigsq, phi, nu)
 }
 
 #' @title Mean of a (Powered Exponential) covariance function (Internal use)
@@ -245,14 +245,14 @@ pexp_cov <- function(dists, sigsq, phi, kappa) {
 #'   covariance function.
 #' @param phi the \eqn{\phi} parameter from the Powered Exponential covariance
 #'   function, controls the range of the spatial dependence.
-#' @param kappa the \eqn{\kappa} parameter from the Powered Exponential
+#' @param nu the \eqn{\nu} parameter from the Powered Exponential
 #'   covariance function,
 #'   controls the differentiability of the process.
 #' 
-#' @return The mean of \code{pexp_cov(dist, sigsq, phi, kappa)}.
+#' @return The mean of \code{pexp_cov(dist, sigsq, phi, nu)}.
 #' @keywords internal
-aux_pexp <- function(dist, sigsq, phi, kappa) {
-    .Call(`_smile_aux_pexp`, dist, sigsq, phi, kappa)
+aux_pexp <- function(dist, sigsq, phi, nu) {
+    .Call(`_smile_aux_pexp`, dist, sigsq, phi, nu)
 }
 
 #' @title Powered Exponential covariance function for a polygons.
@@ -271,7 +271,7 @@ aux_pexp <- function(dist, sigsq, phi, kappa) {
 #'   covariance function.
 #' @param phi the \eqn{\phi} parameter from the Powered Exponential covariance
 #'   function, controls the range of the spatial dependence.
-#' @param kappa the \eqn{\kappa \in (0, 2]} parameter representing the "power"
+#' @param nu the \eqn{\nu \in (0, 2]} parameter representing the "power"
 #' 
 #' @return The powered exponential covariance matrix associated with a set of
 #'   polygons.
@@ -280,8 +280,8 @@ aux_pexp <- function(dist, sigsq, phi, kappa) {
 #'   \code{\link{mat_cov}}
 #'
 #' @keywords internal
-comp_pexp_cov <- function(cross_dists, n, n2, sigsq, phi, kappa) {
-    .Call(`_smile_comp_pexp_cov`, cross_dists, n, n2, sigsq, phi, kappa)
+comp_pexp_cov <- function(cross_dists, n, n2, sigsq, phi, nu) {
+    .Call(`_smile_comp_pexp_cov`, cross_dists, n, n2, sigsq, phi, nu)
 }
 
 #' @title Gaussian covariance function (scalar)
@@ -559,9 +559,10 @@ comp_cs_cov <- function(cross_dists, n, n2, sigsq, phi) {
     .Call(`_smile_comp_cs_cov`, cross_dists, n, n2, sigsq, phi)
 }
 
-#' @title Matern Wendland-1 covariance unction(scalar - generic)
+#' @title Matern Generalized Wendland (GW) covariance function with kappa = 0
+#'   (scalar - generic)
 #'
-#' @description adapted from Furrer et al. 2006.
+#' @description adapted from Bevilacqua et al. 2019.
 #'
 #' @param d a scalar representing the distance on which it is desired to
 #'   evaluate the covariance function.
@@ -569,16 +570,107 @@ comp_cs_cov <- function(cross_dists, n, n2, sigsq, phi) {
 #'   function.
 #' @param phi the \eqn{\phi} parameter from the Matern covariance function,
 #'   controls the range of the spatial dependence.
+#' @param mu a parameter that controls the smoothness of the covariance
+#'   function. Note that, \eqn{\mu \geq 1}.
 #' 
-#' @return a scalar representing the (wendland) covariance between two
+#' @return a scalar representing the GW covariance between two
 #'   observations \code{d} apart of each other.
 #' 
 #' @keywords internal
-single_w1 <- function(d, sigsq, phi) {
-    .Call(`_smile_single_w1`, d, sigsq, phi)
+single_gw0 <- function(d, sigsq, phi, mu) {
+    .Call(`_smile_single_gw0`, d, sigsq, phi, mu)
 }
 
-#' @title Wendland-1 covariance function for a given distance matrix.
+#' @title Matern Generalized Wendland (GW) covariance function with kappa = 1
+#'   (scalar - generic)
+#'
+#' @description adapted from Bevilacqua et al. 2019.
+#'
+#' @param d a scalar representing the distance on which it is desired to
+#'   evaluate the covariance function.
+#' @param sigsq the \eqn{\sigma^2} parameter from the Matern covariance
+#'   function.
+#' @param phi the \eqn{\phi} parameter from the Matern covariance function,
+#'   controls the range of the spatial dependence.
+#' @param mu a parameter that controls the smoothness of the covariance
+#'   function. Note that, \eqn{\mu \geq 1}.
+#' 
+#' @return a scalar representing the GW covariance between two
+#'   observations \code{d} apart of each other.
+#' 
+#' @keywords internal
+single_gw1 <- function(d, sigsq, phi, mu) {
+    .Call(`_smile_single_gw1`, d, sigsq, phi, mu)
+}
+
+#' @title Matern Generalized Wendland (GW) covariance function with kappa = 2
+#'   (scalar - generic)
+#'
+#' @description adapted from Bevilacqua et al. 2019.
+#'
+#' @param d a scalar representing the distance on which it is desired to
+#'   evaluate the covariance function.
+#' @param sigsq the \eqn{\sigma^2} parameter from the Matern covariance
+#'   function.
+#' @param phi the \eqn{\phi} parameter from the Matern covariance function,
+#'   controls the range of the spatial dependence.
+#' @param mu a parameter that controls the smoothness of the covariance
+#'   function. Note that, \eqn{\mu \geq 1}.
+#' 
+#' @return a scalar representing the GW covariance between two
+#'   observations \code{d} apart of each other.
+#' 
+#' @keywords internal
+single_gw2 <- function(d, sigsq, phi, mu) {
+    .Call(`_smile_single_gw2`, d, sigsq, phi, mu)
+}
+
+#' @title Matern Generalized Wendland (GW) covariance function with kappa = 3
+#'   (scalar - generic)
+#'
+#' @description adapted from Bevilacqua et al. 2019.
+#'
+#' @param d a scalar representing the distance on which it is desired to
+#'   evaluate the covariance function.
+#' @param sigsq the \eqn{\sigma^2} parameter from the Matern covariance
+#'   function.
+#' @param phi the \eqn{\phi} parameter from the Matern covariance function,
+#'   controls the range of the spatial dependence.
+#' @param mu a parameter that controls the smoothness of the covariance
+#'   function. Note that, \eqn{\mu \geq 1}.
+#' 
+#' @return a scalar representing the GW covariance between two
+#'   observations \code{d} apart of each other.
+#' 
+#' @keywords internal
+single_gw3 <- function(d, sigsq, phi, mu) {
+    .Call(`_smile_single_gw3`, d, sigsq, phi, mu)
+}
+
+#' @title Matern Generalized Wendland (GW) covariance function with kappa = 0
+#'   (scalar - generic)
+#'
+#' @description adapted from Bevilacqua et al. 2019.
+#'
+#' @param d a scalar representing the distance on which it is desired to
+#'   evaluate the covariance function.
+#' @param sigsq the \eqn{\sigma^2} parameter from the Matern covariance
+#'   function.
+#' @param phi the \eqn{\phi} parameter from the Matern covariance function,
+#'   controls the range of the spatial dependence.
+#' @param kappa \eqn{\kappa \in \{0, \ldots, 3 \}}.
+#' @param mu a parameter that controls the smoothness of the covariance
+#'   function. Note that, \eqn{\mu \geq 1}.
+#' 
+#' @return a scalar representing the GW covariance between two
+#'   observations \code{d} apart of each other.
+#' 
+#' @keywords internal
+single_gw <- function(d, sigsq, phi, kappa, mu) {
+    .Call(`_smile_single_gw`, d, sigsq, phi, kappa, mu)
+}
+
+#' @title Generalized Wendland covariance function for a given distance matrix.
 #'
 #' @description Computing the Matern covariance function for a matrix of
 #'   distances.
@@ -587,17 +679,18 @@ single_w1 <- function(d, sigsq, phi) {
 #'   entities.
 #' @param sigsq the \eqn{\sigma^2} parameter from the Matern covariance
 #'   function.
-#' @param phi the \eqn{\phi} parameter from the Matern covariance function,' 
-#' @return The matern covariance function (for a stationary and isotropic
-#'   process) associated with the provided distances (\code{dists}) and the
-#'   given set of parameters.
+#' @param phi \eqn{\phi} is the range of the covariance function.
+#' @param kappa \eqn{\kappa \in \{0, \ldots, 3 \}}.
+#' @param mu \eqn{\mu} controls the smoothness of the covariance function
+#' @return The GW (isotropic) covariance function associated with the provided
+#'   distances (\code{dists}) and the given set of parameters.
 #' 
 #' @keywords internal
-w1_cov <- function(dists, sigsq, phi) {
-    .Call(`_smile_w1_cov`, dists, sigsq, phi)
+gw_cov <- function(dists, sigsq, phi, kappa, mu) {
+    .Call(`_smile_gw_cov`, dists, sigsq, phi, kappa, mu)
 }
 
-#' @title Mean of a (Wendland-1) covariance function (Internal use)
+#' @title Mean of a Generalized Wendland covariance function (Internal use)
 #'
 #' @description This is an auxilliary function for internal use. It helps to
 #'   numerically integrate a covariance function evaluated at a grid of points
@@ -605,16 +698,18 @@ w1_cov <- function(dists, sigsq, phi) {
 #'
 #' @param dists a numeric matrix representing the distance between spatial
 #'   entities.
-#' @param sigsq the \eqn{\sigma^2} parameter from the Matern covariance
+#' @param sigsq the \eqn{\sigma^2} variance of the covariance function
 #'   function.
-#' @param phi the \eqn{\phi} parameter from the Matern covariance function,
+#' @param phi the \eqn{\phi} is the range parameter of the covariance function.
+#' @param kappa \eqn{\kappa \in \{0, \ldots, 3 \}}.
+#' @param mu \eqn{\mu} controls the smoothness of the covariance function
 #' @return The mean of \code{mat_cov(dist, sigsq, phi, kappa)}.
 #' @keywords internal
-aux_w1 <- function(dist, sigsq, phi) {
-    .Call(`_smile_aux_w1`, dist, sigsq, phi)
+aux_gw <- function(dist, sigsq, phi, kappa, mu) {
+    .Call(`_smile_aux_gw`, dist, sigsq, phi, kappa, mu)
 }
 
-#' @title Wendland-1 covariance function for a polygons.
+#' @title Generalized Wendland covariance function for a polygons.
 #'
 #' @description Computing the Matern covariance function between polygons.
 #'
@@ -625,14 +720,16 @@ aux_w1 <- function(dist, sigsq, phi) {
 #' @param n2 usually, equal to \code{n}, except when the function is being used
 #'   to calculate the "cross" covariance between two different partitions of
 #'   the same space.
-#' @param sigsq the \eqn{\sigma^2} parameter from the Matern covariance
+#' @param sigsq the \eqn{\sigma^2} variance of the covariance function
 #'   function.
-#' @param phi the \eqn{\phi} parameter from the Matern covariance function,' 
+#' @param phi the \eqn{\phi} is the range parameter of the covariance function.
+#' @param kappa \eqn{\kappa \in \{0, \ldots, 3 \}}.
+#' @param mu \eqn{\mu} controls the smoothness of the covariance function
 #' @return The wendland-1 covariance matrix associated with a set of polygons.
 #' 
 #' @keywords internal
-comp_w1_cov <- function(cross_dists, n, n2, sigsq, phi) {
-    .Call(`_smile_comp_w1_cov`, cross_dists, n, n2, sigsq, phi)
+comp_gw_cov <- function(cross_dists, n, n2, sigsq, phi, kappa, mu) {
+    .Call(`_smile_comp_gw_cov`, cross_dists, n, n2, sigsq, phi, kappa, mu)
 }
 
 #' @title Matern (tappered) covariance function (scalar - generic)
@@ -646,8 +743,8 @@ comp_w1_cov <- function(cross_dists, n, n2, sigsq, phi) {
 #'   function.
 #' @param phi the \eqn{\phi} parameter from the Matern covariance function,
 #'   controls the range of the spatial dependence.
-#' @param kappa the \eqn{\kappa} parameter from the Matern covariance function,
-#'   controls the differentiability of the process.
+#' @param nu the smoothness parameter \eqn{\nu} from the Matern covariance
+#'   function, controls the differentiability of the process.
 #'
 #' @param theta the \eqn{\theta} tapper range.
 #'
@@ -658,14 +755,14 @@ comp_w1_cov <- function(cross_dists, n, n2, sigsq, phi) {
 #'   \code{\link{single_exp}}, \code{\link{mat_cov}}
 #' 
 #' @keywords internal
-single_tapmat <- function(d, sigsq, phi, kappa, theta) {
-    .Call(`_smile_single_tapmat`, d, sigsq, phi, kappa, theta)
+single_tapmat <- function(d, sigsq, phi, nu, theta) {
+    .Call(`_smile_single_tapmat`, d, sigsq, phi, nu, theta)
 }
 
-#' @title Tappered Matern covariance function (scalar - kappa = 1/2)
+#' @title Tappered Matern covariance function (scalar - nu = 1/2)
 #'
 #' @description Computing the Matern covariance function for a single distance
-#'   measure, with \eqn{\kappa = 3/2}.
+#'   measure, with \eqn{\nu = 1/2}.
 #'
 #' @param d a scalar representing the distance on which it is desired to
 #'   evaluate the covariance function.
@@ -686,10 +783,10 @@ single_tapmat1 <- function(d, sigsq, phi, theta) {
     .Call(`_smile_single_tapmat1`, d, sigsq, phi, theta)
 }
 
-#' @title Tappered Matern covariance function (scalar - kappa = 3/2)
+#' @title Tappered Matern covariance function (scalar - nu = 3/2)
 #'
 #' @description Computing the Matern covariance function for a single distance
-#'   measure, with \eqn{\kappa = 3/2}.
+#'   measure, with \eqn{\nu = 3/2}.
 #'
 #' @param d a scalar representing the distance on which it is desired to
 #'   evaluate the covariance function.
@@ -710,7 +807,7 @@ single_tapmat3 <- function(d, sigsq, phi, theta) {
     .Call(`_smile_single_tapmat3`, d, sigsq, phi, theta)
 }
 
-#' @title Tappered Matern  covariance function for a given distance matrix.
+#' @title Tappered Matern covariance function for a given distance matrix.
 #'
 #' @description Computing the tappered Matern covariance function for a matrix
 #'   of
@@ -721,7 +818,7 @@ single_tapmat3 <- function(d, sigsq, phi, theta) {
 #' @param sigsq the \eqn{\sigma^2} parameter from the Matern covariance
 #'   function.
 #' @param phi the \eqn{\phi} parameter from the Matern covariance function,'
-#' @param kappa smoothness parameter
+#' @param nu smoothness parameter
 #' @param theta \eqn{\theta} taper range.
 #' 
 #' @return The tappered matern covariance function (for a stationary and isotropic
@@ -729,8 +826,8 @@ single_tapmat3 <- function(d, sigsq, phi, theta) {
 #'   given set of parameters.
 #' 
 #' @keywords internal
-tapmat_cov <- function(dists, sigsq, phi, kappa, theta) {
-    .Call(`_smile_tapmat_cov`, dists, sigsq, phi, kappa, theta)
+tapmat_cov <- function(dists, sigsq, phi, nu, theta) {
+    .Call(`_smile_tapmat_cov`, dists, sigsq, phi, nu, theta)
 }
 
 #' @title Mean of a (Matern - Wendland-1 tapper) covariance function (Internal use)
@@ -744,12 +841,12 @@ tapmat_cov <- function(dists, sigsq, phi, kappa, theta) {
 #' @param sigsq the \eqn{\sigma^2} parameter from the Matern covariance
 #'   function.
 #' @param phi the \eqn{\phi} parameter from the Matern covariance function,
-#' @param kappa
+#' @param nu
 #' @param theta
-#' @return The mean of \code{mat_cov(dist, sigsq, phi, kappa)}.
+#' @return The mean of \code{mat_cov(dist, sigsq, phi, nu)}.
 #' @keywords internal
-aux_tapmat <- function(dist, sigsq, phi, kappa, theta) {
-    .Call(`_smile_aux_tapmat`, dist, sigsq, phi, kappa, theta)
+aux_tapmat <- function(dist, sigsq, phi, nu, theta) {
+    .Call(`_smile_aux_tapmat`, dist, sigsq, phi, nu, theta)
 }
 
 #' @title Wendland-1 covariance function for a polygons.
@@ -765,12 +862,15 @@ aux_tapmat <- function(dist, sigsq, phi, kappa, theta) {
 #'   the same space.
 #' @param sigsq the \eqn{\sigma^2} parameter from the Matern covariance
 #'   function.
-#' @param phi the \eqn{\phi} parameter from the Matern covariance function,' 
+#' @param phi the \eqn{\phi} parameter from the Matern covariance function
+#' @param nu the smoothness parameter \eqn{\nu} parameter from the Matern
+#'   covariance function
+#' @param theta the taper distance.
 #' @return The wendland-1 covariance matrix associated with a set of polygons.
 #' 
 #' @keywords internal
-comp_tapmat_cov <- function(cross_dists, n, n2, sigsq, phi, kappa, theta) {
-    .Call(`_smile_comp_tapmat_cov`, cross_dists, n, n2, sigsq, phi, kappa, theta)
+comp_tapmat_cov <- function(cross_dists, n, n2, sigsq, phi, nu, theta) {
+    .Call(`_smile_comp_tapmat_cov`, cross_dists, n, n2, sigsq, phi, nu, theta)
 }
 
 #' @name aux_mat

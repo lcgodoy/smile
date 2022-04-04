@@ -4,7 +4,7 @@
 \alias{pexp_cov}
 \title{Powered Exponential covariance function for a given distance matrix.}
 \usage{
-pexp_cov(dists, sigsq, phi, kappa)
+pexp_cov(dists, sigsq, phi, nu)
 }
 \arguments{
 \item{dists}{a numeric matrix representing the distance between spatial
@@ -16,7 +16,7 @@ function.}
 \item{phi}{the \eqn{\phi} parameter from the Exponential covariance function,
 controls the range of the spatial dependence.}
 
-\item{kappa}{the \eqn{\kappa \in (0, 2]} parameter representing the "power"}
+\item{nu}{the \eqn{\nu \in (0, 2]} parameter representing the "power"}
 }
 \value{
 The powered exponential covariance function (for a stationary and
