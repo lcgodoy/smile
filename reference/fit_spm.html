@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">smile</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.3.9</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.4</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -97,8 +97,10 @@
   <span class="va">x</span>,
   <span class="va">model</span>,
   <span class="va">theta_st</span>,
-  kappa <span class="op">=</span> <span class="cn">NULL</span>,
+  nu <span class="op">=</span> <span class="cn">NULL</span>,
   tr <span class="op">=</span> <span class="cn">NULL</span>,
+  kappa <span class="op">=</span> <span class="fl">1</span>,
+  mu2 <span class="op">=</span> <span class="fl">1.5</span>,
   apply_exp <span class="op">=</span> <span class="cn">FALSE</span>,
   opt_method <span class="op">=</span> <span class="st">"Nelder-Mead"</span>,
   control_opt <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>,
@@ -106,7 +108,18 @@
   <span class="va">...</span>
 <span class="op">)</span>
 
-<span class="fu">fit_spm2</span><span class="op">(</span><span class="va">x</span>, <span class="va">model</span>, <span class="va">kappa</span>, <span class="va">tr</span>, comp_hess <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">phi_min</span>, <span class="va">phi_max</span>, nphi <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></code></pre></div>
+<span class="fu">fit_spm2</span><span class="op">(</span>
+  <span class="va">x</span>,
+  <span class="va">model</span>,
+  <span class="va">nu</span>,
+  <span class="va">tr</span>,
+  kappa <span class="op">=</span> <span class="fl">1</span>,
+  mu2 <span class="op">=</span> <span class="fl">1.5</span>,
+  comp_hess <span class="op">=</span> <span class="cn">TRUE</span>,
+  <span class="va">phi_min</span>,
+  <span class="va">phi_max</span>,
+  nphi <span class="op">=</span> <span class="fl">10</span>
+<span class="op">)</span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -120,21 +133,26 @@ being analyzed, and 2) if the input is a <code>spm</code> object.</p></dd>
 <dt>model</dt>
 <dd><p>a <code>character</code> scalar indicating the family of the
 covariance function to be used. The options are <code>c("matern",
-    "pexp", "gaussian", "spherical")</code>.</p></dd>
+    "pexp", "gaussian", "spherical", "gw")</code>.</p></dd>
 <dt>theta_st</dt>
 <dd><p>a <code>numeric</code> (named) vector containing the initial
 parameters.</p></dd>
-<dt>kappa</dt>
-<dd><p>a <code>numeric</code> value indicating either the \(\kappa\)
+<dt>nu</dt>
+<dd><p>a <code>numeric</code> value indicating either the \(\nu\)
 paramater from the Matern covariance function (controlling the process
 differentiability), or the "pexp" for the Powered Exponential family. If
-the <code>model</code> chosen by the user is Matern and <code>kappa</code> is not
+the <code>model</code> chosen by the user is Matern and <code>nu</code> is not
 informed, it is automatically set to .5. On the other hand, if the user
-choses the Powered Exponential family and do not inform <code>kappa</code>,
+choses the Powered Exponential family and do not inform <code>nu</code>,
 then it is set to 1. In both cases, the covariance function becomes the
 so covalled exponential covariance function.</p></dd>
 <dt>tr</dt>
 <dd><p>tapper range</p></dd>
+<dt>kappa</dt>
+<dd><p>\(\kappa \in \{0, \ldots, 3 \}\) parameter for the GW cov
+function.</p></dd>
+<dt>mu2</dt>
+<dd><p>the smoothness parameter \(\mu\) for the GW function.</p></dd>
 <dt>apply_exp</dt>
 <dd><p>a <code>logical</code> scalar indicating wheter the parameters
 that cannot assume negative values should be exponentiate or not.</p></dd>

@@ -29,7 +29,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">smile</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.3.9</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.4</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -147,7 +147,7 @@
 <p>Next, we assume the following model, at the grid level, drives the data<a class="footnote-ref" tabindex="0" data-bs-toggle="popover" data-bs-content='&lt;p&gt;To check how the model at the grid level relates to the data at the area level check the &lt;a href="https://lcgodoy.me/smile/articles/theory.html"&gt;Theory vignette&lt;/a&gt;&lt;/p&gt;'><sup>1</sup></a> <span class="math display">\[
     Y(\mathbf{s}) = \mu + S(\mathbf{s}) + \varepsilon(\mathbf{s}), 
 \]</span> where <span class="math inline">\(S(\cdot) \sim {\rm GP}(0, {\rm C}(\cdot ; \, \boldsymbol{\theta}))\)</span>, and <span class="math inline">\(\varepsilon(\cdot) \overset{{\rm i.i.d.}}{\sim} {\rm N}(0, \tau)\)</span>, with <span class="math inline">\(S(\cdot) \perp \varepsilon(\cdot)\)</span>. The form of the covariance functions considered here are written as follows <span class="math inline">\({\rm C}(\cdot ; \, \boldsymbol{\theta} ) = \sigma^2 \rho(\cdot ; \, \boldsymbol{\theta})\)</span>. Where <span class="math inline">\(\rho(\cdot ; \, \boldsymbol{\theta})\)</span> is a stationary and isotropic correlation function. To check the families of correlation functions available in our package, check <a href="https://lcgodoy.me/smile/articles/sp-cov-functions.html">this link</a>. Another important detail is that, if we make <span class="math inline">\(\nu = \tau / \sigma^2\)</span>, the estimation process is slightly easier. The package allows for the two parametrizations.</p>
-<p>For this problem we are going to consider the the Matérn covariance function. The model will be fitted with <span class="math inline">\(\kappa = .5, 1.5, 2.5\)</span>, this the parameter controls the smoothness of the spatial process. Also, for simplicity, we are going to ignore <span class="math inline">\(\tau\)</span>. Next, we evaluate the AIC associated with three models. The function <code>fit_spm</code> fits the models and needs starting values for <span class="math inline">\(\phi\)</span> (and <span class="math inline">\(\nu\)</span> or <span class="math inline">\(\tau\)</span>, if you decide not to ignore the small scale variation), the covariance model to be used is informed as a string in the argument <code>model</code>, the available options are <code>c("matern", "pexp", "gaussian", "spherical")</code>. Notice that, when not inputting an initial value for <span class="math inline">\(\nu\)</span> (or <span class="math inline">\(\tau\)</span>), we are forcing this parameter to be 0. Also, the <code>theta_st</code> argument (which takes the initial values for the parameters), must be a named vector. If we input initial values for <span class="math inline">\(\mu\)</span>, <span class="math inline">\(\sigma^2\)</span>, <span class="math inline">\(\phi\)</span>, and <span class="math inline">\(\nu\)</span> (or <span class="math inline">\(\tau\)</span>), the likelihood is optimized numerically for all the parameters. If we omit <span class="math inline">\(\mu\)</span> and <span class="math inline">\(\sigma^2\)</span>, then a profile likelihood approach is used to find numerically for the <span class="math inline">\(\hat{\phi}\)</span> and, if wished, <span class="math inline">\(\hat{\nu}\)</span>. While, <span class="math inline">\(\hat{\mu}\)</span> and <span class="math inline">\(\hat{\sigma}^2\)</span> have closed form expressions <span class="citation">(Diggle and Ribeiro 2007)</span>. Additionally, the commented part of the code below shows how to proceed to estimate <span class="math inline">\(\nu\)</span>, an equivalently <span class="math inline">\(\tau\)</span>, from the data. The argument <code>apply_exp</code> is a workaround for parameters that cannot be negative. The arguments <code>opt_method</code> and <code>control</code> are passed to the function <code>optim</code> in order to optimize the log likelihood associated with the data. <code>opt_method</code> controls the optimization algorithm to be used, while <code>control</code> inputs control arguments for such optimization algorithms, for more details see <a href="https://stat.ethz.ch/R-manual/R-devel/library/stats/html/optim.html" class="external-link">optim</a>.</p>
+<p>For this problem we are going to consider the the Matérn covariance function. The model will be fitted with <span class="math inline">\(\nu = .5, 1.5, 2.5\)</span>, this the parameter controls the smoothness of the spatial process. Also, for simplicity, we are going to ignore <span class="math inline">\(\tau\)</span>. Next, we evaluate the AIC associated with three models. The function <code>fit_spm</code> fits the models and needs starting values for <span class="math inline">\(\phi\)</span> (and <span class="math inline">\(\nu\)</span> or <span class="math inline">\(\tau\)</span>, if you decide not to ignore the small scale variation), the covariance model to be used is informed as a string in the argument <code>model</code>, the available options are <code>c("matern", "pexp", "gaussian", "spherical")</code>. Notice that, when not inputting an initial value for <span class="math inline">\(\nu\)</span> (or <span class="math inline">\(\tau\)</span>), we are forcing this parameter to be 0. Also, the <code>theta_st</code> argument (which takes the initial values for the parameters), must be a named vector. If we input initial values for <span class="math inline">\(\mu\)</span>, <span class="math inline">\(\sigma^2\)</span>, <span class="math inline">\(\phi\)</span>, and <span class="math inline">\(\nu\)</span> (or <span class="math inline">\(\tau\)</span>), the likelihood is optimized numerically for all the parameters. If we omit <span class="math inline">\(\mu\)</span> and <span class="math inline">\(\sigma^2\)</span>, then a profile likelihood approach is used to find numerically for the <span class="math inline">\(\hat{\phi}\)</span> and, if wished, <span class="math inline">\(\hat{\nu}\)</span>. While, <span class="math inline">\(\hat{\mu}\)</span> and <span class="math inline">\(\hat{\sigma}^2\)</span> have closed form expressions <span class="citation">(Diggle and Ribeiro 2007)</span>. Additionally, the commented part of the code below shows how to proceed to estimate <span class="math inline">\(\nu\)</span>, an equivalently <span class="math inline">\(\tau\)</span>, from the data. The argument <code>apply_exp</code> is a workaround for parameters that cannot be negative. The arguments <code>opt_method</code> and <code>control</code> are passed to the function <code>optim</code> in order to optimize the log likelihood associated with the data. <code>opt_method</code> controls the optimization algorithm to be used, while <code>control</code> inputs control arguments for such optimization algorithms, for more details see <a href="https://stat.ethz.ch/R-manual/R-devel/library/stats/html/optim.html" class="external-link">optim</a>.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">theta_st_msoa</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"phi"</span> <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>
 
@@ -162,7 +162,7 @@
 <span class="co">##     fit_spm(x = spm_msoa,</span>
 <span class="co">##             theta_st = theta_st_msoa,</span>
 <span class="co">##             model = "matern",</span>
-<span class="co">##             kappa = .5,</span>
+<span class="co">##             nu = .5,</span>
 <span class="co">##             lower = c(1e-16, 1e-16),</span>
 <span class="co">##             upper = c(Inf, 1),</span>
 <span class="co">##             opt_method = "L-BFGS-B",</span>
@@ -172,7 +172,7 @@
     <span class="fu"><a href="../reference/fit_spm.html">fit_spm</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">spm_msoa</span>,
             theta_st <span class="op">=</span> <span class="va">theta_st_msoa</span>,
             model <span class="op">=</span> <span class="st">"matern"</span>,
-            kappa <span class="op">=</span> <span class="fl">.5</span>,
+            nu <span class="op">=</span> <span class="fl">.5</span>,
             apply_exp <span class="op">=</span> <span class="cn">TRUE</span>,
             opt_method <span class="op">=</span> <span class="st">"L-BFGS-B"</span>,
             control   <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>maxit <span class="op">=</span> <span class="fl">500</span><span class="op">)</span><span class="op">)</span>
@@ -180,25 +180,25 @@
 <span class="va">fit_msoa2</span> <span class="op">&lt;-</span>
     <span class="fu"><a href="../reference/fit_spm.html">fit_spm</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">spm_msoa</span>,
             theta_st <span class="op">=</span> <span class="va">theta_st_msoa</span>,
-            model <span class="op">=</span> <span class="st">"gaussian"</span>,
-            kappa <span class="op">=</span> <span class="fl">1.5</span>,
+            model <span class="op">=</span> <span class="st">"matern"</span>,
+            nu <span class="op">=</span> <span class="fl">1.5</span>,
             apply_exp <span class="op">=</span> <span class="cn">TRUE</span>,
             opt_method <span class="op">=</span> <span class="st">"L-BFGS-B"</span>,
-            control   <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>maxit <span class="op">=</span> <span class="fl">500</span><span class="op">)</span><span class="op">)</span>
+            control    <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>maxit <span class="op">=</span> <span class="fl">500</span><span class="op">)</span><span class="op">)</span>
 
 <span class="va">fit_msoa3</span> <span class="op">&lt;-</span>
     <span class="fu"><a href="../reference/fit_spm.html">fit_spm</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">spm_msoa</span>,
             theta_st <span class="op">=</span> <span class="va">theta_st_msoa</span>,
             model <span class="op">=</span> <span class="st">"matern"</span>,
-            kappa <span class="op">=</span> <span class="fl">2.5</span>,
+            nu <span class="op">=</span> <span class="fl">2.5</span>,
             apply_exp <span class="op">=</span> <span class="cn">TRUE</span>,
             opt_method <span class="op">=</span> <span class="st">"L-BFGS-B"</span>,
             control   <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>maxit <span class="op">=</span> <span class="fl">500</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<p>The AIC<a class="footnote-ref" tabindex="0" data-bs-toggle="popover" data-bs-content="&lt;p&gt;BIC works for our models too.&lt;/p&gt;"><sup>2</sup></a> associated with each model is given below. According to this criterion, the best model is the one with <span class="math inline">\(\kappa = .5\)</span>.</p>
+<p>The AIC<a class="footnote-ref" tabindex="0" data-bs-toggle="popover" data-bs-content="&lt;p&gt;BIC works for our models too.&lt;/p&gt;"><sup>2</sup></a> associated with each model is given below. According to this criterion, the best model is the one with <span class="math inline">\(\nu = .5\)</span>.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"m1"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/AIC.html" class="external-link">AIC</a></span><span class="op">(</span><span class="va">fit_msoa1</span><span class="op">)</span>, <span class="st">"m2"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/AIC.html" class="external-link">AIC</a></span><span class="op">(</span><span class="va">fit_msoa2</span><span class="op">)</span>, <span class="st">"m3"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/AIC.html" class="external-link">AIC</a></span><span class="op">(</span><span class="va">fit_msoa3</span><span class="op">)</span><span class="op">)</span>
 <span class="co">#&gt;       m1       m2       m3 </span>
-<span class="co">#&gt; 295.0162 296.9356 295.9653</span></code></pre></div>
+<span class="co">#&gt; 296.5157 324.0477 297.5716</span></code></pre></div>
 <p>We can retrieve the estimated parameters and the associated <code>(1 - sig)</code> % confidence intervals by using the function <code>summary_spm_fit</code> as follows</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/summary_spm_fit.html">summary_spm_fit</a></span><span class="op">(</span><span class="va">fit_msoa1</span>, sig <span class="op">=</span> <span class="fl">.05</span><span class="op">)</span>
@@ -206,9 +206,9 @@
 <span class="co">#&gt;  optimization algorithm converged: yes </span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt;     par   estimate        se               ci</span>
-<span class="co">#&gt; 1    mu 75.8535058 0.7993227 [74.287; 77.420]</span>
-<span class="co">#&gt; 2 sigsq 22.5838537 4.0903384 [14.567; 30.601]</span>
-<span class="co">#&gt; 3   phi  0.8277686 0.2144635   [0.407; 1.248]</span></code></pre></div>
+<span class="co">#&gt; 1    mu 75.9420828 0.7599964 [74.453; 77.432]</span>
+<span class="co">#&gt; 2 sigsq 22.8965112 4.1744641 [14.715; 31.078]</span>
+<span class="co">#&gt; 3   phi  0.7783441 0.2001005   [0.386; 1.171]</span></code></pre></div>
 <p>Finally, we have almost everything we need to perform predictions at the LSOA areas. The function <code>predict_spm</code> calculates the predictions associated to the <code>spm_obj</code> (which contains the results associated with a fitted model) into a <code>sf</code> object given as an input for the argument <code>x</code>. We need to specify whether we want to “aggregate” (i.e. average) the predicted surface over the polygons associated with the <code>sf</code> data. The number of points and the type of integration for prediction need to be set as well. In this case we are specifying a finer grid (3500 points) because the LSOA areas are smaller than the MSOA areas.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">pred_lsoa</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/predict_spm.html">predict_spm</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">liv_lsoa</span>, spm_obj <span class="op">=</span> <span class="va">fit_msoa1</span>, id_var <span class="op">=</span> <span class="st">"lsoa11cd"</span><span class="op">)</span>

@@ -46,6 +46,9 @@
     <loc>https://lcgodoy.me/smile/reference/aux_gauss.html</loc>
   </url>
   <url>
+    <loc>https://lcgodoy.me/smile/reference/aux_gw.html</loc>
+  </url>
+  <url>
     <loc>https://lcgodoy.me/smile/reference/aux_mat.html</loc>
   </url>
   <url>
@@ -61,13 +64,13 @@
     <loc>https://lcgodoy.me/smile/reference/aux_tapmat.html</loc>
   </url>
   <url>
-    <loc>https://lcgodoy.me/smile/reference/aux_w1.html</loc>
-  </url>
-  <url>
     <loc>https://lcgodoy.me/smile/reference/comp_cs_cov.html</loc>
   </url>
   <url>
     <loc>https://lcgodoy.me/smile/reference/comp_gauss_cov.html</loc>
+  </url>
+  <url>
+    <loc>https://lcgodoy.me/smile/reference/comp_gw_cov.html</loc>
   </url>
   <url>
     <loc>https://lcgodoy.me/smile/reference/comp_mat_cov.html</loc>
@@ -80,9 +83,6 @@
   </url>
   <url>
     <loc>https://lcgodoy.me/smile/reference/comp_tapmat_cov.html</loc>
-  </url>
-  <url>
-    <loc>https://lcgodoy.me/smile/reference/comp_w1_cov.html</loc>
   </url>
   <url>
     <loc>https://lcgodoy.me/smile/reference/crossdist.html</loc>
@@ -107,6 +107,9 @@
   </url>
   <url>
     <loc>https://lcgodoy.me/smile/reference/goodness_of_fit.html</loc>
+  </url>
+  <url>
+    <loc>https://lcgodoy.me/smile/reference/gw_cov.html</loc>
   </url>
   <url>
     <loc>https://lcgodoy.me/smile/reference/index.html</loc>
@@ -160,6 +163,21 @@
     <loc>https://lcgodoy.me/smile/reference/single_gauss.html</loc>
   </url>
   <url>
+    <loc>https://lcgodoy.me/smile/reference/single_gw.html</loc>
+  </url>
+  <url>
+    <loc>https://lcgodoy.me/smile/reference/single_gw0.html</loc>
+  </url>
+  <url>
+    <loc>https://lcgodoy.me/smile/reference/single_gw1.html</loc>
+  </url>
+  <url>
+    <loc>https://lcgodoy.me/smile/reference/single_gw2.html</loc>
+  </url>
+  <url>
+    <loc>https://lcgodoy.me/smile/reference/single_gw3.html</loc>
+  </url>
+  <url>
     <loc>https://lcgodoy.me/smile/reference/single_matern.html</loc>
   </url>
   <url>
@@ -184,9 +202,6 @@
     <loc>https://lcgodoy.me/smile/reference/single_tapmat3.html</loc>
   </url>
   <url>
-    <loc>https://lcgodoy.me/smile/reference/single_w1.html</loc>
-  </url>
-  <url>
     <loc>https://lcgodoy.me/smile/reference/spher_cov.html</loc>
   </url>
   <url>
@@ -209,9 +224,6 @@
   </url>
   <url>
     <loc>https://lcgodoy.me/smile/reference/vor_build.html</loc>
-  </url>
-  <url>
-    <loc>https://lcgodoy.me/smile/reference/w1_cov.html</loc>
   </url>
   <url>
     <loc>https://lcgodoy.me/smile/reference/weight_mat.html</loc>

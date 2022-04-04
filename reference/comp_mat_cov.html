@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">smile</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.3.9</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.4</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -90,7 +90,7 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">comp_mat_cov</span><span class="op">(</span><span class="va">cross_dists</span>, <span class="va">n</span>, <span class="va">n2</span>, <span class="va">sigsq</span>, <span class="va">phi</span>, <span class="va">kappa</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">comp_mat_cov</span><span class="op">(</span><span class="va">cross_dists</span>, <span class="va">n</span>, <span class="va">n2</span>, <span class="va">sigsq</span>, <span class="va">phi</span>, <span class="va">nu</span><span class="op">)</span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -111,10 +111,10 @@ function.</p></dd>
 <dt>phi</dt>
 <dd><p>the \(\phi\) parameter from the Matern covariance function,
 controls the range of the spatial dependence.</p></dd>
-<dt>kappa</dt>
-<dd><p>the \(\kappa\) parameter from the Matern covariance function,
+<dt>nu</dt>
+<dd><p>the \(\nu\) parameter from the Matern covariance function,
 controls the differentiability of the process. Note that, if we set
-<code>kappa = .5</code>, then the calculations are based on the exponential
+<code>nu = .5</code>, then the calculations are based on the exponential
 covariance function.</p></dd>
 </dl></div>
     <div class="section level2">
