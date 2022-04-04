@@ -339,13 +339,16 @@ predict_spm.sf <- function(x, spm_obj,
                     sf::st_as_sf(
                             sf::st_sample(x = geom,
                                           size = .sz,
-                                          type = .pt)
+                                          type = .tp)
                         )
                 },
                 geom = sf::st_geometry(x),
                 .sz  = n_pts,
                 .tp  = type)
-            pred_grid <- do.call("rbind", pred_grid)
+            pred_grid <- do.call("rbind", pred_grid) |>
+                sf::st_set_crs(sf::st_crs(x))
+            pred_grid <- sf::st_join(sf::st_as_sf(pred_grid), x,
+                                     join = sf::st_within)
         } else {
             if( is.null(outer_poly) ) {
                 outer_poly <- sf::st_union(spm_obj$call_data$sf_poly)
