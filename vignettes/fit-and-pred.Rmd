@@ -135,7 +135,7 @@ fit_msoa1 <-
 fit_msoa2 <-
     fit_spm(x = spm_msoa,
             theta_st = theta_st_msoa,
-            model = "gaussian",
+            model = "matern",
             kappa = 1.5,
             apply_exp = TRUE,
             opt_method = "L-BFGS-B",

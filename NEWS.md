@@ -17,3 +17,8 @@
 # smile 1.0.3.1
 
 * bug fixes for prediction
+
+# smile 1.0.4
+
+* Generalized Wendland covariance function
+* More flexible prediction function

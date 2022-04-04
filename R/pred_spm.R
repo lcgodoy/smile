@@ -320,13 +320,22 @@ predict_spm.sf <- function(x, spm_obj,
         pred_grid   <- sf::st_geometry(x)
         u_pred      <- distmat(coords_pred)
         n_pred      <- nrow(coords_pred)  # number of locations to make
-                                        # predictions
+                                          # predictions
         if( ! missing(n_pts) | ! missing(type) )
             warning("The arguments 'n_pts' and 'type' are ignored when the sf geometry type is POINT.")
     } else {
         if( missing(n_pts) | missing(type) ) {
             pred_grid <- spm_obj$call_data$grid["geometry"]
             pred_grid <- sf::st_join(pred_grid, x, join = sf::st_within)
+        } else if(length(n_pts) == NROW(x)) {
+            pred_grid <-
+                Map(function(geom, .sz, .tp) {
+
+                },
+                geom = sf::st_geometry(x),
+                .sz  = n_pts,
+                .tp  = type)
+            pred_grid <- do.call("rbind", pred_grid)
         } else {
             if( is.null(outer_poly) ) {
                 outer_poly <- sf::st_union(spm_obj$call_data$sf_poly)
@@ -352,6 +361,7 @@ predict_spm.sf <- function(x, spm_obj,
         rownames(pred_grid) <- NULL
         u_pred <- dist_from_grids(pred_grid, id_var)
         n_pred <- nrow(x)
+        coords_pred <- sf::st_coordinates(pred_grid)
     }
 
     if(all(grepl("POINT", sf::st_geometry_type(x)))) {
@@ -668,9 +678,14 @@ predict_spm.sf <- function(x, spm_obj,
     }
     
     if(all(grepl("POINT", sf::st_geometry_type(x)))) {
-        pred_grid <- transform(sf::st_sf(geometry = pred_grid),
-                               mu_pred = mean_pred_y,
-                               se_pred = var_pred_y)
+        if(inherits(pred_grid, "sfc"))
+            pred_grid <- transform(sf::st_sf(geometry = pred_grid),
+                                   mu_pred = as.numeric(mean_pred_y),
+                                   se_pred = var_pred_y)
+        else 
+            pred_grid <- transform(pred_grid,
+                                   mu_pred = as.numeric(mean_pred_y),
+                                   se_pred = var_pred_y)
         pred_grid[["se_pred"]] <- sqrt(pred_grid[["se_pred"]])
         output <-
             list(
