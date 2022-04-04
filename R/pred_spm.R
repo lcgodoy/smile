@@ -336,7 +336,11 @@ predict_spm.sf <- function(x, spm_obj,
         } else if(length(n_pts) == NROW(x)) {
             pred_grid <-
                 Map(function(geom, .sz, .tp) {
-
+                    sf::st_as_sf(
+                            sf::st_sample(x = geom,
+                                          size = .sz,
+                                          type = .pt)
+                        )
                 },
                 geom = sf::st_geometry(x),
                 .sz  = n_pts,
@@ -437,7 +441,7 @@ predict_spm.sf <- function(x, spm_obj,
                                  n = n_obs, n2 = n_pred,
                                  phi   = spm_obj$estimate["phi"],
                                  sigsq = spm_obj$estimate["sigsq"],
-                                 kappa = spm_obj$kappa)
+                                 nu    = spm_obj$nu)
                if(all(grepl("POINT", sf::st_geometry_type(x)))) {
                    sig_pred <-
                        pexp_cov(dists = u_pred,
@@ -558,7 +562,7 @@ predict_spm.sf <- function(x, spm_obj,
                    sparse = TRUE
                )
                d_mat <- Matrix(
-                   comp_fw_cov(cross_dists = u_res_pred,
+                   comp_gw_cov(cross_dists = u_res_pred,
                                n = n_obs, n2 = n_pred,
                                phi   = spm_obj$estimate["phi"],
                                sigsq = spm_obj$estimate["sigsq"],
