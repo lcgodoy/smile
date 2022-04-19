@@ -23,13 +23,16 @@
 ##'     their row numbers.
 ##' @param var_ids a scalar or vector of type \code{character} indicating the
 ##'     (numerical) variables that are going to be analyzed.
+##' @param trunc_d truncation distance for grid points. Consider using half of
+##'     the maximum distance between polygons
 ##' @return a \code{list}.
 ##' @export
 single_sf_to_spm <- function(sf_obj,
                              n_pts, type = "regular",
                              by_polygon = FALSE,
                              poly_ids = NULL,
-                             var_ids  = NULL) {
+                             var_ids  = NULL,
+                             trunc_d  = NULL) {
     stopifnot(inherits(sf_obj, "sf"))
     stopifnot(all(grepl("POLYGON", sf::st_geometry_type(sf_obj))))
     stopifnot(! is.null(var_ids) )
@@ -48,22 +51,18 @@ single_sf_to_spm <- function(sf_obj,
             lapply(sf::st_cast(sf::st_geometry(sf_obj),
                                "POLYGON"),
                    function(x, .sz, .tp) {
-                       sf::st_as_sf(
-                               sf::st_sample(x    = x,
-                                             size = .sz, 
-                                             type = .tp)
-                           )
+                       sf::st_sample(x    = x,
+                                     size = .sz, 
+                                     type = .tp)
                    },
                    .sz = n_pts, 
                    .tp = type)
     } else if(length(n_pts) > 1) {
         out_grid <-
             Map(function(x, .sz, .tp) {
-                sf::st_as_sf(
-                        sf::st_sample(x    = x,
-                                      size = .sz, 
-                                      type = .tp)
-                    )
+                sf::st_sample(x    = x,
+                              size = .sz, 
+                              type = .tp)
             },
             x = sf::st_cast(sf::st_geometry(sf_obj),
                             "POLYGON"),
@@ -79,8 +78,10 @@ single_sf_to_spm <- function(sf_obj,
     }
 
     if(by_polygon) {
-        out_grid <- sf::st_set_crs(do.call("rbind", out_grid),
+        out_grid <- sf::st_set_crs(do.call("c", out_grid),
                                    sf::st_crs(sf_obj))
+        ## out_grid <- sf::st_set_crs(do.call("rbind", out_grid),
+        ##                            sf::st_crs(sf_obj))
         
     }
     
@@ -102,7 +103,19 @@ single_sf_to_spm <- function(sf_obj,
                              x = sf::st_coordinates(out_grid_pt)[, 1],
                              y = sf::st_coordinates(out_grid_pt)[, 2])
 
-    out_dists <- dist_from_grids(out_grid_pt, poly_ids)
+    if( is.null(trunc_d) ) {
+        out_dists <- dist_from_grids(out_grid_pt, poly_ids)
+    } else {
+        aux_dist <-
+            sf::st_is_within_distance(
+                    sf::st_geometry(sf_obj),
+                    dist   = trunc_d,
+                    sparse = FALSE
+                )
+        aux_lo <- aux_dist[lower.tri(aux_dist, diag = TRUE)]
+        out_dists <- dist_from_grids_tr(out_grid_pt, poly_ids,
+                                        aux_lo, trunc_d * 1.01)
+    }
     
     if(length(var_ids) == 1) {
         out_var <- sf_obj[[var_ids]]

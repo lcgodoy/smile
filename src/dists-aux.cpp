@@ -84,6 +84,8 @@ arma::mat crossdist(const arma::mat& m1, const arma::mat& m2) {
 //' @param by internal use
 //' @param y_grid internal use
 //' @param x_grid internal use
+//' @param tr_vec index for distance truncation
+//' @param tr_inp truncation input
 //' @name aux_mat
 //' @keywords internal
 // [[Rcpp::export]]
@@ -93,6 +95,29 @@ List single_dists(const List& mat_list) {
   for(int i = 0; i < n_out; i++) {
     for(int j = i; j < n_out; j++) {
       out[k] = crossdist(mat_list[i], mat_list[j]);
+      k += 1;
+    }
+  }
+  return out;
+}
+
+//' @name aux_mat
+//' @keywords internal
+// [[Rcpp::export]]
+List single_dists_tr(const List& mat_list,
+		     const LogicalVector& tr_vec,
+		     const double& tr_inp) {
+  int n_out = mat_list.size(), k = 0;
+  List out( n_out * (n_out + 1) / 2 );
+  arma::mat aux_out(1, 1, arma::fill::zeros);
+  aux_out.fill(tr_inp);
+  for(int i = 0; i < n_out; i++) {
+    for(int j = i; j < n_out; j++) {
+      if(tr_vec[k]) {
+	out[k] = crossdist(mat_list[i], mat_list[j]);
+      } else {
+	out[k] = aux_out;
+      }	     
       k += 1;
     }
   }

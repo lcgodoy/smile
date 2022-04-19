@@ -39,6 +39,20 @@ dist_from_grids <- function(y_grid,  by) {
 }
 
 ##' @name aux_mat
+dist_from_grids_tr <- function(y_grid, by, tr_vec, tr_inp) {
+    out_list <- split(x = sf::st_set_geometry(y_grid, NULL),
+                      f = factor(y_grid[[by]],
+                                 levels = unique(y_grid[[by]])))
+    return(
+        single_dists_tr(
+            lapply(out_list,
+                   function(x) as.matrix(x[ , c("x", "y")])),
+            tr_vec, tr_inp
+        )
+    )
+}
+
+##' @name aux_mat
 mult_dist_from_grids <- function(y_grid, x_grid, by) {
     y_list <- sf::st_coordinates(y_grid)
     

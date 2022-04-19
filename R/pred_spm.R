@@ -336,17 +336,15 @@ predict_spm.sf <- function(x, spm_obj,
         } else if(length(n_pts) == NROW(x)) {
             pred_grid <-
                 Map(function(geom, .sz, .tp) {
-                    sf::st_as_sf(
-                            sf::st_sample(x = geom,
-                                          size = .sz,
-                                          type = .tp)
-                        )
+                    sf::st_sample(x = geom,
+                                  size = .sz,
+                                  type = .tp)
                 },
                 geom = sf::st_geometry(x),
                 .sz  = n_pts,
                 .tp  = type)
-            pred_grid <- do.call("rbind", pred_grid) |>
-                sf::st_set_crs(sf::st_crs(x))
+            pred_grid <- sf::st_set_crs(do.call("c", pred_grid),
+                                        sf::st_crs(x))
             pred_grid <- sf::st_join(sf::st_as_sf(pred_grid), x,
                                      join = sf::st_within)
         } else {

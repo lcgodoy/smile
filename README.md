@@ -4,7 +4,7 @@
 
 # smile
 
-## **S**patial **M**isalignment: **I**nterpolation, **L**inkage, and **E**stimation
+## **S**patial **M**isalignment: **I**nterpolation, **L**inkage, and **E**stimation <img src="man/figures/logo.png" align="right" />
 
 <!-- badges: start -->
 [![R-CMD-check](https://github.com/lcgodoy/spmismo/workflows/R-CMD-check/badge.svg)](https://github.com/lcgodoy/smile/actions)

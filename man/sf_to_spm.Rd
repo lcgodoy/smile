@@ -11,7 +11,8 @@ single_sf_to_spm(
   type = "regular",
   by_polygon = FALSE,
   poly_ids = NULL,
-  var_ids = NULL
+  var_ids = NULL,
+  trunc_d = NULL
 )
 
 sf_to_spm(
@@ -20,7 +21,8 @@ sf_to_spm(
   type = "regular",
   by_polygon = FALSE,
   poly_ids = NULL,
-  var_ids = NULL
+  var_ids = NULL,
+  trunc_d = NULL
 )
 }
 \arguments{
@@ -48,6 +50,9 @@ their row numbers.}
 
 \item{var_ids}{a scalar or vector of type \code{character} indicating the
 (numerical) variables that are going to be analyzed.}
+
+\item{trunc_d}{truncation distance for grid points. Consider using half of
+the maximum distance between polygons}
 }
 \value{
 a \code{list}.

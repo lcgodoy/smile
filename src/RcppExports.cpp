@@ -570,6 +570,19 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// single_dists_tr
+List single_dists_tr(const List& mat_list, const LogicalVector& tr_vec, const double& tr_inp);
+RcppExport SEXP _smile_single_dists_tr(SEXP mat_listSEXP, SEXP tr_vecSEXP, SEXP tr_inpSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const List& >::type mat_list(mat_listSEXP);
+    Rcpp::traits::input_parameter< const LogicalVector& >::type tr_vec(tr_vecSEXP);
+    Rcpp::traits::input_parameter< const double& >::type tr_inp(tr_inpSEXP);
+    rcpp_result_gen = Rcpp::wrap(single_dists_tr(mat_list, tr_vec, tr_inp));
+    return rcpp_result_gen;
+END_RCPP
+}
 // mult_dists
 List mult_dists(const List& mat_list1, const List& mat_list2, const bool& return_single);
 RcppExport SEXP _smile_mult_dists(SEXP mat_list1SEXP, SEXP mat_list2SEXP, SEXP return_singleSEXP) {
@@ -637,6 +650,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_smile_distmat", (DL_FUNC) &_smile_distmat, 1},
     {"_smile_crossdist", (DL_FUNC) &_smile_crossdist, 2},
     {"_smile_single_dists", (DL_FUNC) &_smile_single_dists, 1},
+    {"_smile_single_dists_tr", (DL_FUNC) &_smile_single_dists_tr, 3},
     {"_smile_mult_dists", (DL_FUNC) &_smile_mult_dists, 3},
     {"_smile_pred_cdist", (DL_FUNC) &_smile_pred_cdist, 2},
     {NULL, NULL, 0}

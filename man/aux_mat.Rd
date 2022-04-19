@@ -3,13 +3,17 @@
 \name{aux_mat}
 \alias{aux_mat}
 \alias{single_dists}
+\alias{single_dists_tr}
 \alias{pred_cdist}
 \alias{get_grid_list}
 \alias{dist_from_grids}
+\alias{dist_from_grids_tr}
 \alias{mult_dist_from_grids}
 \title{Internal use only}
 \usage{
 single_dists(mat_list)
+
+single_dists_tr(mat_list, tr_vec, tr_inp)
 
 pred_cdist(mat_list, pred_mat)
 
@@ -17,10 +21,16 @@ get_grid_list(x_to_list, by)
 
 dist_from_grids(y_grid, by)
 
+dist_from_grids_tr(y_grid, by, tr_vec, tr_inp)
+
 mult_dist_from_grids(y_grid, x_grid, by)
 }
 \arguments{
 \item{mat_list}{internal use}
+
+\item{tr_vec}{index for distance truncation}
+
+\item{tr_inp}{truncation input}
 
 \item{pred_mat}{internal use}
 

@@ -912,10 +912,18 @@ crossdist <- function(m1, m2) {
 #' @param by internal use
 #' @param y_grid internal use
 #' @param x_grid internal use
+#' @param tr_vec index for distance truncation
+#' @param tr_inp truncation input
 #' @name aux_mat
 #' @keywords internal
 single_dists <- function(mat_list) {
     .Call(`_smile_single_dists`, mat_list)
+}
+
+#' @name aux_mat
+#' @keywords internal
+single_dists_tr <- function(mat_list, tr_vec, tr_inp) {
+    .Call(`_smile_single_dists_tr`, mat_list, tr_vec, tr_inp)
 }
 
 #' @name aux_mat//'

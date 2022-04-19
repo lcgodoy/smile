@@ -22,3 +22,8 @@
 
 * Generalized Wendland covariance function
 * More flexible prediction function
+
+# smile 1.0.4.1
+
+* Speeding up `sf_to_spm`.
+* Added icon
