@@ -7,7 +7,7 @@
 ## **S**patial **M**isalignment: **I**nterpolation, **L**inkage, and **E**stimation
 
 <!-- badges: start -->
-[![R-CMD-check](https://github.com/lcgodoy/spmismo/workflows/R-CMD-check/badge.svg)](https://github.com/lcgodoy/smile/actions)
+[![R-CMD-check](https://github.com/lcgodoy/smile/workflows/R-CMD-check/badge.svg)](https://github.com/lcgodoy/smile/actions)
 [![CRAN status](https://www.r-pkg.org/badges/version/smile)](https://CRAN.R-project.org/package=smile)
 <!-- badges: end -->
 
