@@ -33,7 +33,7 @@
   <div class="dropdown-menu" aria-labelledby="dropdown--vignettes">
     <a class="dropdown-item" href="../articles/sf-to-spm.html">1. Converting sf objects to spm</a>
     <a class="dropdown-item" href="../articles/fit-and-pred.html">2. Fitting models and making predictions</a>
-    <a class="dropdown-item" href="../articles/sai.html">3. Simple Areal Interpolation</a>
+    <a class="dropdown-item" href="../articles/sai.html">3. Areal Interpolation</a>
     <a class="dropdown-item" href="../articles/theory.html">4. Method</a>
     <a class="dropdown-item" href="../articles/sp-cov-functions.html">5. Spatial covariance functions</a>
   </div>
@@ -144,9 +144,22 @@ the maximum distance between polygons</p></dd>
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>a <code>list</code>.</p>
+    <p>a named <code>list</code> of size 6 belonging to the class
+<code>spm</code>. This list stores all the objects necessary to fit models
+using the <code><a href="fit_spm.html">fit_spm</a></code>.</p>
     </div>
 
+    <div class="section level2">
+    <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">liv_lsoa</span><span class="op">)</span> <span class="co"># loading the LSOA data</span></span>
+<span class="r-in"></span>
+<span class="r-in"><span class="va">msoa_spm</span> <span class="op">&lt;-</span> <span class="fu">sf_to_spm</span><span class="op">(</span>sf_obj <span class="op">=</span> <span class="va">liv_msoa</span>, n_pts <span class="op">=</span> <span class="fl">1000</span>,</span>
+<span class="r-in">                      type <span class="op">=</span> <span class="st">"regular"</span>, by_polygon <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span class="r-in">                      poly_ids <span class="op">=</span> <span class="st">"msoa11cd"</span>,</span>
+<span class="r-in">                      var_ids <span class="op">=</span> <span class="st">"leb_est"</span><span class="op">)</span></span>
+<span class="r-in"></span>
+</code></pre></div>
+    </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside></div>
 

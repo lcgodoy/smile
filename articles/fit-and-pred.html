@@ -60,7 +60,7 @@
   <div class="dropdown-menu" aria-labelledby="dropdown--vignettes">
     <a class="dropdown-item" href="../articles/sf-to-spm.html">1. Converting sf objects to spm</a>
     <a class="dropdown-item" href="../articles/fit-and-pred.html">2. Fitting models and making predictions</a>
-    <a class="dropdown-item" href="../articles/sai.html">3. Simple Areal Interpolation</a>
+    <a class="dropdown-item" href="../articles/sai.html">3. Areal Interpolation</a>
     <a class="dropdown-item" href="../articles/theory.html">4. Method</a>
     <a class="dropdown-item" href="../articles/sp-cov-functions.html">5. Spatial covariance functions</a>
   </div>
@@ -205,7 +205,7 @@
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"m1"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/AIC.html" class="external-link">AIC</a></span><span class="op">(</span><span class="va">fit_msoa1</span><span class="op">)</span>, <span class="st">"m2"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/AIC.html" class="external-link">AIC</a></span><span class="op">(</span><span class="va">fit_msoa2</span><span class="op">)</span>, <span class="st">"m3"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/AIC.html" class="external-link">AIC</a></span><span class="op">(</span><span class="va">fit_msoa3</span><span class="op">)</span><span class="op">)</span>
 <span class="co">#&gt;       m1       m2       m3 </span>
-<span class="co">#&gt; 298.3935 300.4944 301.4261</span></code></pre></div>
+<span class="co">#&gt; 299.4110 301.0847 301.7434</span></code></pre></div>
 <p>We can retrieve the estimated parameters and the associated <code>(1 - sig)</code> % confidence intervals by using the function <code>summary_spm_fit</code> as follows</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/summary_spm_fit.html">summary_spm_fit</a></span><span class="op">(</span><span class="va">fit_msoa1</span>, sig <span class="op">=</span> <span class="fl">.05</span><span class="op">)</span>
@@ -213,9 +213,9 @@
 <span class="co">#&gt;  optimization algorithm converged: yes </span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt;     par   estimate        se               ci</span>
-<span class="co">#&gt; 1    mu 75.9127022 0.8034137 [74.338; 77.487]</span>
-<span class="co">#&gt; 2 sigsq 23.9070160 4.3385930 [15.404; 32.411]</span>
-<span class="co">#&gt; 3   phi  0.8076036 0.2101864   [0.396; 1.220]</span></code></pre></div>
+<span class="co">#&gt; 1    mu 75.8860716 0.7547559 [74.407; 77.365]</span>
+<span class="co">#&gt; 2 sigsq 24.4754016 4.4881638 [15.679; 33.272]</span>
+<span class="co">#&gt; 3   phi  0.7355643 0.1850456   [0.373; 1.098]</span></code></pre></div>
 <p>Finally, we have almost everything we need to perform predictions at the LSOA areas. The function <code>predict_spm</code> calculates the predictions associated to the <code>spm_obj</code> (which contains the results associated with a fitted model) into a <code>sf</code> object given as an input for the argument <code>x</code>. We need to specify whether we want to “aggregate” (i.e. average) the predicted surface over the polygons associated with the <code>sf</code> data. The number of points and the type of integration for prediction need to be set as well. In this case we are specifying a finer grid (3500 points) because the LSOA areas are smaller than the MSOA areas.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">pred_lsoa</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/predict_spm.html">predict_spm</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">liv_lsoa</span>, spm_obj <span class="op">=</span> <span class="va">fit_msoa1</span>, id_var <span class="op">=</span> <span class="st">"lsoa11cd"</span><span class="op">)</span>

@@ -33,7 +33,7 @@
   <div class="dropdown-menu" aria-labelledby="dropdown--vignettes">
     <a class="dropdown-item" href="../articles/sf-to-spm.html">1. Converting sf objects to spm</a>
     <a class="dropdown-item" href="../articles/fit-and-pred.html">2. Fitting models and making predictions</a>
-    <a class="dropdown-item" href="../articles/sai.html">3. Simple Areal Interpolation</a>
+    <a class="dropdown-item" href="../articles/sai.html">3. Areal Interpolation</a>
     <a class="dropdown-item" href="../articles/theory.html">4. Method</a>
     <a class="dropdown-item" href="../articles/sp-cov-functions.html">5. Spatial covariance functions</a>
   </div>
@@ -177,7 +177,8 @@ compute a grid-search over \(phi\).</p></dd>
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>a <code>spm_fit</code> object.</p>
+    <p>a <code>spm_fit</code> object containing the information about the
+estimation of the model parameters.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
@@ -204,6 +205,42 @@ to be \eqn{Y(B) = \lvert B \rvert^{-1} \int_{B} Y(\mathbf{s}) \,
 
     </div>
 
+    <div class="section level2">
+    <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"></span>
+<span class="r-in"></span>
+<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">liv_lsoa</span><span class="op">)</span> <span class="co">## loading the LSOA data</span></span>
+<span class="r-in"></span>
+<span class="r-in"><span class="va">msoa_spm</span> <span class="op">&lt;-</span> <span class="fu"><a href="sf_to_spm.html">sf_to_spm</a></span><span class="op">(</span>sf_obj <span class="op">=</span> <span class="va">liv_msoa</span>, n_pts <span class="op">=</span> <span class="fl">500</span>,</span>
+<span class="r-in">                      type <span class="op">=</span> <span class="st">"regular"</span>, by_polygon <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span class="r-in">                      poly_ids <span class="op">=</span> <span class="st">"msoa11cd"</span>,</span>
+<span class="r-in">                      var_ids <span class="op">=</span> <span class="st">"leb_est"</span><span class="op">)</span></span>
+<span class="r-in"><span class="co">## fitting model</span></span>
+<span class="r-in"><span class="va">theta_st_msoa</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"phi"</span> <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="co"># initial value for the range parameter</span></span>
+<span class="r-in"></span>
+<span class="r-in"><span class="va">fit_msoa</span> <span class="op">&lt;-</span></span>
+<span class="r-in">   <span class="fu">fit_spm</span><span class="op">(</span>x <span class="op">=</span> <span class="va">msoa_spm</span>,</span>
+<span class="r-in">           theta_st <span class="op">=</span> <span class="va">theta_st_msoa</span>,</span>
+<span class="r-in">           model <span class="op">=</span> <span class="st">"matern"</span>,</span>
+<span class="r-in">           nu <span class="op">=</span> <span class="fl">.5</span>,</span>
+<span class="r-in">           apply_exp  <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span class="r-in">           opt_method <span class="op">=</span> <span class="st">"L-BFGS-B"</span>,</span>
+<span class="r-in">           control    <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>maxit <span class="op">=</span> <span class="fl">500</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-in"></span>
+<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/stats/AIC.html" class="external-link">AIC</a></span><span class="op">(</span><span class="va">fit_msoa</span><span class="op">)</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 296.6101</span>
+<span class="r-in"></span>
+<span class="r-in"><span class="fu"><a href="summary_spm_fit.html">summary_spm_fit</a></span><span class="op">(</span><span class="va">fit_msoa</span>, sig <span class="op">=</span> <span class="fl">.05</span><span class="op">)</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  optimization algorithm converged: yes </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     par   estimate        se               ci</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1    mu 75.9057710 0.7500690 [74.436; 77.376]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 sigsq 23.2573340 4.2477969 [14.932; 31.583]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3   phi  0.7542855 0.1911638   [0.380; 1.129]</span>
+<span class="r-in"></span>
+</code></pre></div>
+    </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside></div>
 
