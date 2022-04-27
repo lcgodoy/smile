@@ -66,7 +66,34 @@ fit_spm <- function(x, ...) UseMethod("fit_spm")
 ##'
 ##' @import Matrix
 ##' 
-##' @return a \code{spm_fit} object.
+##' @return a \code{spm_fit} object containing the information about the
+##'     estimation of the model parameters.
+##'
+##' @examples
+##' 
+##' @examples
+##'
+##' data(liv_lsoa) ## loading the LSOA data
+##' 
+##' msoa_spm <- sf_to_spm(sf_obj = liv_msoa, n_pts = 500,
+##'                       type = "regular", by_polygon = FALSE,
+##'                       poly_ids = "msoa11cd",
+##'                       var_ids = "leb_est")
+##' ## fitting model
+##' theta_st_msoa <- c("phi" = 1) # initial value for the range parameter
+##'
+##' fit_msoa <-
+##'    fit_spm(x = msoa_spm,
+##'            theta_st = theta_st_msoa,
+##'            model = "matern",
+##'            nu = .5,
+##'            apply_exp  = TRUE,
+##'            opt_method = "L-BFGS-B",
+##'            control    = list(maxit = 500))
+##'
+##' AIC(fit_msoa)
+##' 
+##' summary_spm_fit(fit_msoa, sig = .05)
 ##' 
 ##' @export
 fit_spm.spm <- function(x, model, theta_st,
@@ -387,10 +414,17 @@ fit_spm.spm <- function(x, model, theta_st,
 ##     return(output)
 ## }
 
-##' @title summarizing \code{spm_fit}
+##' @title Summarizing \code{spm_fit}
 ##'
-##' @param x a \code{spm_fit} object
-##' @param sig signigicance level
+##' @description Provides a \code{data.frame} with point estimates and
+##'     confidence intervals for the paramters of the model fitted using the
+##'     \code{spm_fit} function.
+##' 
+##' @param x a \code{spm_fit} object.
+##' @param sig a real number between 0 and 1 indicating significance level to be
+##'     used to compute the confidence intervals for the parameter estimates.
+##' @return a \code{data.frame} summarising the parameters estimated by the
+##'     \code{fit_spm} function.
 ##' @export
 summary_spm_fit <- function(x, sig = .05) {
     se_est <- diag(x$info_mat)

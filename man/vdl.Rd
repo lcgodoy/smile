@@ -20,5 +20,6 @@ source - polygon) to be estimated at the target data.}
 a \code{sf} object for the \code{coords_sf} spatial data set.
 }
 \description{
-Reminder, have to create an example.
+Reminder, have to create an example. This will be exported
+after we submit the paper for publication.
 }

@@ -28,5 +28,6 @@ a \code{sf} object, contaning the \code{id_coords} variable and the
 \code{list_vars} for the \code{coords_sf} spatial data set.
 }
 \description{
-Reminder, have to create an example.
+Reminder, have to create an example. This will be exported
+after we submit the paper for publication.
 }

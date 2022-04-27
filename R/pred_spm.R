@@ -305,7 +305,33 @@ predict_spm.spm_fit <- function(x, .aggregate = TRUE, ...) {
 ##'     unique identifier associated to each polygon.
 ##' @param ... additional parameters
 ##'
-##' @return an object of class \code{spm_pred}
+##' @return a \code{list} of size 4 belonging to the class \code{spm_pred}. This
+##'     list contains the predicted values and the mean and covariance matrix
+##'     associated with the conditional distribution used to compute the
+##'     predictions.
+##'
+##' @examples
+##'
+##' data(liv_lsoa) ## loading the LSOA data
+##' data(liv_msoa) ## loading the MSOA data
+##' 
+##' msoa_spm <- sf_to_spm(sf_obj = liv_msoa, n_pts = 500,
+##'                       type = "regular", by_polygon = FALSE,
+##'                       poly_ids = "msoa11cd",
+##'                       var_ids = "leb_est")
+##' ## fitting model
+##' theta_st_msoa <- c("phi" = 1) # initial value for the range parameter
+##'
+##' fit_msoa <-
+##'    fit_spm(x = msoa_spm,
+##'            theta_st = theta_st_msoa,
+##'            model = "matern",
+##'            nu = .5,
+##'            apply_exp  = TRUE,
+##'            opt_method = "L-BFGS-B",
+##'            control    = list(maxit = 500))
+##' 
+##' pred_lsoa <- predict_spm(x = liv_lsoa, spm_obj = fit_msoa, id_var = "lsoa11cd")
 ##' 
 ##' @export
 predict_spm.sf <- function(x, spm_obj, 

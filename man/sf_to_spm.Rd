@@ -55,8 +55,19 @@ their row numbers.}
 the maximum distance between polygons}
 }
 \value{
-a \code{list}.
+a named \code{list} of size 6 belonging to the class
+\code{spm}. This list stores all the objects necessary to fit models
+using the \code{\link{fit_spm}}.
 }
 \description{
 Transforming a \code{sf} into a \code{spm} object (Internal use)
+}
+\examples{
+data(liv_lsoa) # loading the LSOA data
+
+msoa_spm <- sf_to_spm(sf_obj = liv_msoa, n_pts = 1000,
+                      type = "regular", by_polygon = FALSE,
+                      poly_ids = "msoa11cd",
+                      var_ids = "leb_est")
+
 }

@@ -2,15 +2,22 @@
 % Please edit documentation in R/fit.R
 \name{summary_spm_fit}
 \alias{summary_spm_fit}
-\title{summarizing \code{spm_fit}}
+\title{Summarizing \code{spm_fit}}
 \usage{
 summary_spm_fit(x, sig = 0.05)
 }
 \arguments{
-\item{x}{a \code{spm_fit} object}
+\item{x}{a \code{spm_fit} object.}
 
-\item{sig}{signigicance level}
+\item{sig}{a real number between 0 and 1 indicating significance level to be
+used to compute the confidence intervals for the parameter estimates.}
+}
+\value{
+a \code{data.frame} summarising the parameters estimated by the
+\code{fit_spm} function.
 }
 \description{
-summarizing \code{spm_fit}
+Provides a \code{data.frame} with point estimates and
+confidence intervals for the paramters of the model fitted using the
+\code{spm_fit} function.
 }

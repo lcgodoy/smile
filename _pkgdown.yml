@@ -22,7 +22,7 @@ navbar:
           href: articles/sf-to-spm.html
         - text: "2. Fitting models and making predictions"
           href: articles/fit-and-pred.html
-        - text: "3. Simple Areal Interpolation"
+        - text: "3. Areal Interpolation"
           href: articles/sai.html 
         - text: "4. Method"
           href: articles/theory.html 

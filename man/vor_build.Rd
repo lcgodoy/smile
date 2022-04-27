@@ -7,15 +7,16 @@
 vor_build(points_sf, poly_sf)
 }
 \arguments{
-\item{points_sf}{\verb{sf data frame} containing the points' coordinates}
+\item{points_sf}{\code{sf data frame} containing the points' coordinates}
 
 \item{poly_sf}{a \code{sf} polygon}
 }
 \value{
-a \code{sf} polygon
+a \code{sf} object containing the polygons associated with the
+voronoi tesselation of \code{points_sf} the polygon \code{poly_sf}
 }
 \description{
-voronoi tesselation of a given a set of points inside a polygon.
-This is an internal use function.
+voronoi tesselation of a given a set of points inside a
+polygon.  This is an internal use function.
 }
 \keyword{internal}

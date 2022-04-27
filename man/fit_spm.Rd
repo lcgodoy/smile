@@ -88,7 +88,8 @@ value to look for.}
 compute a grid-search over \eqn{phi}.}
 }
 \value{
-a \code{spm_fit} object.
+a \code{spm_fit} object containing the information about the
+estimation of the model parameters.
 }
 \description{
 Fitting an underlying continuous process to areal data
@@ -114,4 +115,30 @@ point level.  Where \eqn{S ~ GP(0, \sigma^2 C(\lVert \mathbf{s} -
 to be \eqn{Y(B) = \lvert B \rvert^{-1} \int_{B} Y(\mathbf{s}) \,
     \textrm{d} \mathbf{s}}.
 }
+}
+\examples{
+
+
+data(liv_lsoa) ## loading the LSOA data
+
+msoa_spm <- sf_to_spm(sf_obj = liv_msoa, n_pts = 500,
+                      type = "regular", by_polygon = FALSE,
+                      poly_ids = "msoa11cd",
+                      var_ids = "leb_est")
+## fitting model
+theta_st_msoa <- c("phi" = 1) # initial value for the range parameter
+
+fit_msoa <-
+   fit_spm(x = msoa_spm,
+           theta_st = theta_st_msoa,
+           model = "matern",
+           nu = .5,
+           apply_exp  = TRUE,
+           opt_method = "L-BFGS-B",
+           control    = list(maxit = 500))
+
+AIC(fit_msoa)
+
+summary_spm_fit(fit_msoa, sig = .05)
+
 }

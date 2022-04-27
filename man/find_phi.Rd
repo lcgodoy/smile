@@ -2,7 +2,8 @@
 % Please edit documentation in R/utils.R
 \name{find_phi}
 \alias{find_phi}
-\title{Find phi parameter for the Exponential spatial auto-correlation function}
+\title{Find phi parameter for the Exponential spatial auto-correlation
+function}
 \usage{
 find_phi(
   d,
@@ -19,21 +20,28 @@ find_phi(
 
 \item{nu}{smoothness parameter associated with the Matern cov. function.}
 
-\item{kappa}{par GW}
+\item{kappa}{one of the smoothness parameters associated with the Generalized
+Wendland covariance function}
 
-\item{mu2}{smoothness GW}
+\item{mu2}{one of the smoothness parameters associated with the Generalized
+Wendland covariance function}
 
-\item{family}{covariance function family}
+\item{family}{covariance function family, the options are \code{c("matern",
+"gw", "cs", "spher", "pexp", "gaussian")}.}
 
-\item{range}{Minimum and maximum distance to be considered.}
+\item{range}{Minimum and maximum distance to be considered. The default is
+\code{range = c(1e-04, 1000)}.}
 
-\item{cut}{Spatial correlation at a distance \code{d}.}
+\item{cut}{desired spatial correlation at a distance \code{d}, the default is
+\code{cut = .05}.}
 }
 \value{
-\code{real number}
+a \code{numeric} value indicating the range parameter such that the
+spatial correlation between two points at distance \code{d} is
+\code{cut}.
 }
 \description{
-Function designed to find the phi paramter such that the correlation
-between points wihtin a given distance \code{d} is at most a given
-value.
+Function designed to find the phi paramter such that the
+correlation between points wihtin a given distance \code{d} is at most a
+given value.
 }

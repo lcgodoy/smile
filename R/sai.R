@@ -124,6 +124,12 @@ var_w <- function(W, var_vec, target,
 ##' @name AI
 ##'
 ##' @title Areal Interpolation
+##'
+##' @description This function estimates variables observed at a "source" region
+##'     into a "target" region. "Source" and "target" regions represent two
+##'     different ways to divide a city, for example. For more details, see
+##'     \url{https://lcgodoy.me/smile/articles/sai.html}.
+##' 
 ##' @param source a \code{sf} object - source spatial data.
 ##' @param target a \code{sf} object - target spatial data.
 ##' @param vars a \code{character} representing the variables (observed at the
@@ -139,6 +145,30 @@ var_w <- function(W, var_vec, target,
 ##' 
 ##' @return the target (of type \code{sf}) with estimates of the variables
 ##'     observed at the source data.
+##'
+##' @examples
+##' data(nyc_surv)
+##' data(nyc_comd)
+##'
+##' ## creating variables that store the variance for each area
+##' ## this is done to exemplify the functionality of the package
+##' nyc_surv <- transform(nyc_surv,
+##'                       my_var = moe / qnorm(p = .975))
+##' nyc_surv <- transform(nyc_surv, my_var = my_var * my_var)
+##' 
+##' \dontrun{
+##' ## areal interpolation
+##' estimate_comd <-
+##'    ai(source = nyc_surv, target = nyc_comd,
+##'       vars = "estimate")
+##'
+##' ## areal interpolation with uncertainty estimation
+##' estimate_comd <-
+##'    ai_var(source = nyc_surv, target = nyc_comd,
+##'           vars = "estimate", vars_var = "my_var",
+##'           var_method = "MI")
+##' }
+##' 
 ##' @export
 ai <- function(source, target,
                vars) {

@@ -34,7 +34,7 @@ package. Besides these two packages, we are going to use the
 `ggplot2`[@wickham2011ggplot2] package for the data visualization.
 
 This vignette is useful when the user wants to pursue the model-based
-approach. This methodology is based on the assumption that areal data (e.g.,
+approach. The methodology is based on the assumption that areal data (e.g.,
 variables measured at census tracts) are composed by averages of a continuous
 underlying process [@gelfand2001change; @moraga2017geostatistical,
 @johnson2020dealing; @wilson2020pointless]. In practice, there exists an

@@ -27,3 +27,5 @@
 
 * Speeding up `sf_to_spm`.
 * Added icon
+* Improved documentation
+* Added examples

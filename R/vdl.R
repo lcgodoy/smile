@@ -1,12 +1,13 @@
 ##' @title Voronoi Tesselation inside a polygon
 ##'
-##' @description voronoi tesselation of a given a set of points inside a polygon.
-##' This is an internal use function.
+##' @description voronoi tesselation of a given a set of points inside a
+##'     polygon.  This is an internal use function.
 ##'
-##' @param points_sf `sf data frame` containing the points' coordinates
-##' @param poly_sf a `sf` polygon
+##' @param points_sf \code{sf data frame} containing the points' coordinates
+##' @param poly_sf a \code{sf} polygon
 ##'
-##' @return a `sf` polygon
+##' @return a \code{sf} object containing the polygons associated with the
+##'     voronoi tesselation of \code{points_sf} the polygon \code{poly_sf}
 ##' @keywords internal
 vor_build <- function(points_sf, poly_sf) {
     if(nrow(points_sf) > 1) {
@@ -29,7 +30,8 @@ vor_build <- function(points_sf, poly_sf) {
 
 ##' @title Voronoi Data Linkage
 ##'
-##' @description Reminder, have to create an example.
+##' @description Reminder, have to create an example. This will be exported
+##'     after we submit the paper for publication.
 ##'
 ##' @param coords_sf \code{sf} POINT target dataset.
 ##' @param areal_sf \code{sf} POLYGON source dataset.
@@ -37,9 +39,7 @@ vor_build <- function(points_sf, poly_sf) {
 ##'     source - polygon) to be estimated at the target data.
 ##' @param buff scalar `numeric`. Mostly for internal use.
 ##'
-##'
 ##' @return a `sf` object for the `coords_sf` spatial data set.
-##' @export
 vdl <- function(coords_sf, areal_sf,
                 vars,
                 buff) {
@@ -89,7 +89,8 @@ vdl <- function(coords_sf, areal_sf,
 
 ##' @title Voronoi Data Linkage - Single variable and variance
 ##'
-##' @description Reminder, have to create an example.
+##' @description Reminder, have to create an example. This will be exported
+##'     after we submit the paper for publication.
 ##'
 ##' @param coords_sf \code{sf} POINT target dataset.
 ##' @param areal_sf \code{sf} POLYGON source dataset.
@@ -103,9 +104,8 @@ vdl <- function(coords_sf, areal_sf,
 ##' @param buff scalar `numeric`. Mostly for internal use.
 ##'
 ##'
-##' @return a `sf` object, contaning the `id_coords` variable and the
-##' `list_vars` for the `coords_sf` spatial data set.
-##' @export
+##' @return a \code{sf} object, contaning the \code{id_coords} variable and the
+##'     \code{list_vars} for the \code{coords_sf} spatial data set.
 vdl_var <- function(coords_sf, areal_sf,
                     res_var,
                     variance,
@@ -144,14 +144,14 @@ vdl_var <- function(coords_sf, areal_sf,
     return(output)
 }
 
-##' Transform method for `sf` objects
+##' @title Transform method for \code{sf} objects
 ##'
-##' Internal usage.
+##' @description Internal usage.
 ##'
-##' @param _data a `sf` object
+##' @param _data a \code{sf} object
 ##' @param ... additional options
 ##'
-##' @return an `sf` object.
+##' @return an \code{sf} object.
 ##' @keywords internal
 transform.sf <- function (`_data`, ...) {
     e <- eval(substitute(list(...)), `_data`, parent.frame())

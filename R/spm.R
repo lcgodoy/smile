@@ -25,8 +25,18 @@
 ##'     (numerical) variables that are going to be analyzed.
 ##' @param trunc_d truncation distance for grid points. Consider using half of
 ##'     the maximum distance between polygons
-##' @return a \code{list}.
-##' @export
+##' @return a named \code{list} of size 6 belonging to the class
+##'     \code{spm}. This list stores all the objects necessary to fit models
+##'     using the \code{\link{fit_spm}}.
+##'
+##' @examples
+##' data(liv_lsoa) # loading the LSOA data
+##' 
+##' msoa_spm <- sf_to_spm(sf_obj = liv_msoa, n_pts = 1000,
+##'                       type = "regular", by_polygon = FALSE,
+##'                       poly_ids = "msoa11cd",
+##'                       var_ids = "leb_est")
+##' 
 single_sf_to_spm <- function(sf_obj,
                              n_pts, type = "regular",
                              by_polygon = FALSE,
