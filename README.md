@@ -34,10 +34,14 @@ The package accompanies a web page (powered by
 
 ### Installation
 
-The package is not on [CRAN](https://cran.r-project.org) yet. Therefore, only
-the development version from [GitHub](https://github.com/) is available. If you
-are interested, you can installed using:
+To install the [CRAN](https://cran.r-project.org) version of the, use
 ```r
-## install.packages("smile")
+install.packages("smile")
+## remotes::install_github("lcgodoy/smile")
+```
+
+The installationg of the development version from Github can be done via
+```r
 remotes::install_github("lcgodoy/smile")
+## or devtools::install_github("lcgodoy/smile")
 ```
