@@ -33,7 +33,7 @@ Imports:
     stats,
     Matrix
 Depends: 
-    R (>= 3.5)
+    R (>= 4.1)
 URL: https://lcgodoy.me/smile/, https://github.com/lcgodoy/smile/
 BugReports: https://github.com/lcgodoy/smile/issues/
 Suggests: 
