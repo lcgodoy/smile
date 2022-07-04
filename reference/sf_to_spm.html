@@ -90,74 +90,89 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">single_sf_to_spm</span><span class="op">(</span>
-  <span class="va">sf_obj</span>,
-  <span class="va">n_pts</span>,
-  type <span class="op">=</span> <span class="st">"regular"</span>,
-  by_polygon <span class="op">=</span> <span class="cn">FALSE</span>,
-  poly_ids <span class="op">=</span> <span class="cn">NULL</span>,
-  var_ids <span class="op">=</span> <span class="cn">NULL</span>,
-  trunc_d <span class="op">=</span> <span class="cn">NULL</span>
-<span class="op">)</span>
-
-<span class="fu">sf_to_spm</span><span class="op">(</span>
-  <span class="va">sf_obj</span>,
-  <span class="va">n_pts</span>,
-  type <span class="op">=</span> <span class="st">"regular"</span>,
-  by_polygon <span class="op">=</span> <span class="cn">FALSE</span>,
-  poly_ids <span class="op">=</span> <span class="cn">NULL</span>,
-  var_ids <span class="op">=</span> <span class="cn">NULL</span>,
-  trunc_d <span class="op">=</span> <span class="cn">NULL</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">single_sf_to_spm</span><span class="op">(</span></span>
+<span>  <span class="va">sf_obj</span>,</span>
+<span>  <span class="va">n_pts</span>,</span>
+<span>  type <span class="op">=</span> <span class="st">"regular"</span>,</span>
+<span>  by_polygon <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  poly_ids <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  var_ids <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  trunc_d <span class="op">=</span> <span class="cn">NULL</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">sf_to_spm</span><span class="op">(</span></span>
+<span>  <span class="va">sf_obj</span>,</span>
+<span>  <span class="va">n_pts</span>,</span>
+<span>  type <span class="op">=</span> <span class="st">"regular"</span>,</span>
+<span>  by_polygon <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  poly_ids <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  var_ids <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  trunc_d <span class="op">=</span> <span class="cn">NULL</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>sf_obj</dt>
 <dd><p>a <code>sf</code> object s.t. its geometries are polygons.</p></dd>
+
+
 <dt>n_pts</dt>
 <dd><p>a <code>numeric</code> scalar representing the number of points to
 create a grid in the study region on which the polygons in <code>sf_obj</code>
 is observed. Alternatively, it can be a vector of the same length as
 <code>nrow(sf_obj)</code>. In this case, it generates the given number of
 points for each polygon in <code>sf_obj</code>.</p></dd>
+
+
 <dt>type</dt>
 <dd><p>a <code>character</code> indicating the type of grid to be
 generated. The options are <code>c("random", "regular",
     "hexagonal")</code>. For more details, see <code>st_sample</code> in the <code>sf</code>
 package.</p></dd>
+
+
 <dt>by_polygon</dt>
 <dd><p>a <code>logical</code> indicating wheter we should generate
 <code>n_pts</code> by polygon or for the <code>n_pts</code> for the whole study
 region.</p></dd>
+
+
 <dt>poly_ids</dt>
 <dd><p>a <code>character</code> vector informing the name of the variable
 in <code>sf_obj</code> that represents the polygons unique identifiers. In
 case this is not informed, we assume the id of the polygons are given by
 their row numbers.</p></dd>
+
+
 <dt>var_ids</dt>
 <dd><p>a scalar or vector of type <code>character</code> indicating the
 (numerical) variables that are going to be analyzed.</p></dd>
+
+
 <dt>trunc_d</dt>
 <dd><p>truncation distance for grid points. Consider using half of
 the maximum distance between polygons</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>a named <code>list</code> of size 6 belonging to the class
+    
+
+<p>a named <code>list</code> of size 6 belonging to the class
 <code>spm</code>. This list stores all the objects necessary to fit models
 using the <code><a href="fit_spm.html">fit_spm</a></code>.</p>
     </div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">liv_lsoa</span><span class="op">)</span> <span class="co"># loading the LSOA data</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">msoa_spm</span> <span class="op">&lt;-</span> <span class="fu">sf_to_spm</span><span class="op">(</span>sf_obj <span class="op">=</span> <span class="va">liv_msoa</span>, n_pts <span class="op">=</span> <span class="fl">1000</span>,</span>
-<span class="r-in">                      type <span class="op">=</span> <span class="st">"regular"</span>, by_polygon <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span class="r-in">                      poly_ids <span class="op">=</span> <span class="st">"msoa11cd"</span>,</span>
-<span class="r-in">                      var_ids <span class="op">=</span> <span class="st">"leb_est"</span><span class="op">)</span></span>
-<span class="r-in"></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">liv_lsoa</span><span class="op">)</span> <span class="co"># loading the LSOA data</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">msoa_spm</span> <span class="op">&lt;-</span> <span class="fu">sf_to_spm</span><span class="op">(</span>sf_obj <span class="op">=</span> <span class="va">liv_msoa</span>, n_pts <span class="op">=</span> <span class="fl">1000</span>,</span></span>
+<span class="r-in"><span>                      type <span class="op">=</span> <span class="st">"regular"</span>, by_polygon <span class="op">=</span> <span class="cn">FALSE</span>,</span></span>
+<span class="r-in"><span>                      poly_ids <span class="op">=</span> <span class="st">"msoa11cd"</span>,</span></span>
+<span class="r-in"><span>                      var_ids <span class="op">=</span> <span class="st">"leb_est"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

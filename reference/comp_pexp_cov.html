@@ -93,7 +93,7 @@ polygons.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">comp_pexp_cov</span><span class="op">(</span><span class="va">cross_dists</span>, <span class="va">n</span>, <span class="va">n2</span>, <span class="va">sigsq</span>, <span class="va">phi</span>, <span class="va">nu</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">comp_pexp_cov</span><span class="op">(</span><span class="va">cross_dists</span>, <span class="va">n</span>, <span class="va">n2</span>, <span class="va">sigsq</span>, <span class="va">phi</span>, <span class="va">nu</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -101,25 +101,38 @@ polygons.</p>
     <dl><dt>cross_dists</dt>
 <dd><p>a <code>list</code> such that each position contains the cross
 distances between points within different polygons.</p></dd>
+
+
 <dt>n</dt>
 <dd><p>an ingeger representing number of polygons (note that, this is
 different than the size of the list <code>cross_dists</code></p></dd>
+
+
 <dt>n2</dt>
 <dd><p>usually, equal to <code>n</code>, except when the function is being used
 to calculate the "cross" covariance between two different partitions of
 the same space.</p></dd>
+
+
 <dt>sigsq</dt>
 <dd><p>the \(\sigma^2\) parameter from the Powered Exponential
 covariance function.</p></dd>
+
+
 <dt>phi</dt>
 <dd><p>the \(\phi\) parameter from the Powered Exponential covariance
 function, controls the range of the spatial dependence.</p></dd>
+
+
 <dt>nu</dt>
 <dd><p>the \(\nu \in (0, 2]\) parameter representing the "power"</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>The powered exponential covariance matrix associated with a set of
+    
+
+<p>The powered exponential covariance matrix associated with a set of
 polygons.</p>
     </div>
     <div class="section level2">

@@ -93,7 +93,7 @@ distances.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">gw_cov</span><span class="op">(</span><span class="va">dists</span>, <span class="va">sigsq</span>, <span class="va">phi</span>, <span class="va">kappa</span>, <span class="va">mu</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">gw_cov</span><span class="op">(</span><span class="va">dists</span>, <span class="va">sigsq</span>, <span class="va">phi</span>, <span class="va">kappa</span>, <span class="va">mu</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -101,19 +101,30 @@ distances.</p>
     <dl><dt>dists</dt>
 <dd><p>a numeric matrix representing the distance between spatial
 entities.</p></dd>
+
+
 <dt>sigsq</dt>
 <dd><p>the \(\sigma^2\) parameter from the Matern covariance
 function.</p></dd>
+
+
 <dt>phi</dt>
 <dd><p>\(\phi\) is the range of the covariance function.</p></dd>
+
+
 <dt>kappa</dt>
 <dd><p>\(\kappa \in \{0, \ldots, 3 \}\).</p></dd>
+
+
 <dt>mu</dt>
 <dd><p>\(\mu\) controls the smoothness of the covariance function</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>The GW (isotropic) covariance function associated with the provided
+    
+
+<p>The GW (isotropic) covariance function associated with the provided
 distances (<code>dists</code>) and the given set of parameters.</p>
     </div>
 

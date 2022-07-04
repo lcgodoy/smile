@@ -93,7 +93,7 @@ distances.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">mat_cov</span><span class="op">(</span><span class="va">dists</span>, <span class="va">sigsq</span>, <span class="va">phi</span>, <span class="va">nu</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">mat_cov</span><span class="op">(</span><span class="va">dists</span>, <span class="va">sigsq</span>, <span class="va">phi</span>, <span class="va">nu</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -101,19 +101,28 @@ distances.</p>
     <dl><dt>dists</dt>
 <dd><p>a numeric matrix representing the distance between spatial
 entities.</p></dd>
+
+
 <dt>sigsq</dt>
 <dd><p>the \(\sigma^2\) parameter from the Matern covariance
 function.</p></dd>
+
+
 <dt>phi</dt>
 <dd><p>the \(\phi\) parameter from the Matern covariance function,
 controls the range of the spatial dependence.</p></dd>
+
+
 <dt>nu</dt>
 <dd><p>the \(\nu\) parameter from the Matern covariance function,
 controls the differentiability of the process.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>The matern covariance function (for a stationary and isotropic
+    
+
+<p>The matern covariance function (for a stationary and isotropic
 process) associated with the provided distances (<code>dists</code>) and the
 given set of parameters.</p>
     </div>

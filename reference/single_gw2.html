@@ -93,7 +93,7 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">single_gw2</span><span class="op">(</span><span class="va">d</span>, <span class="va">sigsq</span>, <span class="va">phi</span>, <span class="va">mu</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">single_gw2</span><span class="op">(</span><span class="va">d</span>, <span class="va">sigsq</span>, <span class="va">phi</span>, <span class="va">mu</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -101,19 +101,28 @@
     <dl><dt>d</dt>
 <dd><p>a scalar representing the distance on which it is desired to
 evaluate the covariance function.</p></dd>
+
+
 <dt>sigsq</dt>
 <dd><p>the \(\sigma^2\) parameter from the Matern covariance
 function.</p></dd>
+
+
 <dt>phi</dt>
 <dd><p>the \(\phi\) parameter from the Matern covariance function,
 controls the range of the spatial dependence.</p></dd>
+
+
 <dt>mu</dt>
 <dd><p>a parameter that controls the smoothness of the covariance
 function. Note that, \(\mu \geq 1\).</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>a scalar representing the GW covariance between two
+    
+
+<p>a scalar representing the GW covariance between two
 observations <code>d</code> apart of each other.</p>
     </div>
 

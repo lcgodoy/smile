@@ -96,13 +96,13 @@ city (or state) on another division of the same region.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">predict_spm</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span>
-
-<span class="co"># S3 method for spm_fit</span>
-<span class="fu">predict_spm</span><span class="op">(</span><span class="va">x</span>, .aggregate <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span>
-
-<span class="co"># S3 method for sf</span>
-<span class="fu">predict_spm</span><span class="op">(</span><span class="va">x</span>, <span class="va">spm_obj</span>, <span class="va">n_pts</span>, <span class="va">type</span>, outer_poly <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">id_var</span>, <span class="va">...</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">predict_spm</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for spm_fit</span></span>
+<span><span class="fu">predict_spm</span><span class="op">(</span><span class="va">x</span>, .aggregate <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for sf</span></span>
+<span><span class="fu">predict_spm</span><span class="op">(</span><span class="va">x</span>, <span class="va">spm_obj</span>, <span class="va">n_pts</span>, <span class="va">type</span>, outer_poly <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">id_var</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -110,33 +110,50 @@ city (or state) on another division of the same region.</p>
     <dl><dt>x</dt>
 <dd><p>a <code>sf</code> object such that its geometris are either points or
 polygons.</p></dd>
+
+
 <dt>...</dt>
 <dd><p>additional parameters</p></dd>
+
+
 <dt>.aggregate</dt>
 <dd><p><code>logical</code>. Should the predictions be aggregated? In
 case the input is only a "fit" object, the aggregation is made over the
 polygons on which the original data was observed. In case the input
 <code>x</code> is composed by <code>sf POLYGONS</code>, the aggregation is made over
 this new partition of the study region.</p></dd>
+
+
 <dt>spm_obj</dt>
 <dd><p>an object of either class <code>spm_fit</code> or <code>mspm_fit</code></p></dd>
+
+
 <dt>n_pts</dt>
 <dd><p>a <code>numeric</code> scalar standing for number of points to form a
 grid over the whole region to make the predictions</p></dd>
+
+
 <dt>type</dt>
 <dd><p><code>character</code> type of grid to be generated. See
 <code>st_sample</code> in the package <code>sf</code>.</p></dd>
+
+
 <dt>outer_poly</dt>
 <dd><p>(object) <code>sf geometry</code> storing the "outer map" we
 want to compute the predictions in.</p></dd>
+
+
 <dt>id_var</dt>
 <dd><p>if <code>x</code> is a set of <code>POLYGONS</code> (areal data) instead
 of a set of points, the <code>id_var</code> is the name (or index) of the
 unique identifier associated to each polygon.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>a <code>list</code> of size 4 belonging to the class <code>spm_pred</code>. This
+    
+
+<p>a <code>list</code> of size 4 belonging to the class <code>spm_pred</code>. This
 list contains the predicted values and the mean and covariance matrix
 associated with the conditional distribution used to compute the
 predictions.</p>
@@ -144,29 +161,29 @@ predictions.</p>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">liv_lsoa</span><span class="op">)</span> <span class="co">## loading the LSOA data</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">liv_msoa</span><span class="op">)</span> <span class="co">## loading the MSOA data</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">msoa_spm</span> <span class="op">&lt;-</span> <span class="fu"><a href="sf_to_spm.html">sf_to_spm</a></span><span class="op">(</span>sf_obj <span class="op">=</span> <span class="va">liv_msoa</span>, n_pts <span class="op">=</span> <span class="fl">500</span>,</span>
-<span class="r-in">                      type <span class="op">=</span> <span class="st">"regular"</span>, by_polygon <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span class="r-in">                      poly_ids <span class="op">=</span> <span class="st">"msoa11cd"</span>,</span>
-<span class="r-in">                      var_ids <span class="op">=</span> <span class="st">"leb_est"</span><span class="op">)</span></span>
-<span class="r-in"><span class="co">## fitting model</span></span>
-<span class="r-in"><span class="va">theta_st_msoa</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"phi"</span> <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="co"># initial value for the range parameter</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">fit_msoa</span> <span class="op">&lt;-</span></span>
-<span class="r-in">   <span class="fu"><a href="fit_spm.html">fit_spm</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">msoa_spm</span>,</span>
-<span class="r-in">           theta_st <span class="op">=</span> <span class="va">theta_st_msoa</span>,</span>
-<span class="r-in">           model <span class="op">=</span> <span class="st">"matern"</span>,</span>
-<span class="r-in">           nu <span class="op">=</span> <span class="fl">.5</span>,</span>
-<span class="r-in">           apply_exp  <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span class="r-in">           opt_method <span class="op">=</span> <span class="st">"L-BFGS-B"</span>,</span>
-<span class="r-in">           control    <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>maxit <span class="op">=</span> <span class="fl">500</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">pred_lsoa</span> <span class="op">&lt;-</span> <span class="fu">predict_spm</span><span class="op">(</span>x <span class="op">=</span> <span class="va">liv_lsoa</span>, spm_obj <span class="op">=</span> <span class="va">fit_msoa</span>, id_var <span class="op">=</span> <span class="st">"lsoa11cd"</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">liv_lsoa</span><span class="op">)</span> <span class="co">## loading the LSOA data</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">liv_msoa</span><span class="op">)</span> <span class="co">## loading the MSOA data</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">msoa_spm</span> <span class="op">&lt;-</span> <span class="fu"><a href="sf_to_spm.html">sf_to_spm</a></span><span class="op">(</span>sf_obj <span class="op">=</span> <span class="va">liv_msoa</span>, n_pts <span class="op">=</span> <span class="fl">500</span>,</span></span>
+<span class="r-in"><span>                      type <span class="op">=</span> <span class="st">"regular"</span>, by_polygon <span class="op">=</span> <span class="cn">FALSE</span>,</span></span>
+<span class="r-in"><span>                      poly_ids <span class="op">=</span> <span class="st">"msoa11cd"</span>,</span></span>
+<span class="r-in"><span>                      var_ids <span class="op">=</span> <span class="st">"leb_est"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co">## fitting model</span></span></span>
+<span class="r-in"><span><span class="va">theta_st_msoa</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"phi"</span> <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="co"># initial value for the range parameter</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">fit_msoa</span> <span class="op">&lt;-</span></span></span>
+<span class="r-in"><span>   <span class="fu"><a href="fit_spm.html">fit_spm</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">msoa_spm</span>,</span></span>
+<span class="r-in"><span>           theta_st <span class="op">=</span> <span class="va">theta_st_msoa</span>,</span></span>
+<span class="r-in"><span>           model <span class="op">=</span> <span class="st">"matern"</span>,</span></span>
+<span class="r-in"><span>           nu <span class="op">=</span> <span class="fl">.5</span>,</span></span>
+<span class="r-in"><span>           apply_exp  <span class="op">=</span> <span class="cn">TRUE</span>,</span></span>
+<span class="r-in"><span>           opt_method <span class="op">=</span> <span class="st">"L-BFGS-B"</span>,</span></span>
+<span class="r-in"><span>           control    <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>maxit <span class="op">=</span> <span class="fl">500</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">pred_lsoa</span> <span class="op">&lt;-</span> <span class="fu">predict_spm</span><span class="op">(</span>x <span class="op">=</span> <span class="va">liv_lsoa</span>, spm_obj <span class="op">=</span> <span class="va">fit_msoa</span>, id_var <span class="op">=</span> <span class="st">"lsoa11cd"</span><span class="op">)</span></span></span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>st_centroid assumes attributes are constant over geometries of x</span>
-<span class="r-in"></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

@@ -93,18 +93,18 @@ parametrization + profile likelihood</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">singl_log_plik</span><span class="op">(</span>
-  <span class="va">theta</span>,
-  <span class="va">.dt</span>,
-  <span class="va">dists</span>,
-  <span class="va">npix</span>,
-  <span class="va">model</span>,
-  nu <span class="op">=</span> <span class="cn">NULL</span>,
-  tr <span class="op">=</span> <span class="cn">NULL</span>,
-  kappa <span class="op">=</span> <span class="fl">1</span>,
-  mu2 <span class="op">=</span> <span class="fl">1.5</span>,
-  apply_exp <span class="op">=</span> <span class="cn">FALSE</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">singl_log_plik</span><span class="op">(</span></span>
+<span>  <span class="va">theta</span>,</span>
+<span>  <span class="va">.dt</span>,</span>
+<span>  <span class="va">dists</span>,</span>
+<span>  <span class="va">npix</span>,</span>
+<span>  <span class="va">model</span>,</span>
+<span>  nu <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  tr <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  kappa <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  mu2 <span class="op">=</span> <span class="fl">1.5</span>,</span>
+<span>  apply_exp <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -113,38 +113,59 @@ parametrization + profile likelihood</p>
 <dd><p>a <code>vector</code> of size 2 containing the parameters associated
 with the model. These parameters are \(\nu\) and \(\phi\),
 respectively.</p></dd>
+
+
 <dt>.dt</dt>
 <dd><p>a <code>numeric</code> vector containing the variable \(Y\).</p></dd>
+
+
 <dt>dists</dt>
 <dd><p>a <code>list</code> of size three. The first containing the distance
 matrices associated with the regions where \(Y\) was measured, the
 second for the distance matrices associated with \(X\), and the last
 containing the cross-distance matrices.</p></dd>
+
+
 <dt>npix</dt>
 <dd><p>a <code>integer vector</code> containing the number of pixels within
 each polygon. (Ordered by the id variables for the polygons).</p></dd>
+
+
 <dt>model</dt>
 <dd><p>a <code>character</code> indicating which covariance function to
 use. Possible values are <code>c("matern", "pexp", "gaussian",
     "spherical", "cs", "gw", "tapmat")</code>.</p></dd>
+
+
 <dt>nu</dt>
 <dd><p>\(\nu\) parameter. Not necessary if <code>mode</code> is
 <code>"gaussian"</code> or <code>"spherical"</code></p></dd>
+
+
 <dt>tr</dt>
 <dd><p>\(\theta_r\) taper range.</p></dd>
+
+
 <dt>kappa</dt>
 <dd><p>\(\kappa \in \{0, \ldots, 3 \}\) parameter for the GW cov
 function.</p></dd>
+
+
 <dt>mu2</dt>
 <dd><p>the smoothness parameter \(\mu\) for the GW function.</p></dd>
+
+
 <dt>apply_exp</dt>
 <dd><p>a <code>logical</code> indicater wheter the exponential
 transformation should be applied to variance parameters. This
 facilitates the optimization process.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>a scalar representing <code>-log.lik</code>.</p>
+    
+
+<p>a scalar representing <code>-log.lik</code>.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>

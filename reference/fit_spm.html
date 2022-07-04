@@ -90,36 +90,36 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">fit_spm</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span>
-
-<span class="co"># S3 method for spm</span>
-<span class="fu">fit_spm</span><span class="op">(</span>
-  <span class="va">x</span>,
-  <span class="va">model</span>,
-  <span class="va">theta_st</span>,
-  nu <span class="op">=</span> <span class="cn">NULL</span>,
-  tr <span class="op">=</span> <span class="cn">NULL</span>,
-  kappa <span class="op">=</span> <span class="fl">1</span>,
-  mu2 <span class="op">=</span> <span class="fl">1.5</span>,
-  apply_exp <span class="op">=</span> <span class="cn">FALSE</span>,
-  opt_method <span class="op">=</span> <span class="st">"Nelder-Mead"</span>,
-  control_opt <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>,
-  comp_hess <span class="op">=</span> <span class="cn">TRUE</span>,
-  <span class="va">...</span>
-<span class="op">)</span>
-
-<span class="fu">fit_spm2</span><span class="op">(</span>
-  <span class="va">x</span>,
-  <span class="va">model</span>,
-  <span class="va">nu</span>,
-  <span class="va">tr</span>,
-  kappa <span class="op">=</span> <span class="fl">1</span>,
-  mu2 <span class="op">=</span> <span class="fl">1.5</span>,
-  comp_hess <span class="op">=</span> <span class="cn">TRUE</span>,
-  <span class="va">phi_min</span>,
-  <span class="va">phi_max</span>,
-  nphi <span class="op">=</span> <span class="fl">10</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">fit_spm</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for spm</span></span>
+<span><span class="fu">fit_spm</span><span class="op">(</span></span>
+<span>  <span class="va">x</span>,</span>
+<span>  <span class="va">model</span>,</span>
+<span>  <span class="va">theta_st</span>,</span>
+<span>  nu <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  tr <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  kappa <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  mu2 <span class="op">=</span> <span class="fl">1.5</span>,</span>
+<span>  apply_exp <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  opt_method <span class="op">=</span> <span class="st">"Nelder-Mead"</span>,</span>
+<span>  control_opt <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  comp_hess <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">fit_spm2</span><span class="op">(</span></span>
+<span>  <span class="va">x</span>,</span>
+<span>  <span class="va">model</span>,</span>
+<span>  <span class="va">nu</span>,</span>
+<span>  <span class="va">tr</span>,</span>
+<span>  kappa <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  mu2 <span class="op">=</span> <span class="fl">1.5</span>,</span>
+<span>  comp_hess <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  <span class="va">phi_min</span>,</span>
+<span>  <span class="va">phi_max</span>,</span>
+<span>  nphi <span class="op">=</span> <span class="fl">10</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -128,15 +128,23 @@
 <dd><p>an object of type <code>spm</code>. Note that, the dimension of
 <code>theta_st</code> depends on the 2 factors. 1) the number of variables
 being analyzed, and 2) if the input is a <code>spm</code> object.</p></dd>
+
+
 <dt>...</dt>
 <dd><p>additionnal parameters, either passed to <code>optim</code>.</p></dd>
+
+
 <dt>model</dt>
 <dd><p>a <code>character</code> scalar indicating the family of the
 covariance function to be used. The options are <code>c("matern",
     "pexp", "gaussian", "spherical", "gw")</code>.</p></dd>
+
+
 <dt>theta_st</dt>
 <dd><p>a <code>numeric</code> (named) vector containing the initial
 parameters.</p></dd>
+
+
 <dt>nu</dt>
 <dd><p>a <code>numeric</code> value indicating either the \(\nu\)
 paramater from the Matern covariance function (controlling the process
@@ -146,38 +154,61 @@ informed, it is automatically set to .5. On the other hand, if the user
 choses the Powered Exponential family and do not inform <code>nu</code>,
 then it is set to 1. In both cases, the covariance function becomes the
 so covalled exponential covariance function.</p></dd>
+
+
 <dt>tr</dt>
 <dd><p>tapper range</p></dd>
+
+
 <dt>kappa</dt>
 <dd><p>\(\kappa \in \{0, \ldots, 3 \}\) parameter for the GW cov
 function.</p></dd>
+
+
 <dt>mu2</dt>
 <dd><p>the smoothness parameter \(\mu\) for the GW function.</p></dd>
+
+
 <dt>apply_exp</dt>
 <dd><p>a <code>logical</code> scalar indicating wheter the parameters
 that cannot assume negative values should be exponentiate or not.</p></dd>
+
+
 <dt>opt_method</dt>
 <dd><p>a <code>character</code> scalar indicating the optimization
 algorithm to be used. For details, see optim.</p></dd>
+
+
 <dt>control_opt</dt>
 <dd><p>a named <code>list</code> containing the control arguments for
 the optimization algorithm to be used. For details, see optim.</p></dd>
+
+
 <dt>comp_hess</dt>
 <dd><p>a <code>boolean</code> indicating whether the Hessian matrix
 should be computed.</p></dd>
+
+
 <dt>phi_min</dt>
 <dd><p>a <code>numeric</code> scalar representing the minimum \(phi\)
 value to look for.</p></dd>
+
+
 <dt>phi_max</dt>
 <dd><p>a <code>numeric</code> scalar representing the maximum \(phi\)
 value to look for.</p></dd>
+
+
 <dt>nphi</dt>
 <dd><p>a <code>numeric</code> scalar indicating the number of values to
 compute a grid-search over \(phi\).</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>a <code>spm_fit</code> object containing the information about the
+    
+
+<p>a <code>spm_fit</code> object containing the information about the
 estimation of the model parameters.</p>
     </div>
     <div class="section level2">
@@ -207,38 +238,38 @@ to be \eqn{Y(B) = \lvert B \rvert^{-1} \int_{B} Y(\mathbf{s}) \,
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">liv_lsoa</span><span class="op">)</span> <span class="co">## loading the LSOA data</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">msoa_spm</span> <span class="op">&lt;-</span> <span class="fu"><a href="sf_to_spm.html">sf_to_spm</a></span><span class="op">(</span>sf_obj <span class="op">=</span> <span class="va">liv_msoa</span>, n_pts <span class="op">=</span> <span class="fl">500</span>,</span>
-<span class="r-in">                      type <span class="op">=</span> <span class="st">"regular"</span>, by_polygon <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span class="r-in">                      poly_ids <span class="op">=</span> <span class="st">"msoa11cd"</span>,</span>
-<span class="r-in">                      var_ids <span class="op">=</span> <span class="st">"leb_est"</span><span class="op">)</span></span>
-<span class="r-in"><span class="co">## fitting model</span></span>
-<span class="r-in"><span class="va">theta_st_msoa</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"phi"</span> <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="co"># initial value for the range parameter</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">fit_msoa</span> <span class="op">&lt;-</span></span>
-<span class="r-in">   <span class="fu">fit_spm</span><span class="op">(</span>x <span class="op">=</span> <span class="va">msoa_spm</span>,</span>
-<span class="r-in">           theta_st <span class="op">=</span> <span class="va">theta_st_msoa</span>,</span>
-<span class="r-in">           model <span class="op">=</span> <span class="st">"matern"</span>,</span>
-<span class="r-in">           nu <span class="op">=</span> <span class="fl">.5</span>,</span>
-<span class="r-in">           apply_exp  <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span class="r-in">           opt_method <span class="op">=</span> <span class="st">"L-BFGS-B"</span>,</span>
-<span class="r-in">           control    <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>maxit <span class="op">=</span> <span class="fl">500</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/stats/AIC.html" class="external-link">AIC</a></span><span class="op">(</span><span class="va">fit_msoa</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 297.7425</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu"><a href="summary_spm_fit.html">summary_spm_fit</a></span><span class="op">(</span><span class="va">fit_msoa</span>, sig <span class="op">=</span> <span class="fl">.05</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">liv_lsoa</span><span class="op">)</span> <span class="co">## loading the LSOA data</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">msoa_spm</span> <span class="op">&lt;-</span> <span class="fu"><a href="sf_to_spm.html">sf_to_spm</a></span><span class="op">(</span>sf_obj <span class="op">=</span> <span class="va">liv_msoa</span>, n_pts <span class="op">=</span> <span class="fl">500</span>,</span></span>
+<span class="r-in"><span>                      type <span class="op">=</span> <span class="st">"regular"</span>, by_polygon <span class="op">=</span> <span class="cn">FALSE</span>,</span></span>
+<span class="r-in"><span>                      poly_ids <span class="op">=</span> <span class="st">"msoa11cd"</span>,</span></span>
+<span class="r-in"><span>                      var_ids <span class="op">=</span> <span class="st">"leb_est"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co">## fitting model</span></span></span>
+<span class="r-in"><span><span class="va">theta_st_msoa</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"phi"</span> <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="co"># initial value for the range parameter</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">fit_msoa</span> <span class="op">&lt;-</span></span></span>
+<span class="r-in"><span>   <span class="fu">fit_spm</span><span class="op">(</span>x <span class="op">=</span> <span class="va">msoa_spm</span>,</span></span>
+<span class="r-in"><span>           theta_st <span class="op">=</span> <span class="va">theta_st_msoa</span>,</span></span>
+<span class="r-in"><span>           model <span class="op">=</span> <span class="st">"matern"</span>,</span></span>
+<span class="r-in"><span>           nu <span class="op">=</span> <span class="fl">.5</span>,</span></span>
+<span class="r-in"><span>           apply_exp  <span class="op">=</span> <span class="cn">TRUE</span>,</span></span>
+<span class="r-in"><span>           opt_method <span class="op">=</span> <span class="st">"L-BFGS-B"</span>,</span></span>
+<span class="r-in"><span>           control    <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>maxit <span class="op">=</span> <span class="fl">500</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/stats/AIC.html" class="external-link">AIC</a></span><span class="op">(</span><span class="va">fit_msoa</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 297.8309</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu"><a href="summary_spm_fit.html">summary_spm_fit</a></span><span class="op">(</span><span class="va">fit_msoa</span>, sig <span class="op">=</span> <span class="fl">.05</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  optimization algorithm converged: yes </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     par   estimate        se               ci</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1    mu 75.8774570 0.7711909 [74.366; 77.389]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2 sigsq 23.5939481 4.2950499 [15.176; 32.012]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3   phi  0.7741349 0.1956779   [0.391; 1.158]</span>
-<span class="r-in"></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1    mu 75.9218188 0.7418152 [74.468; 77.376]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 sigsq 24.0746103 4.4217025 [15.408; 32.741]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3   phi  0.7325028 0.1830269   [0.374; 1.091]</span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

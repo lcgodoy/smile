@@ -96,26 +96,33 @@ objects.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="co"># S3 method for spm_fit</span>
-<span class="fu"><a href="https://rdrr.io/r/stats/AIC.html" class="external-link">AIC</a></span><span class="op">(</span><span class="va">object</span>, <span class="va">...</span>, k <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>
-
-<span class="co"># S3 method for spm_fit</span>
-<span class="fu"><a href="https://rdrr.io/r/stats/AIC.html" class="external-link">BIC</a></span><span class="op">(</span><span class="va">object</span>, <span class="va">...</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="co"># S3 method for spm_fit</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/stats/AIC.html" class="external-link">AIC</a></span><span class="op">(</span><span class="va">object</span>, <span class="va">...</span>, k <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for spm_fit</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/stats/AIC.html" class="external-link">BIC</a></span><span class="op">(</span><span class="va">object</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>object</dt>
 <dd><p>a <code>spm_fit</code> object.</p></dd>
+
+
 <dt>...</dt>
 <dd><p>optionally more fitted model objects.</p></dd>
+
+
 <dt>k</dt>
 <dd><p><code>numeric</code>, the <em>penalty</em> per parameter to be used; the default
 'k = 2' is the classical AIC. (for compatibility with <code><a href="https://rdrr.io/r/stats/AIC.html" class="external-link">stats::AIC</a></code>.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>a <code>numeric</code> scalar corresponding to the goodness of fit
+    
+
+<p>a <code>numeric</code> scalar corresponding to the goodness of fit
 measure.</p>
     </div>
 
