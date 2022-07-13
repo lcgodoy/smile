@@ -148,7 +148,7 @@ find_phi <- function(d, nu, kappa, mu2, family = "matern",
                 out <- single_cs(d, 1, x)
             } else if(family == "pexp") {
                 out <- single_pexp(d, 1, x, nu)
-            } else if(family == "gauss") {
+            } else if(family == "gaussian") {
                 out <- single_gauss(d, 1, x)
             } else {
                 out <- single_spher(d, 1, x)
