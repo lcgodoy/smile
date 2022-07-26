@@ -1,7 +1,7 @@
 Package: smile
 Title: Spatial Misalignment: Interpolation, Linkage, and Estimation
-Version: 1.0.4.1
-Date: 2022-04-27
+Version: 1.0.4.2
+Date: 2022-07-26
 Authors@R: 
     person(given = "Lucas",
            family = "da Cunha Godoy",
@@ -33,7 +33,7 @@ Imports:
     stats,
     Matrix
 Depends: 
-    R (>= 4.1)
+    R (>= 3.6)
 URL: https://lcgodoy.me/smile/, https://github.com/lcgodoy/smile/
 BugReports: https://github.com/lcgodoy/smile/issues/
 Suggests: 
