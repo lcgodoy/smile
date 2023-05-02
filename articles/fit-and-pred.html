@@ -14,13 +14,13 @@
 <link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png">
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png">
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.1.3/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.1.3/bootstrap.bundle.min.js"></script><link href="../deps/Roboto-0.4.2/font.css" rel="stylesheet">
-<link href="../deps/JetBrains_Mono-0.4.2/font.css" rel="stylesheet">
-<link href="../deps/Roboto_Slab-0.4.2/font.css" rel="stylesheet">
+<link href="../deps/bootstrap-5.2.2/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.2.2/bootstrap.bundle.min.js"></script><link href="../deps/Roboto-0.4.5/font.css" rel="stylesheet">
+<link href="../deps/JetBrains_Mono-0.4.5/font.css" rel="stylesheet">
+<link href="../deps/Roboto_Slab-0.4.5/font.css" rel="stylesheet">
 <!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
-<!-- bootstrap-toc --><script src="https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.1/dist/bootstrap-toc.min.js"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="2. Fitting models and making predictions">
+<!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="2. Fitting models and making predictions">
 <meta property="og:description" content="smile">
 <meta property="og:image" content="https://lcgodoy.me/smile/logo.png">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
@@ -111,7 +111,8 @@
 
 
 
-<script src="fit-and-pred_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
+
+<div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>2. Fitting models and making predictions</h1>
             
@@ -123,15 +124,27 @@
     
     
 <hr>
-<p>If interested in the theory involving this calculations, take a look at <a href="https://lcgodoy.me/smile/articles/theory.html">this vignette</a>.</p>
+<p>If interested in the theory involving this calculations, take a look
+at <a href="https://lcgodoy.me/smile/articles/theory.html">this
+vignette</a>.</p>
 <hr>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://lcgodoy.me/smile/">smile</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-spatial.github.io/sf/" class="external-link">sf</a></span><span class="op">)</span></span>
-<span><span class="co">#&gt; Linking to GEOS 3.8.0, GDAL 3.0.4, PROJ 6.3.1; sf_use_s2() is TRUE</span></span></code></pre></div>
-<p>Considering the same setup used in the vignette about converting <code>sf</code> to <code>spm</code> <a href="https://lcgodoy.me/smile/articles/sf-to-spm.html">objects</a>, we are going to predict the Life Expecation at Birth (LEF) score (observed at the Middle Super Output Areas (MSOA), in Liverpool, into the Lower Super Output Area (LSOA). In this second level, we have the Life Expectancy at Birth for each area. This data was taken from <span class="citation">Johnson, Diggle, and Giorgi (2020)</span>.</p>
-<p>The code below loads the data and converts the LSOA <code>sf</code> object into a <code>spm</code> object. In particular, we are going to use numerical integration (based on a 500 points grid) with the precision of the integrals varying according to the size of each MSOA region. The name of the variable we are interested in, in the <code>liv_msoa</code>, is <code>"leb_est"</code>.</p>
+<span><span class="co">#&gt; Linking to GEOS 3.10.2, GDAL 3.4.1, PROJ 8.2.1; sf_use_s2() is TRUE</span></span></code></pre></div>
+<p>Considering the same setup used in the vignette about converting
+<code>sf</code> to <code>spm</code> <a href="https://lcgodoy.me/smile/articles/sf-to-spm.html">objects</a>, we
+are going to predict the Life Expecation at Birth (LEF) score (observed
+at the Middle Super Output Areas (MSOA), in Liverpool, into the Lower
+Super Output Area (LSOA). In this second level, we have the Life
+Expectancy at Birth for each area. This data was taken from <span class="citation">Johnson, Diggle, and Giorgi (2020)</span>.</p>
+<p>The code below loads the data and converts the LSOA <code>sf</code>
+object into a <code>spm</code> object. In particular, we are going to
+use numerical integration (based on a 500 points grid) with the
+precision of the integrals varying according to the size of each MSOA
+region. The name of the variable we are interested in, in the
+<code>liv_msoa</code>, is <code>"leb_est"</code>.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">liv_msoa</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">liv_lsoa</span><span class="op">)</span></span>
@@ -151,10 +164,50 @@
 <span>              by_polygon <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>              poly_ids <span class="op">=</span> <span class="st">"msoa11cd"</span>,</span>
 <span>              var_ids  <span class="op">=</span> <span class="st">"leb_est"</span><span class="op">)</span></span></code></pre></div>
-<p>Next, we assume the following model, at the grid level, drives the data<a class="footnote-ref" tabindex="0" data-bs-toggle="popover" data-bs-content='&lt;p&gt;To check how the model at the grid level relates to the data at the area level check the &lt;a href="https://lcgodoy.me/smile/articles/theory.html"&gt;Theory vignette&lt;/a&gt;&lt;/p&gt;'><sup>1</sup></a> <span class="math display">\[
-    Y(\mathbf{s}) = \mu + S(\mathbf{s}) + \varepsilon(\mathbf{s}), 
-\]</span> where <span class="math inline">\(S(\cdot) \sim {\rm GP}(0, {\rm C}(\cdot ; \, \boldsymbol{\theta}))\)</span>, and <span class="math inline">\(\varepsilon(\cdot) \overset{{\rm i.i.d.}}{\sim} {\rm N}(0, \tau)\)</span>, with <span class="math inline">\(S(\cdot) \perp \varepsilon(\cdot)\)</span>. The form of the covariance functions considered here are written as follows <span class="math inline">\({\rm C}(\cdot ; \, \boldsymbol{\theta} ) = \sigma^2 \rho(\cdot ; \, \boldsymbol{\theta})\)</span>. Where <span class="math inline">\(\rho(\cdot ; \, \boldsymbol{\theta})\)</span> is a stationary and isotropic correlation function. To check the families of correlation functions available in our package, check <a href="https://lcgodoy.me/smile/articles/sp-cov-functions.html">this link</a>. Another important detail is that, if we make <span class="math inline">\(\nu = \tau / \sigma^2\)</span>, the estimation process is slightly easier. The package allows for the two parametrizations.</p>
-<p>For this problem we are going to consider the the Matérn covariance function. The model will be fitted with <span class="math inline">\(\nu = .5, 1.5, 2.5\)</span>, this the parameter controls the smoothness of the spatial process. Also, for simplicity, we are going to ignore <span class="math inline">\(\tau\)</span>. Next, we evaluate the AIC associated with three models. The function <code>fit_spm</code> fits the models and needs starting values for <span class="math inline">\(\phi\)</span> (and <span class="math inline">\(\nu\)</span> or <span class="math inline">\(\tau\)</span>, if you decide not to ignore the small scale variation), the covariance model to be used is informed as a string in the argument <code>model</code>, the available options are <code>c("matern", "pexp", "gaussian", "spherical")</code>. Notice that, when not inputting an initial value for <span class="math inline">\(\nu\)</span> (or <span class="math inline">\(\tau\)</span>), we are forcing this parameter to be 0. Also, the <code>theta_st</code> argument (which takes the initial values for the parameters), must be a named vector. If we input initial values for <span class="math inline">\(\mu\)</span>, <span class="math inline">\(\sigma^2\)</span>, <span class="math inline">\(\phi\)</span>, and <span class="math inline">\(\nu\)</span> (or <span class="math inline">\(\tau\)</span>), the likelihood is optimized numerically for all the parameters. If we omit <span class="math inline">\(\mu\)</span> and <span class="math inline">\(\sigma^2\)</span>, then a profile likelihood approach is used to find numerically for the <span class="math inline">\(\hat{\phi}\)</span> and, if wished, <span class="math inline">\(\hat{\nu}\)</span>. While, <span class="math inline">\(\hat{\mu}\)</span> and <span class="math inline">\(\hat{\sigma}^2\)</span> have closed form expressions <span class="citation">(Diggle and Ribeiro 2007)</span>. Additionally, the commented part of the code below shows how to proceed to estimate <span class="math inline">\(\nu\)</span>, an equivalently <span class="math inline">\(\tau\)</span>, from the data. The argument <code>apply_exp</code> is a workaround for parameters that cannot be negative. The arguments <code>opt_method</code> and <code>control</code> are passed to the function <code>optim</code> in order to optimize the log likelihood associated with the data. <code>opt_method</code> controls the optimization algorithm to be used, while <code>control</code> inputs control arguments for such optimization algorithms, for more details see <a href="https://stat.ethz.ch/R-manual/R-devel/library/stats/html/optim.html" class="external-link">optim</a>.</p>
+<p>Next, we assume the following model, at the grid level, drives the
+data<a class="footnote-ref" tabindex="0" data-bs-toggle="popover" data-bs-content='&lt;p&gt;To check how the model at the grid level relates to the
+data at the area level check the &lt;a href="https://lcgodoy.me/smile/articles/theory.html"&gt;Theory
+vignette&lt;/a&gt;&lt;/p&gt;'><sup>1</sup></a>
+<span class="math display">\[
+    Y(\mathbf{s}) = \mu + S(\mathbf{s}) + \varepsilon(\mathbf{s}),
+\]</span> where <span class="math inline">\(S(\cdot) \sim {\rm GP}(0,
+{\rm C}(\cdot ; \, \boldsymbol{\theta}))\)</span>, and <span class="math inline">\(\varepsilon(\cdot) \overset{{\rm i.i.d.}}{\sim}
+{\rm N}(0, \tau)\)</span>, with <span class="math inline">\(S(\cdot)
+\perp \varepsilon(\cdot)\)</span>. The form of the covariance functions
+considered here are written as follows <span class="math inline">\({\rm
+C}(\cdot ; \, \boldsymbol{\theta} ) = \sigma^2 \rho(\cdot ; \,
+\boldsymbol{\theta})\)</span>. Where <span class="math inline">\(\rho(\cdot ; \, \boldsymbol{\theta})\)</span> is a
+stationary and isotropic correlation function. To check the families of
+correlation functions available in our package, check <a href="https://lcgodoy.me/smile/articles/sp-cov-functions.html">this
+link</a>. Another important detail is that, if we make <span class="math inline">\(\nu = \tau / \sigma^2\)</span>, the estimation
+process is slightly easier. The package allows for the two
+parametrizations.</p>
+<p>For this problem we are going to consider the the Matérn covariance
+function. The model will be fitted with <span class="math inline">\(\nu
+= .5, 1.5, 2.5\)</span>, this the parameter controls the smoothness of
+the spatial process. Also, for simplicity, we are going to ignore <span class="math inline">\(\tau\)</span>. Next, we evaluate the AIC
+associated with three models. The function <code>fit_spm</code> fits the
+models and needs starting values for <span class="math inline">\(\phi\)</span> (and <span class="math inline">\(\nu\)</span> or <span class="math inline">\(\tau\)</span>, if you decide not to ignore the
+small scale variation), the covariance model to be used is informed as a
+string in the argument <code>model</code>, the available options are
+<code>c("matern", "pexp", "gaussian", "spherical")</code>. Notice that,
+when not inputting an initial value for <span class="math inline">\(\nu\)</span> (or <span class="math inline">\(\tau\)</span>), we are forcing this parameter to
+be 0. Also, the <code>theta_st</code> argument (which takes the initial
+values for the parameters), must be a named vector. If we input initial
+values for <span class="math inline">\(\mu\)</span>, <span class="math inline">\(\sigma^2\)</span>, <span class="math inline">\(\phi\)</span>, and <span class="math inline">\(\nu\)</span> (or <span class="math inline">\(\tau\)</span>), the likelihood is optimized
+numerically for all the parameters. If we omit <span class="math inline">\(\mu\)</span> and <span class="math inline">\(\sigma^2\)</span>, then a profile likelihood
+approach is used to find numerically for the <span class="math inline">\(\hat{\phi}\)</span> and, if wished, <span class="math inline">\(\hat{\nu}\)</span>. While, <span class="math inline">\(\hat{\mu}\)</span> and <span class="math inline">\(\hat{\sigma}^2\)</span> have closed form
+expressions <span class="citation">(Diggle and Ribeiro 2007)</span>.
+Additionally, the commented part of the code below shows how to proceed
+to estimate <span class="math inline">\(\nu\)</span>, an equivalently
+<span class="math inline">\(\tau\)</span>, from the data. The argument
+<code>apply_exp</code> is a workaround for parameters that cannot be
+negative. The arguments <code>opt_method</code> and <code>control</code>
+are passed to the function <code>optim</code> in order to optimize the
+log likelihood associated with the data. <code>opt_method</code>
+controls the optimization algorithm to be used, while
+<code>control</code> inputs control arguments for such optimization
+algorithms, for more details see <a href="https://stat.ethz.ch/R-manual/R-devel/library/stats/html/optim.html" class="external-link">optim</a>.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">theta_st_msoa</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"phi"</span> <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
 <span></span>
@@ -201,27 +254,48 @@
 <span>            apply_exp <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>            opt_method <span class="op">=</span> <span class="st">"L-BFGS-B"</span>,</span>
 <span>            control   <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>maxit <span class="op">=</span> <span class="fl">500</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p>The AIC<a class="footnote-ref" tabindex="0" data-bs-toggle="popover" data-bs-content="&lt;p&gt;BIC works for our models too.&lt;/p&gt;"><sup>2</sup></a> associated with each model is given below. According to this criterion, the best model is the one with <span class="math inline">\(\nu = .5\)</span>.</p>
+<p>The AIC<a class="footnote-ref" tabindex="0" data-bs-toggle="popover" data-bs-content="&lt;p&gt;BIC works for our models too.&lt;/p&gt;"><sup>2</sup></a> associated with each model is given below.
+According to this criterion, the best model is the one with <span class="math inline">\(\nu = .5\)</span>.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"m1"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/AIC.html" class="external-link">AIC</a></span><span class="op">(</span><span class="va">fit_msoa1</span><span class="op">)</span>, <span class="st">"m2"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/AIC.html" class="external-link">AIC</a></span><span class="op">(</span><span class="va">fit_msoa2</span><span class="op">)</span>, <span class="st">"m3"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/AIC.html" class="external-link">AIC</a></span><span class="op">(</span><span class="va">fit_msoa3</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt;       m1       m2       m3 </span></span>
-<span><span class="co">#&gt; 298.8200 300.4820 301.3233</span></span></code></pre></div>
-<p>We can retrieve the estimated parameters and the associated <code>(1 - sig)</code> % confidence intervals by using the function <code>summary_spm_fit</code> as follows</p>
+<span><span class="co">#&gt; 296.3172 296.8903 297.2304</span></span></code></pre></div>
+<p>We can retrieve the estimated parameters and the associated
+<code>(1 - sig)</code> % confidence intervals by using the function
+<code>summary_spm_fit</code> as follows</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/summary_spm_fit.html">summary_spm_fit</a></span><span class="op">(</span><span class="va">fit_msoa1</span>, sig <span class="op">=</span> <span class="fl">.05</span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;  optimization algorithm converged: yes </span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;     par  estimate        se               ci</span></span>
-<span><span class="co">#&gt; 1    mu 75.917397 0.8252296 [74.300; 77.535]</span></span>
-<span><span class="co">#&gt; 2 sigsq 23.828658 4.3165522 [15.368; 32.289]</span></span>
-<span><span class="co">#&gt; 3   phi  0.835495 0.2176260   [0.409; 1.262]</span></span></code></pre></div>
-<p>Finally, we have almost everything we need to perform predictions at the LSOA areas. The function <code>predict_spm</code> calculates the predictions associated to the <code>spm_obj</code> (which contains the results associated with a fitted model) into a <code>sf</code> object given as an input for the argument <code>x</code>. We need to specify whether we want to “aggregate” (i.e. average) the predicted surface over the polygons associated with the <code>sf</code> data. The number of points and the type of integration for prediction need to be set as well. In this case we are specifying a finer grid (3500 points) because the LSOA areas are smaller than the MSOA areas.</p>
+<span><span class="co">#&gt;     par   estimate        se               ci</span></span>
+<span><span class="co">#&gt; 1    mu 75.9472536 0.7607230 [74.456; 77.438]</span></span>
+<span><span class="co">#&gt; 2 sigsq 22.6791986 4.1291663 [14.586; 30.772]</span></span>
+<span><span class="co">#&gt; 3   phi  0.7839221 0.2015083   [0.389; 1.179]</span></span></code></pre></div>
+<p>Finally, we have almost everything we need to perform predictions at
+the LSOA areas. The function <code>predict_spm</code> calculates the
+predictions associated to the <code>spm_obj</code> (which contains the
+results associated with a fitted model) into a <code>sf</code> object
+given as an input for the argument <code>x</code>. We need to specify
+whether we want to “aggregate” (i.e. average) the predicted surface over
+the polygons associated with the <code>sf</code> data. The number of
+points and the type of integration for prediction need to be set as
+well. In this case we are specifying a finer grid (3500 points) because
+the LSOA areas are smaller than the MSOA areas.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">pred_lsoa</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/predict_spm.html">predict_spm</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">liv_lsoa</span>, spm_obj <span class="op">=</span> <span class="va">fit_msoa1</span>, id_var <span class="op">=</span> <span class="st">"lsoa11cd"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Warning in st_centroid.sf(x = x[empty_polys, id_var]): st_centroid assumes</span></span>
-<span><span class="co">#&gt; attributes are constant over geometries of x</span></span></code></pre></div>
-<p>The resulting object is a list with entries <code>"mu_pred"</code>, <code>"sig_pred"</code>, <code>"pred_grid"</code>, <code>"pred_agg"</code>. The first two positions correspond to the mean and covariance matrix at the predicted locations, respectively. <code>"pred_grid"</code> can be seen as the predicted surface over the study region, while <code>"pred_agg"</code> contains the (integrals) averages of such surface within each LSOA area. The chunk of code below plots the predicted life expectancy at the LSOA areas.</p>
+<span><span class="co">#&gt; Warning: st_centroid assumes attributes are constant over geometries</span></span>
+<span><span class="co">#&gt; Warning in predict_spm.sf(x = liv_lsoa, spm_obj = fit_msoa1, id_var =</span></span>
+<span><span class="co">#&gt; "lsoa11cd"): Negative variance for at least one predicted region. Taking</span></span>
+<span><span class="co">#&gt; absolute value.</span></span></code></pre></div>
+<p>The resulting object is a list with entries <code>"mu_pred"</code>,
+<code>"sig_pred"</code>, <code>"pred_grid"</code>,
+<code>"pred_agg"</code>. The first two positions correspond to the mean
+and covariance matrix at the predicted locations, respectively.
+<code>"pred_grid"</code> can be seen as the predicted surface over the
+study region, while <code>"pred_agg"</code> contains the (integrals)
+averages of such surface within each LSOA area. The chunk of code below
+plots the predicted life expectancy at the LSOA areas.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">pred_lsoa</span><span class="op">$</span><span class="va">pred_agg</span>,</span>
 <span>       <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>fill  <span class="op">=</span> <span class="va">mu_pred</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
@@ -233,7 +307,8 @@
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>axis.text  <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_blank</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>          axis.ticks <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_blank</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="fit-and-pred_files/figure-html/manip-pred-1-1.png" width="700"></p>
-<p>Next, we plot the standard errors associated with the predictions.</p>
+<p>Next, we plot the standard errors associated with the
+predictions.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">pred_lsoa</span><span class="op">$</span><span class="va">pred_agg</span>,</span>
 <span>       <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>fill  <span class="op">=</span> <span class="va">se_pred</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
@@ -246,14 +321,20 @@
 <span>          axis.ticks <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_blank</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="fit-and-pred_files/figure-html/se-ggplot2-1.png" width="700"></p>
 <div class="section level2">
-<h2 id="reference">Reference<a class="anchor" aria-label="anchor" href="#reference"></a>
+<h2 class="unnumbered" id="reference">Reference<a class="anchor" aria-label="anchor" href="#reference"></a>
 </h2>
-<div id="refs" class="references">
-<div id="ref-diggle2007model">
-<p>Diggle, PJ, and Paulo Justiniano Ribeiro. 2007. “Model-Based Geostatistics (Springer Series in Statistics).” In, 51–56. Springer.</p>
+<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-diggle2007model" class="csl-entry">
+Diggle, PJ, and Paulo Justiniano Ribeiro. 2007. <span>“Model-Based
+Geostatistics (Springer Series in Statistics).”</span> In, 51–56.
+Springer.
 </div>
-<div id="ref-johnson2020dealing">
-<p>Johnson, Olatunji, Peter Diggle, and Emanuele Giorgi. 2020. “Dealing with Spatial Misalignment to Model the Relationship Between Deprivation and Life Expectancy: A Model-Based Geostatistical Approach.” <em>International Journal of Health Geographics</em> 19 (1): 1–13.</p>
+<div id="ref-johnson2020dealing" class="csl-entry">
+Johnson, Olatunji, Peter Diggle, and Emanuele Giorgi. 2020.
+<span>“Dealing with Spatial Misalignment to Model the Relationship
+Between Deprivation and Life Expectancy: <span>A</span> Model-Based
+Geostatistical Approach.”</span> <em>International Journal of Health
+Geographics</em> 19 (1): 1–13.
 </div>
 </div>
 </div>

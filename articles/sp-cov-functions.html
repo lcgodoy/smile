@@ -14,13 +14,13 @@
 <link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png">
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png">
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.1.3/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.1.3/bootstrap.bundle.min.js"></script><link href="../deps/Roboto-0.4.2/font.css" rel="stylesheet">
-<link href="../deps/JetBrains_Mono-0.4.2/font.css" rel="stylesheet">
-<link href="../deps/Roboto_Slab-0.4.2/font.css" rel="stylesheet">
+<link href="../deps/bootstrap-5.2.2/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.2.2/bootstrap.bundle.min.js"></script><link href="../deps/Roboto-0.4.5/font.css" rel="stylesheet">
+<link href="../deps/JetBrains_Mono-0.4.5/font.css" rel="stylesheet">
+<link href="../deps/Roboto_Slab-0.4.5/font.css" rel="stylesheet">
 <!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
-<!-- bootstrap-toc --><script src="https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.1/dist/bootstrap-toc.min.js"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="5. Spatial covariance functions">
+<!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="5. Spatial covariance functions">
 <meta property="og:description" content="smile">
 <meta property="og:image" content="https://lcgodoy.me/smile/logo.png">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
@@ -111,7 +111,8 @@
 
 
 
-<script src="sp-cov-functions_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
+
+<div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>5. Spatial covariance functions</h1>
             
@@ -122,35 +123,74 @@
 
     
     
-<p>In this short vignette, we illustrate the family of spatial covariance functions implemented in this package. Note that, all of them are based on the assumptions of stationarity and isotropy of the underlying Gaussian random field (GRF). Also, the implementations (and definitions) are based on the families of spatial <em>correlation</em> functions presented in <span class="citation">Diggle and Ribeiro (2007)</span>. The implementations make use of the <code>RcppArmadillo</code> <span class="citation">(Eddelbuettel and Sanderson 2014)</span> package and the STL library algorithms (C++ 11)<a class="footnote-ref" tabindex="0" data-bs-toggle="popover" data-bs-content="&lt;p&gt;for this problem, the implementation using the sequencial algorithms of the STL library was more effitient than those using the &lt;code&gt;RcppParallel&lt;/code&gt; package&lt;/p&gt;"><sup>1</sup></a>.</p>
-<p>The first spatial covariance family implemented is the so-called Matérn Covariance function, which is defined as <span class="math display">\[
+<p>In this short vignette, we illustrate the family of spatial
+covariance functions implemented in this package. Note that, all of them
+are based on the assumptions of stationarity and isotropy of the
+underlying Gaussian random field (GRF). Also, the implementations (and
+definitions) are based on the families of spatial <em>correlation</em>
+functions presented in <span class="citation">Diggle and Ribeiro
+(2007)</span>. The implementations make use of the
+<code>RcppArmadillo</code> <span class="citation">(Eddelbuettel and
+Sanderson 2014)</span> package and the STL library algorithms (C++ 11)<a class="footnote-ref" tabindex="0" data-bs-toggle="popover" data-bs-content="&lt;p&gt;for this problem, the implementation using the
+sequencial algorithms of the STL library was more effitient than those
+using the &lt;code&gt;RcppParallel&lt;/code&gt; package&lt;/p&gt;"><sup>1</sup></a>.</p>
+<p>The first spatial covariance family implemented is the so-called
+Matérn Covariance function, which is defined as <span class="math display">\[
 {\rm C}(h; \sigma^2, \phi, \kappa) = \sigma^2 \frac{(h / \phi)^{\kappa}
 K_{\kappa}( h / \phi )} { 2^{\kappa - 1} \Gamma(\kappa) }.
-\]</span> Where <span class="math inline">\(h\)</span> is the distance between two points, <span class="math inline">\(\sigma^2\)</span> is a variance parameter, <span class="math inline">\(\phi\)</span> is the scale parameter that controls the reach of the spatial dependence, and <span class="math inline">\(\kappa\)</span> is a shape parameter that controls the smoothness of the process. The function <span class="math inline">\(K_{\kappa}(\cdot)\)</span> is the <span class="math inline">\(\kappa\)</span>-order Modified Bessel function of Second-Kind. There are special cases of the Matérn family implemented on the package, when setting <span class="math inline">\(\kappa\)</span> to <span class="math inline">\(1/2\)</span>, <span class="math inline">\(3/2\)</span>, <span class="math inline">\(5/2\)</span>, or <span class="math inline">\(\to \infty\)</span> the expression simplifies. The first and the last cases yield to the Exponential and Gaussian family, respectively.</p>
-<p>The second spatial covariance family implemented is the Powered Exponential Covariance function, it is defined as <span class="math display">\[
-{\rm C}(h; \sigma^2, \phi, \kappa) = \sigma^2 \exp \{ - (h / \phi)^{\kappa} \},
-\]</span> where <span class="math inline">\(h\)</span> is the distance between two points, <span class="math inline">\(\sigma^2\)</span>, <span class="math inline">\(\phi\)</span>, and <span class="math inline">\(\kappa\)</span> analogous to the Matérn function.</p>
-<p>The penultimate option is the Gaussian family of covariance functions. The expression associated with this family is written as <span class="math display">\[
-{\rm C}(h; \sigma^2, \phi) = \sigma^2 \exp \left\{ - \frac{h ^ 2}{2 \phi ^ 2} \right\},
-\]</span> again, the parameters are analogous to what have defined before in this vignette.</p>
-<p>Lastly, we have implemented the Spherical family of covariance functions, defined as <span class="math display">\[
-{\rm C}(h; \sigma^2, \phi) = 
-\sigma^2 
+\]</span> Where <span class="math inline">\(h\)</span> is the distance
+between two points, <span class="math inline">\(\sigma^2\)</span> is a
+variance parameter, <span class="math inline">\(\phi\)</span> is the
+scale parameter that controls the reach of the spatial dependence, and
+<span class="math inline">\(\kappa\)</span> is a shape parameter that
+controls the smoothness of the process. The function <span class="math inline">\(K_{\kappa}(\cdot)\)</span> is the <span class="math inline">\(\kappa\)</span>-order Modified Bessel function of
+Second-Kind. There are special cases of the Matérn family implemented on
+the package, when setting <span class="math inline">\(\kappa\)</span> to
+<span class="math inline">\(1/2\)</span>, <span class="math inline">\(3/2\)</span>, <span class="math inline">\(5/2\)</span>, or <span class="math inline">\(\to
+\infty\)</span> the expression simplifies. The first and the last cases
+yield to the Exponential and Gaussian family, respectively.</p>
+<p>The second spatial covariance family implemented is the Powered
+Exponential Covariance function, it is defined as <span class="math display">\[
+{\rm C}(h; \sigma^2, \phi, \kappa) = \sigma^2 \exp \{ - (h /
+\phi)^{\kappa} \},
+\]</span> where <span class="math inline">\(h\)</span> is the distance
+between two points, <span class="math inline">\(\sigma^2\)</span>, <span class="math inline">\(\phi\)</span>, and <span class="math inline">\(\kappa\)</span> analogous to the Matérn
+function.</p>
+<p>The penultimate option is the Gaussian family of covariance
+functions. The expression associated with this family is written as
+<span class="math display">\[
+{\rm C}(h; \sigma^2, \phi) = \sigma^2 \exp \left\{ - \frac{h ^ 2}{2 \phi
+^ 2} \right\},
+\]</span> again, the parameters are analogous to what have defined
+before in this vignette.</p>
+<p>Lastly, we have implemented the Spherical family of covariance
+functions, defined as <span class="math display">\[
+{\rm C}(h; \sigma^2, \phi) =
+\sigma^2
 \begin{cases}
 1 - \frac{3}{2} (h / \phi) + \frac{1}{2} (h / \phi) ^ 3 &amp; , \,
 0 \leq h \leq \phi \\
 0 &amp; , \, h &gt; \phi,
 \end{cases}
-\]</span> where, again, <span class="math inline">\(\sigma^2\)</span> is a variance parameter, while <span class="math inline">\(\phi &gt; 0\)</span> is a parameter with the same magnitude as the distances on which the function is being evaluated at and controls the speed of decay of the spatial covariances as we increase the distance between two points.</p>
+\]</span> where, again, <span class="math inline">\(\sigma^2\)</span> is
+a variance parameter, while <span class="math inline">\(\phi &gt;
+0\)</span> is a parameter with the same magnitude as the distances on
+which the function is being evaluated at and controls the speed of decay
+of the spatial covariances as we increase the distance between two
+points.</p>
 <div class="section level2">
-<h2 id="reference">Reference<a class="anchor" aria-label="anchor" href="#reference"></a>
+<h2 class="unnumbered" id="reference">Reference<a class="anchor" aria-label="anchor" href="#reference"></a>
 </h2>
-<div id="refs" class="references">
-<div id="ref-diggle2007model">
-<p>Diggle, PJ, and Paulo Justiniano Ribeiro. 2007. “Model-Based Geostatistics (Springer Series in Statistics).” In, 51–56. Springer.</p>
+<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-diggle2007model" class="csl-entry">
+Diggle, PJ, and Paulo Justiniano Ribeiro. 2007. <span>“Model-Based
+Geostatistics (Springer Series in Statistics).”</span> In, 51–56.
+Springer.
 </div>
-<div id="ref-eddelbuettel2014rcpparmadillo">
-<p>Eddelbuettel, Dirk, and Conrad Sanderson. 2014. “RcppArmadillo: Accelerating R with High-Performance C++ Linear Algebra.” <em>Computational Statistics &amp; Data Analysis</em> 71: 1054–63.</p>
+<div id="ref-eddelbuettel2014rcpparmadillo" class="csl-entry">
+Eddelbuettel, Dirk, and Conrad Sanderson. 2014. <span>“RcppArmadillo:
+Accelerating r with High-Performance c++ Linear Algebra.”</span>
+<em>Computational Statistics &amp; Data Analysis</em> 71: 1054–63.
 </div>
 </div>
 </div>
