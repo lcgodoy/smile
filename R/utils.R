@@ -134,7 +134,7 @@ st_remove_holes <- function(x) {
 #'     spatial correlation between two points at distance \code{d} is
 #'     \code{cut}.
 #' @export
-find_phi <- function(d, nu, kappa, mu2, family = "matGern",
+find_phi <- function(d, nu, kappa, mu2, family = "matern",
                      range = c(1e-04, 1000), cut = 0.05) {
     if(family %in% c("matern", "gw", "cs",
                      "spher", "pexp",
