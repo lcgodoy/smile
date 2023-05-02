@@ -259,7 +259,7 @@ According to this criterion, the best model is the one with <span class="math in
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"m1"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/AIC.html" class="external-link">AIC</a></span><span class="op">(</span><span class="va">fit_msoa1</span><span class="op">)</span>, <span class="st">"m2"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/AIC.html" class="external-link">AIC</a></span><span class="op">(</span><span class="va">fit_msoa2</span><span class="op">)</span>, <span class="st">"m3"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/AIC.html" class="external-link">AIC</a></span><span class="op">(</span><span class="va">fit_msoa3</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt;       m1       m2       m3 </span></span>
-<span><span class="co">#&gt; 296.3172 296.8903 297.2304</span></span></code></pre></div>
+<span><span class="co">#&gt; 297.9788 299.5174 300.2937</span></span></code></pre></div>
 <p>We can retrieve the estimated parameters and the associated
 <code>(1 - sig)</code> % confidence intervals by using the function
 <code>summary_spm_fit</code> as follows</p>
@@ -269,9 +269,9 @@ According to this criterion, the best model is the one with <span class="math in
 <span><span class="co">#&gt;  optimization algorithm converged: yes </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;     par   estimate        se               ci</span></span>
-<span><span class="co">#&gt; 1    mu 75.9472536 0.7607230 [74.456; 77.438]</span></span>
-<span><span class="co">#&gt; 2 sigsq 22.6791986 4.1291663 [14.586; 30.772]</span></span>
-<span><span class="co">#&gt; 3   phi  0.7839221 0.2015083   [0.389; 1.179]</span></span></code></pre></div>
+<span><span class="co">#&gt; 1    mu 75.9162456 0.8226094 [74.304; 77.529]</span></span>
+<span><span class="co">#&gt; 2 sigsq 23.5971619 4.2739260 [15.220; 31.974]</span></span>
+<span><span class="co">#&gt; 3   phi  0.8392926 0.2178964   [0.412; 1.266]</span></span></code></pre></div>
 <p>Finally, we have almost everything we need to perform predictions at
 the LSOA areas. The function <code>predict_spm</code> calculates the
 predictions associated to the <code>spm_obj</code> (which contains the
@@ -284,10 +284,7 @@ well. In this case we are specifying a finer grid (3500 points) because
 the LSOA areas are smaller than the MSOA areas.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">pred_lsoa</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/predict_spm.html">predict_spm</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">liv_lsoa</span>, spm_obj <span class="op">=</span> <span class="va">fit_msoa1</span>, id_var <span class="op">=</span> <span class="st">"lsoa11cd"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Warning: st_centroid assumes attributes are constant over geometries</span></span>
-<span><span class="co">#&gt; Warning in predict_spm.sf(x = liv_lsoa, spm_obj = fit_msoa1, id_var =</span></span>
-<span><span class="co">#&gt; "lsoa11cd"): Negative variance for at least one predicted region. Taking</span></span>
-<span><span class="co">#&gt; absolute value.</span></span></code></pre></div>
+<span><span class="co">#&gt; Warning: st_centroid assumes attributes are constant over geometries</span></span></code></pre></div>
 <p>The resulting object is a list with entries <code>"mu_pred"</code>,
 <code>"sig_pred"</code>, <code>"pred_grid"</code>,
 <code>"pred_agg"</code>. The first two positions correspond to the mean
