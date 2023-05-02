@@ -2,7 +2,7 @@
 ##'
 ##' Internal use.
 ##' @title Evaluate log-lik
-##' @param theta a \code{numeric} vector of size 4 (\eqn{\mu, \sigma^2, \tau^2,
+##' @param theta a \code{numeric} vector of size 4 (\eqn{\mu, \sigma^2, \alpha,
 ##'     \phi}) containing the parameters associated with the model.
 ##' @param .dt a \code{numeric} vector containing the variable \eqn{Y}.
 ##' @param dists a \code{list} of size distance matrices at the point level.
@@ -20,7 +20,7 @@
 ##' @param apply_exp a \code{logical} indicater wheter the exponential
 ##'     transformation should be applied to variance parameters. This
 ##'     facilitates the optimization process.
-##' 
+##'
 ##' @return a scalar representing \code{-log.lik}.
 ##' @keywords internal
 singl_log_lik <- function(theta, .dt, dists, npix, model,
@@ -28,18 +28,19 @@ singl_log_lik <- function(theta, .dt, dists, npix, model,
                           kappa = 1, mu2 = 1.5,
                           apply_exp = FALSE) {
 
-    if(! apply_exp & any(rev(theta)[1:2] < 0 )) {
+    if (! apply_exp && any(rev(theta)[1:2] < 0)) {
         return(NA_real_)
     }
 
     mu    <- theta[1]
     sigsq <- theta[2]
 
-    if(length(theta) == 4) {
-        tausq <- theta[3]
-        phi   <- theta[4]
-    } else
+    if (length(theta) == 4) {
+        al  <- theta[3]
+        phi <- theta[4]
+    } else {
         phi <- theta[3]
+    }
     ## tausq <- matrix(nrow = p, ncol = p)
     ## tausq[upper.tri(tausq, diag = TRUE)] <-
     ##     theta[(p + 1):((p + 1) + .5*(p * ( p  + 1 )) - 1)]
@@ -47,9 +48,9 @@ singl_log_lik <- function(theta, .dt, dists, npix, model,
     ## sigsq <- theta[((p + 1) + .5*(p * ( p  + 1 )))]
     ## phi   <- theta[((p + 1) + .5*(p * ( p  + 1 )) + 1)]
 
-    if(apply_exp) {
-        if(length(theta) == 4)
-            tausq <- exp(tausq)
+    if (apply_exp) {
+        if (length(theta) == 4)
+            al <- exp(al)
         sigsq <- exp(sigsq)
         phi   <- exp(phi)
     }
@@ -61,39 +62,39 @@ singl_log_lik <- function(theta, .dt, dists, npix, model,
                varcov_u1 <- comp_mat_cov(cross_dists = dists,
                                          n = .n, n2 = .n,
                                          phi = phi,
-                                         sigsq = sigsq,
+                                         sigsq = 1,
                                          nu = nu)
            },
            "pexp" = {
                varcov_u1 <- comp_pexp_cov(cross_dists = dists,
                                           n = .n, n2 = .n,
                                           phi = phi,
-                                          sigsq = sigsq,
+                                          sigsq = 1,
                                           nu = nu)
            },
            "gaussian" = {
                varcov_u1 <- comp_gauss_cov(cross_dists = dists,
                                            n = .n, n2 = .n,
                                            phi = phi,
-                                           sigsq = sigsq)
+                                           sigsq = 1)
            },
            "spherical" = {
                varcov_u1 <- comp_spher_cov(cross_dists = dists,
                                            n = .n, n2 = .n,
                                            phi = phi,
-                                           sigsq = sigsq)
+                                           sigsq = 1)
            },
            "cs" = {
                varcov_u1 <- comp_cs_cov(cross_dists = dists,
                                         n = .n, n2 = .n,
                                         phi = phi,
-                                        sigsq = sigsq)
+                                        sigsq = 1)
            },
            "gw" = {
                varcov_u1 <- comp_gw_cov(cross_dists = dists,
                                         n = .n, n2 = .n,
                                         phi = phi,
-                                        sigsq = sigsq,
+                                        sigsq = 1,
                                         kappa = kappa,
                                         mu    = mu2)
            },
@@ -101,18 +102,18 @@ singl_log_lik <- function(theta, .dt, dists, npix, model,
                varcov_u1 <- comp_tapmat_cov(cross_dists = dists,
                                             n = .n, n2 = .n,
                                             phi = phi,
-                                            sigsq = sigsq,
+                                            sigsq = 1,
                                             nu = nu,
                                             theta = tr)
            })
-    
-    varcov_y  <- varcov_u1 + diag(tausq / npix,
+
+    varcov_y  <- varcov_u1 + diag(al / npix,
                                   nrow = .n, ncol = .n)
-    
+
     log_lik_y <- mvtnorm::dmvnorm(x = matrix(.dt, nrow = 1),
                                   mean  = matrix(rep(mu, .n),
                                                  ncol = 1),
-                                  sigma = varcov_y,
+                                  sigma = sigsq * varcov_y,
                                   log = TRUE,
                                   checkSymmetry = FALSE)
 
@@ -125,7 +126,7 @@ singl_log_lik <- function(theta, .dt, dists, npix, model,
     ##                               log = TRUE,
     ##                               checkSymmetry = FALSE)
 
-    return( - log_lik_y )
+    return(- log_lik_y)
 }
 
 ##' Evaluate the log-likelihood for a given set of parameters - New
@@ -155,22 +156,22 @@ singl_log_lik <- function(theta, .dt, dists, npix, model,
 ##' @param apply_exp a \code{logical} indicater wheter the exponential
 ##'     transformation should be applied to variance parameters. This
 ##'     facilitates the optimization process.
-##' 
+##'
 ##' @return a scalar representing \code{-log.lik}.
 ##' @keywords internal
 singl_log_plik <- function(theta, .dt, dists, npix, model,
                            nu = NULL, tr = NULL,
                            kappa = 1, mu2 = 1.5,
                            apply_exp = FALSE) {
-    
-    if(! apply_exp & any(theta < 0 )) {
+
+    if (! apply_exp && any(theta < 0)) {
         return(NA_real_)
     }
-    
-    nu  <- theta[1]
+
+    al  <- theta[1]
     phi <- theta[2]
-    if(apply_exp) {
-        nu  <- exp(nu)
+    if (apply_exp) {
+        al  <- exp(al)
         phi <- exp(phi)
     }
     .n <- NROW(.dt)
@@ -235,12 +236,12 @@ singl_log_plik <- function(theta, .dt, dists, npix, model,
                    sparse = TRUE
                )
            })
-    
-    
-    V <- varcov_u1 + diag(nu / npix,
+
+
+    V <- varcov_u1 + diag(al / npix,
                           nrow = .n, ncol = .n)
     chol_v <- try(chol(V))
-    if(inherits(chol_v, "try-error")) {
+    if (inherits(chol_v, "try-error")) {
         inv_v <- solve(V)
         mles   <- est_mle(.dt, inv_v)
         log_lik_y <- .5 * (.n * log(2 * pi) + .n * log(mles[length(mles)]) +
@@ -251,7 +252,7 @@ singl_log_plik <- function(theta, .dt, dists, npix, model,
         log_lik_y <- .5 * (.n * log(2 * pi) + .n * log(mles[length(mles)]) +
                            2 * sum(log(diag(chol_v))) + .n)
     }
-    return( log_lik_y )
+    return(log_lik_y)
 }
 
 ##' Evaluate the log-likelihood for a given set of parameters - No nugget +
@@ -285,14 +286,14 @@ singl_log_lik_nn <- function(theta, .dt, dists, npix, model,
                              nu = NULL, tr = NULL,
                              kappa = 1, mu2 = 1.5,
                              apply_exp = FALSE) {
-    
-    if(! apply_exp & theta < 0 ) {
+
+    if (!apply_exp && theta < 0) {
         return(NA_real_)
     }
-    
+
     phi <- theta
 
-    if(apply_exp) {
+    if (apply_exp) {
         phi <- exp(phi)
     }
 
@@ -359,10 +360,10 @@ singl_log_lik_nn <- function(theta, .dt, dists, npix, model,
                    sparse = TRUE
                )
            })
-    
+
     V <- varcov_u1
     chol_v <- try(chol(V))
-    if(inherits(chol_v, "try-error")) {
+    if (inherits(chol_v, "try-error")) {
         inv_v <- solve(V)
         mles <- est_mle(.dt, inv_v)
         log_lik_y <- .5 * (.n * log(2 * pi) + .n * log(mles[length(mles)]) +
@@ -373,8 +374,8 @@ singl_log_lik_nn <- function(theta, .dt, dists, npix, model,
         log_lik_y <- .5 * (.n * log(2 * pi) + .n * log(mles[length(mles)]) +
                            2 * sum(log(diag(chol_v))) + .n)
     }
-    
-    return( log_lik_y )
+
+    return(log_lik_y)
 }
 
 ## ##' Evaluate the log-likelihood for a given set of parameters - New
@@ -502,7 +503,7 @@ singl_ll_nn_hess <- function(theta, .dt, dists, npix, model,
                              kappa = 1, mu2 = 1.5,
                              apply_exp = FALSE) {
     npar <- length(theta)
-    
+
     mu    <- theta[1]
     sigsq <- theta[2]
     phi   <- theta[3]
@@ -571,5 +572,5 @@ singl_ll_nn_hess <- function(theta, .dt, dists, npix, model,
                                   sigma = varcov_u1,
                                   log = TRUE,
                                   checkSymmetry = FALSE)
-    return( - log_lik_y )
+    return(- log_lik_y)
 }

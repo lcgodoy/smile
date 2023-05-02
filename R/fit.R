@@ -108,15 +108,15 @@ fit_spm.spm <- function(x, model, theta_st,
     stopifnot(!is.null(names(theta_st)))
     stopifnot(NCOL(x$var) == 1)
     stopifnot(inherits(x, "spm"))
-    if(! missing(nu))
+    if (! missing(nu))
         stopifnot(length(nu) == 1)
     stopifnot(model %in% c("matern", "pexp", "gaussian",
                            "spherical", "cs", "gw"))
-    if(model == "gw")
+    if (model == "gw")
         stopifnot(mu2 >= 1)
     npar <- length(theta_st)
     p    <- npar + 2L
-    if(npar == 2) {
+    if (npar == 2) {
         op_val <-
             stats::optim(par = theta_st,
                          fn  = singl_log_plik,
@@ -151,24 +151,24 @@ fit_spm.spm <- function(x, model, theta_st,
                          apply_exp = apply_exp,
                          ...)
     }
-    
+
     estimates <- op_val$par
-    
-    if(apply_exp) {
+
+    if (apply_exp) {
         estimates <- exp(estimates)
         ## Using Delta-Method
         ## https://stats.idre.ucla.edu/r/faq/how-can-i-estimate-the-standard-error-of-transformed-regression-parameters-in-r-using-the-delta-method/
         ## grad_mat <-
         ##     diag(c(1, exp(estimates[2:npar])))
         ## info_mat <- crossprod(grad_mat, info_mat) %*% grad_mat
-    } 
-    
+    }
+
     .n <- NROW(x$var)
-    
+
     ## can be turned in to a function to make to code cleaner
     switch(model,
            "matern" = {
-               if(is.null(nu))
+               if (is.null(nu))
                    nu <- .5
 
                V <- comp_mat_cov(x$dists,
@@ -178,7 +178,7 @@ fit_spm.spm <- function(x, model, theta_st,
                                  nu = nu)
            },
            "pexp" = {
-               if(is.null(nu))
+               if (is.null(nu))
                    nu <- 1
 
                V <- comp_pexp_cov(x$dists,
@@ -233,20 +233,19 @@ fit_spm.spm <- function(x, model, theta_st,
                    sparse = TRUE
                )
            })
-    
+
     ones_n <- matrix(rep(1, .n), ncol = 1L)
     y <- matrix(x$var, ncol = 1L)
 
-    if(npar == 2) {
-        V <- V + diag(estimates["tausq"] / x$npix,
-                      nrow = .n, ncol = .n) 
+    if (npar == 2) {
+        V <- V + diag(estimates["al"] / x$npix,
+                      nrow = .n, ncol = .n)
         inv_v <- chol2inv(chol(V))
         mles <- est_mle(x$var, inv_v)
-        estimates <- c(mles, 
-                       "tausq" = unname(mles[length(mles)] *
-                                        estimates["tausq"]),
-                       "phi"   = unname(estimates["phi"]))
-        if(comp_hess) {
+        estimates <- c(mles,
+                       "al" = estimates["al"],
+                       "phi" = unname(estimates["phi"]))
+        if (comp_hess) {
             info_mat <- solve(
                 numDeriv::hessian(func = singl_log_lik,
                                   x = estimates,
@@ -263,13 +262,12 @@ fit_spm.spm <- function(x, model, theta_st,
         } else {
             info_mat <- matrix(NA_real_, ncol = p, nrow = p)
         }
-        
-    } else if(npar == 1) {
+    } else if (npar == 1) {
         inv_v <- chol2inv(chol(V))
         mles  <- est_mle(x$var, inv_v)
-        estimates <- c(mles, 
+        estimates <- c(mles,
                        "phi" = unname(estimates["phi"]))
-        if(comp_hess) {
+        if (comp_hess) {
             ## stats::optimHess(par = estimates,
             ##                  fn  = singl_log_lik,
             info_mat <- solve(
@@ -291,7 +289,7 @@ fit_spm.spm <- function(x, model, theta_st,
                                nrow = length(estimates))
         }
     }
-    
+
     output <- list(
         estimate  = estimates,
         info_mat  = info_mat,
@@ -590,7 +588,7 @@ fit_spm2 <- function(x, model, nu,
 
     inv_v <- chol2inv(chol(V))
     mles <- est_mle(x$var, inv_v)
-    estimates <- c(mles, 
+    estimates <- c(mles,
                    "phi" = unname(phi_out))
 
     if(comp_hess) {
