@@ -238,13 +238,13 @@ fit_spm.spm <- function(x, model, theta_st,
     y <- matrix(x$var, ncol = 1L)
 
     if(npar == 2) {
-        V <- V + diag(estimates["nu"] / x$npix,
+        V <- V + diag(estimates["tausq"] / x$npix,
                       nrow = .n, ncol = .n) 
         inv_v <- chol2inv(chol(V))
         mles <- est_mle(x$var, inv_v)
         estimates <- c(mles, 
                        "tausq" = unname(mles[length(mles)] *
-                                        estimates["nu"]),
+                                        estimates["tausq"]),
                        "phi"   = unname(estimates["phi"]))
         if(comp_hess) {
             info_mat <- solve(
