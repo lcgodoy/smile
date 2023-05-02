@@ -243,7 +243,7 @@ fit_spm.spm <- function(x, model, theta_st,
         inv_v <- chol2inv(chol(V))
         mles <- est_mle(x$var, inv_v)
         estimates <- c(mles,
-                       "al" = estimates["al"],
+                       "al" = unname(estimates["al"]),
                        "phi" = unname(estimates["phi"]))
         if (comp_hess) {
             info_mat <- solve(
