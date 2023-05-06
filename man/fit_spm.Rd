@@ -33,7 +33,8 @@ fit_spm2(
   comp_hess = TRUE,
   phi_min,
   phi_max,
-  nphi = 10
+  nphi = 10,
+  cores = getOption("mc.cores", 1L)
 )
 }
 \arguments{
@@ -86,6 +87,8 @@ value to look for.}
 
 \item{nphi}{a \code{numeric} scalar indicating the number of values to
 compute a grid-search over \eqn{phi}.}
+
+\item{cores}{a \code{integer} scalar indicating number of cores to be used. Default is getOption("mc.cores"). No effect on Windows.}
 }
 \value{
 a \code{spm_fit} object containing the information about the

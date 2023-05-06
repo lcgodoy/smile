@@ -62,6 +62,7 @@ fit_spm <- function(x, ...) UseMethod("fit_spm")
 ##'     value to look for.
 ##' @param nphi a \code{numeric} scalar indicating the number of values to
 ##'     compute a grid-search over \eqn{phi}.
+##' @param cores a \code{integer} scalar indicating number of cores to be used. Default is getOption("mc.cores"). No effect on Windows.
 ##' @param ... additionnal parameters, either passed to \code{optim}.
 ##'
 ##' @import Matrix
@@ -462,16 +463,17 @@ summary_spm_fit <- function(x, sig = .05) {
 fit_spm2 <- function(x, model, nu,
                      tr,
                      kappa = 1, mu2 = 1.5,
-                     comp_hess = TRUE, 
-                     phi_min, phi_max, nphi = 10) {
+                     comp_hess = TRUE,
+                     phi_min, phi_max, nphi = 10,
+                     cores = getOption("mc.cores", 1L)) {
     stopifnot(NCOL(x$var) == 1)
     stopifnot(inherits(x, "spm"))
     stopifnot(length(nphi) == 1)
     stopifnot(model %in% c("matern", "pexp", "gaussian",
                            "spherical", "cs", "gw"))
-    if(model == "gw")
+    if (model == "gw")
         stopifnot(mu2 >= 1)
-    if(! missing(nu))
+    if (! missing(nu))
         stopifnot(length(nu) == 1)
     
     my_phi <- seq(from = phi_min,
@@ -481,12 +483,23 @@ fit_spm2 <- function(x, model, nu,
     ## vector to store the profile likelihood value for each phi
     pl <- vector(mode = "numeric",
                  length = 2 * length(my_phi))
-
-    for( i in seq_along(my_phi) ) {
-        pl[i] <- singl_log_lik_nn(my_phi[i], .dt = x$var,
-                                  dists = x$dists, npix = 1,
-                                  model = model, nu = nu,
-                                  kappa = kappa, mu2 = mu2)
+    
+    if(.Platform$OS.type != "unix") {
+        for(i in seq_along(my_phi)) {
+            pl[i] <- singl_log_lik_nn(my_phi[i], .dt = x$var,
+                                      dists = x$dists, npix = 1,
+                                      model = model, nu = nu,
+                                      kappa = kappa, mu2 = mu2)
+        }
+    } else {
+        pl <- parallel::mclapply(my_phi,
+                                 FUN = singl_log_lik_nn,
+                                 .dt = x$var,
+                                 dists = x$dists, npix = 1,
+                                 model = model, nu = nu,
+                                 kappa = kappa, mu2 = mu2,
+                                 mc.cores = cores)
+        pl <- unlist(pl)         
     }
 
     k <- which.min(pl[seq_len(nphi)])

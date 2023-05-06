@@ -16,7 +16,7 @@ A \code{sf} data frame with 113 rows and 14 variables:
 \item{avg_age}{average age of the inhabitants in the census tract}
 \item{var_age}{variance of the variable age in the census tract}
 \item{prop_women}{proportion of women}
-\item{prop_elder}{proportion of people with 65 years of age or older}
+\item{prop_elder}{proportion of people with 55 years of age or older}
 \item{illit_rate}{illiteracy rate}
 \item{prop_white}{proportion of self-declared white people}
 \item{prop_black}{proportion of self-declared black people}
