@@ -29,3 +29,8 @@
 * Added icon
 * Improved documentation
 * Added examples
+
+# smile 1.0.4.2
+
+* New dataset included
+* Parallelizing `fit_spm2`
