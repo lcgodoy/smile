@@ -1,12 +1,12 @@
 Package: smile
 Title: Spatial Misalignment: Interpolation, Linkage, and Estimation
 Version: 1.0.4.2
-Date: 2022-07-26
+Date: 2023-05-06
 Authors@R: 
     person(given = "Lucas",
            family = "da Cunha Godoy",
            role = c("aut", "cre"),
-           email = "lcgodoy@duck.com",
+           email = "lucasdac.godoy@gmail.com",
            comment = c(ORCID = "0000-0003-4265-972X"))
 Description: Provides functions to estimate, predict and interpolate areal
         data. For estimation and prediction we assume areal data is an average
