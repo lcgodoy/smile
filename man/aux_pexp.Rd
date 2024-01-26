@@ -7,6 +7,9 @@
 aux_pexp(dist, sigsq, phi, nu)
 }
 \arguments{
+\item{dist}{a numeric matrix representing the distance between spatial
+entities.}
+
 \item{sigsq}{the \eqn{\sigma^2} parameter from the Powered Exponential
 covariance function.}
 
@@ -16,9 +19,6 @@ function, controls the range of the spatial dependence.}
 \item{nu}{the \eqn{\nu} parameter from the Powered Exponential
 covariance function,
 controls the differentiability of the process.}
-
-\item{dists}{a numeric matrix representing the distance between spatial
-entities.}
 }
 \value{
 The mean of \code{pexp_cov(dist, sigsq, phi, nu)}.

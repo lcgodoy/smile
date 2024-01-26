@@ -6,14 +6,14 @@ fit_spm <- function(x, ...) UseMethod("fit_spm")
 ##'
 ##' @title Fitting an underlying continuous process to areal data
 ##' 
-##' @details This function uses the \code{optim} function optimization
+##' @details This function uses the [stats::optim] function optimization
 ##'     algorithms to find the Maximum Likelihood estimators, and their standard
 ##'     errors, from a model adapted from. The function allows the user to input
-##'     the control parameters from the {optim} function through the argument
+##'     the control parameters from the [stats::optim] function through the argument
 ##'     \code{control_opt}, which is a named list. Additionally, the one can
 ##'     input lower and upper boundaries for the optimization problem, as well
 ##'     as the preferred optimization algorithm (as long as it is available for
-##'     \code{optim}). The preferred algorithm is selected by the argument
+##'     [stats::optim]). The preferred algorithm is selected by the argument
 ##'     \code{opt_method}. In addition to the control of the optimization, the
 ##'     user can select a covariance function among the following: Matern,
 ##'     Exponential, Powered Exponential, Gaussian, and Spherical. The parameter
@@ -51,9 +51,9 @@ fit_spm <- function(x, ...) UseMethod("fit_spm")
 ##' @param apply_exp a \code{logical} scalar indicating wheter the parameters
 ##'     that cannot assume negative values should be exponentiate or not.
 ##' @param opt_method a \code{character} scalar indicating the optimization
-##'     algorithm to be used. For details, see {optim}.
+##'     algorithm to be used. For details, see [stats::optim].
 ##' @param control_opt a named \code{list} containing the control arguments for
-##'     the optimization algorithm to be used. For details, see {optim}.
+##'     the optimization algorithm to be used. For details, see [stats::optim].
 ##' @param comp_hess a \code{boolean} indicating whether the Hessian matrix
 ##'     should be computed.
 ##' @param phi_min a \code{numeric} scalar representing the minimum \eqn{phi}
@@ -63,7 +63,7 @@ fit_spm <- function(x, ...) UseMethod("fit_spm")
 ##' @param nphi a \code{numeric} scalar indicating the number of values to
 ##'     compute a grid-search over \eqn{phi}.
 ##' @param cores a \code{integer} scalar indicating number of cores to be used. Default is getOption("mc.cores"). No effect on Windows.
-##' @param ... additionnal parameters, either passed to \code{optim}.
+##' @param ... additionnal parameters, either passed to [stats::optim].
 ##'
 ##' @import Matrix
 ##' 

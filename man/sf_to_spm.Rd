@@ -69,5 +69,4 @@ msoa_spm <- sf_to_spm(sf_obj = liv_msoa, n_pts = 1000,
                       type = "regular", by_polygon = FALSE,
                       poly_ids = "msoa11cd",
                       var_ids = "leb_est")
-
 }

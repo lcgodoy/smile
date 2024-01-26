@@ -7,14 +7,14 @@
 aux_spher(dist, sigsq, phi)
 }
 \arguments{
+\item{dist}{a numeric matrix representing the distance between spatial
+entities.}
+
 \item{sigsq}{the \eqn{\sigma^2} parameter from the Spherical covariance.
 function.}
 
 \item{phi}{the \eqn{\phi} parameter from the Spherical covariance function,
 controls the range of the spatial dependence.}
-
-\item{dists}{a numeric matrix representing the distance between spatial
-entities.}
 }
 \value{
 The mean of \code{spher_cov(dist, sigsq, phi)}.

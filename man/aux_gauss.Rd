@@ -7,14 +7,14 @@
 aux_gauss(dist, sigsq, phi)
 }
 \arguments{
+\item{dist}{a numeric matrix representing the distance between spatial
+entities.}
+
 \item{sigsq}{the \eqn{\sigma^2} parameter from the Gaussian covariance
 function.}
 
 \item{phi}{the \eqn{\phi} parameter from the Gaussian covariance function,
 controls the range of the spatial dependence.}
-
-\item{dists}{a numeric matrix representing the distance between spatial
-entities.}
 }
 \value{
 The mean of \code{gauss_cov(dist, sigsq, phi)}.

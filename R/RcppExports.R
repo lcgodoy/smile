@@ -239,7 +239,7 @@ pexp_cov <- function(dists, sigsq, phi, nu) {
 #'   numerically integrate a covariance function evaluated at a grid of points
 #'   within a polyigon and speed-up the computations.
 #'
-#' @param dists a numeric matrix representing the distance between spatial
+#' @param dist a numeric matrix representing the distance between spatial
 #'   entities.
 #' @param sigsq the \eqn{\sigma^2} parameter from the Powered Exponential
 #'   covariance function.
@@ -335,7 +335,7 @@ gauss_cov <- function(dists, sigsq, phi) {
 #'   numerically integrate a covariance function evaluated at a grid of points
 #'   within a polyigon and speed-up the computations.
 #'
-#' @param dists a numeric matrix representing the distance between spatial
+#' @param dist a numeric matrix representing the distance between spatial
 #'   entities.
 #' @param sigsq the \eqn{\sigma^2} parameter from the Gaussian covariance
 #'   function.
@@ -427,7 +427,7 @@ spher_cov <- function(dists, sigsq, phi) {
 #'   numerically integrate a covariance function evaluated at a grid of points
 #'   within a polyigon and speed-up the computations.
 #'
-#' @param dists a numeric matrix representing the distance between spatial
+#' @param dist a numeric matrix representing the distance between spatial
 #'   entities.
 #' @param sigsq the \eqn{\sigma^2} parameter from the Spherical covariance.
 #'   function.
@@ -518,7 +518,7 @@ cs_cov <- function(dists, sigsq, phi) {
 #'   numerically integrate a covariance function evaluated at a grid of points
 #'   within a polyigon and speed-up the computations.
 #'
-#' @param dists a numeric matrix representing the distance between spatial
+#' @param dist a numeric matrix representing the distance between spatial
 #'   entities.
 #' @param sigsq the \eqn{\sigma^2} parameter from the Spherical covariance.
 #'   function.
@@ -696,7 +696,7 @@ gw_cov <- function(dists, sigsq, phi, kappa, mu) {
 #'   numerically integrate a covariance function evaluated at a grid of points
 #'   within a polyigon and speed-up the computations.
 #'
-#' @param dists a numeric matrix representing the distance between spatial
+#' @param dist a numeric matrix representing the distance between spatial
 #'   entities.
 #' @param sigsq the \eqn{\sigma^2} variance of the covariance function
 #'   function.
@@ -836,7 +836,7 @@ tapmat_cov <- function(dists, sigsq, phi, nu, theta) {
 #'   numerically integrate a covariance function evaluated at a grid of points
 #'   within a polyigon and speed-up the computations.
 #'
-#' @param dists a numeric matrix representing the distance between spatial
+#' @param dist a numeric matrix representing the distance between spatial
 #'   entities.
 #' @param sigsq the \eqn{\sigma^2} parameter from the Matern covariance
 #'   function.
