@@ -259,7 +259,7 @@ According to this criterion, the best model is the one with <span class="math in
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"m1"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/AIC.html" class="external-link">AIC</a></span><span class="op">(</span><span class="va">fit_msoa1</span><span class="op">)</span>, <span class="st">"m2"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/AIC.html" class="external-link">AIC</a></span><span class="op">(</span><span class="va">fit_msoa2</span><span class="op">)</span>, <span class="st">"m3"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/AIC.html" class="external-link">AIC</a></span><span class="op">(</span><span class="va">fit_msoa3</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt;       m1       m2       m3 </span></span>
-<span><span class="co">#&gt; 297.3275 297.8690 298.3163</span></span></code></pre></div>
+<span><span class="co">#&gt; 295.4520 296.7408 297.5325</span></span></code></pre></div>
 <p>We can retrieve the estimated parameters and the associated
 <code>(1 - sig)</code> % confidence intervals by using the function
 <code>summary_spm_fit</code> as follows</p>
@@ -269,9 +269,9 @@ According to this criterion, the best model is the one with <span class="math in
 <span><span class="co">#&gt;  optimization algorithm converged: yes </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;     par   estimate        se               ci</span></span>
-<span><span class="co">#&gt; 1    mu 75.9106288 0.7966945 [74.349; 77.472]</span></span>
-<span><span class="co">#&gt; 2 sigsq 23.2842065 4.2227228 [15.008; 31.561]</span></span>
-<span><span class="co">#&gt; 3   phi  0.8133321 0.2113226   [0.399; 1.228]</span></span></code></pre></div>
+<span><span class="co">#&gt; 1    mu 75.9737993 0.8227536 [74.361; 77.586]</span></span>
+<span><span class="co">#&gt; 2 sigsq 22.5032355 4.0752984 [14.516; 30.491]</span></span>
+<span><span class="co">#&gt; 3   phi  0.8636812 0.2243099   [0.424; 1.303]</span></span></code></pre></div>
 <p>Finally, we have almost everything we need to perform predictions at
 the LSOA areas. The function <code>predict_spm</code> calculates the
 predictions associated to the <code>spm_obj</code> (which contains the

@@ -132,7 +132,7 @@ being analyzed, and 2) if the input is a <code>spm</code> object.</p></dd>
 
 
 <dt>...</dt>
-<dd><p>additionnal parameters, either passed to <code>optim</code>.</p></dd>
+<dd><p>additionnal parameters, either passed to <a href="https://rdrr.io/r/stats/optim.html" class="external-link">stats::optim</a>.</p></dd>
 
 
 <dt>model</dt>
@@ -177,12 +177,12 @@ that cannot assume negative values should be exponentiate or not.</p></dd>
 
 <dt>opt_method</dt>
 <dd><p>a <code>character</code> scalar indicating the optimization
-algorithm to be used. For details, see optim.</p></dd>
+algorithm to be used. For details, see <a href="https://rdrr.io/r/stats/optim.html" class="external-link">stats::optim</a>.</p></dd>
 
 
 <dt>control_opt</dt>
 <dd><p>a named <code>list</code> containing the control arguments for
-the optimization algorithm to be used. For details, see optim.</p></dd>
+the optimization algorithm to be used. For details, see <a href="https://rdrr.io/r/stats/optim.html" class="external-link">stats::optim</a>.</p></dd>
 
 
 <dt>comp_hess</dt>
@@ -218,14 +218,14 @@ estimation of the model parameters.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>This function uses the <code>optim</code> function optimization
+    <p>This function uses the <a href="https://rdrr.io/r/stats/optim.html" class="external-link">stats::optim</a> function optimization
 algorithms to find the Maximum Likelihood estimators, and their standard
 errors, from a model adapted from. The function allows the user to input
-the control parameters from the optim function through the argument
+the control parameters from the <a href="https://rdrr.io/r/stats/optim.html" class="external-link">stats::optim</a> function through the argument
 <code>control_opt</code>, which is a named list. Additionally, the one can
 input lower and upper boundaries for the optimization problem, as well
 as the preferred optimization algorithm (as long as it is available for
-<code>optim</code>). The preferred algorithm is selected by the argument
+<a href="https://rdrr.io/r/stats/optim.html" class="external-link">stats::optim</a>). The preferred algorithm is selected by the argument
 <code>opt_method</code>. In addition to the control of the optimization, the
 user can select a covariance function among the following: Matern,
 Exponential, Powered Exponential, Gaussian, and Spherical. The parameter
