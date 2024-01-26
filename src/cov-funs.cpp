@@ -345,7 +345,7 @@ arma::mat pexp_cov(const arma::mat& dists, double sigsq,
 //'   numerically integrate a covariance function evaluated at a grid of points
 //'   within a polyigon and speed-up the computations.
 //'
-//' @param dists a numeric matrix representing the distance between spatial
+//' @param dist a numeric matrix representing the distance between spatial
 //'   entities.
 //' @param sigsq the \eqn{\sigma^2} parameter from the Powered Exponential
 //'   covariance function.
@@ -476,7 +476,7 @@ arma::mat gauss_cov(const arma::mat& dists, double sigsq, double phi) {
 //'   numerically integrate a covariance function evaluated at a grid of points
 //'   within a polyigon and speed-up the computations.
 //'
-//' @param dists a numeric matrix representing the distance between spatial
+//' @param dist a numeric matrix representing the distance between spatial
 //'   entities.
 //' @param sigsq the \eqn{\sigma^2} parameter from the Gaussian covariance
 //'   function.
@@ -602,7 +602,7 @@ arma::mat spher_cov(const arma::mat& dists, double sigsq, double phi) {
 //'   numerically integrate a covariance function evaluated at a grid of points
 //'   within a polyigon and speed-up the computations.
 //'
-//' @param dists a numeric matrix representing the distance between spatial
+//' @param dist a numeric matrix representing the distance between spatial
 //'   entities.
 //' @param sigsq the \eqn{\sigma^2} parameter from the Spherical covariance.
 //'   function.
@@ -729,7 +729,7 @@ arma::mat cs_cov(const arma::mat& dists, double sigsq, double phi) {
 //'   numerically integrate a covariance function evaluated at a grid of points
 //'   within a polyigon and speed-up the computations.
 //'
-//' @param dists a numeric matrix representing the distance between spatial
+//' @param dist a numeric matrix representing the distance between spatial
 //'   entities.
 //' @param sigsq the \eqn{\sigma^2} parameter from the Spherical covariance.
 //'   function.
@@ -1007,7 +1007,7 @@ arma::mat gw_cov(const arma::mat& dists, double sigsq,
 //'   numerically integrate a covariance function evaluated at a grid of points
 //'   within a polyigon and speed-up the computations.
 //'
-//' @param dists a numeric matrix representing the distance between spatial
+//' @param dist a numeric matrix representing the distance between spatial
 //'   entities.
 //' @param sigsq the \eqn{\sigma^2} variance of the covariance function
 //'   function.
@@ -1205,7 +1205,7 @@ arma::mat tapmat_cov(const arma::mat& dists, double sigsq,
 //'   numerically integrate a covariance function evaluated at a grid of points
 //'   within a polyigon and speed-up the computations.
 //'
-//' @param dists a numeric matrix representing the distance between spatial
+//' @param dist a numeric matrix representing the distance between spatial
 //'   entities.
 //' @param sigsq the \eqn{\sigma^2} parameter from the Matern covariance
 //'   function.

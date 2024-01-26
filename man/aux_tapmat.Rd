@@ -7,13 +7,13 @@
 aux_tapmat(dist, sigsq, phi, nu, theta)
 }
 \arguments{
+\item{dist}{a numeric matrix representing the distance between spatial
+entities.}
+
 \item{sigsq}{the \eqn{\sigma^2} parameter from the Matern covariance
 function.}
 
 \item{phi}{the \eqn{\phi} parameter from the Matern covariance function,}
-
-\item{dists}{a numeric matrix representing the distance between spatial
-entities.}
 }
 \value{
 The mean of \code{mat_cov(dist, sigsq, phi, nu)}.

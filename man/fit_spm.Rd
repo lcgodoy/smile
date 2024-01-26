@@ -42,7 +42,7 @@ fit_spm2(
 \code{theta_st} depends on the 2 factors. 1) the number of variables
 being analyzed, and 2) if the input is a \code{spm} object.}
 
-\item{...}{additionnal parameters, either passed to \code{optim}.}
+\item{...}{additionnal parameters, either passed to \link[stats:optim]{stats::optim}.}
 
 \item{model}{a \code{character} scalar indicating the family of the
 covariance function to be used. The options are \code{c("matern",
@@ -71,10 +71,10 @@ function.}
 that cannot assume negative values should be exponentiate or not.}
 
 \item{opt_method}{a \code{character} scalar indicating the optimization
-algorithm to be used. For details, see {optim}.}
+algorithm to be used. For details, see \link[stats:optim]{stats::optim}.}
 
 \item{control_opt}{a named \code{list} containing the control arguments for
-the optimization algorithm to be used. For details, see {optim}.}
+the optimization algorithm to be used. For details, see \link[stats:optim]{stats::optim}.}
 
 \item{comp_hess}{a \code{boolean} indicating whether the Hessian matrix
 should be computed.}
@@ -98,14 +98,14 @@ estimation of the model parameters.
 Fitting an underlying continuous process to areal data
 }
 \details{
-This function uses the \code{optim} function optimization
+This function uses the \link[stats:optim]{stats::optim} function optimization
 algorithms to find the Maximum Likelihood estimators, and their standard
 errors, from a model adapted from. The function allows the user to input
-the control parameters from the {optim} function through the argument
+the control parameters from the \link[stats:optim]{stats::optim} function through the argument
 \code{control_opt}, which is a named list. Additionally, the one can
 input lower and upper boundaries for the optimization problem, as well
 as the preferred optimization algorithm (as long as it is available for
-\code{optim}). The preferred algorithm is selected by the argument
+\link[stats:optim]{stats::optim}). The preferred algorithm is selected by the argument
 \code{opt_method}. In addition to the control of the optimization, the
 user can select a covariance function among the following: Matern,
 Exponential, Powered Exponential, Gaussian, and Spherical. The parameter

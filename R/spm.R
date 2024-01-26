@@ -1,9 +1,9 @@
 ##' Transforming a \code{sf} into a \code{spm} object (Internal use)
 ##'
 ##' @name sf_to_spm
-##' 
+##'
 ##' @title single \code{sf} to \code{spm}
-##' 
+##'
 ##' @param sf_obj a \code{sf} object s.t. its geometries are polygons.
 ##' @param n_pts a \code{numeric} scalar representing the number of points to
 ##'     create a grid in the study region on which the polygons in \code{sf_obj}
@@ -31,140 +31,128 @@
 ##'
 ##' @examples
 ##' data(liv_lsoa) # loading the LSOA data
-##' 
+##'
 ##' msoa_spm <- sf_to_spm(sf_obj = liv_msoa, n_pts = 1000,
 ##'                       type = "regular", by_polygon = FALSE,
 ##'                       poly_ids = "msoa11cd",
 ##'                       var_ids = "leb_est")
-##' 
 single_sf_to_spm <- function(sf_obj,
                              n_pts, type = "regular",
                              by_polygon = FALSE,
                              poly_ids = NULL,
                              var_ids  = NULL,
                              trunc_d  = NULL) {
-    stopifnot(inherits(sf_obj, "sf"))
-    stopifnot(all(grepl("POLYGON", sf::st_geometry_type(sf_obj))))
-    stopifnot(! is.null(var_ids) )
-    stopifnot(inherits(sf_obj, "sf"))
-    stopifnot(length(n_pts) == 1 | length(n_pts) == nrow(sf_obj))
-    stopifnot(type %in% c("random", "regular", "hexagonal"))
-    
-    if(is.null(poly_ids) | ( ! poly_ids %in% names(sf_obj))) {
-        sf_obj <- transform(sf_obj,
-                            poly_ids = seq_len(nrow(sf_obj)))
-        poly_ids <- "poly_ids"
-    }
-    
-    if(by_polygon & length(n_pts) == 1) {
-        out_grid <-
-            lapply(sf::st_cast(sf::st_geometry(sf_obj),
-                               "POLYGON"),
-                   function(x, .sz, .tp) {
-                       sf::st_sample(x    = x,
-                                     size = .sz, 
-                                     type = .tp)
-                   },
-                   .sz = n_pts, 
-                   .tp = type)
-    } else if(length(n_pts) > 1) {
-        out_grid <-
-            Map(function(x, .sz, .tp) {
-                sf::st_sample(x    = x,
-                              size = .sz, 
-                              type = .tp)
-            },
-            x = sf::st_cast(sf::st_geometry(sf_obj),
-                            "POLYGON"),
-            .sz = n_pts, 
-            .tp = type)
-    } else {
-        out_grid <-
-            sf::st_sample(x = sf::st_cast(sf::st_geometry(sf_obj),
-                                          "POLYGON"),
-                          size = n_pts, 
-                          type = type,
-                          by_polygon = by_polygon)
-    }
+  stopifnot(inherits(sf_obj, "sf"))
+  stopifnot(all(grepl("POLYGON", sf::st_geometry_type(sf_obj))))
+  stopifnot(! is.null(var_ids))
+  stopifnot(inherits(sf_obj, "sf"))
+  stopifnot(length(n_pts) == 1 | length(n_pts) == nrow(sf_obj))
+  stopifnot(type %in% c("random", "regular", "hexagonal"))
+  if (is.null(poly_ids) || (! poly_ids %in% names(sf_obj))) {
+    sf_obj <- transform(sf_obj,
+                        poly_ids = seq_len(nrow(sf_obj)))
+    poly_ids <- "poly_ids"
+  }
+  if (by_polygon && length(n_pts) == 1) {
+    out_grid <-
+      lapply(sf::st_cast(sf::st_geometry(sf_obj),
+                         "POLYGON"),
+             function(x, .sz, .tp) {
+               sf::st_sample(x    = x,
+                             size = .sz, 
+                             type = .tp)
+             },
+             .sz = n_pts,
+             .tp = type)
+  } else if (length(n_pts) > 1) {
+    out_grid <-
+      Map(function(x, .sz, .tp) {
+        sf::st_sample(x    = x,
+                      size = .sz,
+                      type = .tp)
+      },
+      x = sf::st_cast(sf::st_geometry(sf_obj),
+                      "POLYGON"),
+      .sz = n_pts,
+      .tp = type)
+  } else {
+    out_grid <-
+      ## sf::st_sample(x = sf::st_cast(sf::st_geometry(sf_obj),
+      ##                               "POLYGON"),
+      sf::st_sample(x = sf::st_geometry(sf_obj),
+                    size = n_pts,
+                    type = type,
+                    by_polygon = by_polygon)
+  }
 
-    if(by_polygon) {
-        out_grid <- sf::st_set_crs(do.call("c", out_grid),
-                                   sf::st_crs(sf_obj))
-        ## out_grid <- sf::st_set_crs(do.call("rbind", out_grid),
-        ##                            sf::st_crs(sf_obj))
-        
-    }
-    
-    out_grid_pt <-
-        sf::st_join(x = sf::st_sf(out_grid),
-                    y = sf_obj[poly_ids],
-                    join = sf::st_within)
-    if(any(! sf_obj[[poly_ids]] %in% out_grid_pt[[poly_ids]])) {
-        empty_polys <- which(! sf_obj[[poly_ids]] %in% out_grid_pt[[poly_ids]])
- 
-        out_grid_aux <-
-            sf::st_centroid(x = sf_obj[empty_polys, poly_ids])
-        out_grid_pt <- rbind(out_grid_pt, sf::st_sf(out_grid_aux))
-    }
-    
-    out_grid_pt <- out_grid_pt[order(out_grid_pt[[poly_ids]]), ]
+  if (by_polygon) {
+    out_grid <- sf::st_set_crs(do.call("c", out_grid),
+                               sf::st_crs(sf_obj))
+    ## out_grid <- sf::st_set_crs(do.call("rbind", out_grid),
+    ##                            sf::st_crs(sf_obj))
+  }
+  out_grid_pt <-
+    sf::st_join(x = sf::st_sf(out_grid),
+                y = sf_obj[poly_ids],
+                join = sf::st_within)
+  if (any(! sf_obj[[poly_ids]] %in% out_grid_pt[[poly_ids]])) {
+    empty_polys <- which(! sf_obj[[poly_ids]] %in% out_grid_pt[[poly_ids]]) 
+    out_grid_aux <-
+      sf::st_centroid(x = sf_obj[empty_polys, poly_ids])
+    out_grid_pt <- rbind(out_grid_pt, sf::st_sf(out_grid_aux))
+  }
+  
+  out_grid_pt <- out_grid_pt[order(out_grid_pt[[poly_ids]]), ]
 
-    out_grid_pt <- transform(out_grid_pt,
-                             x = sf::st_coordinates(out_grid_pt)[, 1],
-                             y = sf::st_coordinates(out_grid_pt)[, 2])
+  out_grid_pt <- transform(out_grid_pt,
+                           x = sf::st_coordinates(out_grid_pt)[, 1],
+                           y = sf::st_coordinates(out_grid_pt)[, 2])
 
-    if( is.null(trunc_d) ) {
-        out_dists <- dist_from_grids(out_grid_pt, poly_ids)
-    } else {
-        aux_dist <-
-            sf::st_is_within_distance(
-                    sf::st_geometry(sf_obj),
-                    dist   = trunc_d,
-                    sparse = FALSE
-                )
-        aux_lo <- aux_dist[lower.tri(aux_dist, diag = TRUE)]
-        out_dists <- dist_from_grids_tr(out_grid_pt, poly_ids,
-                                        aux_lo, trunc_d * 1.01)
-    }
-    
-    if(length(var_ids) == 1) {
-        out_var <- sf_obj[[var_ids]]
-    } else {
-        stop("var_ids must be a single variable")
-    }
-    
-    npix <- as.numeric( sf::st_area(sf_obj) )
-
-    output <- list(
-        var     = out_var,
-        dists   = out_dists,
-        ids_var = poly_ids,
-        grid    = out_grid_pt[poly_ids],
-        npix    = npix,
-        sf_poly = sf::st_geometry(sf_obj)
-    )
-    
-    class(output) <- append(class(output), "spm")
-    return(output)
+  if (is.null(trunc_d)) {
+    out_dists <- dist_from_grids(out_grid_pt, poly_ids)
+  } else {
+    aux_dist <-
+      sf::st_is_within_distance(sf::st_geometry(sf_obj),
+                                dist   = trunc_d,
+                                sparse = FALSE)
+    aux_lo <- aux_dist[lower.tri(aux_dist, diag = TRUE)]
+    out_dists <- dist_from_grids_tr(out_grid_pt, poly_ids,
+                                    aux_lo, trunc_d * 1.01)
+  }
+  if (length(var_ids) == 1) {
+    out_var <- sf_obj[[var_ids]]
+  } else {
+    stop("var_ids must be a single variable")
+  }
+  npix <- as.numeric(sf::st_area(sf_obj))
+  output <- list(
+      var     = out_var,
+      dists   = out_dists,
+      ids_var = poly_ids,
+      grid    = out_grid_pt[poly_ids],
+      npix    = npix,
+      sf_poly = sf::st_geometry(sf_obj)
+  )
+  class(output) <- append(class(output), "spm")
+  return(output)
 }
 
 ##' @name sf_to_spm
 ##' @export
 sf_to_spm <- single_sf_to_spm
 
-print.spm <- function(x, ...) {    
-    cat(sprintf("\n Number of variables to be analyzed: %d \n", NCOL(x$var)))
-    cat(sprintf("\n ID variable: %ds\n", x$poly_ids))
-    if(NCOL(x$var) == 1) {
-        cat("\n Variable summary: ")
-        summary(x$var)
-    } else {
-        apply(x$var, 2, summary)
-    }
-    cat(sprintf("\n Number of polygons in the partition: %d \n", nrow(x$sf_poly)))
-    cat(sprintf("\n Number of points in the grid over: %d \n", nrow(x$grid)))
+print.spm <- function(x, ...) {
+  cat(sprintf("\n Number of variables to be analyzed: %d \n", NCOL(x$var)))
+  cat(sprintf("\n ID variable: %ds\n", x$poly_ids))
+  if (NCOL(x$var) == 1) {
+    cat("\n Variable summary: ")
+    summary(x$var)
+  } else {
+    apply(x$var, 2, summary)
+  }
+  cat(sprintf("\n Number of polygons in the partition: %d \n", nrow(x$sf_poly)))
+  cat(sprintf("\n Number of points in the grid over: %d \n", nrow(x$grid)))
 }
-
 
 ## ##' @export
 ## summary.spm <- function(object, ...) {
