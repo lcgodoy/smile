@@ -21,7 +21,7 @@ knitr::opts_chunk$set(
 The goal of `smile` is to provide an easy to use `R` package that functions to
 estimate, predict and interpolate areal data. For estimation and prediction we
 use a model-based approach assuming areal data to be an average of an underlying
-continuos Gaussian random field. For interpolation, we use the simple areal
+continuous Gaussian random field. For interpolation, we use the simple areal
 interpolation, which is a nonparametric approach. Also, we provide functions to
 quantify the uncertainty associated with the simple areal interpolation when the
 variance of the observed variables is known.
