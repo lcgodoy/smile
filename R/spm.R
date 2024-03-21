@@ -92,7 +92,7 @@ single_sf_to_spm <- function(sf_obj,
     ##                            sf::st_crs(sf_obj))
   }
   out_grid_pt <-
-    sf::st_join(x = sf::st_sf(out_grid),
+    sf::st_join(x = sf::st_sf(geometry = out_grid),
                 y = sf_obj[poly_ids],
                 join = sf::st_within)
   if (any(! sf_obj[[poly_ids]] %in% out_grid_pt[[poly_ids]])) {
