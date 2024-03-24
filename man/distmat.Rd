@@ -2,7 +2,7 @@
 % Please edit documentation in R/RcppExports.R
 \name{distmat}
 \alias{distmat}
-\title{Creatin a distance matrix}
+\title{Creating a distance matrix}
 \usage{
 distmat(my_mat)
 }

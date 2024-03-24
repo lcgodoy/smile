@@ -14,6 +14,10 @@ entities.}
 function.}
 
 \item{phi}{the \eqn{\phi} parameter from the Matern covariance function,}
+
+\item{nu}{smoothness parameter}
+
+\item{theta}{the \eqn{\theta} tapper range.}
 }
 \value{
 The mean of \code{mat_cov(dist, sigsq, phi, nu)}.

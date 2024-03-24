@@ -3,7 +3,6 @@
 
 // [[Rcpp::depends(RcppArmadillo)]]
 
-// [[Rcpp::plugins(cpp11)]]
 using namespace Rcpp;
 
 //' @name aux_mat
@@ -12,7 +11,7 @@ double eucl_aux(double x, double y) {
   return sqrt( x*x + y*y );
 }
 
-//' @title Creatin a distance matrix
+//' @title Creating a distance matrix
 //' 
 //' @description Internal use. For now it only supports euclidean distance. (May
 //'   import parallelDist in the future).
@@ -124,7 +123,7 @@ List single_dists_tr(const List& mat_list,
   return out;
 }
 
-//' @name aux_mat//'
+//' @name aux_mat
 //' @keywords internal
 // [[Rcpp::export]]
 List mult_dists(const List& mat_list1, const List& mat_list2,

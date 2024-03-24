@@ -1,5 +1,5 @@
 #' smile: Spatial MIsaLignment Estimation
-#'
+#' @name smile
 
 ## usethis namespace: start
 #' @useDynLib smile, .registration = TRUE

@@ -9,6 +9,7 @@
 #'
 #' @param mat_aux a numeric matrix.
 #' @return The mean of \code{mat_aux}.
+#' @name aux_mat
 #' @keywords internal
 NULL
 
@@ -841,8 +842,8 @@ tapmat_cov <- function(dists, sigsq, phi, nu, theta) {
 #' @param sigsq the \eqn{\sigma^2} parameter from the Matern covariance
 #'   function.
 #' @param phi the \eqn{\phi} parameter from the Matern covariance function,
-#' @param nu
-#' @param theta
+#' @param nu smoothness parameter
+#' @param theta the \eqn{\theta} tapper range.
 #' @return The mean of \code{mat_cov(dist, sigsq, phi, nu)}.
 #' @keywords internal
 aux_tapmat <- function(dist, sigsq, phi, nu, theta) {
@@ -877,7 +878,7 @@ comp_tapmat_cov <- function(cross_dists, n, n2, sigsq, phi, nu, theta) {
 #' @keywords internal
 NULL
 
-#' @title Creatin a distance matrix
+#' @title Creating a distance matrix
 #' 
 #' @description Internal use. For now it only supports euclidean distance. (May
 #'   import parallelDist in the future).
@@ -926,7 +927,7 @@ single_dists_tr <- function(mat_list, tr_vec, tr_inp) {
     .Call(`_smile_single_dists_tr`, mat_list, tr_vec, tr_inp)
 }
 
-#' @name aux_mat//'
+#' @name aux_mat
 #' @keywords internal
 mult_dists <- function(mat_list1, mat_list2, return_single) {
     .Call(`_smile_mult_dists`, mat_list1, mat_list2, return_single)

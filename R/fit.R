@@ -71,8 +71,6 @@ fit_spm <- function(x, ...) UseMethod("fit_spm")
 ##'     estimation of the model parameters.
 ##'
 ##' @examples
-##' 
-##' @examples
 ##'
 ##' data(liv_lsoa) ## loading the LSOA data
 ##' 

@@ -5,7 +5,6 @@
 
 // [[Rcpp::depends(RcppArmadillo)]]
 
-// [[Rcpp::plugins(cpp11)]]
 using namespace Rcpp;
 
 //' @title Mean of a matrix (Internal use)
@@ -16,6 +15,7 @@ using namespace Rcpp;
 //'
 //' @param mat_aux a numeric matrix.
 //' @return The mean of \code{mat_aux}.
+//' @name aux_mat
 //' @keywords internal
 double mean_mat(arma::mat mat_aux) {
   return std::accumulate(mat_aux.begin(), mat_aux.end(), 0.0) /
@@ -1210,8 +1210,8 @@ arma::mat tapmat_cov(const arma::mat& dists, double sigsq,
 //' @param sigsq the \eqn{\sigma^2} parameter from the Matern covariance
 //'   function.
 //' @param phi the \eqn{\phi} parameter from the Matern covariance function,
-//' @param nu
-//' @param theta
+//' @param nu smoothness parameter
+//' @param theta the \eqn{\theta} tapper range.
 //' @return The mean of \code{mat_cov(dist, sigsq, phi, nu)}.
 //' @keywords internal
 // [[Rcpp::export]]
