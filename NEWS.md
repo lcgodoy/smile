@@ -34,3 +34,7 @@
 
 * New dataset included
 * Parallelizing `fit_spm2`
+
+# smile 1.0.4.3
+
+* Minor bug fixes and documentation enhancement.
