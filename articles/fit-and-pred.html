@@ -36,7 +36,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">smile</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.4.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.4.3</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -261,7 +261,7 @@ According to this criterion, the best model is the one with <span class="math in
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"m1"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/AIC.html" class="external-link">AIC</a></span><span class="op">(</span><span class="va">fit_msoa1</span><span class="op">)</span>, <span class="st">"m2"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/AIC.html" class="external-link">AIC</a></span><span class="op">(</span><span class="va">fit_msoa2</span><span class="op">)</span>, <span class="st">"m3"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/AIC.html" class="external-link">AIC</a></span><span class="op">(</span><span class="va">fit_msoa3</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt;       m1       m2       m3 </span></span>
-<span><span class="co">#&gt; 295.9335 327.3192 298.2888</span></span></code></pre></div>
+<span><span class="co">#&gt; 296.7570 297.5340 297.9726</span></span></code></pre></div>
 <p>We can retrieve the estimated parameters and the associated
 <code>(1 - sig)</code> % confidence intervals by using the function
 <code>summary_spm_fit</code> as follows</p>
@@ -271,9 +271,9 @@ According to this criterion, the best model is the one with <span class="math in
 <span><span class="co">#&gt;  optimization algorithm converged: yes </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;     par   estimate        se               ci</span></span>
-<span><span class="co">#&gt; 1    mu 75.9605379 0.8217335 [74.350; 77.571]</span></span>
-<span><span class="co">#&gt; 2 sigsq 22.6388314 4.0994008 [14.604; 30.674]</span></span>
-<span><span class="co">#&gt; 3   phi  0.8589781 0.2217835   [0.424; 1.294]</span></span></code></pre></div>
+<span><span class="co">#&gt; 1    mu 75.9143727 0.7773498 [74.391; 77.438]</span></span>
+<span><span class="co">#&gt; 2 sigsq 23.3395254 4.2430800 [15.023; 31.656]</span></span>
+<span><span class="co">#&gt; 3   phi  0.7877929 0.2025655   [0.391; 1.185]</span></span></code></pre></div>
 <p>Finally, we have almost everything we need to perform predictions at
 the LSOA areas. The function <code>predict_spm</code> calculates the
 predictions associated to the <code>spm_obj</code> (which contains the
