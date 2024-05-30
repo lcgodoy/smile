@@ -1,7 +1,7 @@
 Package: smile
 Title: Spatial Misalignment: Interpolation, Linkage, and Estimation
 Version: 1.0.4.3
-Date: 2024-03-26
+Date: 2024-05-30
 Authors@R: 
     person(given = "Lucas",
            family = "da Cunha Godoy",

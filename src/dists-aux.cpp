@@ -75,10 +75,9 @@ arma::mat crossdist(const arma::mat& m1, const arma::mat& m2) {
 //' @param mat_list internal use
 //' @param mat_list1 internal use
 //' @param mat_list2 internal use
-//' @param x internal use
-//' @param y internal use
 //' @param return_single internal use
 //' @param pred_mat internal use
+//' @param mat_aux a numeric matrix.
 //' @param x_to_list internal use
 //' @param by internal use
 //' @param y_grid internal use

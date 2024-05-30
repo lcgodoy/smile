@@ -141,7 +141,7 @@ mat_cov <- function(dists, sigsq, phi, nu) {
 #'   numerically integrate a covariance function evaluated at a grid of points
 #'   within a polyigon and speed-up the computations.
 #'
-#' @param dists a numeric matrix representing the distance between spatial
+#' @param dist a numeric matrix representing the distance between spatial
 #'   entities.
 #' @param sigsq the \eqn{\sigma^2} parameter from the Matern covariance
 #'   function.
@@ -905,10 +905,9 @@ crossdist <- function(m1, m2) {
 #' @param mat_list internal use
 #' @param mat_list1 internal use
 #' @param mat_list2 internal use
-#' @param x internal use
-#' @param y internal use
 #' @param return_single internal use
 #' @param pred_mat internal use
+#' @param mat_aux a numeric matrix.
 #' @param x_to_list internal use
 #' @param by internal use
 #' @param y_grid internal use

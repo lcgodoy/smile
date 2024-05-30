@@ -211,7 +211,7 @@ arma::mat mat_cov(const arma::mat& dists, double sigsq,
 //'   numerically integrate a covariance function evaluated at a grid of points
 //'   within a polyigon and speed-up the computations.
 //'
-//' @param dists a numeric matrix representing the distance between spatial
+//' @param dist a numeric matrix representing the distance between spatial
 //'   entities.
 //' @param sigsq the \eqn{\sigma^2} parameter from the Matern covariance
 //'   function.

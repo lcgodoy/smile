@@ -52,10 +52,6 @@ mult_dist_from_grids(y_grid, x_grid, by)
 \item{x_grid}{internal use}
 
 \item{mat_aux}{a numeric matrix.}
-
-\item{x}{internal use}
-
-\item{y}{internal use}
 }
 \value{
 The mean of \code{mat_aux}.
