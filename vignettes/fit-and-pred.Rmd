@@ -21,6 +21,10 @@ knitr::opts_chunk$set(
 If interested in the theory involving this calculations, take a look at [this
 vignette](https://lcgodoy.me/smile/articles/theory.html).
 
+> These functions will work only for planar projections. If working with a
+> spherical projection, we recommend using a _powered exponential_ covariance
+> function with $\kappa \in (0, 1)$.
+
 ---
 
 ```{r setup}
