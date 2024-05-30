@@ -12,114 +12,153 @@ vignette: >
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
-  eval = FALSE
+  eval = TRUE
 )
 ```
 
-Often, in an applied setting, it is interesting to compute estimates (and
-quantify its associated uncertainty) of socioeconomic and demographic variables
-for different administrative regions within the same city. Computing estimates
-is trivial when applying the Areal Interpolation [@goodchild1980areal]
-approach. However, a common criticism regarding this method is that it does not
-provide uncertainty measures associated with the estimates
-[@bradley2016bayesian]. Our package provides the simple areal interpolation
-along with an approximation and an upper bound for the variance of the computed
-estimates when the variance associated with the observed data is known, which is
-a common fact when working with survey data. To illustrate how does it work, we
-are going to show how to estimate a variable observed at census tracts in the
-Public Use Microdata Areas (PUMAs) in NYC.
 
-To load the data and the packages needed for this tutorial run the chunk of code
-below.
-```{r load-data, eval = TRUE}
+In applied settings, estimating socioeconomic and demographic variables for
+different administrative regions within a city is often of interest. While areal
+interpolation [AI, @goodchild1980areal] easily computes such estimates, it lacks
+measures of uncertainty [@bradley2016bayesian]. Our package addresses this by
+providing both areal interpolation and methods to approximate the variance of
+estimates when the observed data's variance is known, as is common with survey
+data.
+
+
+This demonstration will utilize 2010 Brazilian Census data from Nova Lima. The
+objective is to estimate some variables in a separate map of the same
+municipality. The census map with the original data will be referred to as the
+"source" map, while the map where the data will be estimated will be referred to
+as the "target" map. In this example, the target map is artificially
+generated. To initiate the process, the data and necessary packages can be
+loaded using the code below. We recommend using a planar Coordinate Reference
+System (CRS) when using this method.
+```{r load-data}
 library(sf)
 library(smile)
 library(ggplot2)
 
-data(nyc_surv)
-data(nyc_comd)
+data(nl_ct)
+nl_ct <- st_transform(nl_ct, 20823)
 ```
 
-Since the `nyc_surv` data proves a "margin of error" instead of a variance, we
-are going to use the piece of code below to approximate the variance. We are
-assuming the margin of error was calculated using a 95% confidence interval
-based on the Normal distribution.
-```{r var_calc}
-nyc_surv <- transform(nyc_surv,
-                      my_var = moe / qnorm(p = .975))
-nyc_surv <- transform(nyc_surv, my_var = my_var * my_var)
+The code chunk below creates the synthetic target map.
+
+```{r synthetic-data}
+set.seed(2024)
+
+## outer polygon
+nl_outer <- nl_ct |>
+  st_geometry() |>
+  st_union() |>
+  smile:::st_remove_holes()
+
+## creating `target` data
+points_nl <- st_sample(x = nl_outer,
+                       size = 40)
+
+nl_vor <- do.call(c, points_nl) |>
+  ## voronoi tesselation
+  st_voronoi(envelope = nl_outer) |> 
+  st_collection_extract(type = "POLYGON") |>
+  st_set_crs(st_crs(nl_ct)) |>
+  st_intersection(nl_outer) |>
+  st_as_sf() |>
+  ## creating id variable
+  transform(id = seq_len(NROW(nl_vor)))
 ```
-Now, to estimate a variable observed at the `nyc_surv` dataset into the
-`nyc_comd` data we can run the following command:
-```{r est-1, eval = FALSE}
-estimate_comd <-
-    ai(source = nyc_surv, target = nyc_comd,
-       vars = "estimate")
+
+
+Now, to estimate one (or several) variable observed at the `nl_ct` dataset into
+the `nl_vor` data we can run the following command:
+
+```{r est-1}
+nl_ests <-
+    ai(source = nl_ct,
+       target = vor_nl,
+       vars = c("hh_density",
+                "avg_income",
+                "avg_age"))
+
+## displaying the result
+nl_ests |>
+  st_drop_geometry() |>
+  head()
 ```
-where `source` is the "source" dataset, i.e., the one on which we observe the
-variable we wish to estimate at the `target` dataset. The argument `vars` is a
-`character` (scalar or vector) containing the name of the variable (or
-variables) at the `source` that are going to be estimated at the `target`
-regions. This function does not quantify the uncertainty associated with the
-estimates, though. In order to get a variability measure associated with the
-estimates, we need to use the function `ai_var` (see the chunk of code
-below). The function is quite similar to the before mentioned `ai`. The
-differences are: 1) `vars` must be a scalar; 2) the argument `my_var` is another
-length 1 `character` indicating the name of the variable that contains the
-variance of the observed variable in the `source` dataset; and 3) the argument
-`var_method` indicates whether we are going to use the Moran's I (`var_method =
-"MI"`) to approximate the autocorrelation between areas and, therefore,
-approximate the variance of the estimates or the Cauchy--Schwartz (`var_method =
-"CS"`) inequality to calculate an upper bound for such variances. The output of
-the `ai_var` function is the `target` (`sf data.frame`) with two additional
-columns, `est` and `se_est`, representing the estimated variable and its
-corresponding (approximate) standard error.
+
+In the function above, `source` is the map/dataset where the variables to be
+estimated are observed, while `target` is the map/dataset where the estimation
+is desired. The `vars` argument is a character scalar (or vector) specifying the
+variable(s) in `source` to be estimated in `target`. However, this function does
+not quantify uncertainty in the estimates.
+
+
+If the variance of the variable we wish to estimate in the target map is
+available in the source map, we can use the `ai_var` function to quantify the
+uncertainty around our point estimates. The function is similar to `ai`, but
+with a few differences:
+
+1. `vars` must be a single variable name.
+
+1. `my_var` is a character indicating the variable in source containing the
+   observed variable's variance.
+
+1. `var_method` specifies the method for approximating variance: Moran's I
+   ("MI") for autocorrelation-based approximation, or Cauchy-Schwarz ("CS") for
+   an upper bound.
+
+1. The current version only supports one variable at a time.
+
+The `ai_var` function outputs the target dataset with two additional columns:
+`est` (estimated variable) and `se_est` (approximate standard error). 
+
 ```{r est-2}
-estimate_comd <-
-    ai_var(source = nyc_surv, target = nyc_comd,
-           vars = "estimate", vars_var = "my_var",
+nl_est <-
+    ai_var(source = nl_ct,
+           target = vor_nl,
+           vars = "hh_density",
+           vars_var = "var_hhd",
            var_method = "MI")
+
+## renaming geometry
+st_geometry(nl_est) <- "geometry"
 ```
-The next piece of code uses `ggplot2` to plot the observed and estimated
-variable at NYC census tracts and community districts, respectively.
+
+Below we use `ggplot2` to plot the observed and estimated "household density" in
+the source and target maps, respectively.
+
 ```{r ggplot-obs-est}
 viz_dt <-
     rbind(
-        transform(nyc_surv, source = "Observed", est = estimate)[c("source", "est")],
-        transform(estimate_comd, source = "Predicted")[c("source", "est")]
+        transform(nl_ct, source = "Observed",
+                  est = hh_density)[c("source", "est")],
+        transform(nl_est, source = "Estimated")[c("source", "est")]
     )
 
 ggplot(data = viz_dt,
-       aes(fill = est / 1000)) +
+       aes(fill = est)) +
     geom_sf(color = 1, lwd = .1) +
     scale_fill_viridis_c(option = "H",
-                         name = "median \n income",
-                         label = \(x) paste0(x, "K")) +
+                         name = "Household \n density") +
     theme_bw() +
     facet_wrap( ~ source) +
     theme(axis.text = element_blank(),
           axis.ticks = element_blank())
 ```
+
+Finally, the next map displays the uncertainty about the estimated household
+density.
 
 ```{r ggplot-obs-est-viz, eval = TRUE, echo = FALSE}
-viz_dt <-
-    rbind(
-        transform(nyc_surv, source = "Observed",
-                  est = estimate)[c("source", "est")],
-        transform(nyc_comd, source = "Predicted")[c("source", "est")]
-    )
-
-ggplot(data = viz_dt,
-       aes(fill = est / 1000)) +
+ggplot(data = nl_est,
+       aes(fill = se_est)) +
     geom_sf(color = 1, lwd = .1) +
     scale_fill_viridis_c(option = "H",
-                         name = "median \n income",
-                         label = \(x) paste0(x, "K")) +
+                         name = "SE(Household \n density)") +
     theme_bw() +
-    facet_wrap( ~ source) +
     theme(axis.text = element_blank(),
           axis.ticks = element_blank())
 ```
-
 
 # Reference

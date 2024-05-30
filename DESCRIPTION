@@ -34,7 +34,7 @@ Imports:
     parallel,
     Matrix
 Depends: 
-    R (>= 3.6)
+    R (>= 4.0)
 URL: https://lcgodoy.me/smile/, https://github.com/lcgodoy/smile/
 BugReports: https://github.com/lcgodoy/smile/issues/
 Suggests: 

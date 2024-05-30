@@ -38,3 +38,7 @@
 # smile 1.0.4.3
 
 * Minor bug fixes and documentation enhancement.
+
+* Removed NYC datasets (they are too large).
+
+* Spatial areal interpolation vignette rewritten.
