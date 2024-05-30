@@ -64,9 +64,10 @@ nl_vor <- do.call(c, points_nl) |>
   st_collection_extract(type = "POLYGON") |>
   st_set_crs(st_crs(nl_ct)) |>
   st_intersection(nl_outer) |>
-  st_as_sf() |>
-  ## creating id variable
-  transform(id = seq_len(NROW(nl_vor)))
+  st_as_sf()
+
+## creating id variable
+nl_vor <- transform(nl_vor, id = seq_len(NROW(nl_vor)))
 ```
 
 
@@ -76,7 +77,7 @@ the `nl_vor` data we can run the following command:
 ```{r est-1}
 nl_ests <-
     ai(source = nl_ct,
-       target = vor_nl,
+       target = nl_vor,
        vars = c("hh_density",
                 "avg_income",
                 "avg_age"))
@@ -116,7 +117,7 @@ The `ai_var` function outputs the target dataset with two additional columns:
 ```{r est-2}
 nl_est <-
     ai_var(source = nl_ct,
-           target = vor_nl,
+           target = nl_vor,
            vars = "hh_density",
            vars_var = "var_hhd",
            var_method = "MI")

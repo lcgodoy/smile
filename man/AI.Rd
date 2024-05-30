@@ -40,25 +40,43 @@ different ways to divide a city, for example. For more details, see
 \url{https://lcgodoy.me/smile/articles/sai.html}.
 }
 \examples{
-data(nyc_surv)
-data(nyc_comd)
+data(nl_ct)
 
-## creating variables that store the variance for each area
-## this is done to exemplify the functionality of the package
-nyc_surv <- transform(nyc_surv,
-                      my_var = moe / qnorm(p = .975))
-nyc_surv <- transform(nyc_surv, my_var = my_var * my_var)
 
 \dontrun{
+nl_ct <- st_transform(nl_ct, 20823)
+set.seed(2024)
+
+## outer polygon
+nl_outer <- nl_ct |>
+ st_geometry() |>
+ st_union() |>
+ smile:::st_remove_holes()
+
+## creating `target` data
+points_nl <- st_sample(x = nl_outer,
+                      size = 40)
+
+nl_vor <- do.call(c, points_nl) |>
+## voronoi tesselation
+  st_voronoi(envelope = nl_outer) |> 
+  st_collection_extract(type = "POLYGON") |>
+  st_set_crs(st_crs(nl_ct)) |>
+  st_intersection(nl_outer) |>
+  st_as_sf()
+
+creating id variable
+nl_vor <- transform(nl_vor, id = seq_len(NROW(nl_vor)))
+
 ## areal interpolation
 estimate_comd <-
-   ai(source = nyc_surv, target = nyc_comd,
-      vars = "estimate")
+   ai(source = nl_ct, target = nl_vor,
+      vars = "hh_density")
 
 ## areal interpolation with uncertainty estimation
 estimate_comd <-
-   ai_var(source = nyc_surv, target = nyc_comd,
-          vars = "estimate", vars_var = "my_var",
+   ai_var(source = nl_ct, target = nl_vor,
+          vars = "hh_density", vars_var = "var_hhd",
           var_method = "MI")
 }
 
