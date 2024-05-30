@@ -6,7 +6,7 @@ Authors@R:
     person(given = "Lucas",
            family = "da Cunha Godoy",
            role = c("aut", "cre"),
-           email = "lucasdac.godoy@gmail.com",
+           email = "lcgodoy@duck.com",
            comment = c(ORCID = "0000-0003-4265-972X"))
 Description: Provides functions to estimate, predict and interpolate areal
         data. For estimation and prediction we assume areal data is an average
