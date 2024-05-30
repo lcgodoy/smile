@@ -20,7 +20,7 @@
 <link href="../deps/Roboto_Slab-0.4.9/font.css" rel="stylesheet">
 <!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
-<!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="3. Areal Interpolation">
+<!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.11/clipboard.min.js" integrity="sha512-7O5pXpc0oCRrxk8RUfDYFgn0nO1t+jLuIOQdOMRp4APB7uZ4vSjspzp5y6YDtDs4VzUSTbWzBFZ/LKJhnyFOKw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="3. Areal Interpolation">
 <meta property="og:description" content="smile">
 <meta property="og:image" content="https://lcgodoy.me/smile/logo.png">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
@@ -32,7 +32,7 @@
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
     
 
-    <nav class="navbar fixed-top navbar-dark navbar-expand-lg bg-primary"><div class="container">
+    <nav class="navbar fixed-top navbar-dark navbar-expand-lg bg-primary" data-bs-theme="dark"><div class="container">
     
     <a class="navbar-brand me-2" href="../index.html">smile</a>
 
@@ -123,94 +123,134 @@
 
     
     
-<p>Often, in an applied setting, it is interesting to compute estimates
-(and quantify its associated uncertainty) of socioeconomic and
-demographic variables for different administrative regions within the
-same city. Computing estimates is trivial when applying the Areal
-Interpolation <span class="citation">(Goodchild and Lam 1980)</span>
-approach. However, a common criticism regarding this method is that it
-does not provide uncertainty measures associated with the estimates
-<span class="citation">(Bradley, Wikle, and Holan 2016)</span>. Our
-package provides the simple areal interpolation along with an
-approximation and an upper bound for the variance of the computed
-estimates when the variance associated with the observed data is known,
-which is a common fact when working with survey data. To illustrate how
-does it work, we are going to show how to estimate a variable observed
-at census tracts in the Public Use Microdata Areas (PUMAs) in NYC.</p>
-<p>To load the data and the packages needed for this tutorial run the
-chunk of code below.</p>
+<p>In applied settings, estimating socioeconomic and demographic
+variables for different administrative regions within a city is often of
+interest. While areal interpolation <span class="citation">(AI,
+Goodchild and Lam 1980)</span> easily computes such estimates, it lacks
+measures of uncertainty <span class="citation">(Bradley, Wikle, and
+Holan 2016)</span>. Our package addresses this by providing both areal
+interpolation and methods to approximate the variance of estimates when
+the observed data’s variance is known, as is common with survey
+data.</p>
+<p>This demonstration will utilize 2010 Brazilian Census data from Nova
+Lima. The objective is to estimate some variables in a separate map of
+the same municipality. The census map with the original data will be
+referred to as the “source” map, while the map where the data will be
+estimated will be referred to as the “target” map. In this example, the
+target map is artificially generated. To initiate the process, the data
+and necessary packages can be loaded using the code below. We recommend
+using a planar Coordinate Reference System (CRS) when using this
+method.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-spatial.github.io/sf/" class="external-link">sf</a></span><span class="op">)</span></span>
-<span><span class="co">#&gt; Linking to GEOS 3.10.2, GDAL 3.4.1, PROJ 8.2.1; sf_use_s2() is TRUE</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://lcgodoy.me/smile/">smile</a></span><span class="op">)</span></span>
+<span><span class="co">#&gt; Linking to GEOS 3.10.2, GDAL 3.4.1, PROJ 8.2.1; sf_use_s2() is TRUE</span></span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://lcgodoy.me/smile/">smile</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">nyc_surv</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">nyc_comd</span><span class="op">)</span></span></code></pre></div>
-<p>Since the <code>nyc_surv</code> data proves a “margin of error”
-instead of a variance, we are going to use the piece of code below to
-approximate the variance. We are assuming the margin of error was
-calculated using a 95% confidence interval based on the Normal
-distribution.</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">nyc_surv</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/transform.html" class="external-link">transform</a></span><span class="op">(</span><span class="va">nyc_surv</span>,</span>
-<span>                      my_var <span class="op">=</span> <span class="va">moe</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">qnorm</a></span><span class="op">(</span>p <span class="op">=</span> <span class="fl">.975</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="va">nyc_surv</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/transform.html" class="external-link">transform</a></span><span class="op">(</span><span class="va">nyc_surv</span>, my_var <span class="op">=</span> <span class="va">my_var</span> <span class="op">*</span> <span class="va">my_var</span><span class="op">)</span></span></code></pre></div>
-<p>Now, to estimate a variable observed at the <code>nyc_surv</code>
-dataset into the <code>nyc_comd</code> data we can run the following
-command:</p>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">nl_ct</span><span class="op">)</span></span>
+<span><span class="va">nl_ct</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_transform.html" class="external-link">st_transform</a></span><span class="op">(</span><span class="va">nl_ct</span>, <span class="fl">20823</span><span class="op">)</span></span></code></pre></div>
+<p>The code chunk below creates the synthetic target map.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">estimate_comd</span> <span class="op">&lt;-</span></span>
-<span>    <span class="fu"><a href="../reference/AI.html">ai</a></span><span class="op">(</span>source <span class="op">=</span> <span class="va">nyc_surv</span>, target <span class="op">=</span> <span class="va">nyc_comd</span>,</span>
-<span>       vars <span class="op">=</span> <span class="st">"estimate"</span><span class="op">)</span></span></code></pre></div>
-<p>where <code>source</code> is the “source” dataset, i.e., the one on
-which we observe the variable we wish to estimate at the
-<code>target</code> dataset. The argument <code>vars</code> is a
-<code>character</code> (scalar or vector) containing the name of the
-variable (or variables) at the <code>source</code> that are going to be
-estimated at the <code>target</code> regions. This function does not
-quantify the uncertainty associated with the estimates, though. In order
-to get a variability measure associated with the estimates, we need to
-use the function <code>ai_var</code> (see the chunk of code below). The
-function is quite similar to the before mentioned <code>ai</code>. The
-differences are: 1) <code>vars</code> must be a scalar; 2) the argument
-<code>my_var</code> is another length 1 <code>character</code>
-indicating the name of the variable that contains the variance of the
-observed variable in the <code>source</code> dataset; and 3) the
-argument <code>var_method</code> indicates whether we are going to use
-the Moran’s I (<code>var_method = "MI"</code>) to approximate the
-autocorrelation between areas and, therefore, approximate the variance
-of the estimates or the Cauchy–Schwartz (<code>var_method = "CS"</code>)
-inequality to calculate an upper bound for such variances. The output of
-the <code>ai_var</code> function is the <code>target</code>
-(<code>sf data.frame</code>) with two additional columns,
-<code>est</code> and <code>se_est</code>, representing the estimated
-variable and its corresponding (approximate) standard error.</p>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">2024</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">## outer polygon</span></span>
+<span><span class="va">nl_outer</span> <span class="op">&lt;-</span> <span class="va">nl_ct</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_geometry.html" class="external-link">st_geometry</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://r-spatial.github.io/sf/reference/geos_combine.html" class="external-link">st_union</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">smile</span><span class="fu">:::</span><span class="fu"><a href="../reference/st_remove_holes.html">st_remove_holes</a></span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">## creating `target` data</span></span>
+<span><span class="va">points_nl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_sample.html" class="external-link">st_sample</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">nl_outer</span>,</span>
+<span>                       size <span class="op">=</span> <span class="fl">40</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">nl_vor</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/do.call.html" class="external-link">do.call</a></span><span class="op">(</span><span class="va">c</span>, <span class="va">points_nl</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="co">## voronoi tesselation</span></span>
+<span>  <span class="fu"><a href="https://r-spatial.github.io/sf/reference/geos_unary.html" class="external-link">st_voronoi</a></span><span class="op">(</span>envelope <span class="op">=</span> <span class="va">nl_outer</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_collection_extract.html" class="external-link">st_collection_extract</a></span><span class="op">(</span>type <span class="op">=</span> <span class="st">"POLYGON"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_crs.html" class="external-link">st_set_crs</a></span><span class="op">(</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_crs.html" class="external-link">st_crs</a></span><span class="op">(</span><span class="va">nl_ct</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://r-spatial.github.io/sf/reference/geos_binary_ops.html" class="external-link">st_intersection</a></span><span class="op">(</span><span class="va">nl_outer</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_as_sf.html" class="external-link">st_as_sf</a></span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">## creating id variable</span></span>
+<span><span class="va">nl_vor</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/transform.html" class="external-link">transform</a></span><span class="op">(</span><span class="va">nl_vor</span>, id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_len</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">NROW</a></span><span class="op">(</span><span class="va">nl_vor</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p>Now, to estimate one (or several) variable observed at the
+<code>nl_ct</code> dataset into the <code>nl_vor</code> data we can run
+the following command:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">estimate_comd</span> <span class="op">&lt;-</span></span>
-<span>    <span class="fu"><a href="../reference/AI.html">ai_var</a></span><span class="op">(</span>source <span class="op">=</span> <span class="va">nyc_surv</span>, target <span class="op">=</span> <span class="va">nyc_comd</span>,</span>
-<span>           vars <span class="op">=</span> <span class="st">"estimate"</span>, vars_var <span class="op">=</span> <span class="st">"my_var"</span>,</span>
-<span>           var_method <span class="op">=</span> <span class="st">"MI"</span><span class="op">)</span></span></code></pre></div>
-<p>The next piece of code uses <code>ggplot2</code> to plot the observed
-and estimated variable at NYC census tracts and community districts,
-respectively.</p>
+<code class="sourceCode R"><span><span class="va">nl_ests</span> <span class="op">&lt;-</span></span>
+<span>    <span class="fu"><a href="../reference/AI.html">ai</a></span><span class="op">(</span>source <span class="op">=</span> <span class="va">nl_ct</span>,</span>
+<span>       target <span class="op">=</span> <span class="va">nl_vor</span>,</span>
+<span>       vars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"hh_density"</span>,</span>
+<span>                <span class="st">"avg_income"</span>,</span>
+<span>                <span class="st">"avg_age"</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">## displaying the result</span></span>
+<span><span class="va">nl_ests</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_geometry.html" class="external-link">st_drop_geometry</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">#&gt;   id hh_density avg_income  avg_age</span></span>
+<span><span class="co">#&gt; 1  1   2.695228   1730.009 24.02146</span></span>
+<span><span class="co">#&gt; 2  2   2.477646   2078.178 25.59811</span></span>
+<span><span class="co">#&gt; 3  3   3.154861   1729.689 30.22053</span></span>
+<span><span class="co">#&gt; 4  4   2.920528   2253.925 30.70541</span></span>
+<span><span class="co">#&gt; 5  5   3.300867   7904.903 34.49821</span></span>
+<span><span class="co">#&gt; 6  6   3.390798   5468.113 34.89071</span></span></code></pre></div>
+<p>In the function above, <code>source</code> is the map/dataset where
+the variables to be estimated are observed, while <code>target</code> is
+the map/dataset where the estimation is desired. The <code>vars</code>
+argument is a character scalar (or vector) specifying the variable(s) in
+<code>source</code> to be estimated in <code>target</code>. However,
+this function does not quantify uncertainty in the estimates.</p>
+<p>If the variance of the variable we wish to estimate in the target map
+is available in the source map, we can use the <code>ai_var</code>
+function to quantify the uncertainty around our point estimates. The
+function is similar to <code>ai</code>, but with a few differences:</p>
+<ol style="list-style-type: decimal">
+<li><p><code>vars</code> must be a single variable name.</p></li>
+<li><p><code>my_var</code> is a character indicating the variable in
+source containing the observed variable’s variance.</p></li>
+<li><p><code>var_method</code> specifies the method for approximating
+variance: Moran’s I (“MI”) for autocorrelation-based approximation, or
+Cauchy-Schwarz (“CS”) for an upper bound.</p></li>
+<li><p>The current version only supports one variable at a
+time.</p></li>
+</ol>
+<p>The <code>ai_var</code> function outputs the target dataset with two
+additional columns: <code>est</code> (estimated variable) and
+<code>se_est</code> (approximate standard error).</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">nl_est</span> <span class="op">&lt;-</span></span>
+<span>    <span class="fu"><a href="../reference/AI.html">ai_var</a></span><span class="op">(</span>source <span class="op">=</span> <span class="va">nl_ct</span>,</span>
+<span>           target <span class="op">=</span> <span class="va">nl_vor</span>,</span>
+<span>           vars <span class="op">=</span> <span class="st">"hh_density"</span>,</span>
+<span>           vars_var <span class="op">=</span> <span class="st">"var_hhd"</span>,</span>
+<span>           var_method <span class="op">=</span> <span class="st">"MI"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">## renaming geometry</span></span>
+<span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_geometry.html" class="external-link">st_geometry</a></span><span class="op">(</span><span class="va">nl_est</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">"geometry"</span></span></code></pre></div>
+<p>Below we use <code>ggplot2</code> to plot the observed and estimated
+“household density” in the source and target maps, respectively.</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">viz_dt</span> <span class="op">&lt;-</span></span>
 <span>    <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span></span>
-<span>        <span class="fu"><a href="https://rdrr.io/r/base/transform.html" class="external-link">transform</a></span><span class="op">(</span><span class="va">nyc_surv</span>, source <span class="op">=</span> <span class="st">"Observed"</span>, est <span class="op">=</span> <span class="va">estimate</span><span class="op">)</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"source"</span>, <span class="st">"est"</span><span class="op">)</span><span class="op">]</span>,</span>
-<span>        <span class="fu"><a href="https://rdrr.io/r/base/transform.html" class="external-link">transform</a></span><span class="op">(</span><span class="va">estimate_comd</span>, source <span class="op">=</span> <span class="st">"Predicted"</span><span class="op">)</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"source"</span>, <span class="st">"est"</span><span class="op">)</span><span class="op">]</span></span>
+<span>        <span class="fu"><a href="https://rdrr.io/r/base/transform.html" class="external-link">transform</a></span><span class="op">(</span><span class="va">nl_ct</span>, source <span class="op">=</span> <span class="st">"Observed"</span>,</span>
+<span>                  est <span class="op">=</span> <span class="va">hh_density</span><span class="op">)</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"source"</span>, <span class="st">"est"</span><span class="op">)</span><span class="op">]</span>,</span>
+<span>        <span class="fu"><a href="https://rdrr.io/r/base/transform.html" class="external-link">transform</a></span><span class="op">(</span><span class="va">nl_est</span>, source <span class="op">=</span> <span class="st">"Estimated"</span><span class="op">)</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"source"</span>, <span class="st">"est"</span><span class="op">)</span><span class="op">]</span></span>
 <span>    <span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">viz_dt</span>,</span>
-<span>       <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="va">est</span> <span class="op">/</span> <span class="fl">1000</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>       <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="va">est</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">geom_sf</a></span><span class="op">(</span>color <span class="op">=</span> <span class="fl">1</span>, lwd <span class="op">=</span> <span class="fl">.1</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html" class="external-link">scale_fill_viridis_c</a></span><span class="op">(</span>option <span class="op">=</span> <span class="st">"H"</span>,</span>
-<span>                         name <span class="op">=</span> <span class="st">"median \n income"</span>,</span>
-<span>                         label <span class="op">=</span> \<span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">x</span>, <span class="st">"K"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>                         name <span class="op">=</span> <span class="st">"Household \n density"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_bw</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">facet_wrap</a></span><span class="op">(</span> <span class="op">~</span> <span class="va">source</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>axis.text <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_blank</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>          axis.ticks <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_blank</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p><img src="sai_files/figure-html/ggplot-obs-est-1.png" width="700"></p>
+<p>Finally, the next map displays the uncertainty about the estimated
+household density.</p>
 <p><img src="sai_files/figure-html/ggplot-obs-est-viz-1.png" width="700"></p>
 <div class="section level2">
 <h2 class="unnumbered" id="reference">Reference<a class="anchor" aria-label="anchor" href="#reference"></a>
@@ -235,13 +275,11 @@ Problem.”</span> <em>Geo-Processing</em> 1: 279–312.
 
 
     <footer><div class="pkgdown-footer-left">
-  <p></p>
-<p>Powered by <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a>.</p>
+  <p>Powered by <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a>.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p></p>
-<p>Lucas da Cunha Godoy. Provided without <strong>any warranty</strong>.</p>
+  <p>Lucas da Cunha Godoy. Provided without <strong>any warranty</strong>.</p>
 </div>
 
     </footer>
