@@ -7,16 +7,6 @@
 
 using namespace Rcpp;
 
-//' @title Mean of a matrix (Internal use)
-//'
-//' @description This is an auxilliary function for internal use. It helps to
-//'   numerically integrate a covariance function evaluated at a grid of points
-//'   within a polyigon.
-//'
-//' @param mat_aux a numeric matrix.
-//' @return The mean of \code{mat_aux}.
-//' @name aux_mat
-//' @keywords internal
 double mean_mat(arma::mat mat_aux) {
   return std::accumulate(mat_aux.begin(), mat_aux.end(), 0.0) /
     (mat_aux.n_rows * mat_aux.n_cols);

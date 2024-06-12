@@ -10,7 +10,7 @@
 \alias{dist_from_grids}
 \alias{dist_from_grids_tr}
 \alias{mult_dist_from_grids}
-\title{Mean of a matrix (Internal use)}
+\title{Internal use only}
 \usage{
 single_dists(mat_list)
 
@@ -50,15 +50,8 @@ mult_dist_from_grids(y_grid, x_grid, by)
 \item{y_grid}{internal use}
 
 \item{x_grid}{internal use}
-
-\item{mat_aux}{a numeric matrix.}
-}
-\value{
-The mean of \code{mat_aux}.
 }
 \description{
-This is an auxilliary function for internal use. It helps to
-numerically integrate a covariance function evaluated at a grid of points
-within a polyigon.
+Internal use only
 }
 \keyword{internal}

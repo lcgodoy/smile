@@ -7,3 +7,4 @@
 setup-usethis.R
 ^doc$
 ^Meta$
+^cran-comments\.md$
