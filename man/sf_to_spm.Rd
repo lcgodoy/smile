@@ -39,7 +39,7 @@ generated. The options are \code{c("random", "regular",
     "hexagonal")}. For more details, see \code{st_sample} in the \code{sf}
 package.}
 
-\item{by_polygon}{a \code{logical} indicating wheter we should generate
+\item{by_polygon}{a \code{logical} indicating whether we should generate
 \code{n_pts} by polygon or for the \code{n_pts} for the whole study
 region.}
 

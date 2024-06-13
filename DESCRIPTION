@@ -1,7 +1,7 @@
 Package: smile
 Title: Spatial Misalignment: Interpolation, Linkage, and Estimation
 Version: 1.0.5
-Date: 2024-06-11
+Date: 2024-06-13
 Authors@R: 
     person(given = "Lucas",
            family = "da Cunha Godoy",
@@ -10,11 +10,11 @@ Authors@R:
            comment = c(ORCID = "0000-0003-4265-972X"))
 Description: Provides functions to estimate, predict and interpolate areal
         data. For estimation and prediction we assume areal data is an average
-        of an underlying continuous spatial process as in 'Moraga et
-        al.' (2017) <doi:10.1016/j.spasta.2017.04.006>, 'Johnson et al.' (2020)
-        <doi:10.1186/s12942-020-00200-w>, and 'Wilson and Wakefield' (2020)
+        of an underlying continuous spatial process as in Moraga et
+        al. (2017) <doi:10.1016/j.spasta.2017.04.006>, Johnson et al. (2020)
+        <doi:10.1186/s12942-020-00200-w>, and Wilson and Wakefield (2020)
         <doi:10.1093/biostatistics/kxy041>. The interpolation methodology is
-        (mostly) based on 'Goodchild and Lam' (1980, ISSN:01652273).
+        (mostly) based on Goodchild and Lam (1980, ISSN:01652273).
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
@@ -41,6 +41,7 @@ Suggests:
     knitr,
     rmarkdown,
     ggplot2,
-    graphics
+    graphics,
+    spelling
 VignetteBuilder: knitr
 Language: en-US

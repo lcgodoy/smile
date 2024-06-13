@@ -37,18 +37,18 @@ fit_spm <- function(x, ...) UseMethod("fit_spm")
 ##' @param theta_st a \code{numeric} (named) vector containing the initial
 ##'     parameters.
 ##' @param nu a \code{numeric} value indicating either the \eqn{\nu}
-##'     paramater from the Matern covariance function (controlling the process
+##'     parameter from the Matern covariance function (controlling the process
 ##'     differentiability), or the "pexp" for the Powered Exponential family. If
 ##'     the \code{model} chosen by the user is Matern and \code{nu} is not
 ##'     informed, it is automatically set to .5. On the other hand, if the user
-##'     choses the Powered Exponential family and do not inform \code{nu},
+##'     chooses the Powered Exponential family and do not inform \code{nu},
 ##'     then it is set to 1. In both cases, the covariance function becomes the
-##'     so covalled exponential covariance function.
+##'     so called exponential covariance function.
 ##' @param tr tapper range
 ##' @param kappa \eqn{\kappa \in \{0, \ldots, 3 \}} parameter for the GW cov
 ##'     function.
 ##' @param mu2 the smoothness parameter \eqn{\mu} for the GW function.
-##' @param apply_exp a \code{logical} scalar indicating wheter the parameters
+##' @param apply_exp a \code{logical} scalar indicating whether the parameters
 ##'     that cannot assume negative values should be exponentiate or not.
 ##' @param opt_method a \code{character} scalar indicating the optimization
 ##'     algorithm to be used. For details, see [stats::optim].
@@ -63,7 +63,7 @@ fit_spm <- function(x, ...) UseMethod("fit_spm")
 ##' @param nphi a \code{numeric} scalar indicating the number of values to
 ##'     compute a grid-search over \eqn{phi}.
 ##' @param cores a \code{integer} scalar indicating number of cores to be used. Default is getOption("mc.cores"). No effect on Windows.
-##' @param ... additionnal parameters, either passed to [stats::optim].
+##' @param ... additional parameters, either passed to [stats::optim].
 ##'
 ##' @import Matrix
 ##' 
@@ -414,13 +414,13 @@ fit_spm.spm <- function(x, model, theta_st,
 ##' @title Summarizing \code{spm_fit}
 ##'
 ##' @description Provides a \code{data.frame} with point estimates and
-##'     confidence intervals for the paramters of the model fitted using the
+##'     confidence intervals for the parameters of the model fitted using the
 ##'     \code{spm_fit} function.
 ##' 
 ##' @param x a \code{spm_fit} object.
 ##' @param sig a real number between 0 and 1 indicating significance level to be
 ##'     used to compute the confidence intervals for the parameter estimates.
-##' @return a \code{data.frame} summarising the parameters estimated by the
+##' @return a \code{data.frame} summarizing the parameters estimated by the
 ##'     \code{fit_spm} function.
 ##' @export
 summary_spm_fit <- function(x, sig = .05) {

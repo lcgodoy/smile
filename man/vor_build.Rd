@@ -2,7 +2,7 @@
 % Please edit documentation in R/vdl.R
 \name{vor_build}
 \alias{vor_build}
-\title{Voronoi Tesselation inside a polygon}
+\title{Voronoi Tessellation inside a polygon}
 \usage{
 vor_build(points_sf, poly_sf)
 }
@@ -13,10 +13,10 @@ vor_build(points_sf, poly_sf)
 }
 \value{
 a \code{sf} object containing the polygons associated with the
-voronoi tesselation of \code{points_sf} the polygon \code{poly_sf}
+voronoi tessellation of \code{points_sf} the polygon \code{poly_sf}
 }
 \description{
-voronoi tesselation of a given a set of points inside a
+voronoi tessellation of a given a set of points inside a
 polygon.  This is an internal use function.
 }
 \keyword{internal}

@@ -258,7 +258,7 @@ ggplot(data = to_plot,
     theme(axis.text = element_blank())
 ```
 
-For details on fitting models and making precitions, see [this
+For details on fitting models and making predictions, see [this
 vignette](https://lcgodoy.me/smile/articles/fit-and-pred.html).
 
 # References

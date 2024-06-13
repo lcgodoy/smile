@@ -20,7 +20,7 @@ w_col <- function(source_unit, target) {
 ##' @param source a \code{sf} object - source spatial data.
 ##' @param source_unit a single \code{geometry} from the source dataset.
 ##' @param source_dt a \code{data.frame} object representing the source dataset
-##'     but excludying the \code{geometry}, i.e. the spatial information,
+##'     but excluding the \code{geometry}, i.e. the spatial information,
 ##'     column.
 ##' @param target a \code{sf} object - target spatial data.
 ##' @param var_vec a \code{numeric} vector with variances observed at the source
@@ -29,9 +29,9 @@ w_col <- function(source_unit, target) {
 ##' @param method a \code{character} representing the method to approximate the
 ##'     variance of the AI estimates. Possible values are "CS"
 ##'     (Cauchy-Schwartz) or "MI" (Moran's I).
-##' @param rho_mi \code{numeric} calcuated Moran's I.
+##' @param rho_mi \code{numeric} calculated Moran's I.
 ##' @return A \eqn{n \times m} \code{numeric} matrix. Where \eqn{n} is the
-##'     number of objservations in the target and \eqn{m} is the sample size in
+##'     number of observations in the target and \eqn{m} is the sample size in
 ##'     the source dataset.
 ##' @keywords internal
 build_w <- function(source, target) {

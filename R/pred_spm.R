@@ -286,7 +286,7 @@ predict_spm.spm_fit <- function(x, .aggregate = TRUE, ...) {
 ##'     interested in predict a variable observed in one political division of a
 ##'     city (or state) on another division of the same region.
 ##' 
-##' @param x a \code{sf} object such that its geometris are either points or
+##' @param x a \code{sf} object such that its geometries are either points or
 ##'     polygons.
 ##' @param spm_obj an object of either class \code{spm_fit} or \code{mspm_fit}
 ##' @param .aggregate \code{logical}. Should the predictions be aggregated? In

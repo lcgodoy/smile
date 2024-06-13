@@ -2,7 +2,7 @@
 % Please edit documentation in R/RcppExports.R
 \name{single_tapmat}
 \alias{single_tapmat}
-\title{Matern (tappered) covariance function (scalar - generic)}
+\title{Matern (tapered) covariance function (scalar - generic)}
 \usage{
 single_tapmat(d, sigsq, phi, nu, theta)
 }
@@ -22,12 +22,12 @@ function, controls the differentiability of the process.}
 \item{theta}{the \eqn{\theta} tapper range.}
 }
 \value{
-a scalar representing the (tappered matern) covariance between two
+a scalar representing the (tapered matern) covariance between two
 observations \code{d} apart of each other.
 }
 \description{
 Computing the Matern covariance function for a single distance
-measure, addapted from \code{geoR} using Wendland-1 as a tapper.
+measure, adapted from \code{geoR} using Wendland-1 as a tapper.
 }
 \seealso{
 \code{\link{single_matern}}, \code{\link{single_matern5}}

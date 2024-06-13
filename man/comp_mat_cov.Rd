@@ -10,7 +10,7 @@ comp_mat_cov(cross_dists, n, n2, sigsq, phi, nu)
 \item{cross_dists}{a \code{list} such that each position contains the cross
 distances between points within different polygons.}
 
-\item{n}{an ingeger representing number of polygons (note that, this is
+\item{n}{an integer representing number of polygons (note that, this is
 different than the size of the list \code{cross_dists}}
 
 \item{n2}{usually, equal to \code{n}, except when the function is being used

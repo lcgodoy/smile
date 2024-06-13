@@ -42,7 +42,7 @@ function.}
 
 \item{mu2}{the smoothness parameter \eqn{\mu} for the GW function.}
 
-\item{apply_exp}{a \code{logical} indicater wheter the exponential
+\item{apply_exp}{a \code{logical} indicating whether the exponential
 transformation should be applied to variance parameters. This
 facilitates the optimization process.}
 }

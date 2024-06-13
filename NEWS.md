@@ -1,13 +1,13 @@
-# smile 1.0.1
+'# smile 1.0.1
 
 * Added a `NEWS.md` file to track changes to the package.
 * Fixed Spherical covariance function.
-* Added Cubic splince covariance function.
+* Added Cubic spline covariance function.
 
 # smile 1.0.2
 
 * added Wendland (1) covariance function
-* added "tappered" Matern covariance function
+* added "tapered" Matern covariance function
 
 # smile 1.0.3
 
@@ -33,9 +33,9 @@
 # smile 1.0.4.2
 
 * New dataset included
-* Parallelizing `fit_spm2`
+* Parallel version of `fit_spm2`
 
-# smile 1.0.4.3
+# smile 1.0.5
 
 * Minor bug fixes and documentation enhancement.
 

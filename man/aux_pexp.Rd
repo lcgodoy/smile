@@ -24,8 +24,8 @@ controls the differentiability of the process.}
 The mean of \code{pexp_cov(dist, sigsq, phi, nu)}.
 }
 \description{
-This is an auxilliary function for internal use. It helps to
+This is an auxiliary function for internal use. It helps to
 numerically integrate a covariance function evaluated at a grid of points
-within a polyigon and speed-up the computations.
+within a polygon and speed-up the computations.
 }
 \keyword{internal}

@@ -13,7 +13,7 @@ predict_spm(x, ...)
 \method{predict_spm}{sf}(x, spm_obj, n_pts, type, outer_poly = NULL, id_var, ...)
 }
 \arguments{
-\item{x}{a \code{sf} object such that its geometris are either points or
+\item{x}{a \code{sf} object such that its geometries are either points or
 polygons.}
 
 \item{...}{additional parameters}

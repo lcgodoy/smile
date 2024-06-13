@@ -2,7 +2,7 @@
 % Please edit documentation in R/RcppExports.R
 \name{single_tapmat3}
 \alias{single_tapmat3}
-\title{Tappered Matern covariance function (scalar - nu = 3/2)}
+\title{Tapered Matern covariance function (scalar - nu = 3/2)}
 \usage{
 single_tapmat3(d, sigsq, phi, theta)
 }
@@ -19,7 +19,7 @@ controls the range of the spatial dependence.}
 \item{theta}{\eqn{\theta} taper range.}
 }
 \value{
-a scalar representing the (tappered matern) covariance between two
+a scalar representing the (tapered matern) covariance between two
 observations \code{d} apart of each other.
 }
 \description{

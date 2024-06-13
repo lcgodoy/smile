@@ -13,11 +13,11 @@ summary_spm_fit(x, sig = 0.05)
 used to compute the confidence intervals for the parameter estimates.}
 }
 \value{
-a \code{data.frame} summarising the parameters estimated by the
+a \code{data.frame} summarizing the parameters estimated by the
 \code{fit_spm} function.
 }
 \description{
 Provides a \code{data.frame} with point estimates and
-confidence intervals for the paramters of the model fitted using the
+confidence intervals for the parameters of the model fitted using the
 \code{spm_fit} function.
 }

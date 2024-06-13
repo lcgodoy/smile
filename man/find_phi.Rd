@@ -16,7 +16,7 @@ find_phi(
 )
 }
 \arguments{
-\item{d}{maximun distance for spatial dependence equal to \code{cut}.}
+\item{d}{maximum distance for spatial dependence equal to \code{cut}.}
 
 \item{nu}{smoothness parameter associated with the Matern cov. function.}
 
@@ -41,7 +41,7 @@ spatial correlation between two points at distance \code{d} is
 \code{cut}.
 }
 \description{
-Function designed to find the phi paramter such that the
-correlation between points wihtin a given distance \code{d} is at most a
+Function designed to find the phi parameter such that the
+correlation between points within a given distance \code{d} is at most a
 given value.
 }

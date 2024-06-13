@@ -17,7 +17,7 @@
 ##' @param kappa \eqn{\kappa \in \{0, \ldots, 3 \}} parameter for the GW cov
 ##'     function.
 ##' @param mu2 the smoothness parameter \eqn{\mu} for the GW function.
-##' @param apply_exp a \code{logical} indicater wheter the exponential
+##' @param apply_exp a \code{logical} indicating whether the exponential
 ##'     transformation should be applied to variance parameters. This
 ##'     facilitates the optimization process.
 ##'
@@ -153,7 +153,7 @@ singl_log_lik <- function(theta, .dt, dists, npix, model,
 ##' @param kappa \eqn{\kappa \in \{0, \ldots, 3 \}} parameter for the GW cov
 ##'     function.
 ##' @param mu2 the smoothness parameter \eqn{\mu} for the GW function.
-##' @param apply_exp a \code{logical} indicater wheter the exponential
+##' @param apply_exp a \code{logical} indicating whether the exponential
 ##'     transformation should be applied to variance parameters. This
 ##'     facilitates the optimization process.
 ##'
@@ -276,7 +276,7 @@ singl_log_plik <- function(theta, .dt, dists, npix, model,
 ##' @param kappa \eqn{\kappa \in \{0, \ldots, 3 \}} parameter for the GW cov
 ##'     function.
 ##' @param mu2 the smoothness parameter \eqn{\mu} for the GW function.
-##' @param apply_exp a \code{logical} indicater wheter the exponential
+##' @param apply_exp a \code{logical} indicating whether the exponential
 ##'     transformation should be applied to variance parameters. This
 ##'     facilitates the optimization process.
 ##' 
@@ -399,7 +399,7 @@ singl_log_lik_nn <- function(theta, .dt, dists, npix, model,
 ## ##'     "spherical")}.
 ## ##' @param nu \eqn{\nu} parameter. Not necessary if \code{mode} is
 ## ##'     \code{"gaussian"} or \code{"spherical"}
-## ##' @param apply_exp a \code{logical} indicater wheter the exponential
+## ##' @param apply_exp a \code{logical} indicating whether the exponential
 ## ##'     transformation should be applied to variance parameters. This
 ## ##'     facilitates the optimization process.
 ## ##' 
@@ -492,7 +492,7 @@ singl_log_lik_nn <- function(theta, .dt, dists, npix, model,
 ##' @param kappa \eqn{\kappa \in \{0, \ldots, 3 \}} parameter for the GW cov
 ##'     function.
 ##' @param mu2 the smoothness parameter \eqn{\mu} for the GW function.
-##' @param apply_exp a \code{logical} indicater wheter the exponential
+##' @param apply_exp a \code{logical} indicating whether the exponential
 ##'     transformation should be applied to variance parameters. This
 ##'     facilitates the optimization process.
 ##' 

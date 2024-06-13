@@ -44,7 +44,7 @@ install.packages("smile")
 ## remotes::install_github("lcgodoy/smile")
 ```
 
-The installationg of the development version from Github can be done via
+The installation of the development version from Github can be done via
 
 ``` r
 remotes::install_github("lcgodoy/smile")

@@ -2,7 +2,7 @@
 % Please edit documentation in R/RcppExports.R
 \name{tapmat_cov}
 \alias{tapmat_cov}
-\title{Tappered Matern covariance function for a given distance matrix.}
+\title{Tapered Matern covariance function for a given distance matrix.}
 \usage{
 tapmat_cov(dists, sigsq, phi, nu, theta)
 }
@@ -20,12 +20,12 @@ function.}
 \item{theta}{\eqn{\theta} taper range.}
 }
 \value{
-The tappered matern covariance function (for a stationary and isotropic
+The tapered matern covariance function (for a stationary and isotropic
 process) associated with the provided distances (\code{dists}) and the
 given set of parameters.
 }
 \description{
-Computing the tappered Matern covariance function for a matrix
+Computing the tapered Matern covariance function for a matrix
 of
 distances.
 }

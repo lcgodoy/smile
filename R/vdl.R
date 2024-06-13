@@ -1,13 +1,13 @@
-##' @title Voronoi Tesselation inside a polygon
+##' @title Voronoi Tessellation inside a polygon
 ##'
-##' @description voronoi tesselation of a given a set of points inside a
+##' @description voronoi tessellation of a given a set of points inside a
 ##'     polygon.  This is an internal use function.
 ##'
 ##' @param points_sf \code{sf data frame} containing the points' coordinates
 ##' @param poly_sf a \code{sf} polygon
 ##'
 ##' @return a \code{sf} object containing the polygons associated with the
-##'     voronoi tesselation of \code{points_sf} the polygon \code{poly_sf}
+##'     voronoi tessellation of \code{points_sf} the polygon \code{poly_sf}
 ##' @keywords internal
 vor_build <- function(points_sf, poly_sf) {
     if(nrow(points_sf) > 1) {
@@ -96,7 +96,7 @@ vdl <- function(coords_sf, areal_sf,
 ##' @param areal_sf \code{sf} POLYGON source dataset.
 ##' @param res_var a \code{character} - the name of the variable in the
 ##'     \code{areal_sf} to be estimated in the \code{coords_sf}.
-##' @param variance a \code{character} - the name of the variable varinace in
+##' @param variance a \code{character} - the name of the variable variance in
 ##'     the \code{areal_sf} to be estimated in the \code{coords_sf}.
 ##' @param var_method a \code{character} representing the method to approximate
 ##'     the variance of the AI estimates. Possible values are "CS"
@@ -104,7 +104,7 @@ vdl <- function(coords_sf, areal_sf,
 ##' @param buff scalar `numeric`. Mostly for internal use.
 ##'
 ##'
-##' @return a \code{sf} object, contaning the \code{id_coords} variable and the
+##' @return a \code{sf} object, containing the \code{id_coords} variable and the
 ##'     \code{list_vars} for the \code{coords_sf} spatial data set.
 vdl_var <- function(coords_sf, areal_sf,
                     res_var,

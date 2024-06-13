@@ -14,7 +14,7 @@ vdl_var(coords_sf, areal_sf, res_var, variance, var_method = "CS", buff)
 \item{res_var}{a \code{character} - the name of the variable in the
 \code{areal_sf} to be estimated in the \code{coords_sf}.}
 
-\item{variance}{a \code{character} - the name of the variable varinace in
+\item{variance}{a \code{character} - the name of the variable variance in
 the \code{areal_sf} to be estimated in the \code{coords_sf}.}
 
 \item{var_method}{a \code{character} representing the method to approximate
@@ -24,7 +24,7 @@ the variance of the AI estimates. Possible values are "CS"
 \item{buff}{scalar \code{numeric}. Mostly for internal use.}
 }
 \value{
-a \code{sf} object, contaning the \code{id_coords} variable and the
+a \code{sf} object, containing the \code{id_coords} variable and the
 \code{list_vars} for the \code{coords_sf} spatial data set.
 }
 \description{

@@ -42,7 +42,7 @@ fit_spm2(
 \code{theta_st} depends on the 2 factors. 1) the number of variables
 being analyzed, and 2) if the input is a \code{spm} object.}
 
-\item{...}{additionnal parameters, either passed to \link[stats:optim]{stats::optim}.}
+\item{...}{additional parameters, either passed to \link[stats:optim]{stats::optim}.}
 
 \item{model}{a \code{character} scalar indicating the family of the
 covariance function to be used. The options are \code{c("matern",
@@ -52,13 +52,13 @@ covariance function to be used. The options are \code{c("matern",
 parameters.}
 
 \item{nu}{a \code{numeric} value indicating either the \eqn{\nu}
-paramater from the Matern covariance function (controlling the process
+parameter from the Matern covariance function (controlling the process
 differentiability), or the "pexp" for the Powered Exponential family. If
 the \code{model} chosen by the user is Matern and \code{nu} is not
 informed, it is automatically set to .5. On the other hand, if the user
-choses the Powered Exponential family and do not inform \code{nu},
+chooses the Powered Exponential family and do not inform \code{nu},
 then it is set to 1. In both cases, the covariance function becomes the
-so covalled exponential covariance function.}
+so called exponential covariance function.}
 
 \item{tr}{tapper range}
 
@@ -67,7 +67,7 @@ function.}
 
 \item{mu2}{the smoothness parameter \eqn{\mu} for the GW function.}
 
-\item{apply_exp}{a \code{logical} scalar indicating wheter the parameters
+\item{apply_exp}{a \code{logical} scalar indicating whether the parameters
 that cannot assume negative values should be exponentiate or not.}
 
 \item{opt_method}{a \code{character} scalar indicating the optimization

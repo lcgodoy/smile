@@ -19,7 +19,7 @@ knitr::opts_chunk$set(
 
 Let us set up the notations first. Suppose a there exists a partition of a
 region ${\rm D} \in {\cal R}^2$ (e.g., a city). This partition is denoted by
-$A_i$, $i = 1, \ldots, n$. Moreover, there exists another parition of the same
+$A_i$, $i = 1, \ldots, n$. Moreover, there exists another partition of the same
 city, denoted $B_j$, where $j = 1, \ldots, m$. These partitions can be seen as
 two different administrative divisions within the same city. It is common for
 different government agencies to release data for different divisions of a same

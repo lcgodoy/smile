@@ -113,11 +113,11 @@ st_remove_holes <- function(x) {
 #' @title Find phi parameter for the Exponential spatial auto-correlation
 #'     function
 #'
-#' @description Function designed to find the phi paramter such that the
-#'     correlation between points wihtin a given distance \code{d} is at most a
+#' @description Function designed to find the phi parameter such that the
+#'     correlation between points within a given distance \code{d} is at most a
 #'     given value.
 #'
-#' @param d maximun distance for spatial dependence equal to \code{cut}.
+#' @param d maximum distance for spatial dependence equal to \code{cut}.
 #' @param nu smoothness parameter associated with the Matern cov. function.
 #' @param kappa one of the smoothness parameters associated with the Generalized
 #'     Wendland covariance function

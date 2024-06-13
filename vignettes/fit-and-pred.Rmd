@@ -35,7 +35,7 @@ library(sf)
 
 Considering the same setup used in the vignette about converting `sf` to `spm`
 [objects](https://lcgodoy.me/smile/articles/sf-to-spm.html), we are going to
-predict the Life Expecation at Birth (LEF) score (observed at the Middle Super
+predict the Life Expectation at Birth (LEF) score (observed at the Middle Super
 Output Areas (MSOA), in Liverpool, into the Lower Super Output Area (LSOA). In
 this second level, we have the Life Expectancy at Birth for each area. This data
 was taken from @johnson2020dealing.
