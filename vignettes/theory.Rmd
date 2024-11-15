@@ -18,7 +18,7 @@ knitr::opts_chunk$set(
 ## General setup
 
 Let us set up the notations first. Suppose a there exists a partition of a
-region ${\rm D} \in {\cal R}^2$ (e.g., a city). This partition is denoted by
+region $\mathrm{D} \in {\cal R}^2$ (e.g., a city). This partition is denoted by
 $A_i$, $i = 1, \ldots, n$. Moreover, there exists another partition of the same
 city, denoted $B_j$, where $j = 1, \ldots, m$. These partitions can be seen as
 two different administrative divisions within the same city. It is common for
@@ -27,55 +27,77 @@ city, country, or state.
 
 ## Model-based approach
 
+
+Consequently,
+\begin{align*}
+\mathrm{E}[Y(A_i)] & = \frac{1}{\lvert A_i \rvert} \int_{A_i} {\rm
+E}[Y(\mathbf{s})] \, \mathrm{d} \mathbf{s} \\
+& = \frac{1}{\lvert A_i \rvert} \int_{A_i} \mu \, \mathrm{d} \mathbf{s} \\
+& = \mu,
+\end{align*}
+and
+\begin{align*}
+\mathrm{Cov}[Y(A_i), Y(A_j)] & = \frac{1}{\lvert A_i \rvert \lvert A_j \rvert}
+\int_{A_i \times A_j} \mathrm{Cov}[Y(\mathbf{s}, Y(\mathbf{s}')] \, \mathrm{d}
+\mathbf{s} \, \mathrm{d} \mathbf{s'} \\
+& = \frac{1}{\lvert A_i \rvert \lvert A_j \rvert} \int_{A_i \times A_j} \mathrm{C}(
+\lVert \mathbf{s} - \mathbf{s}' \rVert ; \boldsymbol{\theta}) \, \mathrm{d}
+\mathbf{s} \, \mathrm{d} \mathbf{s'},
+\end{align*}
+where $\lVert \mathbf{s} - \mathbf{s}' \rVert$ is the Euclidean distance between
+the coordinates $\mathbf{s}$ and $\mathbf{s}'$, and $\mathrm{C}( \lVert
+\mathbf{s} - \mathbf{s}' \rVert ; \boldsymbol{\theta})$ is an isotropic
+covariance function depending on the parameter $\boldsymbol{\theta}$.
+
+
 Assume we observe a random variable $Y(\cdot)$ at each region $A_i$ and we are
 interested in predict/estimate this variable in each of the regions $B_j$. Now
-suppose the random variable $Y(\cdot)$ varies continuously over ${\rm D}$ and is
+suppose the random variable $Y(\cdot)$ varies continuously over $\mathrm{D}$ and is
 defined as follows
-\[
-Y(\mathbf{s}) = \mu + S(\mathbf{s}) + \varepsilon(\mathbf{s}), \, \mathbf{s} \in
-{\rm D} \subset {\cal R}^2.
-\]
+$$Y(\mathbf{s}) = \mu + S(\mathbf{s}) + \varepsilon(\mathbf{s}), \, \mathbf{s} \in
+\mathrm{D} \subset {\cal R}^2.$$
+
 where
-\[
- S(\cdot) \sim {\rm GP}(0, \sigma^2 \rho(\cdot; \, \phi, \kappa)) \;
+$$
+ S(\cdot) \sim \mathrm{GP}(0, \sigma^2 \rho(\cdot; \, \phi, \kappa)) \;
  \text{ and } \;
-\varepsilon(\cdot) \overset{{\rm i.i.d.}}{\sim} {\rm N}(0, \sigma^2 \rho(\cdot;
+\varepsilon(\cdot) \overset{\mathrm{i.i.d.}}{\sim} \mathrm{N}(0, \sigma^2 \rho(\cdot;
 \, \phi, \kappa)),
-\]
-with $S$ and $\varepsilon$ independent of each other. For now, let's make the
+$$
+where $S$ and $\varepsilon$ are independent. For now, let's make the
 unrealistic assumption that all those parameters are known. Then, our assumption
 is that the observed data is as follows
 \begin{align*}
-Y(A_i) & = \frac{1}{\lvert A_i \rvert} \int_{A_i} Y(\mathbf{s}) \, {\rm d}
+Y(A_i) & = \frac{1}{\lvert A_i \rvert} \int_{A_i} Y(\mathbf{s}) \, \mathrm{d}
 \mathbf{s} \\
 & = \frac{1}{\lvert A_i \rvert} \int_{A_i} [\mu + S(\mathbf{s}) +
-\varepsilon(\mathbf{s})] \, {\rm d} \mathbf{s} \\
-& = \mu + \frac{1}{\lvert A_i \rvert} \int_{A_i} S(\mathbf{s}) {\rm d}
+\varepsilon(\mathbf{s})] \, \mathrm{d} \mathbf{s} \\
+& = \mu + \frac{1}{\lvert A_i \rvert} \int_{A_i} S(\mathbf{s}) \mathrm{d}
 \mathbf{s} + \frac{1}{\lvert A_i \rvert} \int_{A_i} \varepsilon(\mathbf{s}) {\rm
 d} \mathbf{s},
 \end{align*}
 where $\lvert \cdot \rvert$ returns the area of a polygon.
 Furthermore, it can be shown that (using Fubini's Theorem and some algebraic
 manipulation)
-\[
-{\rm Cov}(Y(A_i), Y(A_j)) = \frac{\sigma^2}{\lvert A_i \rvert \lvert A_j \rvert}
+$$
+\mathrm{Cov}(Y(A_i), Y(A_j)) = \frac{\sigma^2}{\lvert A_i \rvert \lvert A_j \rvert}
 \int_{A_i \times A_j} \rho( \lVert \mathbf{s} - \mathbf{s}' \rVert; \, \phi,
-\kappa ) \, {\rm d} \mathbf{s} \, {\rm d} \mathbf{s}' + \mathbf{I}(i = j)
+\kappa ) \, \mathrm{d} \mathbf{s} \, \mathrm{d} \mathbf{s}' + \mathbf{I}(i = j)
 \frac{\tau}{\lvert A_i \rvert},
-\]
+$$
 where $\rho(\cdot ; \, \phi, \kappa)$ is a positive definite correlation
-function. Now, let ${\rm R}_{\kappa}(\phi)$ be a correlation matrix such that
-\[
-{\rm R}_{\kappa}(\phi)_{ij} = \frac{1}{\lvert A_i \rvert \lvert A_j \rvert}
+function. Now, let $\mathrm{R}_{\kappa}(\phi)$ be a correlation matrix such that
+$$
+\mathrm{R}_{\kappa}(\phi)_{ij} = \frac{1}{\lvert A_i \rvert \lvert A_j \rvert}
 \int_{A_i \times A_j} \rho( \lVert \mathbf{s} - \mathbf{s}' \rVert; \, \phi,
-\kappa ) \, {\rm d} \mathbf{s} \, {\rm d} \mathbf{s}',
-\]
+\kappa ) \, \mathrm{d} \mathbf{s} \, \mathrm{d} \mathbf{s}',
+$$
 thus,
-\[
-Y(A_1, \cdots, A_n) \sim {\rm N}( \mu \mathbf{1}_n, \sigma^2 {\rm
-R}_{\kappa}(\phi) + \tau {\rm diag}(\lvert A_1 \rvert^{-1}, \ldots, \lvert A_1
+$$
+Y(A_1, \cdots, A_n) \sim \mathrm{N}( \mu \mathbf{1}_n, \sigma^2 {\rm
+R}_{\kappa}(\phi) + \tau \mathrm{diag}(\lvert A_1 \rvert^{-1}, \ldots, \lvert A_1
 \rvert^{-1})).
-\]
+$$
 Then, if we assume $(Y^{\top}(A_1, \cdots, A_n), Y^{\top}(B_1, \cdots,
 A_m)^{\top})$ to be jointly normal, we use can the conditional mean of
 $Y^{\top}(B_1, \cdots, A_m)^{\top}$ given $Y^{\top}(A_1, \cdots, A_n)$ to
@@ -86,9 +108,10 @@ estimate the observed random variable in the partition $B_1, \ldots, B_m$.
 Now, suppose the parameters $\boldsymbol{\theta} = (\mu, \sigma^2, \phi, \tau)$
 are unknown. The Likelihood of $Y(A_1, \ldots, A_n)$ can still be computed.
 
-In particular, if we use the parametrization $\nu = \tau / \sigma^2$, we have
+
+In particular, if we use the parametrization $\alpha = \tau / \sigma^2$, we have
 closed form for the Maximum Likelihood estimators both for $\mu$ and
-$\sigma^2$. Thus, we can optimize the profile likelihood for $\phi$ and $\nu$
+$\sigma^2$. Thus, we can optimize the profile likelihood for $\phi$ and $\alpha$
 numerically. Then, we resort on conditional Normal properties again to compute
 the predictions in a new different set of regions.
 
@@ -108,8 +131,8 @@ $\hat Y(B_1, \ldots, B_m)$ is constructed as
 \end{equation}
 The expectation and variance of the predictor are, respectively,
 \[
-  {\rm E}[\hat{Y}(B_1, \ldots, B_m)] = \mathbf{W}
-  {\rm E}[Y(A_1, \ldots, A_n)]
+  \mathrm{E}[\hat{Y}(B_1, \ldots, B_m)] = \mathbf{W}
+  \mathrm{E}[Y(A_1, \ldots, A_n)]
 \]
 and
 \begin{equation}

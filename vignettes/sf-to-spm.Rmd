@@ -22,36 +22,34 @@ library(ggplot2)
 library(sf)
 ```
 
-Often, in an applied setting, it is desirable to change the spatial support of
-some variables in order to conduct either association or regression
-analysis. This package provides functions to deal with this problem under two
-different approaches, a model-based one and a (non-parametric) spatial
-interpolation.
+Spatial data often needs to be analyzed at different scales or resolutions. This
+package helps you align disparate spatial data using two approaches:
 
-The purpose of this vignette is to illustrate how to convert
-`sf`[@pebesma2018simple] objects to objects support by the `smile`
-package. Besides these two packages, we are going to use the
-`ggplot2`[@wickham2011ggplot2] package for the data visualization.
+* **Model-based**: This approach is based on the assumption that areal data
+  (e.g., variables measured at census tracts) are composed by averages of a
+  continuous underlying process [@gelfand2001change]. In particular, we assume
+  this underlying process to be a Gaussian Process [@moraga2017geostatistical,
+  @johnson2020dealing; @wilson2020pointless].
 
-This vignette is useful when the user wants to pursue the model-based
-approach. The methodology is based on the assumption that areal data (e.g.,
-variables measured at census tracts) are composed by averages of a continuous
-underlying process [@gelfand2001change; @moraga2017geostatistical,
-@johnson2020dealing; @wilson2020pointless]. In practice, there exists an
-identifiability problem when estimating some variance parameters, which can be
-seen either as small scale variation (nugget effect) or measurement errors. When
-fitting models, the users may chose to ignore the measurement error associated
-with the problem. Model fitting and prediction are explained in the vignette
-available on [this link](https://lcgodoy.me/smile/articles/fit-and-pred.html).
+* **Non-parametric spatial interpolation:** This simpler method estimates values
+  at a new spatial support based on the area of intersection between areal
+  units. If you are interested in the non-parametric approach, visit [our
+  vignette on the topic](https://lcgodoy.me/smile/articles/sai.html).
 
-To illustrate how to convert `sf` polygons into `spm` objects, we are going to
-use the datasets provided by @johnson2020dealing. For this data, we have the
-Life Expectancy at Birth (LEB) and the Index of Multiple Deprivation (IMD) in
-Liverpool. These variables are observed at the Middle Super Output Areas (MSOA)
-and Lower Super Output Areas (LSOA), respectively. After loading our package,
-the datasets can be loaded by simply running the chunk of code below. Figure
-\ref{fig:leb-msoa} displays the LEB at the MSOA.
+This vignette focuses on the model-based approach for areal data (like, for
+instance, census tract data). This method involves converting
+`sf`[@pebesma2018simple] objects (a common format for spatial data in R) to the
+spm format used by this package. We'll use the `ggplot2`[@wickham2011ggplot2]
+package for visualization.
+
+
+To demonstrate this conversion, we'll use life expectancy at birth (LEB) and the
+index of multiple deprivation (IMD) data for Liverpool from
+@johnson2020dealing. This data is available at different spatial resolutions
+(MSOA and LSOA). See Figure \ref{fig:leb-msoa} for a visualization of life
+expectancy at the MSOA level.
 ```{r load-data, eval = TRUE, echo = TRUE}
+
 data(liv_lsoa) # loading the LSOA data
 data(liv_msoa) # loading the MSOA data
 
@@ -86,102 +84,46 @@ the continuous surface on which these covariances have to be computed, --> <!--
 we generate a fine grid over the whole study region (or a fine grid --> <!--
 within each MSOA) and approximate such covariance by numerical integration. -->
 
-Now, suppose we are interested in estimating the LEB at the LSOA, so we will be
-able to conduct association analysis between LEB and IMD at the MSOA level. We
-assume, that the LEB, denoted $Y(\cdot)$, is driven by a stationary and
-isotropic continuous Gaussian process over the region of study, such that, the
-observed data at the $i$-th MSOA area (denoted $A_i$) is an average of this
-underlying process. If we knew the parameters and covariance function associated
-with this process, then the LEB at the $i$-th MSOA would be as follow
-\[
-	Y(A_i) = \frac{1}{\lvert A_i \rvert} \int_{A_i} Y(\mathbf{s}) \, {\rm d}
-	\mathbf{s},
-\]
-where $\lvert A_i \rvert$ stands for the area associated with the region $A_i$.
+To analyze the relationship between life expectancy (LEB) and deprivation at the
+LSOA level, we need to estimate LEB at this higher resolution. We assume LEB
+follows a continuous spatial pattern represented by a Gaussian process.
 
-Similarly,
-\begin{align*}
-{\rm E}[Y(A_i)] & = \frac{1}{\lvert A_i \rvert} \int_{A_i} {\rm
-E}[Y(\mathbf{s})] \, {\rm d} \mathbf{s} \\
-& = \frac{1}{\lvert A_i \rvert} \int_{A_i} \mu \, {\rm d} \mathbf{s} \\
-& = \mu,
-\end{align*}
-and
-\begin{align*}
-{\rm Cov}[Y(A_i), Y(A_j)] & = \frac{1}{\lvert A_i \rvert \lvert A_j \rvert}
-\int_{A_i \times A_j} {\rm Cov}[Y(\mathbf{s}, Y(\mathbf{s}')] \, {\rm d}
-\mathbf{s} \, {\rm d} \mathbf{s'} \\
-& = \frac{1}{\lvert A_i \rvert \lvert A_j \rvert} \int_{A_i \times A_j} {\rm C}(
-\lVert \mathbf{s} - \mathbf{s}' \rVert ; \boldsymbol{\theta}) \, {\rm d}
-\mathbf{s} \, {\rm d} \mathbf{s'},
-\end{align*}
-where $\lVert \mathbf{s} - \mathbf{s}' \rVert$ is the Euclidean distance between
-the coordinates $\mathbf{s}$ and $\mathbf{s}'$, and ${\rm C}( \lVert
-\mathbf{s} - \mathbf{s}' \rVert ; \boldsymbol{\theta})$ is an isotropic
-covariance function depending on the parameter $\boldsymbol{\theta}$.
 
-In practice, however, the integrals in the equation above are hard to be
-evaluated analytically. A common workaround is to evaluate them either
-numerically or by Monte Carlo integration [@gelfand2001change]. When using the
-function `sf_to_spm`, the parameter `"type"` controls the method of
-integration. The options are `"regular"` (or `"hexagonal"`) for numerical
-integration, or `"random"` for Monte Carlo integration. Regardless of the
-`"type"` chosen, we have to generate a grid of points over the study
-region. When doing so, we may chose whether we want to approximate the integral
-within each area with the same precision or if we want the precision to vary
-according to the size of the polygon. This is controlled by the parameter
-`"by_polygon"`, which is a boolean scalar. When set to `TRUE`, all the integrals
-will be estimated with the same precision, regardless of the size of the
-polygon. On the other hand, if this parameter is set to `FALSE`, the grid of
-points will be generated over the whole study region and, afterwards, the points
-will be attributed to the areas they are contained in. This way, larger polygons
-will contain more points and, thus, the respective integrals will have a smaller
-numerical error. Lastly, there exists a parameter called `"npts"`. This
-parameter controls the number of points used to compute this integrals. We may
-either input a vector with the same length as the number of areas or a
-scalar. When inputting a scalar, this scalar will stand for the number of points
-over the whole city if `by_polygon = FALSE` and the number of points per polygon
-(area) otherwise.
+Mathematically, the observed LEB in an areal resolution (e.g., an MSOA) as
+averages of a continuous underlying process across that area. If we knew the
+exact parameters of this process, we could calculate the LEB for any
+location. However, these calculations involve complex integrals that are
+difficult to solve analytically. For more details on the theory behind this, see
+this [vignette](https://lcgodoy.me/smile/articles/theory.html).
 
-<!-- Firstly, we are going to show how does it work with a single `sf` -->
-<!-- object. Besides the `sf` objects, this function has 5 additional arguments. The -->
-<!-- first one, called `n_pts`, controls the number of points we are going to -->
-<!-- generate to create a grid within the study region. We can input either a single -->
-<!-- (integer) value or a vector with length equal to the number of rows of the `sf` -->
-<!-- objected being analyzed. The next parameter is called `type`. This one is string -->
-<!-- scalar that assumes either `"random"`, `"regular"`, or `"hexagonal"`. Finally, -->
-<!-- the parameter `by_polygon` is a logical that if set to `TRUE`, will generate -->
-<!-- `n_pts` for each polygon within the study region^[This parameter has to be set -->
-<!-- to `TRUE` when `n_pts` is a vector.]. The last two parameters are `poly_ids` and -->
-<!-- `var_ids`. Both are strings, the first one is a scalar representing the variable -->
-<!-- that uniquely identify each polygon within the study region, while the second -->
-<!-- one indicates which (numerical) variables we want to analyze. For example, in -->
-<!-- the code chunk below, we are transforming the `sf` object `liv_msoa` into a -->
-<!-- `smile` compatible object. We are going to generate a grid of 1000 points -->
-<!-- within the study region, with `type = "regular"`, and `by_polygon = FALSE`. The -->
-<!-- id variable is called `"msoa11cd"` and the numerical variable that we are -->
-<!-- interested in is called `"leb_est"`. The object returned by the function is of -->
-<!-- class `"sspm"`^[when we use more than one partition, the resulting class is -->
-<!-- `"mspm"`]. Under the hood, this object is a 5 positions named list. The first -->
-<!-- position is called `"var"` and stores the numerical variable (or variables) to -->
-<!-- be analyzed. The second position is named `"dists"` and stores the pairwise -->
-<!-- distances between points belonging to different polygons, this object is -->
-<!-- important to calculate the covariance matrix associated with the polygons. The -->
-<!-- third positions stores the name of the id variable, while the fourth and fifth -->
-<!-- positions contain the grid of points generated and the polygon associated with -->
-<!-- the data. All these objects are used in functions that will be explained further -->
-<!-- in other vignettes.  -->
 
-If we wish to estimate the LEB in the LSOA areas, we will need to create a `spm`
-object associated with this variable, fit the model, and then compute the
-predictions. The chunk of code below shows how to convert the `liv_msoa` (of
-class `sf`) to a `spm` object. In this case, we are generating a grid of 1000
-points over the whole city of Liverpool, then we will be attributing each of
-these points to the area they are contained in. Also, the `"poly_ids"` argument
-is a string indicating the variable in the `liv_msoa` dataset that contains the
-unique identifier associated with each area. The argument `"var_ids"` is a
-string as well but this indicates the "response variable". That is, the variable
-that for which we will be interested in fitting a model to. 
+The `sf_to_spm` function controls how the model-based approach will approximate
+these integrals. It supports either numerical or Monte Carlo integration. Here's
+how different parameters of this function change the integration method:
+
+* `type`: Controls the grid used for approximating the integrals. Options
+  include "regular", "hexagonal" (both for numerical integration), and "random"
+  (for Monte Carlo integration).
+
+* `npts`: Specifies the number of grid points used to approximate the
+  integral. This can be a single value or a vector with different values for
+  each area. More points generally improve accuracy but increase computation
+  time.
+
+* `by_polygon`: Determines if the precision of the approximation should vary by
+  polygon size.
+  * `TRUE`: All integrals are estimated with the same precision.
+  * `FALSE`: A grid of points is generated over the entire region, and points
+    are assigned to the areas they fall within. This results in more points and
+    higher accuracy for larger polygons.
+
+This approach allows us to estimate LEB at the LSOA level while accounting for
+the underlying spatial structure of the data.
+
+
+The code below converts the `liv_msoa` object (in `sf` format) to an `spm`
+object. We generate a grid of 1000 points across Liverpool and assign each
+point to its corresponding area.
 ```{R sf-to-spm1}
 msoa_spm <-
     sf_to_spm(sf_obj = liv_msoa, n_pts = 1000,
@@ -189,21 +131,23 @@ msoa_spm <-
               poly_ids = "msoa11cd", var_ids = "leb_est")
 ```
 
-Finally, the Figure below displays the grids associated with each of the
-possible combinations of the parameters `type` and `by_polygon` when calling the
-`sf_to_spm` function.
-<!-- Next, we illustrate how do different values of `type` and `by_polygon` affect -->
-<!-- the final result of the `sf_to_spm` call. In all examples we are going to use a -->
-<!-- grid of 305 points (multiple of the number of polygons observed). The "sparsity" -->
-<!-- of the points forming the grid helps to see the differences caused by the -->
-<!-- different inputs for the function. The panel below displays every possible -->
-<!-- combination of the parameters `type` and `by_polygon`. Although there is no -->
-<!-- "right" choice for these parameters, we advise using `type` as `"regular"` or -->
-<!-- `"hexagonal"` with by `by_polygon = FALSE`. Also, it is import to make sure -->
-<!-- that, after generating the grid, your grid is in a finer resolution than your -->
-<!-- smallest polygon, that is, to make sure that there exists no points lying in -->
-<!-- more than one polygon. -->
-```{R sf-to-spm2, echo = FALSE, warning = FALSE, message = FALSE}
+
+Here's what the additional arguments of the `sf_to_spm` function do:
+
+* `poly_ids`: Specifies the column in liv_msoa that contains the unique
+  identifier for each area (e.g., an area ID).
+
+* `var_ids`: Indicates the column containing the "response variable" – the
+  variable we want to model (e.g., life expectancy).
+
+This conversion prepares the data for spatial analysis using the `smile`
+package.
+
+
+For the sake of comparison, the Figure below displays the grids associated with
+each of the possible combinations of the parameters `type` and `by_polygon` when
+calling the `sf_to_spm` function.
+```{R sf-to-spm2, echo = FALSE, warning = FALSE, message = FALSE, fig.cap="Panel illustrating the grids generated for different approaches to approximate numerical integrals in the model-based approach."}
 set.seed(123)
 
 msoa_spm1 <-

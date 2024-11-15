@@ -13,10 +13,11 @@ navbar:
   bg: primary
   title: "smile"
   left:
-    - icon: fa-home fa-lg
+    - icon: fa-home
+      text: "HOME"
       href: index.html
     - text: "Vignettes"
-      icon: fa-book fa-lg
+      icon: fa-book
       menu:
         - text: "1. Converting sf objects to spm"
           href: articles/sf-to-spm.html
@@ -32,11 +33,14 @@ navbar:
       icon: fa-search fa-lg
       href: reference/index.html
   right:
-   - icon: fa-globl
+   - icon: fa-globe
+     aria-label: "Personal website"
      href: https://lcgodoy.me
    - icon: fa-github
+     aria-label: "GitHub Profile"
      href: https://github.com/lcgodoy
    - icon: fa-linkedin
+     aria-label: "Linkedin Profile"
      href: https://www.linkedin.com/in/godoy-lucas/
 
 footer:

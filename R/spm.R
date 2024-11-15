@@ -141,18 +141,18 @@ single_sf_to_spm <- function(sf_obj,
 ##' @export
 sf_to_spm <- single_sf_to_spm
 
-print.spm <- function(x, ...) {
-  cat(sprintf("\n Number of variables to be analyzed: %d \n", NCOL(x$var)))
-  cat(sprintf("\n ID variable: %ds\n", x$poly_ids))
-  if (NCOL(x$var) == 1) {
-    cat("\n Variable summary: ")
-    summary(x$var)
-  } else {
-    apply(x$var, 2, summary)
-  }
-  cat(sprintf("\n Number of polygons in the partition: %d \n", nrow(x$sf_poly)))
-  cat(sprintf("\n Number of points in the grid over: %d \n", nrow(x$grid)))
-}
+## print.spm <- function(x, ...) {
+##   cat(sprintf("\n Number of variables to be analyzed: %d \n", NCOL(x$var)))
+##   cat(sprintf("\n ID variable: %ds\n", x$poly_ids))
+##   if (NCOL(x$var) == 1) {
+##     cat("\n Variable summary: ")
+##     summary(x$var)
+##   } else {
+##     apply(x$var, 2, summary)
+##   }
+##   cat(sprintf("\n Number of polygons in the partition: %d \n", nrow(x$sf_poly)))
+##   cat(sprintf("\n Number of points in the grid over: %d \n", nrow(x$grid)))
+## }
 
 ## ##' @export
 ## summary.spm <- function(object, ...) {

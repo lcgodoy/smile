@@ -4,6 +4,8 @@
 
 PKG_NAME=$(shell grep -i ^package DESCRIPTION | cut -d : -d \  -f 2)
 
+.PHONY: render_md build_site build install clean docs check check_cran
+
 default: build
 
 check:

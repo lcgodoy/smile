@@ -38,13 +38,14 @@ Considering the same setup used in the vignette about converting `sf` to `spm`
 predict the Life Expectation at Birth (LEF) score (observed at the Middle Super
 Output Areas (MSOA), in Liverpool, into the Lower Super Output Area (LSOA). In
 this second level, we have the Life Expectancy at Birth for each area. This data
-was taken from @johnson2020dealing.
+is available in the package and was made available by @johnson2020dealing.
+
 
 The code below loads the data and converts the LSOA `sf` object into a `spm`
-object. In particular, we are going to use numerical integration (based on a 500
-points grid) with the precision of the integrals varying according to the size
-of each MSOA region. The name of the variable we are interested in, in the
-`liv_msoa`, is `"leb_est"`.
+object. We are going to use numerical integration (based on a 500 points grid)
+with the precision of the integrals varying according to the size of each MSOA
+region. We are interested in a variable called `"leb_est"` available only at the
+`liv_msoa` dataset.
 ```{R load-data}
 data(liv_msoa)
 data(liv_lsoa)
@@ -69,43 +70,44 @@ spm_msoa <-
 Next, we assume the following model, at the grid level, drives the data^[To
 check how the model at the grid level relates to the data at the area level
 check the [Theory vignette](https://lcgodoy.me/smile/articles/theory.html)] 
-\[
-	Y(\mathbf{s}) = \mu + S(\mathbf{s}) + \varepsilon(\mathbf{s}), 
-\] 
-where $S(\cdot) \sim {\rm GP}(0, {\rm C}(\cdot ; \, \boldsymbol{\theta}))$, and
-$\varepsilon(\cdot) \overset{{\rm i.i.d.}}{\sim} {\rm N}(0, \tau)$, with
-$S(\cdot) \perp \varepsilon(\cdot)$. The form of the covariance functions
-considered here are written as follows ${\rm C}(\cdot ; \, \boldsymbol{\theta} )
-= \sigma^2 \rho(\cdot ; \, \boldsymbol{\theta})$. Where $\rho(\cdot ; \,
-\boldsymbol{\theta})$ is a stationary and isotropic correlation function. To
-check the families of correlation functions available in our package, check
-[this link](https://lcgodoy.me/smile/articles/sp-cov-functions.html). Another
-important detail is that, if we make $\nu = \tau / \sigma^2$, the estimation
+
+$$Y(\mathbf{s}) = \mu + S(\mathbf{s}) + \varepsilon(\mathbf{s}), $$ 
+
+where $S(\cdot) \sim \mathrm{GP}(0, \mathrm{C}(\cdot ; \,
+\boldsymbol{\theta}))$, and $\varepsilon(\cdot) \overset{\mathrm{i.i.d.}}{\sim}
+\mathrm{N}(0, \tau)$, with $S(\cdot) \perp \varepsilon(\cdot)$. The form of the
+covariance functions considered here are written as follows $\mathrm{C}(\cdot ;
+\, \boldsymbol{\theta} ) = \sigma^2 \rho(\cdot ; \, \boldsymbol{\theta})$. Where
+$\rho(\cdot ; \, \boldsymbol{\theta})$ is a stationary and isotropic correlation
+function. To check the families of correlation functions available in our
+package, check [this
+link](https://lcgodoy.me/smile/articles/sp-cov-functions.html). Another
+important detail is that, if we make $\alpha = \tau / \sigma^2$, the estimation
 process is slightly easier. The package allows for the two parametrizations.
 
+
 For this problem we are going to consider the the Matérn covariance
-function. The model will be fitted with $\nu = .5, 1.5, 2.5$, this the
-parameter controls the smoothness of the spatial process. Also, for simplicity,
-we are going to ignore $\tau$. Next, we evaluate the AIC associated with three
+function. The model will be fitted with $\nu = .5, 1.5, 2.5$, this the parameter
+controls the smoothness of the spatial process. Also, for simplicity, we are
+going to ignore $\tau$. Next, we evaluate the AIC associated with three
 models. The function `fit_spm` fits the models and needs starting values for
-$\phi$ (and $\nu$ or $\tau$, if you decide not to ignore the small scale
+$\phi$ (and $\alpha$ or $\tau$, if you decide not to ignore the small scale
 variation), the covariance model to be used is informed as a string in the
 argument `model`, the available options are `c("matern", "pexp", "gaussian",
-"spherical")`. Notice that, when not inputting an initial value for $\nu$ (or
+"spherical")`. Notice that, when not inputting an initial value for $\alpha$ (or
 $\tau$), we are forcing this parameter to be 0. Also, the `theta_st` argument
-(which takes the initial values for the parameters), must be a named vector.  If
-we input initial values for $\mu$, $\sigma^2$, $\phi$, and $\nu$ (or $\tau$),
+(which takes the initial values for the parameters), must be a named vector. If
+we input initial values for $\mu$, $\sigma^2$, $\phi$, and $\alpha$ (or $\tau$),
 the likelihood is optimized numerically for all the parameters. If we omit $\mu$
 and $\sigma^2$, then a profile likelihood approach is used to find numerically
-for the $\hat{\phi}$ and, if wished, $\hat{\nu}$. While, $\hat{\mu}$ and
-$\hat{\sigma}^2$ have closed form expressions [@diggle2007model].  Additionally,
-the commented part of the code below shows how to proceed to estimate $\nu$, an
-equivalently $\tau$, from the data. The argument `apply_exp` is a workaround for
+$\hat{\phi}$ and, if wished, $\hat{\alpha}$. While, $\hat{\mu}$ and
+$\hat{\sigma}^2$ have closed form expressions [@diggle2007model]. Additionally,
+the commented part of the code below shows how to proceed to estimate $\alpha$
+(or $\tau$) from the data. The argument `apply_exp` is a workaround for
 parameters that cannot be negative. The arguments `opt_method` and `control` are
-passed to the function `optim` in order to optimize the log likelihood
-associated with the data. `opt_method` controls the optimization algorithm to be
-used, while `control` inputs control arguments for such optimization algorithms,
-for more details see
+passed to the function `optim`. `opt_method` controls the optimization algorithm
+to be used, while `control` inputs control arguments for such optimization
+algorithms, for more details see
 [optim](https://stat.ethz.ch/R-manual/R-devel/library/stats/html/optim.html).
 ```{R fit-pred-1}
 theta_st_msoa <- c("phi" = 1)
@@ -182,7 +184,7 @@ covariance matrix at the predicted locations, respectively. `"pred_grid"` can be
 seen as the predicted surface over the study region, while `"pred_agg"` contains
 the (integrals) averages of such surface within each LSOA area. The chunk of
 code below plots the predicted life expectancy at the LSOA areas.
-```{R manip-pred-1}
+```{R manip-pred-1, fig.alt="Estimated LEB at LSOA in Liverpool."}
 ggplot(data = pred_lsoa$pred_agg,
        aes(fill  = mu_pred)) +
     geom_sf(color = 1,
@@ -195,7 +197,7 @@ ggplot(data = pred_lsoa$pred_agg,
 ```
 
 Next, we plot the standard errors associated with the predictions.
-```{R se-ggplot2}
+```{R se-ggplot2, fig.alt="Standard errors of the estimates for LEB at LSOA in Liverpool."}
 ggplot(data = pred_lsoa$pred_agg,
        aes(fill  = se_pred)) +
     geom_sf(color = 1,
