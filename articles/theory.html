@@ -38,9 +38,9 @@
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto">
-<li class="nav-item"><a class="nav-link" href="../index.html"><span class="fa fa-home fa-lg"></span></a></li>
+<li class="nav-item"><a class="nav-link" href="../index.html"><span class="fa fa-home"></span> HOME</a></li>
 <li class="active nav-item dropdown">
-  <button class="nav-link dropdown-toggle" type="button" id="dropdown-vignettes" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true"><span class="fa fa-book fa-lg"></span> Vignettes</button>
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-vignettes" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true"><span class="fa fa-book"></span> Vignettes</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-vignettes">
 <li><a class="dropdown-item" href="../articles/sf-to-spm.html">1. Converting sf objects to spm</a></li>
     <li><a class="dropdown-item" href="../articles/fit-and-pred.html">2. Fitting models and making predictions</a></li>
@@ -52,9 +52,9 @@
 <li class="nav-item"><a class="nav-link" href="../reference/index.html"><span class="fa fa-search fa-lg"></span> Reference</a></li>
       </ul>
 <ul class="navbar-nav">
-<li class="nav-item"><a class="external-link nav-link" href="https://lcgodoy.me"><span class="fa fa-globl"></span></a></li>
-<li class="nav-item"><a class="external-link nav-link" href="https://github.com/lcgodoy"><span class="fa fa-github"></span></a></li>
-<li class="nav-item"><a class="external-link nav-link" href="https://www.linkedin.com/in/godoy-lucas/"><span class="fa fa-linkedin"></span></a></li>
+<li class="nav-item"><a class="external-link nav-link" href="https://lcgodoy.me" aria-label="Personal website"><span class="fa fa-globe"></span></a></li>
+<li class="nav-item"><a class="external-link nav-link" href="https://github.com/lcgodoy" aria-label="GitHub Profile"><span class="fa fa-github"></span></a></li>
+<li class="nav-item"><a class="external-link nav-link" href="https://www.linkedin.com/in/godoy-lucas/" aria-label="Linkedin Profile"><span class="fa fa-linkedin"></span></a></li>
       </ul>
 </div>
 
@@ -80,7 +80,7 @@
 <h3 id="general-setup">General setup<a class="anchor" aria-label="anchor" href="#general-setup"></a>
 </h3>
 <p>Let us set up the notations first. Suppose a there exists a partition
-of a region <span class="math inline">${\rm D} \in {\cal R}^2$</span>
+of a region <span class="math inline">$\mathrm{D} \in {\cal R}^2$</span>
 (e.g., a city). This partition is denoted by
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>A</mi><mi>i</mi></msub><annotation encoding="application/x-tex">A_i</annotation></semantics></math>,
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>i</mi><mo>=</mo><mn>1</mn><mo>,</mo><mi>…</mi><mo>,</mo><mi>n</mi></mrow><annotation encoding="application/x-tex">i = 1, \ldots, n</annotation></semantics></math>.
@@ -96,6 +96,31 @@ state.</p>
 <div class="section level3">
 <h3 id="model-based-approach">Model-based approach<a class="anchor" aria-label="anchor" href="#model-based-approach"></a>
 </h3>
+<p>Consequently, <span class="math display">$$\begin{align*}
+\mathrm{E}[Y(A_i)] &amp; = \frac{1}{\lvert A_i \rvert} \int_{A_i} {\rm
+E}[Y(\mathbf{s})] \, \mathrm{d} \mathbf{s} \\
+&amp; = \frac{1}{\lvert A_i \rvert} \int_{A_i} \mu \, \mathrm{d}
+\mathbf{s} \\
+&amp; = \mu,
+\end{align*}$$</span> and
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mtable><mtr><mtd columnalign="right" style="text-align: right"><mrow><mi mathvariant="normal">C</mi><mi mathvariant="normal">o</mi><mi mathvariant="normal">v</mi></mrow><mrow><mo stretchy="true" form="prefix">[</mo><mi>Y</mi><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>A</mi><mi>i</mi></msub><mo stretchy="true" form="postfix">)</mo></mrow><mo>,</mo><mi>Y</mi><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>A</mi><mi>j</mi></msub><mo stretchy="true" form="postfix">)</mo></mrow><mo stretchy="true" form="postfix">]</mo></mrow></mtd><mtd columnalign="left" style="text-align: left"><mo>=</mo><mfrac><mn>1</mn><mrow><mo stretchy="false" form="prefix">|</mo><msub><mi>A</mi><mi>i</mi></msub><mo stretchy="false" form="postfix">|</mo><mo stretchy="false" form="prefix">|</mo><msub><mi>A</mi><mi>j</mi></msub><mo stretchy="false" form="postfix">|</mo></mrow></mfrac><msub><mo>∫</mo><mrow><msub><mi>A</mi><mi>i</mi></msub><mo>×</mo><msub><mi>A</mi><mi>j</mi></msub></mrow></msub><mrow><mi mathvariant="normal">C</mi><mi mathvariant="normal">o</mi><mi mathvariant="normal">v</mi></mrow><mrow><mo stretchy="true" form="prefix">[</mo><mi>Y</mi><mo stretchy="false" form="prefix">(</mo><mi>𝐬</mi><mo>,</mo><mi>Y</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>𝐬</mi><mi>′</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo stretchy="true" form="postfix">]</mo></mrow><mspace width="0.167em"></mspace><mi mathvariant="normal">d</mi><mi>𝐬</mi><mspace width="0.167em"></mspace><mi mathvariant="normal">d</mi><mrow><mi>𝐬</mi><mi mathvariant="bold">′</mi></mrow></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"></mtd><mtd columnalign="left" style="text-align: left"><mo>=</mo><mfrac><mn>1</mn><mrow><mo stretchy="false" form="prefix">|</mo><msub><mi>A</mi><mi>i</mi></msub><mo stretchy="false" form="postfix">|</mo><mo stretchy="false" form="prefix">|</mo><msub><mi>A</mi><mi>j</mi></msub><mo stretchy="false" form="postfix">|</mo></mrow></mfrac><msub><mo>∫</mo><mrow><msub><mi>A</mi><mi>i</mi></msub><mo>×</mo><msub><mi>A</mi><mi>j</mi></msub></mrow></msub><mi mathvariant="normal">C</mi><mrow><mo stretchy="true" form="prefix">(</mo><mo stretchy="false" form="prefix">∥</mo><mi>𝐬</mi><mo>−</mo><mi>𝐬</mi><mi>′</mi><mo stretchy="false" form="postfix">∥</mo><mo>;</mo><mi>𝛉</mi><mo stretchy="true" form="postfix">)</mo></mrow><mspace width="0.167em"></mspace><mi mathvariant="normal">d</mi><mi>𝐬</mi><mspace width="0.167em"></mspace><mi mathvariant="normal">d</mi><mrow><mi>𝐬</mi><mi mathvariant="bold">′</mi></mrow><mo>,</mo></mtd></mtr></mtable><annotation encoding="application/x-tex">\begin{align*}
+\mathrm{Cov}[Y(A_i), Y(A_j)] &amp; = \frac{1}{\lvert A_i \rvert \lvert A_j \rvert}
+\int_{A_i \times A_j} \mathrm{Cov}[Y(\mathbf{s}, Y(\mathbf{s}')] \, \mathrm{d}
+\mathbf{s} \, \mathrm{d} \mathbf{s'} \\
+&amp; = \frac{1}{\lvert A_i \rvert \lvert A_j \rvert} \int_{A_i \times A_j} \mathrm{C}(
+\lVert \mathbf{s} - \mathbf{s}' \rVert ; \boldsymbol{\theta}) \, \mathrm{d}
+\mathbf{s} \, \mathrm{d} \mathbf{s'},
+\end{align*}</annotation></semantics></math> where
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">∥</mo><mi>𝐬</mi><mo>−</mo><mi>𝐬</mi><mi>′</mi><mo stretchy="false" form="postfix">∥</mo></mrow><annotation encoding="application/x-tex">\lVert \mathbf{s} - \mathbf{s}' \rVert</annotation></semantics></math>
+is the Euclidean distance between the coordinates
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>𝐬</mi><annotation encoding="application/x-tex">\mathbf{s}</annotation></semantics></math>
+and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>𝐬</mi><mi>′</mi></mrow><annotation encoding="application/x-tex">\mathbf{s}'</annotation></semantics></math>,
+and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">C</mi><mrow><mo stretchy="true" form="prefix">(</mo><mo stretchy="false" form="prefix">∥</mo><mi>𝐬</mi><mo>−</mo><mi>𝐬</mi><mi>′</mi><mo stretchy="false" form="postfix">∥</mo><mo>;</mo><mi>𝛉</mi><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">\mathrm{C}( \lVert
+\mathbf{s} - \mathbf{s}' \rVert ; \boldsymbol{\theta})</annotation></semantics></math>
+is an isotropic covariance function depending on the parameter
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>𝛉</mi><annotation encoding="application/x-tex">\boldsymbol{\theta}</annotation></semantics></math>.</p>
 <p>Assume we observe a random variable
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Y</mi><mrow><mo stretchy="true" form="prefix">(</mo><mo>⋅</mo><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">Y(\cdot)</annotation></semantics></math>
 at each region
@@ -105,57 +130,55 @@ regions
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>B</mi><mi>j</mi></msub><annotation encoding="application/x-tex">B_j</annotation></semantics></math>.
 Now suppose the random variable
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Y</mi><mrow><mo stretchy="true" form="prefix">(</mo><mo>⋅</mo><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">Y(\cdot)</annotation></semantics></math>
-varies continuously over <span class="math inline">${\rm D}$</span> and
-is defined as follows <span class="math display">$$
-Y(\mathbf{s}) = \mu + S(\mathbf{s}) + \varepsilon(\mathbf{s}), \,
-\mathbf{s} \in
-{\rm D} \subset {\cal R}^2.
-$$</span> where <span class="math display">$$
-S(\cdot) \sim {\rm GP}(0, \sigma^2 \rho(\cdot; \, \phi, \kappa)) \;
-\text{ and } \;
-\varepsilon(\cdot) \overset{{\rm i.i.d.}}{\sim} {\rm N}(0, \sigma^2
-\rho(\cdot;
+varies continuously over
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi mathvariant="normal">D</mi><annotation encoding="application/x-tex">\mathrm{D}</annotation></semantics></math>
+and is defined as follows <span class="math display">$$Y(\mathbf{s}) =
+\mu + S(\mathbf{s}) + \varepsilon(\mathbf{s}), \, \mathbf{s} \in
+\mathrm{D} \subset {\cal R}^2.$$</span></p>
+<p>where
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>S</mi><mrow><mo stretchy="true" form="prefix">(</mo><mo>⋅</mo><mo stretchy="true" form="postfix">)</mo></mrow><mo>∼</mo><mrow><mi mathvariant="normal">G</mi><mi mathvariant="normal">P</mi></mrow><mrow><mo stretchy="true" form="prefix">(</mo><mn>0</mn><mo>,</mo><msup><mi>σ</mi><mn>2</mn></msup><mi>ρ</mi><mrow><mo stretchy="true" form="prefix">(</mo><mo>⋅</mo><mo>;</mo><mspace width="0.167em"></mspace><mi>ϕ</mi><mo>,</mo><mi>κ</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo stretchy="true" form="postfix">)</mo></mrow><mspace width="0.278em"></mspace><mrow><mspace width="0.333em"></mspace><mtext mathvariant="normal"> and </mtext><mspace width="0.333em"></mspace></mrow><mspace width="0.278em"></mspace><mi>ε</mi><mrow><mo stretchy="true" form="prefix">(</mo><mo>⋅</mo><mo stretchy="true" form="postfix">)</mo></mrow><mover><mo>∼</mo><mrow><mi mathvariant="normal">i</mi><mi mathvariant="normal">.</mi><mi mathvariant="normal">i</mi><mi mathvariant="normal">.</mi><mi mathvariant="normal">d</mi><mi mathvariant="normal">.</mi></mrow></mover><mi mathvariant="normal">N</mi><mrow><mo stretchy="true" form="prefix">(</mo><mn>0</mn><mo>,</mo><msup><mi>σ</mi><mn>2</mn></msup><mi>ρ</mi><mrow><mo stretchy="true" form="prefix">(</mo><mo>⋅</mo><mo>;</mo><mspace width="0.167em"></mspace><mi>ϕ</mi><mo>,</mo><mi>κ</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo stretchy="true" form="postfix">)</mo></mrow><mo>,</mo></mrow><annotation encoding="application/x-tex">
+ S(\cdot) \sim \mathrm{GP}(0, \sigma^2 \rho(\cdot; \, \phi, \kappa)) \;
+ \text{ and } \;
+\varepsilon(\cdot) \overset{\mathrm{i.i.d.}}{\sim} \mathrm{N}(0, \sigma^2 \rho(\cdot;
 \, \phi, \kappa)),
-$$</span> with
+</annotation></semantics></math> where
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>S</mi><annotation encoding="application/x-tex">S</annotation></semantics></math>
 and
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>ε</mi><annotation encoding="application/x-tex">\varepsilon</annotation></semantics></math>
-independent of each other. For now, let’s make the unrealistic
-assumption that all those parameters are known. Then, our assumption is
-that the observed data is as follows <span class="math display">$$\begin{align*}
+are independent. For now, let’s make the unrealistic assumption that all
+those parameters are known. Then, our assumption is that the observed
+data is as follows <span class="math display">$$\begin{align*}
 Y(A_i) &amp; = \frac{1}{\lvert A_i \rvert} \int_{A_i} Y(\mathbf{s}) \,
-{\rm d}
+\mathrm{d}
 \mathbf{s} \\
 &amp; = \frac{1}{\lvert A_i \rvert} \int_{A_i} [\mu + S(\mathbf{s}) +
-\varepsilon(\mathbf{s})] \, {\rm d} \mathbf{s} \\
-&amp; = \mu + \frac{1}{\lvert A_i \rvert} \int_{A_i} S(\mathbf{s}) {\rm
-d}
+\varepsilon(\mathbf{s})] \, \mathrm{d} \mathbf{s} \\
+&amp; = \mu + \frac{1}{\lvert A_i \rvert} \int_{A_i} S(\mathbf{s})
+\mathrm{d}
 \mathbf{s} + \frac{1}{\lvert A_i \rvert} \int_{A_i}
 \varepsilon(\mathbf{s}) {\rm
 d} \mathbf{s},
 \end{align*}$$</span> where
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">|</mo><mo>⋅</mo><mo stretchy="false" form="postfix">|</mo></mrow><annotation encoding="application/x-tex">\lvert \cdot \rvert</annotation></semantics></math>
 returns the area of a polygon. Furthermore, it can be shown that (using
-Fubini’s Theorem and some algebraic manipulation) <span class="math display">$$
-{\rm Cov}(Y(A_i), Y(A_j)) = \frac{\sigma^2}{\lvert A_i \rvert \lvert A_j
-\rvert}
-\int_{A_i \times A_j} \rho( \lVert \mathbf{s} - \mathbf{s}' \rVert; \,
-\phi,
-\kappa ) \, {\rm d} \mathbf{s} \, {\rm d} \mathbf{s}' + \mathbf{I}(i =
-j)
+Fubini’s Theorem and some algebraic manipulation)
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mi mathvariant="normal">C</mi><mi mathvariant="normal">o</mi><mi mathvariant="normal">v</mi></mrow><mrow><mo stretchy="true" form="prefix">(</mo><mi>Y</mi><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>A</mi><mi>i</mi></msub><mo stretchy="true" form="postfix">)</mo></mrow><mo>,</mo><mi>Y</mi><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>A</mi><mi>j</mi></msub><mo stretchy="true" form="postfix">)</mo></mrow><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mfrac><msup><mi>σ</mi><mn>2</mn></msup><mrow><mo stretchy="false" form="prefix">|</mo><msub><mi>A</mi><mi>i</mi></msub><mo stretchy="false" form="postfix">|</mo><mo stretchy="false" form="prefix">|</mo><msub><mi>A</mi><mi>j</mi></msub><mo stretchy="false" form="postfix">|</mo></mrow></mfrac><msub><mo>∫</mo><mrow><msub><mi>A</mi><mi>i</mi></msub><mo>×</mo><msub><mi>A</mi><mi>j</mi></msub></mrow></msub><mi>ρ</mi><mrow><mo stretchy="true" form="prefix">(</mo><mo stretchy="false" form="prefix">∥</mo><mi>𝐬</mi><mo>−</mo><mi>𝐬</mi><mi>′</mi><mo stretchy="false" form="postfix">∥</mo><mo>;</mo><mspace width="0.167em"></mspace><mi>ϕ</mi><mo>,</mo><mi>κ</mi><mo stretchy="true" form="postfix">)</mo></mrow><mspace width="0.167em"></mspace><mi mathvariant="normal">d</mi><mi>𝐬</mi><mspace width="0.167em"></mspace><mi mathvariant="normal">d</mi><mi>𝐬</mi><mi>′</mi><mo>+</mo><mi>𝐈</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>i</mi><mo>=</mo><mi>j</mi><mo stretchy="true" form="postfix">)</mo></mrow><mfrac><mi>τ</mi><mrow><mo stretchy="false" form="prefix">|</mo><msub><mi>A</mi><mi>i</mi></msub><mo stretchy="false" form="postfix">|</mo></mrow></mfrac><mo>,</mo></mrow><annotation encoding="application/x-tex">
+\mathrm{Cov}(Y(A_i), Y(A_j)) = \frac{\sigma^2}{\lvert A_i \rvert \lvert A_j \rvert}
+\int_{A_i \times A_j} \rho( \lVert \mathbf{s} - \mathbf{s}' \rVert; \, \phi,
+\kappa ) \, \mathrm{d} \mathbf{s} \, \mathrm{d} \mathbf{s}' + \mathbf{I}(i = j)
 \frac{\tau}{\lvert A_i \rvert},
-$$</span> where
+</annotation></semantics></math> where
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>ρ</mi><mrow><mo stretchy="true" form="prefix">(</mo><mo>⋅</mo><mo>;</mo><mspace width="0.167em"></mspace><mi>ϕ</mi><mo>,</mo><mi>κ</mi><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">\rho(\cdot ; \, \phi, \kappa)</annotation></semantics></math>
-is a positive definite correlation function. Now, let <span class="math inline">${\rm R}_{\kappa}(\phi)$</span> be a correlation
-matrix such that <span class="math display">$$
-{\rm R}_{\kappa}(\phi)_{ij} = \frac{1}{\lvert A_i \rvert \lvert A_j
-\rvert}
-\int_{A_i \times A_j} \rho( \lVert \mathbf{s} - \mathbf{s}' \rVert; \,
-\phi,
-\kappa ) \, {\rm d} \mathbf{s} \, {\rm d} \mathbf{s}',
-$$</span> thus, <span class="math display">$$
-Y(A_1, \cdots, A_n) \sim {\rm N}( \mu \mathbf{1}_n, \sigma^2 {\rm
-R}_{\kappa}(\phi) + \tau {\rm diag}(\lvert A_1 \rvert^{-1}, \ldots,
+is a positive definite correlation function. Now, let
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi mathvariant="normal">R</mi><mi>κ</mi></msub><mrow><mo stretchy="true" form="prefix">(</mo><mi>ϕ</mi><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">\mathrm{R}_{\kappa}(\phi)</annotation></semantics></math>
+be a correlation matrix such that
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi mathvariant="normal">R</mi><mi>κ</mi></msub><msub><mrow><mo stretchy="true" form="prefix">(</mo><mi>ϕ</mi><mo stretchy="true" form="postfix">)</mo></mrow><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo>=</mo><mfrac><mn>1</mn><mrow><mo stretchy="false" form="prefix">|</mo><msub><mi>A</mi><mi>i</mi></msub><mo stretchy="false" form="postfix">|</mo><mo stretchy="false" form="prefix">|</mo><msub><mi>A</mi><mi>j</mi></msub><mo stretchy="false" form="postfix">|</mo></mrow></mfrac><msub><mo>∫</mo><mrow><msub><mi>A</mi><mi>i</mi></msub><mo>×</mo><msub><mi>A</mi><mi>j</mi></msub></mrow></msub><mi>ρ</mi><mrow><mo stretchy="true" form="prefix">(</mo><mo stretchy="false" form="prefix">∥</mo><mi>𝐬</mi><mo>−</mo><mi>𝐬</mi><mi>′</mi><mo stretchy="false" form="postfix">∥</mo><mo>;</mo><mspace width="0.167em"></mspace><mi>ϕ</mi><mo>,</mo><mi>κ</mi><mo stretchy="true" form="postfix">)</mo></mrow><mspace width="0.167em"></mspace><mi mathvariant="normal">d</mi><mi>𝐬</mi><mspace width="0.167em"></mspace><mi mathvariant="normal">d</mi><mi>𝐬</mi><mi>′</mi><mo>,</mo></mrow><annotation encoding="application/x-tex">
+\mathrm{R}_{\kappa}(\phi)_{ij} = \frac{1}{\lvert A_i \rvert \lvert A_j \rvert}
+\int_{A_i \times A_j} \rho( \lVert \mathbf{s} - \mathbf{s}' \rVert; \, \phi,
+\kappa ) \, \mathrm{d} \mathbf{s} \, \mathrm{d} \mathbf{s}',
+</annotation></semantics></math> thus, <span class="math display">$$
+Y(A_1, \cdots, A_n) \sim \mathrm{N}( \mu \mathbf{1}_n, \sigma^2 {\rm
+R}_{\kappa}(\phi) + \tau \mathrm{diag}(\lvert A_1 \rvert^{-1}, \ldots,
 \lvert A_1
 \rvert^{-1})).
 $$</span> Then, if we assume
@@ -174,7 +197,7 @@ are unknown. The Likelihood of
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Y</mi><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>A</mi><mn>1</mn></msub><mo>,</mo><mi>…</mi><mo>,</mo><msub><mi>A</mi><mi>n</mi></msub><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">Y(A_1, \ldots, A_n)</annotation></semantics></math>
 can still be computed.</p>
 <p>In particular, if we use the parametrization
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>ν</mi><mo>=</mo><mi>τ</mi><mi>/</mi><msup><mi>σ</mi><mn>2</mn></msup></mrow><annotation encoding="application/x-tex">\nu = \tau / \sigma^2</annotation></semantics></math>,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>α</mi><mo>=</mo><mi>τ</mi><mi>/</mi><msup><mi>σ</mi><mn>2</mn></msup></mrow><annotation encoding="application/x-tex">\alpha = \tau / \sigma^2</annotation></semantics></math>,
 we have closed form for the Maximum Likelihood estimators both for
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>μ</mi><annotation encoding="application/x-tex">\mu</annotation></semantics></math>
 and
@@ -182,7 +205,7 @@ and
 Thus, we can optimize the profile likelihood for
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>ϕ</mi><annotation encoding="application/x-tex">\phi</annotation></semantics></math>
 and
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>ν</mi><annotation encoding="application/x-tex">\nu</annotation></semantics></math>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>α</mi><annotation encoding="application/x-tex">\alpha</annotation></semantics></math>
 numerically. Then, we resort on conditional Normal properties again to
 compute the predictions in a new different set of regions.</p>
 </div>
@@ -213,10 +236,11 @@ is constructed as
   \hat{Y}(B_1, \ldots, B_m) = \mathbf{W}
   Y(A_1, \ldots, A_n).
 \end{equation}</annotation></semantics></math> The expectation and
-variance of the predictor are, respectively, <span class="math display">$$
-  {\rm E}[\hat{Y}(B_1, \ldots, B_m)] = \mathbf{W}
-  {\rm E}[Y(A_1, \ldots, A_n)]
-$$</span> and
+variance of the predictor are, respectively,
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">E</mi><mrow><mo stretchy="true" form="prefix">[</mo><mover><mi>Y</mi><mo accent="true">̂</mo></mover><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>B</mi><mn>1</mn></msub><mo>,</mo><mi>…</mi><mo>,</mo><msub><mi>B</mi><mi>m</mi></msub><mo stretchy="true" form="postfix">)</mo></mrow><mo stretchy="true" form="postfix">]</mo></mrow><mo>=</mo><mi>𝐖</mi><mi mathvariant="normal">E</mi><mrow><mo stretchy="true" form="prefix">[</mo><mi>Y</mi><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>A</mi><mn>1</mn></msub><mo>,</mo><mi>…</mi><mo>,</mo><msub><mi>A</mi><mi>n</mi></msub><mo stretchy="true" form="postfix">)</mo></mrow><mo stretchy="true" form="postfix">]</mo></mrow></mrow><annotation encoding="application/x-tex">
+  \mathrm{E}[\hat{Y}(B_1, \ldots, B_m)] = \mathbf{W}
+  \mathrm{E}[Y(A_1, \ldots, A_n)]
+</annotation></semantics></math> and
 <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mtext mathvariant="normal">Var</mtext><mrow><mo stretchy="true" form="prefix">[</mo><mover><mi>Y</mi><mo accent="true">̂</mo></mover><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>B</mi><mn>1</mn></msub><mo>,</mo><mi>…</mi><mo>,</mo><msub><mi>B</mi><mi>m</mi></msub><mo stretchy="true" form="postfix">)</mo></mrow><mo stretchy="true" form="postfix">]</mo></mrow><mo>=</mo><mi>𝐖</mi><mtext mathvariant="normal">Var</mtext><mrow><mo stretchy="true" form="prefix">[</mo><mi>Y</mi><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>A</mi><mn>1</mn></msub><mo>,</mo><mi>…</mi><mo>,</mo><msub><mi>A</mi><mi>n</mi></msub><mo stretchy="true" form="postfix">)</mo></mrow><mo stretchy="true" form="postfix">]</mo></mrow><msup><mi>𝐖</mi><mi>⊤</mi></msup><mi>.</mi></mrow><annotation encoding="application/x-tex">\begin{equation}
   \label{eq:np-matcov}
   \textrm{Var}[\hat{Y}(B_1, \ldots, B_m)] = \mathbf{W}
