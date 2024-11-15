@@ -87,7 +87,7 @@ process is slightly easier. The package allows for the two parametrizations.
 
 
 For this problem we are going to consider the the Matérn covariance
-function. The model will be fitted with $\nu = .5, 1.5, 2.5$, this the parameter
+function. The model will be fitted with $\nu \in \{0.5, 1.5, 2.5\}$, this the parameter
 controls the smoothness of the spatial process. Also, for simplicity, we are
 going to ignore $\tau$. Next, we evaluate the AIC associated with three
 models. The function `fit_spm` fits the models and needs starting values for

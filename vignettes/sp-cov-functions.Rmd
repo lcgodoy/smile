@@ -29,7 +29,7 @@ efficient than those using the `RcppParallel` package].
 The first spatial covariance family implemented is the so-called Matérn
 Covariance function, which is defined as
 \[
-{\rm C}(h; \sigma^2, \phi, \kappa) = \sigma^2 \frac{(h / \phi)^{\kappa}
+\mathrm{ C}(h; \sigma^2, \phi, \kappa) = \sigma^2 \frac{(h / \phi)^{\kappa}
 K_{\kappa}( h / \phi )} { 2^{\kappa - 1} \Gamma(\kappa) }.
 \]
 Where $h$ is the distance between two points, $\sigma^2$ is a variance
@@ -44,7 +44,7 @@ the Exponential and Gaussian family, respectively.
 The second spatial covariance family implemented is the Powered Exponential
 Covariance function, it is defined as
 \[
-{\rm C}(h; \sigma^2, \phi, \kappa) = \sigma^2 \exp \{ - (h / \phi)^{\kappa} \},
+\mathrm{ C}(h; \sigma^2, \phi, \kappa) = \sigma^2 \exp \{ - (h / \phi)^{\kappa} \},
 \]
 where $h$ is the distance between two points, $\sigma^2$, $\phi$, and $\kappa$
 analogous to the Matérn function.
@@ -52,7 +52,7 @@ analogous to the Matérn function.
 The penultimate option is the Gaussian family of covariance functions. The
 expression associated with this family is written as
 \[
-{\rm C}(h; \sigma^2, \phi) = \sigma^2 \exp \left\{ - \frac{h ^ 2}{2 \phi ^ 2} \right\},
+\mathrm{ C}(h; \sigma^2, \phi) = \sigma^2 \exp \left\{ - \frac{h ^ 2}{2 \phi ^ 2} \right\},
 \]
 again, the parameters are analogous to what have defined before in this
 vignette.
@@ -60,7 +60,7 @@ vignette.
 Lastly, we have implemented the Spherical family of covariance functions,
 defined as
 \[
-{\rm C}(h; \sigma^2, \phi) = 
+\mathrm{ C}(h; \sigma^2, \phi) = 
 \sigma^2 
 \begin{cases}
 1 - \frac{3}{2} (h / \phi) + \frac{1}{2} (h / \phi) ^ 3 & , \,

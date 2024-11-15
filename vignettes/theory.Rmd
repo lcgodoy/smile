@@ -18,7 +18,7 @@ knitr::opts_chunk$set(
 ## General setup
 
 Let us set up the notations first. Suppose a there exists a partition of a
-region $\mathrm{D} \in {\cal R}^2$ (e.g., a city). This partition is denoted by
+region $\mathrm{D} \in \mathcal{R}^2$ (e.g., a city). This partition is denoted by
 $A_i$, $i = 1, \ldots, n$. Moreover, there exists another partition of the same
 city, denoted $B_j$, where $j = 1, \ldots, m$. These partitions can be seen as
 two different administrative divisions within the same city. It is common for
@@ -29,13 +29,13 @@ city, country, or state.
 
 
 Consequently,
-\begin{align*}
-\mathrm{E}[Y(A_i)] & = \frac{1}{\lvert A_i \rvert} \int_{A_i} {\rm
-E}[Y(\mathbf{s})] \, \mathrm{d} \mathbf{s} \\
-& = \frac{1}{\lvert A_i \rvert} \int_{A_i} \mu \, \mathrm{d} \mathbf{s} \\
-& = \mu,
-\end{align*}
+
+$$\mathrm{E}[Y(A_i)] = \frac{1}{\lvert A_i \rvert} \int_{A_i}
+\mathrm{E}[Y(\mathbf{s})] \, \mathrm{d} \mathbf{s} = \frac{1}{\lvert A_i \rvert}
+\int_{A_i} \mu \, \mathrm{d} \mathbf{s} = \mu$$
+
 and
+
 \begin{align*}
 \mathrm{Cov}[Y(A_i), Y(A_j)] & = \frac{1}{\lvert A_i \rvert \lvert A_j \rvert}
 \int_{A_i \times A_j} \mathrm{Cov}[Y(\mathbf{s}, Y(\mathbf{s}')] \, \mathrm{d}
@@ -44,6 +44,7 @@ and
 \lVert \mathbf{s} - \mathbf{s}' \rVert ; \boldsymbol{\theta}) \, \mathrm{d}
 \mathbf{s} \, \mathrm{d} \mathbf{s'},
 \end{align*}
+
 where $\lVert \mathbf{s} - \mathbf{s}' \rVert$ is the Euclidean distance between
 the coordinates $\mathbf{s}$ and $\mathbf{s}'$, and $\mathrm{C}( \lVert
 \mathbf{s} - \mathbf{s}' \rVert ; \boldsymbol{\theta})$ is an isotropic
@@ -55,7 +56,7 @@ interested in predict/estimate this variable in each of the regions $B_j$. Now
 suppose the random variable $Y(\cdot)$ varies continuously over $\mathrm{D}$ and is
 defined as follows
 $$Y(\mathbf{s}) = \mu + S(\mathbf{s}) + \varepsilon(\mathbf{s}), \, \mathbf{s} \in
-\mathrm{D} \subset {\cal R}^2.$$
+\mathrm{D} \subset \mathcal{R}^2.$$
 
 where
 $$
@@ -67,15 +68,17 @@ $$
 where $S$ and $\varepsilon$ are independent. For now, let's make the
 unrealistic assumption that all those parameters are known. Then, our assumption
 is that the observed data is as follows
+
 \begin{align*}
 Y(A_i) & = \frac{1}{\lvert A_i \rvert} \int_{A_i} Y(\mathbf{s}) \, \mathrm{d}
 \mathbf{s} \\
 & = \frac{1}{\lvert A_i \rvert} \int_{A_i} [\mu + S(\mathbf{s}) +
 \varepsilon(\mathbf{s})] \, \mathrm{d} \mathbf{s} \\
 & = \mu + \frac{1}{\lvert A_i \rvert} \int_{A_i} S(\mathbf{s}) \mathrm{d}
-\mathbf{s} + \frac{1}{\lvert A_i \rvert} \int_{A_i} \varepsilon(\mathbf{s}) {\rm
-d} \mathbf{s},
+\mathbf{s} + \frac{1}{\lvert A_i \rvert} \int_{A_i} \varepsilon(\mathbf{s})
+\mathrm{d} \mathbf{s},
 \end{align*}
+
 where $\lvert \cdot \rvert$ returns the area of a polygon.
 Furthermore, it can be shown that (using Fubini's Theorem and some algebraic
 manipulation)
@@ -94,9 +97,9 @@ $$
 $$
 thus,
 $$
-Y(A_1, \cdots, A_n) \sim \mathrm{N}( \mu \mathbf{1}_n, \sigma^2 {\rm
-R}_{\kappa}(\phi) + \tau \mathrm{diag}(\lvert A_1 \rvert^{-1}, \ldots, \lvert A_1
-\rvert^{-1})).
+Y(A_1, \cdots, A_n) \sim \mathrm{N}( \mu \mathbf{1}_n, \sigma^2
+\mathrm{R}_{\kappa}(\phi) + \tau \mathrm{diag}(\lvert A_1 \rvert^{-1}, \ldots,
+\lvert A_1 \rvert^{-1})).
 $$
 Then, if we assume $(Y^{\top}(A_1, \cdots, A_n), Y^{\top}(B_1, \cdots,
 A_m)^{\top})$ to be jointly normal, we use can the conditional mean of
