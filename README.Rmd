@@ -20,15 +20,26 @@ knitr::opts_chunk$set(
 <!-- badges: start -->
 [![R-CMD-check](https://github.com/lcgodoy/smile/workflows/R-CMD-check/badge.svg)](https://github.com/lcgodoy/smile/actions)
 [![CRAN status](https://www.r-pkg.org/badges/version/smile)](https://CRAN.R-project.org/package=smile)
+[![Downloads](https://cranlogs.r-pkg.org/badges/grand-total/smile)](https://CRAN.R-project.org/package=smile)
 <!-- badges: end -->
 
-The goal of `smile` is to provide an easy to use `R` package that functions to
-estimate, predict and interpolate areal data. For estimation and prediction we
-use a model-based approach assuming areal data to be an average of an underlying
-continuous Gaussian random field. For interpolation, we use the simple areal
-interpolation, which is a nonparametric approach. Also, we provide functions to
-quantify the uncertainty associated with the simple areal interpolation when the
-variance of the observed variables is known.
+The `smile` package for R simplifies the analysis of spatial data. It offers
+tools to:
+
+* **Estimate and predicte**: Using a model-based approach, smile treats areal
+  data as averages derived from a continuous Gaussian random field. It is
+  possible to model point-referenced and areal data jointly.
+
+* **Interpolate**: For straightforward interpolation, smile employs a
+  non-parametric method known as simple areal interpolation.
+
+* **Quantify uncertainty:** When dealing with simple areal interpolation and
+  knowing the variance of your observations, smile helps you quantify the
+  uncertainty associated with the interpolation.
+
+Essentially, smile provides a user-friendly way to explore, model, and
+interpolate spatial data with R, offering both model-based and non-parametric
+approaches.
 
 The package accompanies a web page (powered by
 [pkgdown](https://pkgdown.r-lib.org/)) and 5 vignettes.
@@ -45,10 +56,9 @@ The package accompanies a web page (powered by
 
 ### Installation
 
-To install the [CRAN](https://cran.r-project.org) version of the, use
+To install the [CRAN](https://cran.r-project.org) version of the package, use
 ```r
 install.packages("smile")
-## remotes::install_github("lcgodoy/smile")
 ```
 
 The installation of the development version from GitHub can be done via

@@ -32,12 +32,10 @@ navbar:
       icon: fa-search fa-lg
       href: reference/index.html
   right:
+   - icon: fa-globl
+     href: https://lcgodoy.me
    - icon: fa-github
      href: https://github.com/lcgodoy
-   - icon: fa-stack-overflow fa-lg
-     href: https://stacksoverflow.com/users/9220758/lcgodoy
-   - icon: fa-twitter
-     href: https://twitter.com/ldcgodoy
    - icon: fa-linkedin
      href: https://www.linkedin.com/in/godoy-lucas/
 
@@ -48,4 +46,4 @@ footer:
   components:
     pkgdown: Powered by [pkgdown](https://pkgdown.r-lib.org/).
     authors: Lucas da Cunha Godoy.
-    legal: Provided without **any warranty**.
+    legal: Provided without any warranty.
