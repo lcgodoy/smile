@@ -41,7 +41,6 @@ Suggests:
     knitr,
     rmarkdown,
     ggplot2,
-    graphics,
-    spelling
+    graphics
 VignetteBuilder: knitr
 Language: en-US
