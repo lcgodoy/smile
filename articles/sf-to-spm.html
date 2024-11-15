@@ -5,7 +5,6 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<meta name="description" content="smile">
 <title>1. Converting sf objects to spm • smile</title>
 <!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
 <link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
@@ -18,94 +17,48 @@
 <script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/Roboto-0.4.9/font.css" rel="stylesheet">
 <link href="../deps/JetBrains_Mono-0.4.9/font.css" rel="stylesheet">
 <link href="../deps/Roboto_Slab-0.4.9/font.css" rel="stylesheet">
-<!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
-<!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.11/clipboard.min.js" integrity="sha512-7O5pXpc0oCRrxk8RUfDYFgn0nO1t+jLuIOQdOMRp4APB7uZ4vSjspzp5y6YDtDs4VzUSTbWzBFZ/LKJhnyFOKw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="1. Converting sf objects to spm">
-<meta property="og:description" content="smile">
-<meta property="og:image" content="https://lcgodoy.me/smile/logo.png">
-<!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
-<script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-<![endif]-->
+<link href="../deps/font-awesome-6.4.2/css/all.min.css" rel="stylesheet">
+<link href="../deps/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet">
+<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="1. Converting sf objects to spm">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
-    
 
-    <nav class="navbar fixed-top navbar-dark navbar-expand-lg bg-primary" data-bs-theme="dark"><div class="container">
-    
+
+    <nav class="navbar navbar-expand-lg fixed-top bg-primary" data-bs-theme="dark" aria-label="Site navigation"><div class="container">
+
     <a class="navbar-brand me-2" href="../index.html">smile</a>
 
     <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.5</small>
 
-    
+
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto">
-<li class="nav-item">
-  <a class="nav-link" href="../index.html">
-    <span class="fa fa-home fa-lg"></span>
-     
-  </a>
-</li>
+<li class="nav-item"><a class="nav-link" href="../index.html"><span class="fa fa-home fa-lg"></span></a></li>
 <li class="active nav-item dropdown">
-  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown--vignettes">
-    <span class="fa fa-book fa-lg"></span>
-     
-    Vignettes
-  </a>
-  <div class="dropdown-menu" aria-labelledby="dropdown--vignettes">
-    <a class="dropdown-item" href="../articles/sf-to-spm.html">1. Converting sf objects to spm</a>
-    <a class="dropdown-item" href="../articles/fit-and-pred.html">2. Fitting models and making predictions</a>
-    <a class="dropdown-item" href="../articles/sai.html">3. Areal Interpolation</a>
-    <a class="dropdown-item" href="../articles/theory.html">4. Method</a>
-    <a class="dropdown-item" href="../articles/sp-cov-functions.html">5. Spatial covariance functions</a>
-  </div>
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-vignettes" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true"><span class="fa fa-book fa-lg"></span> Vignettes</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-vignettes">
+<li><a class="dropdown-item" href="../articles/sf-to-spm.html">1. Converting sf objects to spm</a></li>
+    <li><a class="dropdown-item" href="../articles/fit-and-pred.html">2. Fitting models and making predictions</a></li>
+    <li><a class="dropdown-item" href="../articles/sai.html">3. Areal Interpolation</a></li>
+    <li><a class="dropdown-item" href="../articles/theory.html">4. Method</a></li>
+    <li><a class="dropdown-item" href="../articles/sp-cov-functions.html">5. Spatial covariance functions</a></li>
+  </ul>
 </li>
-<li class="nav-item">
-  <a class="nav-link" href="../reference/index.html">
-    <span class="fa fa-search fa-lg"></span>
-     
-    Reference
-  </a>
-</li>
+<li class="nav-item"><a class="nav-link" href="../reference/index.html"><span class="fa fa-search fa-lg"></span> Reference</a></li>
       </ul>
-<form class="form-inline my-2 my-lg-0" role="search">
-        <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off">
-</form>
-
-      <ul class="navbar-nav">
-<li class="nav-item">
-  <a class="external-link nav-link" href="https://github.com/lcgodoy">
-    <span class="fa fa-github"></span>
-     
-  </a>
-</li>
-<li class="nav-item">
-  <a class="external-link nav-link" href="https://stacksoverflow.com/users/9220758/lcgodoy">
-    <span class="fa fa-stack-overflow fa-lg"></span>
-     
-  </a>
-</li>
-<li class="nav-item">
-  <a class="external-link nav-link" href="https://twitter.com/ldcgodoy">
-    <span class="fa fa-twitter"></span>
-     
-  </a>
-</li>
-<li class="nav-item">
-  <a class="external-link nav-link" href="https://www.linkedin.com/in/godoy-lucas/">
-    <span class="fa fa-linkedin"></span>
-     
-  </a>
-</li>
+<ul class="navbar-nav">
+<li class="nav-item"><a class="external-link nav-link" href="https://lcgodoy.me"><span class="fa fa-globl"></span></a></li>
+<li class="nav-item"><a class="external-link nav-link" href="https://github.com/lcgodoy"><span class="fa fa-github"></span></a></li>
+<li class="nav-item"><a class="external-link nav-link" href="https://www.linkedin.com/in/godoy-lucas/"><span class="fa fa-linkedin"></span></a></li>
       </ul>
 </div>
 
-    
+
   </div>
 </nav><div class="container template-article">
 
@@ -117,7 +70,7 @@
       <img src="../logo.png" class="logo" alt=""><h1>1. Converting sf objects to spm</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/lcgodoy/smile/blob/HEAD/vignettes/sf-to-spm.Rmd" class="external-link"><code>vignettes/sf-to-spm.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/lcgodoy/smile/blob/main/vignettes/sf-to-spm.Rmd" class="external-link"><code>vignettes/sf-to-spm.Rmd</code></a></small>
       <div class="d-none name"><code>sf-to-spm.Rmd</code></div>
     </div>
 
@@ -156,8 +109,8 @@ this data, we have the Life Expectancy at Birth (LEB) and the Index of
 Multiple Deprivation (IMD) in Liverpool. These variables are observed at
 the Middle Super Output Areas (MSOA) and Lower Super Output Areas
 (LSOA), respectively. After loading our package, the datasets can be
-loaded by simply running the chunk of code below. Figure <span class="math inline">\(\ref{fig:leb-msoa}\)</span> displays the LEB at
-the MSOA.</p>
+loaded by simply running the chunk of code below. Figure displays the
+LEB at the MSOA.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">liv_lsoa</span><span class="op">)</span> <span class="co"># loading the LSOA data</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">liv_msoa</span><span class="op">)</span> <span class="co"># loading the MSOA data</span></span>
@@ -206,41 +159,49 @@ we generate a fine grid over the whole study region (or a fine grid -->
 within each MSOA) and approximate such covariance by numerical integration. -->
 <p>Now, suppose we are interested in estimating the LEB at the LSOA, so
 we will be able to conduct association analysis between LEB and IMD at
-the MSOA level. We assume, that the LEB, denoted <span class="math inline">\(Y(\cdot)\)</span>, is driven by a stationary and
-isotropic continuous Gaussian process over the region of study, such
-that, the observed data at the <span class="math inline">\(i\)</span>-th
-MSOA area (denoted <span class="math inline">\(A_i\)</span>) is an
-average of this underlying process. If we knew the parameters and
+the MSOA level. We assume, that the LEB, denoted
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Y</mi><mrow><mo stretchy="true" form="prefix">(</mo><mo>⋅</mo><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">Y(\cdot)</annotation></semantics></math>,
+is driven by a stationary and isotropic continuous Gaussian process over
+the region of study, such that, the observed data at the
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>i</mi><annotation encoding="application/x-tex">i</annotation></semantics></math>-th
+MSOA area (denoted
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>A</mi><mi>i</mi></msub><annotation encoding="application/x-tex">A_i</annotation></semantics></math>)
+is an average of this underlying process. If we knew the parameters and
 covariance function associated with this process, then the LEB at the
-<span class="math inline">\(i\)</span>-th MSOA would be as follow <span class="math display">\[
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>i</mi><annotation encoding="application/x-tex">i</annotation></semantics></math>-th
+MSOA would be as follow <span class="math display">$$
     Y(A_i) = \frac{1}{\lvert A_i \rvert} \int_{A_i} Y(\mathbf{s}) \,
 {\rm d}
     \mathbf{s},
-\]</span> where <span class="math inline">\(\lvert A_i \rvert\)</span>
-stands for the area associated with the region <span class="math inline">\(A_i\)</span>.</p>
-<p>Similarly, <span class="math display">\[\begin{align*}
+$$</span> where
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">|</mo><msub><mi>A</mi><mi>i</mi></msub><mo stretchy="false" form="postfix">|</mo></mrow><annotation encoding="application/x-tex">\lvert A_i \rvert</annotation></semantics></math>
+stands for the area associated with the region
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>A</mi><mi>i</mi></msub><annotation encoding="application/x-tex">A_i</annotation></semantics></math>.</p>
+<p>Similarly, <span class="math display">$$\begin{align*}
 {\rm E}[Y(A_i)] &amp; = \frac{1}{\lvert A_i \rvert} \int_{A_i} {\rm
 E}[Y(\mathbf{s})] \, {\rm d} \mathbf{s} \\
 &amp; = \frac{1}{\lvert A_i \rvert} \int_{A_i} \mu \, {\rm d} \mathbf{s}
 \\
 &amp; = \mu,
-\end{align*}\]</span> and <span class="math display">\[\begin{align*}
+\end{align*}$$</span> and <span class="math display">$$\begin{align*}
 {\rm Cov}[Y(A_i), Y(A_j)] &amp; = \frac{1}{\lvert A_i \rvert \lvert A_j
 \rvert}
-\int_{A_i \times A_j} {\rm Cov}[Y(\mathbf{s}, Y(\mathbf{s}')] \,
-{\rm d}
+\int_{A_i \times A_j} {\rm Cov}[Y(\mathbf{s}, Y(\mathbf{s}')] \, {\rm d}
 \mathbf{s} \, {\rm d} \mathbf{s'} \\
 &amp; = \frac{1}{\lvert A_i \rvert \lvert A_j \rvert} \int_{A_i \times
 A_j} {\rm C}(
-\lVert \mathbf{s} - \mathbf{s}' \rVert ; \boldsymbol{\theta}) \,
-{\rm d}
+\lVert \mathbf{s} - \mathbf{s}' \rVert ; \boldsymbol{\theta}) \, {\rm d}
 \mathbf{s} \, {\rm d} \mathbf{s'},
-\end{align*}\]</span> where <span class="math inline">\(\lVert
-\mathbf{s} - \mathbf{s}' \rVert\)</span> is the Euclidean distance
-between the coordinates <span class="math inline">\(\mathbf{s}\)</span>
-and <span class="math inline">\(\mathbf{s}'\)</span>, and <span class="math inline">\({\rm C}( \lVert
-\mathbf{s} - \mathbf{s}' \rVert ; \boldsymbol{\theta})\)</span> is
-an isotropic covariance function depending on the parameter <span class="math inline">\(\boldsymbol{\theta}\)</span>.</p>
+\end{align*}$$</span> where
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">∥</mo><mi>𝐬</mi><mo>−</mo><mi>𝐬</mi><mi>′</mi><mo stretchy="false" form="postfix">∥</mo></mrow><annotation encoding="application/x-tex">\lVert \mathbf{s} - \mathbf{s}' \rVert</annotation></semantics></math>
+is the Euclidean distance between the coordinates
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>𝐬</mi><annotation encoding="application/x-tex">\mathbf{s}</annotation></semantics></math>
+and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>𝐬</mi><mi>′</mi></mrow><annotation encoding="application/x-tex">\mathbf{s}'</annotation></semantics></math>,
+and <span class="math inline">${\rm C}( \lVert
+\mathbf{s} - \mathbf{s}' \rVert ; \boldsymbol{\theta})$</span> is an
+isotropic covariance function depending on the parameter
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>𝛉</mi><annotation encoding="application/x-tex">\boldsymbol{\theta}</annotation></semantics></math>.</p>
 <p>In practice, however, the integrals in the equation above are hard to
 be evaluated analytically. A common workaround is to evaluate them
 either numerically or by Monte Carlo integration <span class="citation">(Gelfand, Zhu, and Carlin 2001)</span>. When using the
@@ -377,15 +338,15 @@ Modeling.”</span> <em>Biostatistics</em> 21 (2): e17–32.
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Lucas da Cunha Godoy. Provided without <strong>any warranty</strong>.</p>
+  <p>Lucas da Cunha Godoy. Provided without any warranty.</p>
 </div>
 
     </footer>
 </div>
 
-  
 
-  
+
+
 
   </body>
 </html>

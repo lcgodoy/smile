@@ -1,5 +1,5 @@
 pandoc: 3.1.11
-pkgdown: 2.0.9
+pkgdown: 2.1.1
 pkgdown_sha: ~
 articles:
   fit-and-pred: fit-and-pred.html
@@ -7,8 +7,7 @@ articles:
   sf-to-spm: sf-to-spm.html
   sp-cov-functions: sp-cov-functions.html
   theory: theory.html
-last_built: 2024-06-13T22:41Z
+last_built: 2024-11-15T17:08Z
 urls:
   reference: https://lcgodoy.me/smile/reference
   article: https://lcgodoy.me/smile/articles
-
