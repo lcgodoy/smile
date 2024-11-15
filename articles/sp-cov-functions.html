@@ -88,10 +88,11 @@ Sanderson 2014)</span> package and the STL library algorithms (C++ 11)<a class="
 sequential algorithms of the STL library was more efficient than those
 using the &lt;code&gt;RcppParallel&lt;/code&gt; package&lt;/p&gt;"><sup>1</sup></a>.</p>
 <p>The first spatial covariance family implemented is the so-called
-Matérn Covariance function, which is defined as <span class="math display">$$
-{\rm C}(h; \sigma^2, \phi, \kappa) = \sigma^2 \frac{(h / \phi)^{\kappa}
+Matérn Covariance function, which is defined as
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">C</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>h</mi><mo>;</mo><msup><mi>σ</mi><mn>2</mn></msup><mo>,</mo><mi>ϕ</mi><mo>,</mo><mi>κ</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><msup><mi>σ</mi><mn>2</mn></msup><mfrac><mrow><msup><mrow><mo stretchy="true" form="prefix">(</mo><mi>h</mi><mi>/</mi><mi>ϕ</mi><mo stretchy="true" form="postfix">)</mo></mrow><mi>κ</mi></msup><msub><mi>K</mi><mi>κ</mi></msub><mrow><mo stretchy="true" form="prefix">(</mo><mi>h</mi><mi>/</mi><mi>ϕ</mi><mo stretchy="true" form="postfix">)</mo></mrow></mrow><mrow><msup><mn>2</mn><mrow><mi>κ</mi><mo>−</mo><mn>1</mn></mrow></msup><mi>Γ</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>κ</mi><mo stretchy="true" form="postfix">)</mo></mrow></mrow></mfrac><mi>.</mi></mrow><annotation encoding="application/x-tex">
+\mathrm{ C}(h; \sigma^2, \phi, \kappa) = \sigma^2 \frac{(h / \phi)^{\kappa}
 K_{\kappa}( h / \phi )} { 2^{\kappa - 1} \Gamma(\kappa) }.
-$$</span> Where
+</annotation></semantics></math> Where
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>h</mi><annotation encoding="application/x-tex">h</annotation></semantics></math>
 is the distance between two points,
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>σ</mi><mn>2</mn></msup><annotation encoding="application/x-tex">\sigma^2</annotation></semantics></math>
@@ -117,10 +118,10 @@ or
 the expression simplifies. The first and the last cases yield to the
 Exponential and Gaussian family, respectively.</p>
 <p>The second spatial covariance family implemented is the Powered
-Exponential Covariance function, it is defined as <span class="math display">$$
-{\rm C}(h; \sigma^2, \phi, \kappa) = \sigma^2 \exp \{ - (h /
-\phi)^{\kappa} \},
-$$</span> where
+Exponential Covariance function, it is defined as
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">C</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>h</mi><mo>;</mo><msup><mi>σ</mi><mn>2</mn></msup><mo>,</mo><mi>ϕ</mi><mo>,</mo><mi>κ</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><msup><mi>σ</mi><mn>2</mn></msup><mo>exp</mo><mo stretchy="false" form="prefix">{</mo><mo>−</mo><msup><mrow><mo stretchy="true" form="prefix">(</mo><mi>h</mi><mi>/</mi><mi>ϕ</mi><mo stretchy="true" form="postfix">)</mo></mrow><mi>κ</mi></msup><mo stretchy="false" form="postfix">}</mo><mo>,</mo></mrow><annotation encoding="application/x-tex">
+\mathrm{ C}(h; \sigma^2, \phi, \kappa) = \sigma^2 \exp \{ - (h / \phi)^{\kappa} \},
+</annotation></semantics></math> where
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>h</mi><annotation encoding="application/x-tex">h</annotation></semantics></math>
 is the distance between two points,
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>σ</mi><mn>2</mn></msup><annotation encoding="application/x-tex">\sigma^2</annotation></semantics></math>,
@@ -130,21 +131,21 @@ and
 analogous to the Matérn function.</p>
 <p>The penultimate option is the Gaussian family of covariance
 functions. The expression associated with this family is written as
-<span class="math display">$$
-{\rm C}(h; \sigma^2, \phi) = \sigma^2 \exp \left\{ - \frac{h ^ 2}{2 \phi
-^ 2} \right\},
-$$</span> again, the parameters are analogous to what have defined
-before in this vignette.</p>
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">C</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>h</mi><mo>;</mo><msup><mi>σ</mi><mn>2</mn></msup><mo>,</mo><mi>ϕ</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><msup><mi>σ</mi><mn>2</mn></msup><mo>exp</mo><mrow><mo stretchy="true" form="prefix">{</mo><mo>−</mo><mfrac><msup><mi>h</mi><mn>2</mn></msup><mrow><mn>2</mn><msup><mi>ϕ</mi><mn>2</mn></msup></mrow></mfrac><mo stretchy="true" form="postfix">}</mo></mrow><mo>,</mo></mrow><annotation encoding="application/x-tex">
+\mathrm{ C}(h; \sigma^2, \phi) = \sigma^2 \exp \left\{ - \frac{h ^ 2}{2 \phi ^ 2} \right\},
+</annotation></semantics></math> again, the parameters are analogous to
+what have defined before in this vignette.</p>
 <p>Lastly, we have implemented the Spherical family of covariance
-functions, defined as <span class="math display">$$
-{\rm C}(h; \sigma^2, \phi) =
-\sigma^2
+functions, defined as
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">C</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>h</mi><mo>;</mo><msup><mi>σ</mi><mn>2</mn></msup><mo>,</mo><mi>ϕ</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><msup><mi>σ</mi><mn>2</mn></msup><mrow><mo stretchy="true" form="prefix">{</mo><mtable><mtr><mtd columnalign="left" style="text-align: left"><mn>1</mn><mo>−</mo><mfrac><mn>3</mn><mn>2</mn></mfrac><mrow><mo stretchy="true" form="prefix">(</mo><mi>h</mi><mi>/</mi><mi>ϕ</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>+</mo><mfrac><mn>1</mn><mn>2</mn></mfrac><msup><mrow><mo stretchy="true" form="prefix">(</mo><mi>h</mi><mi>/</mi><mi>ϕ</mi><mo stretchy="true" form="postfix">)</mo></mrow><mn>3</mn></msup></mtd><mtd columnalign="left" style="text-align: left"><mo>,</mo><mspace width="0.167em"></mspace><mn>0</mn><mo>≤</mo><mi>h</mi><mo>≤</mo><mi>ϕ</mi></mtd></mtr><mtr><mtd columnalign="left" style="text-align: left"><mn>0</mn></mtd><mtd columnalign="left" style="text-align: left"><mo>,</mo><mspace width="0.167em"></mspace><mi>h</mi><mo>&gt;</mo><mi>ϕ</mi><mo>,</mo></mtd></mtr></mtable></mrow></mrow><annotation encoding="application/x-tex">
+\mathrm{ C}(h; \sigma^2, \phi) = 
+\sigma^2 
 \begin{cases}
 1 - \frac{3}{2} (h / \phi) + \frac{1}{2} (h / \phi) ^ 3 &amp; , \,
 0 \leq h \leq \phi \\
 0 &amp; , \, h &gt; \phi,
 \end{cases}
-$$</span> where, again,
+</annotation></semantics></math> where, again,
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>σ</mi><mn>2</mn></msup><annotation encoding="application/x-tex">\sigma^2</annotation></semantics></math>
 is a variance parameter, while
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>ϕ</mi><mo>&gt;</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">\phi &gt; 0</annotation></semantics></math>
