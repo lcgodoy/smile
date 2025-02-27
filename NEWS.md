@@ -1,4 +1,4 @@
-'# smile 1.0.1
+# smile 1.0.1
 
 * Added a `NEWS.md` file to track changes to the package.
 * Fixed Spherical covariance function.
@@ -42,3 +42,7 @@
 * Removed NYC datasets (they are too large).
 
 * Spatial areal interpolation vignette rewritten.
+
+# smile 1.1.0
+
+* Changed how likelihood calculations work (for increased performance)
