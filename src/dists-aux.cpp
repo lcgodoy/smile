@@ -44,7 +44,19 @@ Eigen::MatrixXd crossdist(const Eigen::MatrixXd& m1,
   return out;
 }
 
-//' @title Pairwise distances for a list of matrices (Eigen version)
+//' @title Pairwise distances for a list of matrices (Internal use)
+//' @param mat_list internal use
+//' @param mat_list1 internal use
+//' @param mat_list2 internal use
+//' @param return_single internal use
+//' @param pred_mat internal use
+//' @param x_to_list internal use
+//' @param by internal use
+//' @param y_grid internal use
+//' @param x_grid internal use
+//' @param tr_vec index for distance truncation
+//' @param tr_inp truncation input
+//' @name aux_mat
 //' @keywords internal
 // [[Rcpp::export]]
 Rcpp::List single_dists(const Rcpp::List& mat_list) {
@@ -60,33 +72,8 @@ Rcpp::List single_dists(const Rcpp::List& mat_list) {
   return out;
 }
 
-//' @title Truncated pairwise distances for a list of matrices (Eigen version)
-//' @keywords internal
-// [[Rcpp::export]]
-Rcpp::List single_dists_tr(const Rcpp::List& mat_list,
-                           const Rcpp::LogicalVector& tr_vec,
-                           const double& tr_inp) {
-  const int n_out = mat_list.size();
-  Rcpp::List out(n_out * (n_out + 1) / 2);
-  // Create the constant fill-in matrix once, outside the loop
-  Eigen::MatrixXd aux_out(1, 1);
-  aux_out(0, 0) = tr_inp;
-  int k = 0;
-  for (int j = 0; j < n_out; ++j) {
-    for (int i = j; i < n_out; ++i) {
-      if (tr_vec[k]) {
-        out[k] = crossdist(Rcpp::as<Eigen::MatrixXd>(mat_list[i]),
-                           Rcpp::as<Eigen::MatrixXd>(mat_list[j]));
-      } else {
-        out[k] = aux_out;
-      }
-      k++;
-    }
-  }
-  return out;
-}
-
 //' @title Cross-distances for two lists of matrices (Eigen version)
+//' @rdname aux_mat
 //' @keywords internal
 // [[Rcpp::export]]
 Rcpp::List mult_dists(const Rcpp::List& mat_list1,
@@ -116,6 +103,7 @@ Rcpp::List mult_dists(const Rcpp::List& mat_list1,
 }
 
 //' @title Prediction cross-distances (Eigen version)
+//' @rdname aux_mat
 //' @keywords internal
 // [[Rcpp::export]]
 Rcpp::List pred_cdist(const Rcpp::List& mat_list,
