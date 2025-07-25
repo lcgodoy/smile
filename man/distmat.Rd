@@ -2,15 +2,15 @@
 % Please edit documentation in R/RcppExports.R
 \name{distmat}
 \alias{distmat}
-\title{Creating a distance matrix}
+\title{Creating a symmetric distance matrix (Eigen version)}
 \usage{
 distmat(my_mat)
 }
 \arguments{
-\item{my_mat}{a matrix representing a grid of points.}
+\item{my_mat}{A matrix where each row is a 2D coordinate.}
 }
 \description{
-Internal use. For now it only supports euclidean distance. (May
-import parallelDist in the future).
+Computes the Euclidean distance between all pairs of rows in a
+matrix.
 }
 \keyword{internal}

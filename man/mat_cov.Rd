@@ -2,9 +2,42 @@
 % Please edit documentation in R/RcppExports.R
 \name{mat_cov}
 \alias{mat_cov}
+\alias{comp_mat_cov}
+\alias{pexp_cov}
+\alias{comp_pexp_cov}
+\alias{gauss_cov}
+\alias{comp_gauss_cov}
+\alias{spher_cov}
+\alias{comp_spher_cov}
+\alias{cs_cov}
+\alias{comp_cs_cov}
+\alias{gw_cov}
+\alias{comp_gw_cov}
 \title{Matern covariance function for a given distance matrix.}
 \usage{
 mat_cov(dists, sigsq, phi, nu)
+
+comp_mat_cov(cross_dists, n, n2, sigsq, phi, nu)
+
+pexp_cov(dists, sigsq, phi, nu)
+
+comp_pexp_cov(cross_dists, n, n2, sigsq, phi, nu)
+
+gauss_cov(dists, sigsq, phi)
+
+comp_gauss_cov(cross_dists, n, n2, sigsq, phi)
+
+spher_cov(dists, sigsq, phi)
+
+comp_spher_cov(cross_dists, n, n2, sigsq, phi)
+
+cs_cov(dists, sigsq, phi)
+
+comp_cs_cov(cross_dists, n, n2, sigsq, phi)
+
+gw_cov(dists, sigsq, phi, kappa, mu)
+
+comp_gw_cov(cross_dists, n, n2, sigsq, phi, kappa, mu)
 }
 \arguments{
 \item{dists}{a numeric matrix representing the distance between spatial
@@ -18,17 +51,27 @@ controls the range of the spatial dependence.}
 
 \item{nu}{the \eqn{\nu} parameter from the Matern covariance function,
 controls the differentiability of the process.}
+
+\item{cross_dists}{a \code{list} such that each position contains the cross
+distances between points within different polygons.}
 }
 \value{
 The matern covariance function (for a stationary and isotropic
 process) associated with the provided distances (\code{dists}) and the
 given set of parameters.
+
+The matern covariance matrix associated with a set of polygons.
 }
 \description{
 Computing the Matern covariance function for a matrix of
 distances.
+
+Computing the Matern covariance function between polygons.
 }
 \seealso{
 \code{\link{single_exp}}, \code{\link{single_matern}}
+
+\code{\link{single_exp}}, \code{\link{single_matern}},
+\code{\link{mat_cov}}
 }
 \keyword{internal}

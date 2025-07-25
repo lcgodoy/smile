@@ -10,10 +10,9 @@
 ##'     each polygon. (Ordered by the id variables for the polygons).
 ##' @param model a \code{character} indicating which covariance function to
 ##'     use. Possible values are \code{c("matern", "pexp", "gaussian",
-##'     "spherical", "cs", "gw", "tapmat")}.
+##'     "spherical", "cs", "gw")}.
 ##' @param nu \eqn{\nu} parameter. Not necessary if \code{model} is
 ##'     \code{"gaussian"} or \code{"spherical"}
-##' @param tr \eqn{\theta_r} taper range.
 ##' @param kappa \eqn{\kappa \in \{0, \ldots, 3 \}} parameter for the GW cov
 ##'     function.
 ##' @param mu2 the smoothness parameter \eqn{\mu} for the GW function.
@@ -24,7 +23,7 @@
 ##' @return a scalar representing \code{-log.lik}.
 ##' @keywords internal
 singl_log_lik <- function(theta, .dt, dists, npix, model,
-                          nu = NULL, tr = NULL,
+                          nu = NULL,
                           kappa = 1, mu2 = 1.5,
                           apply_exp = FALSE) {
 
@@ -97,14 +96,6 @@ singl_log_lik <- function(theta, .dt, dists, npix, model,
                                         sigsq = 1,
                                         kappa = kappa,
                                         mu    = mu2)
-           },
-           "tapmat" = {
-               varcov_u1 <- comp_tapmat_cov(cross_dists = dists,
-                                            n = .n, n2 = .n,
-                                            phi = phi,
-                                            sigsq = 1,
-                                            nu = nu,
-                                            theta = tr)
            })
 
     varcov_y  <- varcov_u1 + diag(al / npix,
@@ -149,7 +140,6 @@ singl_log_lik <- function(theta, .dt, dists, npix, model,
 ##'     "spherical", "cs", "gw", "tapmat")}.
 ##' @param nu \eqn{\nu} parameter. Not necessary if \code{mode} is
 ##'     \code{"gaussian"} or \code{"spherical"}
-##' @param tr \eqn{\theta_r} taper range.
 ##' @param kappa \eqn{\kappa \in \{0, \ldots, 3 \}} parameter for the GW cov
 ##'     function.
 ##' @param mu2 the smoothness parameter \eqn{\mu} for the GW function.
@@ -160,7 +150,7 @@ singl_log_lik <- function(theta, .dt, dists, npix, model,
 ##' @return a scalar representing \code{-log.lik}.
 ##' @keywords internal
 singl_log_plik <- function(theta, .dt, dists, npix, model,
-                           nu = NULL, tr = NULL,
+                           nu = NULL,
                            kappa = 1, mu2 = 1.5,
                            apply_exp = FALSE) {
 
@@ -224,17 +214,6 @@ singl_log_plik <- function(theta, .dt, dists, npix, model,
                                mu    = mu2),
                    sparse = TRUE
                )
-           },
-           "tapmat" = {
-               varcov_u1 <- Matrix(
-                   comp_tapmat_cov(cross_dists = dists,
-                                   n = .n, n2 = .n,
-                                   phi = phi,
-                                   sigsq = 1,
-                                   nu = nu,
-                                   theta = tr),
-                   sparse = TRUE
-               )
            })
 
 
@@ -283,7 +262,7 @@ singl_log_plik <- function(theta, .dt, dists, npix, model,
 ##' @return a scalar representing \code{-log.lik}.
 ##' @keywords internal
 singl_log_lik_nn <- function(theta, .dt, dists, npix, model,
-                             nu = NULL, tr = NULL,
+                             nu = NULL,
                              kappa = 1, mu2 = 1.5,
                              apply_exp = FALSE) {
 
@@ -346,17 +325,6 @@ singl_log_lik_nn <- function(theta, .dt, dists, npix, model,
                                sigsq = 1,
                                kappa = kappa,
                                mu    = mu2),
-                   sparse = TRUE
-               )
-           },
-           "tapmat" = {
-               varcov_u1 <- Matrix(
-                   comp_tapmat_cov(cross_dists = dists,
-                                   n = .n, n2 = .n,
-                                   phi = phi,
-                                   sigsq = 1,
-                                   nu = nu,
-                                   theta = tr),
                    sparse = TRUE
                )
            })
@@ -488,7 +456,6 @@ singl_log_lik_nn <- function(theta, .dt, dists, npix, model,
 ##'     "spherical")}.
 ##' @param nu \eqn{\nu} parameter. Not necessary if \code{mode} is
 ##'     \code{"gaussian"} or \code{"spherical"}
-##' @param tr taper range
 ##' @param kappa \eqn{\kappa \in \{0, \ldots, 3 \}} parameter for the GW cov
 ##'     function.
 ##' @param mu2 the smoothness parameter \eqn{\mu} for the GW function.
@@ -499,7 +466,7 @@ singl_log_lik_nn <- function(theta, .dt, dists, npix, model,
 ##' @return a scalar representing \code{-log.lik}.
 ##' @keywords internal
 singl_ll_nn_hess <- function(theta, .dt, dists, npix, model,
-                             nu = NULL, tr = NULL,
+                             nu = NULL,
                              kappa = 1, mu2 = 1.5,
                              apply_exp = FALSE) {
     npar <- length(theta)
@@ -557,14 +524,6 @@ singl_ll_nn_hess <- function(theta, .dt, dists, npix, model,
                                         n = .n, n2 = .n,
                                         phi = phi,
                                         sigsq = sigsq)
-           },
-           "tapmat" = {
-               varcov_u1 <- comp_tapmat_cov(cross_dists = dists,
-                                            n = .n, n2 = .n,
-                                            phi = phi,
-                                            sigsq = sigsq,
-                                            nu = nu,
-                                            theta = tr)
            })
     log_lik_y <- mvtnorm::dmvnorm(x = matrix(.dt, nrow = 1),
                                   mean  = matrix(rep(mu, .n),

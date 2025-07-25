@@ -24,7 +24,7 @@ observations \code{d} apart of each other.
 }
 \description{
 Computing the Powered Exponential covariance function for a
-single distance measure.
+scalar distance.
 }
 \seealso{
 \code{\link{single_exp}}, \code{\link{single_matern}},

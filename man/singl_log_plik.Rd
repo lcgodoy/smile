@@ -11,7 +11,6 @@ singl_log_plik(
   npix,
   model,
   nu = NULL,
-  tr = NULL,
   kappa = 1,
   mu2 = 1.5,
   apply_exp = FALSE
@@ -38,8 +37,6 @@ use. Possible values are \code{c("matern", "pexp", "gaussian",
 
 \item{nu}{\eqn{\nu} parameter. Not necessary if \code{mode} is
 \code{"gaussian"} or \code{"spherical"}}
-
-\item{tr}{\eqn{\theta_r} taper range.}
 
 \item{kappa}{\eqn{\kappa \in \{0, \ldots, 3 \}} parameter for the GW cov
 function.}

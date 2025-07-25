@@ -13,7 +13,6 @@ fit_spm(x, ...)
   model,
   theta_st,
   nu = NULL,
-  tr = NULL,
   kappa = 1,
   mu2 = 1.5,
   apply_exp = FALSE,
@@ -27,7 +26,6 @@ fit_spm2(
   x,
   model,
   nu,
-  tr,
   kappa = 1,
   mu2 = 1.5,
   comp_hess = TRUE,
@@ -38,108 +36,104 @@ fit_spm2(
 )
 }
 \arguments{
-\item{x}{an object of type \code{spm}. Note that, the dimension of
-\code{theta_st} depends on the 2 factors. 1) the number of variables
-being analyzed, and 2) if the input is a \code{spm} object.}
+\item{x}{An object of type \code{spm}. The dimension of \code{theta_st}
+depends on the number of variables analyzed and whether the input is an
+\code{spm} object.}
 
-\item{...}{additional parameters, either passed to \link[stats:optim]{stats::optim}.}
+\item{...}{Additional parameters passed to \link[stats:optim]{stats::optim}.}
 
-\item{model}{a \code{character} scalar indicating the family of the
-covariance function to be used. The options are \code{c("matern",
-    "pexp", "gaussian", "spherical", "gw")}.}
+\item{model}{A \code{character} scalar indicating the covariance function
+family. Options are \code{c("matern", "pexp", "gaussian", "spherical",
+  "gw")}.}
 
-\item{theta_st}{a \code{numeric} (named) vector containing the initial
-parameters.}
+\item{theta_st}{A named \code{numeric} vector containing initial parameter
+values.}
 
-\item{nu}{a \code{numeric} value indicating either the \eqn{\nu}
-parameter from the Matern covariance function (controlling the process
-differentiability), or the "pexp" for the Powered Exponential family. If
-the \code{model} chosen by the user is Matern and \code{nu} is not
-informed, it is automatically set to .5. On the other hand, if the user
-chooses the Powered Exponential family and do not inform \code{nu},
-then it is set to 1. In both cases, the covariance function becomes the
-so called exponential covariance function.}
+\item{nu}{A \code{numeric} value specifying the \eqn{\nu} parameter for the
+Matern or Powered Exponential covariance functions. If \code{model} is
+"matern" and \code{nu} is not provided, it defaults to 0.5. If
+\code{model} is "pexp" and \code{nu} is not provided, it defaults to 1. In
+both cases, this results in the exponential covariance function.}
 
-\item{tr}{tapper range}
+\item{kappa}{\eqn{\kappa \in \{0, \ldots, 3 \}} parameter for the GW
+covariance function.}
 
-\item{kappa}{\eqn{\kappa \in \{0, \ldots, 3 \}} parameter for the GW cov
-function.}
+\item{mu2}{The smoothness parameter \eqn{\mu} for the GW function.}
 
-\item{mu2}{the smoothness parameter \eqn{\mu} for the GW function.}
+\item{apply_exp}{A \code{logical} scalar indicating whether to exponentiate
+non-negative parameters.}
 
-\item{apply_exp}{a \code{logical} scalar indicating whether the parameters
-that cannot assume negative values should be exponentiate or not.}
+\item{opt_method}{A \code{character} scalar specifying the optimization
+algorithm (see \link[stats:optim]{stats::optim}).}
 
-\item{opt_method}{a \code{character} scalar indicating the optimization
-algorithm to be used. For details, see \link[stats:optim]{stats::optim}.}
+\item{control_opt}{A named \code{list} of control arguments for the
+optimization algorithm (see \link[stats:optim]{stats::optim}).}
 
-\item{control_opt}{a named \code{list} containing the control arguments for
-the optimization algorithm to be used. For details, see \link[stats:optim]{stats::optim}.}
+\item{comp_hess}{A \code{logical} indicating whether to compute the Hessian
+matrix.}
 
-\item{comp_hess}{a \code{boolean} indicating whether the Hessian matrix
-should be computed.}
+\item{phi_min}{A \code{numeric} scalar representing the minimum \eqn{phi}
+value for grid search.}
 
-\item{phi_min}{a \code{numeric} scalar representing the minimum \eqn{phi}
-value to look for.}
+\item{phi_max}{A \code{numeric} scalar representing the maximum \eqn{phi}
+value for grid search.}
 
-\item{phi_max}{a \code{numeric} scalar representing the maximum \eqn{phi}
-value to look for.}
+\item{nphi}{A \code{numeric} scalar indicating the number of \eqn{phi}
+values for grid search.}
 
-\item{nphi}{a \code{numeric} scalar indicating the number of values to
-compute a grid-search over \eqn{phi}.}
-
-\item{cores}{a \code{integer} scalar indicating number of cores to be used. Default is getOption("mc.cores"). No effect on Windows.}
+\item{cores}{An \code{integer} scalar indicating the number of cores to use.
+Defaults to \code{getOption("mc.cores")}. No effect on Windows.}
 }
 \value{
-a \code{spm_fit} object containing the information about the
-estimation of the model parameters.
+An \code{spm_fit} object containing the estimated model parameters.
 }
 \description{
-Fitting an underlying continuous process to areal data
+This function fits a spatial process model to areal data by
+estimating the parameters of an underlying continuous process. It
+leverages the \link[stats:optim]{stats::optim} function for Maximum Likelihood estimation,
+providing flexibility in optimization algorithms and control parameters.
 }
 \details{
-This function uses the \link[stats:optim]{stats::optim} function optimization
-algorithms to find the Maximum Likelihood estimators, and their standard
-errors, from a model adapted from. The function allows the user to input
-the control parameters from the \link[stats:optim]{stats::optim} function through the argument
-\code{control_opt}, which is a named list. Additionally, the one can
-input lower and upper boundaries for the optimization problem, as well
-as the preferred optimization algorithm (as long as it is available for
-\link[stats:optim]{stats::optim}). The preferred algorithm is selected by the argument
-\code{opt_method}. In addition to the control of the optimization, the
-user can select a covariance function among the following: Matern,
-Exponential, Powered Exponential, Gaussian, and Spherical. The parameter
-\code{apply_exp} is a \code{logical} scalar such that, if set to
-\code{TRUE}, the \eqn{\exp} function is applied to the nonnegative
-parameters, allowing the optimization algorithm to search for all the
-parameters over the real numbers.
+The function utilizes optimization algorithms from \link[stats:optim]{stats::optim}
+to determine Maximum Likelihood estimators (MLEs) and their standard
+errors for a model adapted for areal data. Users can customize the
+optimization process by providing control parameters through the
+\code{control_opt} argument (a named list, see \link[stats:optim]{stats::optim} for details),
+specifying lower and upper bounds for parameters, and selecting the
+desired optimization algorithm via \code{opt_method} (must be available in
+\link[stats:optim]{stats::optim}).
 
-\if{html}{\out{<div class="sourceCode">}}\preformatted{The model assumes \deqn{Y(\mathbf{s}) = \mu + S(\mathbf{s})} at the
-point level.  Where \eqn{S ~ GP(0, \sigma^2 C(\lVert \mathbf{s} -
-    \mathbf{s}_2 \rVert; \theta))}.  Further, the observed data is supposed
-to be \eqn{Y(B) = \lvert B \rvert^{-1} \int_{B} Y(\mathbf{s}) \,
-    \textrm{d} \mathbf{s}}.
-}\if{html}{\out{</div>}}
+Additionally, the function supports various covariance functions,
+including Matern, Exponential, Powered Exponential, Gaussian, and
+Spherical. The \code{apply_exp} argument, a logical scalar, allows for
+exponentiation of non-negative parameters, enabling optimization over the
+entire real line.
+
+The underlying model assumes a point-level process:
+\deqn{Y(\mathbf{s}) = \mu + S(\mathbf{s})} where
+\eqn{S ~ GP(0, \sigma^2 C(\lVert \mathbf{s} - \mathbf{s}_2 \rVert; \theta))}.
+The observed areal data is then assumed to behave as the average of the process
+over each area:
+\deqn{Y(B) = \lvert B \rvert^{-1} \int_{B} Y(\mathbf{s}) \, \textrm{d} \mathbf{s}}.
 }
 \examples{
-
 data(liv_lsoa) ## loading the LSOA data
 
 msoa_spm <- sf_to_spm(sf_obj = liv_msoa, n_pts = 500,
-                      type = "regular", by_polygon = FALSE,
-                      poly_ids = "msoa11cd",
-                      var_ids = "leb_est")
+                     type = "regular", by_polygon = FALSE,
+                     poly_ids = "msoa11cd",
+                     var_ids = "leb_est")
 ## fitting model
 theta_st_msoa <- c("phi" = 1) # initial value for the range parameter
 
 fit_msoa <-
-   fit_spm(x = msoa_spm,
-           theta_st = theta_st_msoa,
-           model = "matern",
-           nu = .5,
-           apply_exp  = TRUE,
-           opt_method = "L-BFGS-B",
-           control    = list(maxit = 500))
+  fit_spm(x = msoa_spm,
+          theta_st = theta_st_msoa,
+          model = "matern",
+          nu = .5,
+          apply_exp  = TRUE,
+          opt_method = "L-BFGS-B",
+          control    = list(maxit = 500))
 
 AIC(fit_msoa)
 

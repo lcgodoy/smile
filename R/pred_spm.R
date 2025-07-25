@@ -164,38 +164,6 @@ predict_spm.spm_fit <- function(x, .aggregate = TRUE, ...) {
                           mu    = x$gw_pars[2]),
                    sparse = TRUE
                )
-           },
-           "tapmat" = {
-               sig_y <- Matrix(
-                   comp_tapmat_cov(x$call_data$dists, 
-                                   n = n_obs, n2 = n_obs,
-                                   phi   = x$estimate["phi"],
-                                   ## sigsq = x$estimate["sigsq"]
-                                   sigsq = 1,
-                                   nu = x$nu,
-                                   theta = x$taper_rg),
-                   sparse = TRUE
-               )
-               
-               d_mat <- Matrix(
-                   comp_tapmat_cov(cross_dists = u_res_pred,
-                                   n = n_obs, n2 = n_pred,
-                                   phi   = x$estimate["phi"],
-                                   sigsq = x$estimate["sigsq"],
-                                   nu = x$nu,
-                                   theta = x$taper_rg),
-                   sparse = TRUE
-               )
-               
-               sig_pred <- Matrix(
-                   tapmat_cov(dists = u_pred,
-                              phi   = x$estimate["phi"],
-                              ## sigsq = x$estimate["sigsq"]
-                              sigsq = 1,
-                              nu = x$nu,
-                              theta = x$taper_rg),
-                   sparse = TRUE
-               )
            })
 
     if(length(x$estimate) > 3) {
@@ -615,45 +583,6 @@ predict_spm.sf <- function(x, spm_obj,
                                    sigsq = 1,
                                    kappa = spm_obj$gw_pars[1],
                                    mu    = spm_obj$gw_pars[2]),
-                       sparse = TRUE
-                   )
-               }
-           },
-           "tapmat" = {
-               sig_y <- Matrix(
-                   comp_tapmat_cov(spm_obj$call_data$dists, 
-                                   n = n_obs, n2 = n_obs,
-                                   phi   = spm_obj$estimate["phi"],
-                                   sigsq = 1,
-                                   nu    = spm_obj$nu,
-                                   theta = spm_obj$taper_rg),
-                   sparse = TRUE
-               )
-               d_mat <- Matrix(
-                   comp_tapmat_cov(cross_dists = u_res_pred,
-                                   n = n_obs, n2 = n_pred,
-                                   phi   = spm_obj$estimate["phi"],
-                                   sigsq = spm_obj$estimate["sigsq"],
-                                   nu    = spm_obj$nu,
-                                   theta = spm_obj$taper_rg),
-                   sparse = TRUE
-               )
-               if(all(grepl("POINT", sf::st_geometry_type(x)))) {
-                   sig_pred <- Matrix(
-                       tapmat_cov(dists = u_pred,
-                                  phi   = spm_obj$estimate["phi"],
-                                  sigsq = 1,
-                                  nu = spm_obj$nu,
-                                  theta = spm_obj$taper_rg),
-                       sparse = TRUE
-                   )
-               } else {
-                   sig_pred <- Matrix(
-                       comp_tapmat_cov(cross_dists = u_pred,
-                                       phi   = spm_obj$estimate["phi"],
-                                       sigsq = 1,
-                                       nu = spm_obj$nu,
-                                       theta = spm_obj$taper_rg),
                        sparse = TRUE
                    )
                }

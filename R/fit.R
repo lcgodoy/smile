@@ -46,7 +46,6 @@ fit_spm <- function(x, ...) UseMethod("fit_spm")
 ##'   "matern" and \code{nu} is not provided, it defaults to 0.5. If
 ##'   \code{model} is "pexp" and \code{nu} is not provided, it defaults to 1. In
 ##'   both cases, this results in the exponential covariance function.
-##' @param tr Taper range.
 ##' @param kappa \eqn{\kappa \in \{0, \ldots, 3 \}} parameter for the GW
 ##'   covariance function.
 ##' @param mu2 The smoothness parameter \eqn{\mu} for the GW function.
@@ -98,7 +97,6 @@ fit_spm <- function(x, ...) UseMethod("fit_spm")
 ##' @export
 fit_spm.spm <- function(x, model, theta_st,
                         nu = NULL,
-                        tr = NULL,
                         kappa = 1, mu2 = 1.5,
                         apply_exp = FALSE,
                         opt_method  = "Nelder-Mead",
@@ -128,7 +126,6 @@ fit_spm.spm <- function(x, model, theta_st,
                    npix    = x$npix,
                    model   = model,
                    nu = nu,
-                   tr = tr,
                    kappa = kappa,
                    mu2 = mu2,
                    apply_exp = apply_exp,
@@ -145,7 +142,6 @@ fit_spm.spm <- function(x, model, theta_st,
                    npix    = x$npix,
                    model   = model,
                    nu = nu,
-                   tr = tr,
                    kappa = kappa,
                    mu2 = mu2,
                    apply_exp = apply_exp,
@@ -221,17 +217,6 @@ fit_spm.spm <- function(x, model, theta_st,
                            sigsq = 1),
                sparse = TRUE
            )
-         },
-         "tapmat" = {
-           V <- Matrix(
-               comp_tapmat_cov(x$dists,
-                               n = .n, n2 = .n,
-                               phi   = estimates["phi"],
-                               sigsq = 1,
-                               nu = nu,
-                               theta = tr),
-               sparse = TRUE
-           )
          })
 
   ones_n <- matrix(rep(1, .n), ncol = 1L)
@@ -254,7 +239,6 @@ fit_spm.spm <- function(x, model, theta_st,
                             npix = x$npix,
                             model = model,
                             nu = nu,
-                            tr = tr,
                             kappa = kappa,
                             mu2 = mu2,
                             apply_exp = FALSE)
@@ -278,7 +262,6 @@ fit_spm.spm <- function(x, model, theta_st,
                             npix = x$npix,
                             model = model,
                             nu = nu,
-                            tr = tr,
                             kappa = kappa,
                             mu2 = mu2,
                             apply_exp = FALSE)
@@ -299,7 +282,6 @@ fit_spm.spm <- function(x, model, theta_st,
       call_data = x,
       model     = model,
       nu        = nu,
-      taper_rg  = tr,
       gw_pars   = c(kappa, mu2)
   )
 
@@ -460,7 +442,6 @@ summary_spm_fit <- function(x, sig = .05) {
 ##' @name fit_spm
 ##' @export
 fit_spm2 <- function(x, model, nu,
-                     tr,
                      kappa = 1, mu2 = 1.5,
                      comp_hess = TRUE,
                      phi_min, phi_max, nphi = 10,
@@ -582,17 +563,6 @@ fit_spm2 <- function(x, model, nu,
                            sigsq = 1),
                sparse = TRUE
            )
-         },
-         "tapmat" = {
-           V <- Matrix(
-               comp_tapmat_cov(x$dists,
-                               n = .n, n2 = .n,
-                               phi   = phi_out,
-                               sigsq = 1,
-                               nu = nu,
-                               theta = tr),
-               sparse = TRUE
-           )
          })
   
   ones_n <- matrix(rep(1, .n), ncol = 1L)
@@ -614,7 +584,6 @@ fit_spm2 <- function(x, model, nu,
                           npix = x$npix,
                           model = model,
                           nu = nu,
-                          tr    = tr,
                           kappa = kappa,
                           mu2   = mu2,
                           apply_exp = FALSE)

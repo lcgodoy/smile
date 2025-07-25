@@ -21,8 +21,8 @@ a scalar representing the (gaussian) covariance between two
 observations \code{d} apart of each other.
 }
 \description{
-Computing the Spherical covariance function for a single
-distance measure.
+Computing the Spherical covariance function for a scalar
+distance.
 }
 \seealso{
 \code{\link{single_exp}}, \code{\link{single_matern}},

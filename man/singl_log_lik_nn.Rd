@@ -11,7 +11,6 @@ singl_log_lik_nn(
   npix,
   model,
   nu = NULL,
-  tr = NULL,
   kappa = 1,
   mu2 = 1.5,
   apply_exp = FALSE

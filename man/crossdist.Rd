@@ -2,16 +2,16 @@
 % Please edit documentation in R/RcppExports.R
 \name{crossdist}
 \alias{crossdist}
-\title{Pairwise distances between matrices}
+\title{Pairwise distances between two matrices (Eigen version)}
 \usage{
 crossdist(m1, m2)
 }
 \arguments{
-\item{m1}{a matrix representing a grid of points within a polygon.}
+\item{m1}{A matrix where each row is a 2D coordinate.}
 
-\item{m2}{a matrix representing a grid of points within a polygon.}
+\item{m2}{A matrix where each row is a 2D coordinate.}
 }
 \description{
-Internal use.
+Computes Euclidean distance between rows of m1 and rows of m2.
 }
 \keyword{internal}
