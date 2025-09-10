@@ -160,28 +160,3 @@ find_phi <- function(d, nu, kappa, mu2, family = "matern",
         - d / log(cut)
     }
 }
-
-##' @title Find phi parameter for the Exponential spatial auto-correlation
-##'     function
-##'
-##' @description Function designed to find the phi parameter such that the
-##'     correlation between points within a given distance \code{d} is at most a
-##'     given value.
-##'
-##' @param d maximum distance for spatial dependence equal to \code{cut}.
-##' @param nu smoothness parameter associated with the Matern cov. function.
-##' @param kappa one of the smoothness parameters associated with the Generalized
-##'     Wendland covariance function
-##' @param mu2 one of the smoothness parameters associated with the Generalized
-##'     Wendland covariance function
-##' @param range Minimum and maximum distance to be considered. The default is
-##'     \code{range = c(1e-04, 1000)}.
-##' @param family covariance function family, the options are \code{c("matern",
-##'     "gw", "cs", "spher", "pexp", "gaussian")}.
-##' @param cut desired spatial correlation at a distance \code{d}, the default is
-##'     \code{cut = .05}.
-##'
-##' @return a \code{numeric} value indicating the range parameter such that the
-##'     spatial correlation between two points at distance \code{d} is
-##'     \code{cut}.
-##' @export
