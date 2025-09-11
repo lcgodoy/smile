@@ -1,39 +1,11 @@
-# smile 1.0.1
+# smile 1.1.0
 
-* Added a `NEWS.md` file to track changes to the package.
-* Fixed Spherical covariance function.
-* Added Cubic spline covariance function.
+* Changed how likelihood calculations work (for increased performance)
 
-# smile 1.0.2
+* Transitioned from `RcppArmadillo` to `RcppEigen`
 
-* added Wendland (1) covariance function
-* added "tapered" Matern covariance function
-
-# smile 1.0.3
-
-* fixed Wendland (1) covariance function
-* support for sparse covariance matrices through the `Matrix` package
-
-# smile 1.0.3.1
-
-* bug fixes for prediction
-
-# smile 1.0.4
-
-* Generalized Wendland covariance function
-* More flexible prediction function
-
-# smile 1.0.4.1
-
-* Speeding up `sf_to_spm`.
-* Added icon
-* Improved documentation
-* Added examples
-
-# smile 1.0.4.2
-
-* New dataset included
-* Parallel version of `fit_spm2`
+* Function for empirical validation of the Powered Exponential Covariance
+  function
 
 # smile 1.0.5
 
@@ -43,6 +15,39 @@
 
 * Spatial areal interpolation vignette rewritten.
 
-# smile 1.1.0
+# smile 1.0.4.2
 
-* Changed how likelihood calculations work (for increased performance)
+* New dataset included
+* Parallel version of `fit_spm2`
+
+# smile 1.0.4.1
+
+* Speeding up `sf_to_spm`.
+* Added icon
+* Improved documentation
+* Added examples
+
+# smile 1.0.4
+
+* Generalized Wendland covariance function
+* More flexible prediction function
+
+# smile 1.0.3.1
+
+* bug fixes for prediction
+
+# smile 1.0.3
+
+* fixed Wendland (1) covariance function
+* support for sparse covariance matrices through the `Matrix` package
+
+# smile 1.0.2
+
+* added Wendland (1) covariance function
+* added "tapered" Matern covariance function
+
+# smile 1.0.1
+
+* Added a `NEWS.md` file to track changes to the package.
+* Fixed Spherical covariance function.
+* Added Cubic spline covariance function.

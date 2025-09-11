@@ -54,8 +54,6 @@ Eigen::MatrixXd crossdist(const Eigen::MatrixXd& m1,
 //' @param by internal use
 //' @param y_grid internal use
 //' @param x_grid internal use
-//' @param tr_vec index for distance truncation
-//' @param tr_inp truncation input
 //' @name aux_mat
 //' @keywords internal
 // [[Rcpp::export]]

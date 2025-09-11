@@ -295,25 +295,31 @@ crossdist <- function(m1, m2) {
     .Call(`_smile_crossdist`, m1, m2)
 }
 
-#' @title Pairwise distances for a list of matrices (Eigen version)
+#' @title Pairwise distances for a list of matrices (Internal use)
+#' @param mat_list internal use
+#' @param mat_list1 internal use
+#' @param mat_list2 internal use
+#' @param return_single internal use
+#' @param pred_mat internal use
+#' @param x_to_list internal use
+#' @param by internal use
+#' @param y_grid internal use
+#' @param x_grid internal use
+#' @name aux_mat
 #' @keywords internal
 single_dists <- function(mat_list) {
     .Call(`_smile_single_dists`, mat_list)
 }
 
-#' @title Truncated pairwise distances for a list of matrices (Eigen version)
-#' @keywords internal
-single_dists_tr <- function(mat_list, tr_vec, tr_inp) {
-    .Call(`_smile_single_dists_tr`, mat_list, tr_vec, tr_inp)
-}
-
 #' @title Cross-distances for two lists of matrices (Eigen version)
+#' @rdname aux_mat
 #' @keywords internal
 mult_dists <- function(mat_list1, mat_list2, return_single) {
     .Call(`_smile_mult_dists`, mat_list1, mat_list2, return_single)
 }
 
 #' @title Prediction cross-distances (Eigen version)
+#' @rdname aux_mat
 #' @keywords internal
 pred_cdist <- function(mat_list, pred_mat) {
     .Call(`_smile_pred_cdist`, mat_list, pred_mat)

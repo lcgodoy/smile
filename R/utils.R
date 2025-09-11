@@ -39,20 +39,6 @@ dist_from_grids <- function(y_grid,  by) {
 }
 
 ##' @name aux_mat
-dist_from_grids_tr <- function(y_grid, by, tr_vec, tr_inp) {
-    out_list <- split(x = sf::st_set_geometry(y_grid, NULL),
-                      f = factor(y_grid[[by]],
-                                 levels = unique(y_grid[[by]])))
-    return(
-        single_dists_tr(
-            lapply(out_list,
-                   function(x) as.matrix(x[ , c("x", "y")])),
-            tr_vec, tr_inp
-        )
-    )
-}
-
-##' @name aux_mat
 mult_dist_from_grids <- function(y_grid, x_grid, by) {
     y_list <- sf::st_coordinates(y_grid)
     
@@ -159,4 +145,75 @@ find_phi <- function(d, nu, kappa, mu2, family = "matern",
     } else {
         - d / log(cut)
     }
+}
+
+##' @title Calculate Smallest Eigenvalue for Power Exponential Correlation Matrices
+##'
+##' @description This function computes the smallest eigenvalue of a correlation
+##'   matrix derived from the power exponential correlation function. It
+##'   evaluates this across a grid of values for the power parameter (`nu`) and
+##'   the practical range parameter (`rho`), based on a provided distance
+##'   matrix.
+##'
+##' @details The practical range `rho` is defined here as the distance at which
+##'   the correlation is 0.1. The internal scale parameter `phi` is calculated
+##'   as `phi = rho / (log(10)^(1/nu))`. The power exponential correlation
+##'   function is assumed to be of the form C(h) = exp(-(h/phi)^nu), where h is
+##'   distance.  The function `smile:::pexp_cov` is used internally to compute
+##'   the covariance/correlation matrix with a sill of 1.
+##'
+##' @param range_nu A numeric vector of length 2, specifying the minimum and
+##'   maximum values for the power parameter `nu`. `nu` typically ranges between
+##'   0 and 2 (e.g., `nu = 1` for exponential, `nu = 2` for Gaussian).
+##' @param range_rho A numeric vector of length 2, specifying the minimum and
+##'   maximum values for the practical range parameter `rho`. `rho` must be
+##'   positive.
+##' @param grid_len An integer specifying the number of points to create for
+##'   both `nu` and `rho` sequences. The total number of grid combinations will
+##'   be `grid_len^2`. Default is 50.
+##' @param dmat A numeric matrix representing the distance matrix between
+##'   locations.  The distances should be non-negative.
+##'
+##' @return A [tibble][dplyr::tibble] with three columns:
+##'   \item{rho}{The practical range parameter value.}
+##'   \item{nu}{The power parameter value.}
+##'   \item{lambda}{The smallest eigenvalue of the power exponential correlation
+##'                 matrix corresponding to the `rho` and `nu` pair.}
+##'
+##' @details The function first creates a grid of `nu` and `rho` parameters. For
+##'   each pair of (`rho`, `nu`) in the grid: 1. It calculates the scale
+##'   parameter `phi` for the power exponential correlation function, where `phi
+##'   = rho / (log(10)^(1/nu))`. This definition implies that the correlation is
+##'   0.1 at the distance `rho`.  2. It computes the power exponential
+##'   correlation matrix using `smile:::pexp_cov(dists = dmat, sill = 1, range =
+##'   phi, smooth = nu)`.  Note the use of an internal function from the `smile`
+##'   package.  3. It calculates the eigenvalues of this correlation matrix.
+##'   4. The minimum eigenvalue is extracted.  The final output is a tibble
+##'   containing all parameter combinations and their corresponding minimum
+##'   eigenvalues.
+##'
+##' @export
+sev_pexp <- function(range_nu, range_rho,
+                     grid_len = 50,
+                     dmat) {
+  rhos <- seq(from = range_rho[1], range_rho[2],
+              length.out = grid_len)
+  nus  <- seq(from = range_nu[1], range_nu[2],
+              length.out = grid_len)
+  pars_mat <- expand.grid(rho = rhos, nu = nus)
+  min_lbd <-
+    sapply(seq_len(nrow(pars_mat)),
+           \(i, pmts, dst) {
+             phi <-
+               pmts$rho[i] /
+               (log(10) ^ (1 / pmts$nu[i]))
+             out <-
+               eigen(pexp_cov(dists = dst,
+                              1,
+                              phi,
+                              pmts$nu[i]))
+             min(out$values)
+           }, pmts = pars_mat,
+           dst = dmat)
+  transform(as.data.frame(pars_mat), lambda = min_lbd)
 }

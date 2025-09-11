@@ -23,8 +23,6 @@
 ##'     their row numbers.
 ##' @param var_ids a scalar or vector of type \code{character} indicating the
 ##'     (numerical) variables that are going to be analyzed.
-##' @param trunc_d truncation distance for grid points. Consider using half of
-##'     the maximum distance between polygons
 ##' @return a named \code{list} of size 6 belonging to the class
 ##'     \code{spm}. This list stores all the objects necessary to fit models
 ##'     using the \code{\link{fit_spm}}.
@@ -40,8 +38,7 @@ single_sf_to_spm <- function(sf_obj,
                              n_pts, type = "regular",
                              by_polygon = FALSE,
                              poly_ids = NULL,
-                             var_ids  = NULL,
-                             trunc_d  = NULL) {
+                             var_ids  = NULL) {
   stopifnot(inherits(sf_obj, "sf"))
   stopifnot(all(grepl("POLYGON", sf::st_geometry_type(sf_obj))))
   stopifnot(! is.null(var_ids))
@@ -108,17 +105,7 @@ single_sf_to_spm <- function(sf_obj,
                            x = sf::st_coordinates(out_grid_pt)[, 1],
                            y = sf::st_coordinates(out_grid_pt)[, 2])
 
-  if (is.null(trunc_d)) {
-    out_dists <- dist_from_grids(out_grid_pt, poly_ids)
-  } else {
-    aux_dist <-
-      sf::st_is_within_distance(sf::st_geometry(sf_obj),
-                                dist   = trunc_d,
-                                sparse = FALSE)
-    aux_lo <- aux_dist[lower.tri(aux_dist, diag = TRUE)]
-    out_dists <- dist_from_grids_tr(out_grid_pt, poly_ids,
-                                    aux_lo, trunc_d * 1.01)
-  }
+  out_dists <- dist_from_grids(out_grid_pt, poly_ids)
   if (length(var_ids) == 1) {
     out_var <- sf_obj[[var_ids]]
   } else {
