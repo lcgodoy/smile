@@ -1,3 +1,7 @@
+# smile 1.1.1
+
+* Function for empirical validation of the Matern Covariance function
+
 # smile 1.1.0
 
 * Changed how likelihood calculations work (for increased performance)

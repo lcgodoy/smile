@@ -147,7 +147,8 @@ find_phi <- function(d, nu, kappa, mu2, family = "matern",
     }
 }
 
-##' @title Calculate Smallest Eigenvalue for Power Exponential Correlation Matrices
+##' @title Calculate Smallest Eigenvalue for Matern and Power Exponential
+##'   Correlation Matrices
 ##'
 ##' @description This function computes the smallest eigenvalue of a correlation
 ##'   matrix derived from the power exponential correlation function. It
@@ -156,15 +157,10 @@ find_phi <- function(d, nu, kappa, mu2, family = "matern",
 ##'   matrix.
 ##'
 ##' @details The practical range `rho` is defined here as the distance at which
-##'   the correlation is 0.1. The internal scale parameter `phi` is calculated
-##'   as `phi = rho / (log(10)^(1/nu))`. The power exponential correlation
-##'   function is assumed to be of the form C(h) = exp(-(h/phi)^nu), where h is
-##'   distance.  The function `smile:::pexp_cov` is used internally to compute
-##'   the covariance/correlation matrix with a sill of 1.
+##'   the correlation is 0.1.
 ##'
-##' @param range_nu A numeric vector of length 2, specifying the minimum and
-##'   maximum values for the power parameter `nu`. `nu` typically ranges between
-##'   0 and 2 (e.g., `nu = 1` for exponential, `nu = 2` for Gaussian).
+##' @param range_nu A numeric vector of length 1 or 2 especifying the smoothness
+##'   parameter.
 ##' @param range_rho A numeric vector of length 2, specifying the minimum and
 ##'   maximum values for the practical range parameter `rho`. `rho` must be
 ##'   positive.
@@ -192,14 +188,15 @@ find_phi <- function(d, nu, kappa, mu2, family = "matern",
 ##'   containing all parameter combinations and their corresponding minimum
 ##'   eigenvalues.
 ##'
+##' @name sev
 ##' @export
 sev_pexp <- function(range_nu, range_rho,
                      grid_len = 50,
                      dmat) {
-  rhos <- seq(from = range_rho[1], range_rho[2],
-              length.out = grid_len)
-  nus  <- seq(from = range_nu[1], range_nu[2],
-              length.out = grid_len)
+  rhos <- unique(seq(from = range_rho[1], range_rho[2],
+                     length.out = grid_len))
+  nus  <- unique(seq(from = range_nu[1], range_nu[2],
+                     length.out = grid_len))
   pars_mat <- expand.grid(rho = rhos, nu = nus)
   min_lbd <-
     sapply(seq_len(nrow(pars_mat)),
@@ -212,6 +209,32 @@ sev_pexp <- function(range_nu, range_rho,
                               1,
                               phi,
                               pmts$nu[i]))
+             min(out$values)
+           }, pmts = pars_mat,
+           dst = dmat)
+  transform(as.data.frame(pars_mat), lambda = min_lbd)
+}
+
+##' @rdname sev
+##' @export
+sev_mat <- function(range_nu, range_rho,
+                    grid_len = 50,
+                    dmat) {
+  rhos <- unique(seq(from = range_rho[1], range_rho[2],
+                     length.out = grid_len))
+  nus  <- unique(seq(from = range_nu[1], range_nu[2],
+                     length.out = grid_len))
+  pars_mat <- expand.grid(rho = rhos, nu = nus)
+  min_lbd <-
+    sapply(seq_len(nrow(pars_mat)),
+           \(i, pmts, dst) {
+             phi <-
+               pmts$rho[i] / sqrt(8 * pmts$nu[i])
+             out <-
+               eigen(mat_cov(dists = dst,
+                             1,
+                             phi,
+                             pmts$nu[i]))
              min(out$values)
            }, pmts = pars_mat,
            dst = dmat)
