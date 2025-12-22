@@ -99,147 +99,42 @@ double single_pexp(double d, double sigsq, double phi, double nu) {
   return sigsq * exp(-pow(d / phi, nu));
 }
 
-//--- * Gaussian ----
-
-//' @rdname single-matern
-//' @keywords internal
-// [[Rcpp::export]]
-double single_gauss(double d, double sigsq, double phi) {
-  if (d <= 0) return sigsq;
-  const double d_phi = d / phi;
-  return sigsq * exp(-0.5 * d_phi * d_phi);
-}
-
-//--- * Spherical ----
-//' @title Spherical covariance function (scalar)
+//' @title Matern covariance function (scalar - generic)
 //'
-//' @description Computing the Spherical covariance function for a scalar
-//'   distance.
+//' @description Computing the Matern covariance function for a scalar distance,
+//'   adapted from \code{geoR}.
 //'
-//' @param d a scalar representing the distance on which it is desired to
-//'   evaluate the covariance function.
-//' @param sigsq the \eqn{\sigma^2} parameter from the Spherical covariance.
-//'   function.
-//' @param phi the \eqn{\phi} parameter from the Spherical covariance function,
-//'   controls the range of the spatial dependence.
-//'
-//' @return a scalar representing the (gaussian) covariance between two
-//'   observations \code{d} apart of each other.
+//' @details \code{single_matern3} and \code{single_matern5} are optimized for
+//'   when \eqn{\nu} is 1.5 or 2.5, respectively. Similarly, \code{single_exp}
+//'   and \code{single_gauss} represent the cases where \eqn{\nu = 0.5} or
+//'   \eqn{\nu \to \infty}. In other words, they are the exponential and
+//'   Gaussian covariance functions.
 //' 
-//' @seealso \code{\link{single_exp}}, \code{\link{single_matern}},
-//'   \code{\link{single_matern3}}, \code{\link{single_matern5}},
-//'   \code{\link{mat_cov}}
-//'
-//' @keywords internal
-// [[Rcpp::export]]
-double single_spher(double d, double sigsq, double phi) {
-  if (d >= phi) return 0.0;
-  if (d <= 0) return sigsq;
-  const double d_phi = d / phi;
-  return sigsq * (1.0 - 1.5 * d_phi + 0.5 * pow(d_phi, 3.0));
-}
-
-//--- * Cubic Spline ----
-//' @title Cubic spline covariance function (scalar)
-//'
-//' @description Computing the Spherical covariance function for a scalar
-//'   distance.
-//'
-//' @param d a scalar representing the distance on which it is desired to
-//'   evaluate the covariance function.
-//' @param sigsq the \eqn{\sigma^2} parameter from the Spherical covariance.
-//'   function.
-//' @param phi the \eqn{\phi} parameter from the Spherical covariance function,
-//'   controls the range of the spatial dependence.
-//'
-//' @return a scalar representing the (gaussian) covariance between two
-//'   observations \code{d} apart of each other.
-//' 
-//' @seealso \code{\link{single_exp}}, \code{\link{single_matern}},
-//'   \code{\link{single_matern3}}, \code{\link{single_matern5}},
-//'   \code{\link{mat_cov}}
-//'
-//' @keywords internal
-// [[Rcpp::export]]
-double single_cs(double d, double sigsq, double phi) {
-  const double d_phi = d / phi;
-  if (d_phi >= 1.0) return 0.0;
-  if (d_phi < 0.5) {
-    return sigsq * (1.0 - 6.0 * pow(d_phi, 2.0) + 6.0 * pow(d_phi, 3.0));
-  }
-  return sigsq * (2.0 * pow(1.0 - d_phi, 3.0));
-}
-
-//--- * Generalized Wendland (GW) Family ----
-//' @rdname gw
-// [[Rcpp::export]]
-double single_gw0(double d, double sigsq, double phi, double mu) {
-  const double aux = d / phi;
-  if (aux >= 1.0) return 0.0;
-  return sigsq * pow(1.0 - aux, mu + 0.5);
-}
-
-
-//' @rdname gw
-// [[Rcpp::export]]
-double single_gw1(double d, double sigsq, double phi, double mu) {
-  const double aux = d / phi;
-  if (aux >= 1.0) return 0.0;
-  const double beta = mu + 2.5;
-  return sigsq * (1.0 + beta * aux) * pow(1.0 - aux, beta);
-}
-
-//' @rdname gw
-// [[Rcpp::export]]
-double single_gw2(double d, double sigsq, double phi, double mu) {
-  const double aux = d / phi;
-  if (aux >= 1.0) return 0.0;
-  const double beta = mu + 4.5;
-  return sigsq * pow(1.0 - aux, beta) * (1.0 + beta * aux + ((beta * beta - 1.0) * aux * aux / 3.0));
-}
-
-//' @rdname gw
-// [[Rcpp::export]]
-double single_gw3(double d, double sigsq, double phi, double mu) {
-  const double aux = d / phi;
-  if (aux >= 1.0) return 0.0;
-  const double beta = mu + 6.5;
-  return sigsq * pow(1.0 - aux, beta) *
-    (1.0 + beta * aux + ((2.0 * beta * beta - 3.0) * aux * aux * 0.2) +
-     ((beta * beta - 4.0) * beta * aux * aux * aux / 15.0));
-}
-
-//' @title Matern Generalized Wendland (GW) covariance function
-//'   (scalar - generic)
-//'
-//' @description adapted from Bevilacqua et al. 2019.
-//'
 //' @param d a scalar representing the distance on which it is desired to
 //'   evaluate the covariance function.
 //' @param sigsq the \eqn{\sigma^2} parameter from the Matern covariance
 //'   function.
 //' @param phi the \eqn{\phi} parameter from the Matern covariance function,
 //'   controls the range of the spatial dependence.
-//' @param kappa \eqn{\kappa \in \{0, \ldots, 3 \}}.
-//' @param mu a parameter that controls the smoothness of the covariance
-//'   function. Note that, \eqn{\mu \geq 1}.
+//' @param nu the \eqn{\nu} parameter from the Matern covariance function,
+//'   controls the differentiability of the process.
+//' @name single-matern
 //' 
-//' @return a scalar representing the GW covariance between two
+//' @return a scalar representing the (matern) covariance between two
 //'   observations \code{d} apart of each other.
-//'
-//' @name gw
+//' 
+//' @seealso \code{\link{single_matern3}}, \code{\link{single_matern5}}
+//'   \code{\link{single_exp}}, \code{\link{mat_cov}}
 //' 
 //' @keywords internal
 // [[Rcpp::export]]
-double single_gw(double d, double sigsq, double phi, int kappa, double mu) {
-  switch (kappa) {
-  case 0:  return single_gw0(d, sigsq, phi, mu);
-  case 1:  return single_gw1(d, sigsq, phi, mu);
-  case 2:  return single_gw2(d, sigsq, phi, mu);
-  case 3:  return single_gw3(d, sigsq, phi, mu);
-  default: Rcpp::stop("kappa must be 0, 1, 2, or 3");
-  }
+double single_dagum(double d, double sigsq, double phi, double nu) {
+  if (d <= 0) return sigsq;
+  const double d_phi = d / phi;
+  return sigsq * (pow(2.0, 1.0 - nu) / ::tgamma(nu)) * pow(d_phi, nu) *
+    Rf_bessel_k(d_phi, nu, 1.0);
 }
+
 
 //--- Internal generic functions ----
 
@@ -371,97 +266,5 @@ Eigen::MatrixXd comp_pexp_cov(const Rcpp::List& cross_dists,
                               double phi,
                               double nu) {
   auto kernel = [=](double d) { return single_pexp(d, sigsq, phi, nu); };
-  return comp_cov_generic(cross_dists, n, n2, kernel);
-}
-
-//' @title Gaussian Covariance
-//' @rdname mat_cov
-// [[Rcpp::export]]
-Eigen::MatrixXd gauss_cov(const Eigen::MatrixXd& dists,
-                          double sigsq,
-                          double phi) {
-  auto kernel = [=](double d) { return single_gauss(d, sigsq, phi); };
-  return generic_cov_matrix(dists, kernel);
-}
-
-//' @title Gaussian Covariance for polygons
-//' @rdname mat_cov
-// [[Rcpp::export]]
-Eigen::MatrixXd comp_gauss_cov(const Rcpp::List& cross_dists,
-                               int n,
-                               int n2,
-                               double sigsq,
-                               double phi) {
-  auto kernel = [=](double d) { return single_gauss(d, sigsq, phi); };
-  return comp_cov_generic(cross_dists, n, n2, kernel);
-}
-
-//' @title Spherical Covariance
-//' @rdname mat_cov
-// [[Rcpp::export]]
-Eigen::MatrixXd spher_cov(const Eigen::MatrixXd& dists,
-                          double sigsq,
-                          double phi) {
-  auto kernel = [=](double d) { return single_spher(d, sigsq, phi); };
-  return generic_cov_matrix(dists, kernel);
-}
-
-//' @title Spherical Covariance for polygons
-//' @rdname mat_cov
-// [[Rcpp::export]]
-Eigen::MatrixXd comp_spher_cov(const Rcpp::List& cross_dists,
-                               int n,
-                               int n2,
-                               double sigsq,
-                               double phi) {
-  auto kernel = [=](double d) { return single_spher(d, sigsq, phi); };
-  return comp_cov_generic(cross_dists, n, n2, kernel);
-}
-
-//' @title Cubic Spline Covariance
-//' @rdname mat_cov
-// [[Rcpp::export]]
-Eigen::MatrixXd cs_cov(const Eigen::MatrixXd& dists,
-                       double sigsq,
-                       double phi) {
-  auto kernel = [=](double d) { return single_cs(d, sigsq, phi); };
-  return generic_cov_matrix(dists, kernel);
-}
-
-//' @title Cubic Spline Covariance for polygons
-//' @rdname mat_cov
-// [[Rcpp::export]]
-Eigen::MatrixXd comp_cs_cov(const Rcpp::List& cross_dists,
-                            int n,
-                            int n2,
-                            double sigsq,
-                            double phi) {
-  auto kernel = [=](double d) { return single_cs(d, sigsq, phi); };
-  return comp_cov_generic(cross_dists, n, n2, kernel);
-}
-
-//' @title Generalized Wendland Covariance
-//' @rdname mat_cov
-// [[Rcpp::export]]
-Eigen::MatrixXd gw_cov(const Eigen::MatrixXd& dists,
-                       double sigsq,
-                       double phi,
-                       int kappa,
-                       double mu) {
-  auto kernel = [=](double d) { return single_gw(d, sigsq, phi, kappa, mu); };
-  return generic_cov_matrix(dists, kernel);
-}
-
-//' @title Generalized Wendland Covariance for polygons
-//' @rdname mat_cov
-// [[Rcpp::export]]
-Eigen::MatrixXd comp_gw_cov(const Rcpp::List& cross_dists,
-                            int n,
-                            int n2,
-                            double sigsq,
-                            double phi,
-                            int kappa,
-                            double mu) {
-  auto kernel = [=](double d) { return single_gw(d, sigsq, phi, kappa, mu); };
   return comp_cov_generic(cross_dists, n, n2, kernel);
 }

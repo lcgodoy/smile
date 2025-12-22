@@ -21,56 +21,36 @@ implemented in this package. Note that, all of them are based on the assumptions
 of stationarity and isotropy of the underlying Gaussian random field
 (GRF). Also, the implementations (and definitions) are based on the families of
 spatial _correlation_ functions presented in @diggle2007model. The
-implementations make use of the `RcppArmadillo` [@eddelbuettel2014rcpparmadillo]
-package and the STL library algorithms (C++ 11)^[for this problem, the
-implementation using the sequential algorithms of the STL library was more
-efficient than those using the `RcppParallel` package].
+implementations make use of the `RcppEigen` package and the STL library
+algorithms (C++ 11)^[for this problem, the implementation using the sequential
+algorithms of the STL library was more efficient than those using the
+`RcppParallel` package].
+
 
 The first spatial covariance family implemented is the so-called Matérn
 Covariance function, which is defined as
 \[
-\mathrm{ C}(h; \sigma^2, \phi, \kappa) = \sigma^2 \frac{(h / \phi)^{\kappa}
-K_{\kappa}( h / \phi )} { 2^{\kappa - 1} \Gamma(\kappa) }.
+\mathrm{ C}(h; \sigma^2, \phi, \nu) = \sigma^2 \frac{(h / \phi)^{\nu}
+K_{\nu}( h / \phi )} { 2^{\nu - 1} \Gamma(\nu) }.
 \]
 Where $h$ is the distance between two points, $\sigma^2$ is a variance
 parameter, $\phi$ is the scale parameter that controls the reach of the spatial
-dependence, and $\kappa$ is a shape parameter that controls the smoothness of
-the process. The function $K_{\kappa}(\cdot)$ is the $\kappa$-order Modified
+dependence, and $\nu$ is a shape parameter that controls the smoothness of
+the process. The function $K_{\nu}(\cdot)$ is the $\nu$-order Modified
 Bessel function of Second-Kind. There are special cases of the Matérn family
-implemented on the package, when setting $\kappa$ to $1/2$, $3/2$, $5/2$, or
+implemented on the package, when setting $\nu$ to $1/2$, $3/2$, $5/2$, or
 $\to \infty$ the expression simplifies. The first and the last cases yield to
 the Exponential and Gaussian family, respectively.
+
 
 The second spatial covariance family implemented is the Powered Exponential
 Covariance function, it is defined as
 \[
-\mathrm{ C}(h; \sigma^2, \phi, \kappa) = \sigma^2 \exp \{ - (h / \phi)^{\kappa} \},
+\mathrm{ C}(h; \sigma^2, \phi, \nu) = \sigma^2 \exp \{ - (h / \phi)^{\nu} \},
 \]
-where $h$ is the distance between two points, $\sigma^2$, $\phi$, and $\kappa$
+where $h$ is the distance between two points, $\sigma^2$, $\phi$, and $\nu$
 analogous to the Matérn function.
 
-The penultimate option is the Gaussian family of covariance functions. The
-expression associated with this family is written as
-\[
-\mathrm{ C}(h; \sigma^2, \phi) = \sigma^2 \exp \left\{ - \frac{h ^ 2}{2 \phi ^ 2} \right\},
-\]
-again, the parameters are analogous to what have defined before in this
-vignette.
 
-Lastly, we have implemented the Spherical family of covariance functions,
-defined as
-\[
-\mathrm{ C}(h; \sigma^2, \phi) = 
-\sigma^2 
-\begin{cases}
-1 - \frac{3}{2} (h / \phi) + \frac{1}{2} (h / \phi) ^ 3 & , \,
-0 \leq h \leq \phi \\
-0 & , \, h > \phi,
-\end{cases}
-\]
-where, again, $\sigma^2$ is a variance parameter, while $\phi > 0$ is a
-parameter with the same magnitude as the distances on which the function is
-being evaluated at and controls the speed of decay of the spatial covariances as
-we increase the distance between two points.
 
 # Reference

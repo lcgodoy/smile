@@ -4,17 +4,7 @@
 \alias{singl_log_lik_nn}
 \title{Evaluate log-lik}
 \usage{
-singl_log_lik_nn(
-  theta,
-  .dt,
-  dists,
-  npix,
-  model,
-  nu = NULL,
-  kappa = 1,
-  mu2 = 1.5,
-  apply_exp = FALSE
-)
+singl_log_lik_nn(theta, .dt, dists, npix, model, nu = NULL, apply_exp = FALSE)
 }
 \arguments{
 \item{theta}{a scalar for the \eqn{\phi} parameter.}
@@ -35,11 +25,6 @@ use. Possible values are \code{c("matern", "pexp", "gaussian",
 
 \item{nu}{\eqn{\nu} parameter. Not necessary if \code{mode} is
 \code{"gaussian"} or \code{"spherical"}}
-
-\item{kappa}{\eqn{\kappa \in \{0, \ldots, 3 \}} parameter for the GW cov
-function.}
-
-\item{mu2}{the smoothness parameter \eqn{\mu} for the GW function.}
 
 \item{apply_exp}{a \code{logical} indicating whether the exponential
 transformation should be applied to variance parameters. This

@@ -5,35 +5,21 @@
 \title{Find phi parameter for the Exponential spatial auto-correlation
 function}
 \usage{
-find_phi(
-  d,
-  nu,
-  kappa,
-  mu2,
-  family = "matern",
-  range = c(1e-04, 1000),
-  cut = 0.05
-)
+find_phi(d, nu, family = "matern", range = c(1e-04, 1000), cut = 0.05)
 }
 \arguments{
 \item{d}{maximum distance for spatial dependence equal to \code{cut}.}
 
 \item{nu}{smoothness parameter associated with the Matern cov. function.}
 
-\item{kappa}{one of the smoothness parameters associated with the Generalized
-Wendland covariance function}
-
-\item{mu2}{one of the smoothness parameters associated with the Generalized
-Wendland covariance function}
-
 \item{family}{covariance function family, the options are \code{c("matern",
-"gw", "cs", "spher", "pexp", "gaussian")}.}
+"pexp")}.}
 
 \item{range}{Minimum and maximum distance to be considered. The default is
 \code{range = c(1e-04, 1000)}.}
 
-\item{cut}{desired spatial correlation at a distance \code{d}, the default is
-\code{cut = .05}.}
+\item{cut}{desired spatial correlation at a distance \code{d}, the default
+is \code{cut = .05}.}
 }
 \value{
 a \code{numeric} value indicating the range parameter such that the

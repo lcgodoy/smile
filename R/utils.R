@@ -105,46 +105,29 @@ st_remove_holes <- function(x) {
 ##'
 ##' @param d maximum distance for spatial dependence equal to \code{cut}.
 ##' @param nu smoothness parameter associated with the Matern cov. function.
-##' @param kappa one of the smoothness parameters associated with the Generalized
-##'     Wendland covariance function
-##' @param mu2 one of the smoothness parameters associated with the Generalized
-##'     Wendland covariance function
 ##' @param range Minimum and maximum distance to be considered. The default is
-##'     \code{range = c(1e-04, 1000)}.
+##'   \code{range = c(1e-04, 1000)}.
 ##' @param family covariance function family, the options are \code{c("matern",
-##'     "gw", "cs", "spher", "pexp", "gaussian")}.
-##' @param cut desired spatial correlation at a distance \code{d}, the default is
-##'     \code{cut = .05}.
+##'   "pexp")}.
+##' @param cut desired spatial correlation at a distance \code{d}, the default
+##'   is \code{cut = .05}.
 ##'
 ##' @return a \code{numeric} value indicating the range parameter such that the
 ##'     spatial correlation between two points at distance \code{d} is
 ##'     \code{cut}.
 ##' @export
-find_phi <- function(d, nu, kappa, mu2, family = "matern",
+find_phi <- function(d, nu, family = "matern",
                      range = c(1e-04, 1000), cut = 0.05) {
-    if(family %in% c("matern", "gw", "cs",
-                     "spher", "pexp",
-                     "gaussian")) {
-        out <- stats::uniroot(f = function(x, d, nu, cut) {
-            if(family == "matern") {
-                out <- single_matern(d, 1, x, nu)
-            } else if(family == "gw") {
-                out <- single_gw(d, 1, x, kappa, mu2)
-            } else if(family == "cs") {
-                out <- single_cs(d, 1, x)
-            } else if(family == "pexp") {
-                out <- single_pexp(d, 1, x, nu)
-            } else if(family == "gaussian") {
-                out <- single_gauss(d, 1, x)
-            } else {
-                out <- single_spher(d, 1, x)
-            }
-            out - cut
-        }, interval = range, d = d, nu = nu, cut = cut)
-        out$root
-    } else {
-        - d / log(cut)
-    }
+  stopifnot(family %in% c("matern", "pexp"))
+  if (family == "matern") {
+    out <- stats::uniroot(f = function(x, d, nu, cut) {
+      out <- single_matern(d, 1, x, nu)
+      out - cut
+    }, interval = range, d = d, nu = nu, cut = cut)
+    out$root
+  } else {
+    - d / (log(cut)^(1 / nu))
+  }
 }
 
 ##' @title Calculate Smallest Eigenvalue for Matern and Power Exponential

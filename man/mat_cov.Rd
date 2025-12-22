@@ -5,14 +5,6 @@
 \alias{comp_mat_cov}
 \alias{pexp_cov}
 \alias{comp_pexp_cov}
-\alias{gauss_cov}
-\alias{comp_gauss_cov}
-\alias{spher_cov}
-\alias{comp_spher_cov}
-\alias{cs_cov}
-\alias{comp_cs_cov}
-\alias{gw_cov}
-\alias{comp_gw_cov}
 \title{Matern covariance function for a given distance matrix.}
 \usage{
 mat_cov(dists, sigsq, phi, nu)
@@ -22,22 +14,6 @@ comp_mat_cov(cross_dists, n, n2, sigsq, phi, nu)
 pexp_cov(dists, sigsq, phi, nu)
 
 comp_pexp_cov(cross_dists, n, n2, sigsq, phi, nu)
-
-gauss_cov(dists, sigsq, phi)
-
-comp_gauss_cov(cross_dists, n, n2, sigsq, phi)
-
-spher_cov(dists, sigsq, phi)
-
-comp_spher_cov(cross_dists, n, n2, sigsq, phi)
-
-cs_cov(dists, sigsq, phi)
-
-comp_cs_cov(cross_dists, n, n2, sigsq, phi)
-
-gw_cov(dists, sigsq, phi, kappa, mu)
-
-comp_gw_cov(cross_dists, n, n2, sigsq, phi, kappa, mu)
 }
 \arguments{
 \item{dists}{a numeric matrix representing the distance between spatial

@@ -76,103 +76,36 @@ single_pexp <- function(d, sigsq, phi, nu) {
     .Call(`_smile_single_pexp`, d, sigsq, phi, nu)
 }
 
-#' @rdname single-matern
-#' @keywords internal
-single_gauss <- function(d, sigsq, phi) {
-    .Call(`_smile_single_gauss`, d, sigsq, phi)
-}
-
-#' @title Spherical covariance function (scalar)
+#' @title Matern covariance function (scalar - generic)
 #'
-#' @description Computing the Spherical covariance function for a scalar
-#'   distance.
+#' @description Computing the Matern covariance function for a scalar distance,
+#'   adapted from \code{geoR}.
 #'
-#' @param d a scalar representing the distance on which it is desired to
-#'   evaluate the covariance function.
-#' @param sigsq the \eqn{\sigma^2} parameter from the Spherical covariance.
-#'   function.
-#' @param phi the \eqn{\phi} parameter from the Spherical covariance function,
-#'   controls the range of the spatial dependence.
-#'
-#' @return a scalar representing the (gaussian) covariance between two
-#'   observations \code{d} apart of each other.
+#' @details \code{single_matern3} and \code{single_matern5} are optimized for
+#'   when \eqn{\nu} is 1.5 or 2.5, respectively. Similarly, \code{single_exp}
+#'   and \code{single_gauss} represent the cases where \eqn{\nu = 0.5} or
+#'   \eqn{\nu \to \infty}. In other words, they are the exponential and
+#'   Gaussian covariance functions.
 #' 
-#' @seealso \code{\link{single_exp}}, \code{\link{single_matern}},
-#'   \code{\link{single_matern3}}, \code{\link{single_matern5}},
-#'   \code{\link{mat_cov}}
-#'
-#' @keywords internal
-single_spher <- function(d, sigsq, phi) {
-    .Call(`_smile_single_spher`, d, sigsq, phi)
-}
-
-#' @title Cubic spline covariance function (scalar)
-#'
-#' @description Computing the Spherical covariance function for a scalar
-#'   distance.
-#'
-#' @param d a scalar representing the distance on which it is desired to
-#'   evaluate the covariance function.
-#' @param sigsq the \eqn{\sigma^2} parameter from the Spherical covariance.
-#'   function.
-#' @param phi the \eqn{\phi} parameter from the Spherical covariance function,
-#'   controls the range of the spatial dependence.
-#'
-#' @return a scalar representing the (gaussian) covariance between two
-#'   observations \code{d} apart of each other.
-#' 
-#' @seealso \code{\link{single_exp}}, \code{\link{single_matern}},
-#'   \code{\link{single_matern3}}, \code{\link{single_matern5}},
-#'   \code{\link{mat_cov}}
-#'
-#' @keywords internal
-single_cs <- function(d, sigsq, phi) {
-    .Call(`_smile_single_cs`, d, sigsq, phi)
-}
-
-#' @rdname gw
-single_gw0 <- function(d, sigsq, phi, mu) {
-    .Call(`_smile_single_gw0`, d, sigsq, phi, mu)
-}
-
-#' @rdname gw
-single_gw1 <- function(d, sigsq, phi, mu) {
-    .Call(`_smile_single_gw1`, d, sigsq, phi, mu)
-}
-
-#' @rdname gw
-single_gw2 <- function(d, sigsq, phi, mu) {
-    .Call(`_smile_single_gw2`, d, sigsq, phi, mu)
-}
-
-#' @rdname gw
-single_gw3 <- function(d, sigsq, phi, mu) {
-    .Call(`_smile_single_gw3`, d, sigsq, phi, mu)
-}
-
-#' @title Matern Generalized Wendland (GW) covariance function
-#'   (scalar - generic)
-#'
-#' @description adapted from Bevilacqua et al. 2019.
-#'
 #' @param d a scalar representing the distance on which it is desired to
 #'   evaluate the covariance function.
 #' @param sigsq the \eqn{\sigma^2} parameter from the Matern covariance
 #'   function.
 #' @param phi the \eqn{\phi} parameter from the Matern covariance function,
 #'   controls the range of the spatial dependence.
-#' @param kappa \eqn{\kappa \in \{0, \ldots, 3 \}}.
-#' @param mu a parameter that controls the smoothness of the covariance
-#'   function. Note that, \eqn{\mu \geq 1}.
+#' @param nu the \eqn{\nu} parameter from the Matern covariance function,
+#'   controls the differentiability of the process.
+#' @name single-matern
 #' 
-#' @return a scalar representing the GW covariance between two
+#' @return a scalar representing the (matern) covariance between two
 #'   observations \code{d} apart of each other.
-#'
-#' @name gw
+#' 
+#' @seealso \code{\link{single_matern3}}, \code{\link{single_matern5}}
+#'   \code{\link{single_exp}}, \code{\link{mat_cov}}
 #' 
 #' @keywords internal
-single_gw <- function(d, sigsq, phi, kappa, mu) {
-    .Call(`_smile_single_gw`, d, sigsq, phi, kappa, mu)
+single_dagum <- function(d, sigsq, phi, nu) {
+    .Call(`_smile_single_dagum`, d, sigsq, phi, nu)
 }
 
 #' @title Matern covariance function for a given distance matrix.
@@ -227,54 +160,6 @@ pexp_cov <- function(dists, sigsq, phi, nu) {
 #' @rdname mat_cov
 comp_pexp_cov <- function(cross_dists, n, n2, sigsq, phi, nu) {
     .Call(`_smile_comp_pexp_cov`, cross_dists, n, n2, sigsq, phi, nu)
-}
-
-#' @title Gaussian Covariance
-#' @rdname mat_cov
-gauss_cov <- function(dists, sigsq, phi) {
-    .Call(`_smile_gauss_cov`, dists, sigsq, phi)
-}
-
-#' @title Gaussian Covariance for polygons
-#' @rdname mat_cov
-comp_gauss_cov <- function(cross_dists, n, n2, sigsq, phi) {
-    .Call(`_smile_comp_gauss_cov`, cross_dists, n, n2, sigsq, phi)
-}
-
-#' @title Spherical Covariance
-#' @rdname mat_cov
-spher_cov <- function(dists, sigsq, phi) {
-    .Call(`_smile_spher_cov`, dists, sigsq, phi)
-}
-
-#' @title Spherical Covariance for polygons
-#' @rdname mat_cov
-comp_spher_cov <- function(cross_dists, n, n2, sigsq, phi) {
-    .Call(`_smile_comp_spher_cov`, cross_dists, n, n2, sigsq, phi)
-}
-
-#' @title Cubic Spline Covariance
-#' @rdname mat_cov
-cs_cov <- function(dists, sigsq, phi) {
-    .Call(`_smile_cs_cov`, dists, sigsq, phi)
-}
-
-#' @title Cubic Spline Covariance for polygons
-#' @rdname mat_cov
-comp_cs_cov <- function(cross_dists, n, n2, sigsq, phi) {
-    .Call(`_smile_comp_cs_cov`, cross_dists, n, n2, sigsq, phi)
-}
-
-#' @title Generalized Wendland Covariance
-#' @rdname mat_cov
-gw_cov <- function(dists, sigsq, phi, kappa, mu) {
-    .Call(`_smile_gw_cov`, dists, sigsq, phi, kappa, mu)
-}
-
-#' @title Generalized Wendland Covariance for polygons
-#' @rdname mat_cov
-comp_gw_cov <- function(cross_dists, n, n2, sigsq, phi, kappa, mu) {
-    .Call(`_smile_comp_gw_cov`, cross_dists, n, n2, sigsq, phi, kappa, mu)
 }
 
 #' @title Creating a symmetric distance matrix (Eigen version)

@@ -6,7 +6,7 @@
 \alias{single_matern5}
 \alias{single-matern}
 \alias{single_matern}
-\alias{single_gauss}
+\alias{single_dagum}
 \title{Matern covariance function (scalar - generic)}
 \usage{
 single_exp(d, sigsq, phi)
@@ -17,7 +17,7 @@ single_matern5(d, sigsq, phi)
 
 single_matern(d, sigsq, phi, nu)
 
-single_gauss(d, sigsq, phi)
+single_dagum(d, sigsq, phi, nu)
 }
 \arguments{
 \item{d}{a scalar representing the distance on which it is desired to
@@ -35,8 +35,14 @@ controls the differentiability of the process.}
 \value{
 a scalar representing the (matern) covariance between two
 observations \code{d} apart of each other.
+
+a scalar representing the (matern) covariance between two
+observations \code{d} apart of each other.
 }
 \description{
+Computing the Matern covariance function for a scalar distance,
+adapted from \code{geoR}.
+
 Computing the Matern covariance function for a scalar distance,
 adapted from \code{geoR}.
 }
@@ -46,8 +52,17 @@ when \eqn{\nu} is 1.5 or 2.5, respectively. Similarly, \code{single_exp}
 and \code{single_gauss} represent the cases where \eqn{\nu = 0.5} or
 \eqn{\nu \to \infty}. In other words, they are the exponential and
 Gaussian covariance functions.
+
+\code{single_matern3} and \code{single_matern5} are optimized for
+when \eqn{\nu} is 1.5 or 2.5, respectively. Similarly, \code{single_exp}
+and \code{single_gauss} represent the cases where \eqn{\nu = 0.5} or
+\eqn{\nu \to \infty}. In other words, they are the exponential and
+Gaussian covariance functions.
 }
 \seealso{
+\code{\link{single_matern3}}, \code{\link{single_matern5}}
+\code{\link{single_exp}}, \code{\link{mat_cov}}
+
 \code{\link{single_matern3}}, \code{\link{single_matern5}}
 \code{\link{single_exp}}, \code{\link{mat_cov}}
 }

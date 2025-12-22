@@ -13,8 +13,6 @@ fit_spm(x, ...)
   model,
   theta_st,
   nu = NULL,
-  kappa = 1,
-  mu2 = 1.5,
   apply_exp = FALSE,
   opt_method = "Nelder-Mead",
   control_opt = list(),
@@ -26,8 +24,6 @@ fit_spm2(
   x,
   model,
   nu,
-  kappa = 1,
-  mu2 = 1.5,
   comp_hess = TRUE,
   phi_min,
   phi_max,
@@ -43,8 +39,7 @@ depends on the number of variables analyzed and whether the input is an
 \item{...}{Additional parameters passed to \link[stats:optim]{stats::optim}.}
 
 \item{model}{A \code{character} scalar indicating the covariance function
-family. Options are \code{c("matern", "pexp", "gaussian", "spherical",
-  "gw")}.}
+family. Options are \code{c("matern", "pexp")}.}
 
 \item{theta_st}{A named \code{numeric} vector containing initial parameter
 values.}
@@ -54,11 +49,6 @@ Matern or Powered Exponential covariance functions. If \code{model} is
 "matern" and \code{nu} is not provided, it defaults to 0.5. If
 \code{model} is "pexp" and \code{nu} is not provided, it defaults to 1. In
 both cases, this results in the exponential covariance function.}
-
-\item{kappa}{\eqn{\kappa \in \{0, \ldots, 3 \}} parameter for the GW
-covariance function.}
-
-\item{mu2}{The smoothness parameter \eqn{\mu} for the GW function.}
 
 \item{apply_exp}{A \code{logical} scalar indicating whether to exponentiate
 non-negative parameters.}
@@ -104,10 +94,9 @@ desired optimization algorithm via \code{opt_method} (must be available in
 \link[stats:optim]{stats::optim}).
 
 Additionally, the function supports various covariance functions,
-including Matern, Exponential, Powered Exponential, Gaussian, and
-Spherical. The \code{apply_exp} argument, a logical scalar, allows for
-exponentiation of non-negative parameters, enabling optimization over the
-entire real line.
+including Matern, Exponential, and Powered Exponential. The \code{apply_exp}
+argument, a logical scalar, allows for exponentiation of non-negative
+parameters, enabling optimization over the entire real line.
 
 The underlying model assumes a point-level process:
 \deqn{Y(\mathbf{s}) = \mu + S(\mathbf{s})} where

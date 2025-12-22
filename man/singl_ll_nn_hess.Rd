@@ -4,17 +4,7 @@
 \alias{singl_ll_nn_hess}
 \title{Evaluate log-lik}
 \usage{
-singl_ll_nn_hess(
-  theta,
-  .dt,
-  dists,
-  npix,
-  model,
-  nu = NULL,
-  kappa = 1,
-  mu2 = 1.5,
-  apply_exp = FALSE
-)
+singl_ll_nn_hess(theta, .dt, dists, npix, model, nu = NULL, apply_exp = FALSE)
 }
 \arguments{
 \item{theta}{a \code{numeric} vector of size \eqn{3} containing the
@@ -32,16 +22,9 @@ containing the cross-distance matrices.}
 each polygon. (Ordered by the id variables for the polygons).}
 
 \item{model}{a \code{character} indicating which covariance function to
-use. Possible values are \code{c("matern", "pexp", "gaussian",
-    "spherical")}.}
+use. Possible values are \code{c("matern", "pexp")}.}
 
-\item{nu}{\eqn{\nu} parameter. Not necessary if \code{mode} is
-\code{"gaussian"} or \code{"spherical"}}
-
-\item{kappa}{\eqn{\kappa \in \{0, \ldots, 3 \}} parameter for the GW cov
-function.}
-
-\item{mu2}{the smoothness parameter \eqn{\mu} for the GW function.}
+\item{nu}{\eqn{\nu} parameter.}
 
 \item{apply_exp}{a \code{logical} indicating whether the exponential
 transformation should be applied to variance parameters. This
