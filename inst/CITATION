@@ -1,0 +1,13 @@
+citHeader("To cite smile in publications use:")
+
+bibentry(bibtype = "Article",
+         title =
+           "Voronoi linkage between mismatching voting stations and census tracts in analyzing the 2018 Brazilian presidential election data",
+         author = c("Lucas da Cunha Godoy", "Marcos Oliveira Prates", "Jun Yan"), 
+         year = 2026,
+         journal = "Spatial Statistics",
+         volume = "00",
+         pages = "00--00",
+         textVersion = paste("Godoy, L.d.C., Prates, Marcos O. & Yan J. (2026)",
+                             "Voronoi linkage between mismatching voting stations and census tracts in analyzing the 2018 Brazilian presidential election data",
+                             "Spatial Statistics"))

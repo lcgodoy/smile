@@ -1,5 +1,7 @@
 # smile 1.1.1
 
+* Add CITATION file
+
 * Keeping only covariance functions valid on $R^n$ (as $n \to \infty$). This
   keeps the code easier to mantain and extend and, in addition, allows us to fit
   models on different domains (on the square-root scale).
