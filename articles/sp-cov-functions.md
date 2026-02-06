@@ -1,0 +1,62 @@
+# 5. Spatial covariance functions
+
+In this short vignette, we illustrate the family of spatial covariance
+functions implemented in this package. Note that, all of them are based
+on the assumptions of stationarity and isotropy of the underlying
+Gaussian random field (GRF). Also, the implementations (and definitions)
+are based on the families of spatial *correlation* functions presented
+in Diggle and Ribeiro (2007). The implementations make use of the
+`RcppArmadillo` (Eddelbuettel and Sanderson 2014) package and the STL
+library algorithms (C++ 11)[¹](#fn1).
+
+The first spatial covariance family implemented is the so-called Matérn
+Covariance function, which is defined as
+$$C\left( h;\sigma^{2},\phi,\kappa \right) = \sigma^{2}\frac{(h/\phi)^{\kappa}K_{\kappa}(h/\phi)}{2^{\kappa - 1}\Gamma(\kappa)}.$$
+Where $h$ is the distance between two points, $\sigma^{2}$ is a variance
+parameter, $\phi$ is the scale parameter that controls the reach of the
+spatial dependence, and $\kappa$ is a shape parameter that controls the
+smoothness of the process. The function $K_{\kappa}( \cdot )$ is the
+$\kappa$-order Modified Bessel function of Second-Kind. There are
+special cases of the Matérn family implemented on the package, when
+setting $\kappa$ to $1/2$, $3/2$, $5/2$, or
+$\left. \rightarrow\infty \right.$ the expression simplifies. The first
+and the last cases yield to the Exponential and Gaussian family,
+respectively.
+
+The second spatial covariance family implemented is the Powered
+Exponential Covariance function, it is defined as
+$$C\left( h;\sigma^{2},\phi,\kappa \right) = \sigma^{2}\exp\{ - (h/\phi)^{\kappa}\},$$
+where $h$ is the distance between two points, $\sigma^{2}$, $\phi$, and
+$\kappa$ analogous to the Matérn function.
+
+The penultimate option is the Gaussian family of covariance functions.
+The expression associated with this family is written as
+$$C\left( h;\sigma^{2},\phi \right) = \sigma^{2}\exp\left\{ - \frac{h^{2}}{2\phi^{2}} \right\},$$
+again, the parameters are analogous to what have defined before in this
+vignette.
+
+Lastly, we have implemented the Spherical family of covariance
+functions, defined as
+$$C\left( h;\sigma^{2},\phi \right) = \sigma^{2}\begin{cases}
+{1 - \frac{3}{2}(h/\phi) + \frac{1}{2}(h/\phi)^{3}} & {,\, 0 \leq h \leq \phi} \\
+0 & {,\, h > \phi,}
+\end{cases}$$ where, again, $\sigma^{2}$ is a variance parameter, while
+$\phi > 0$ is a parameter with the same magnitude as the distances on
+which the function is being evaluated at and controls the speed of decay
+of the spatial covariances as we increase the distance between two
+points.
+
+## Reference
+
+Diggle, PJ, and Paulo Justiniano Ribeiro. 2007. “Model-Based
+Geostatistics (Springer Series in Statistics).” In, 51–56. Springer.
+
+Eddelbuettel, Dirk, and Conrad Sanderson. 2014. “RcppArmadillo:
+Accelerating r with High-Performance c++ Linear Algebra.” *Computational
+Statistics & Data Analysis* 71: 1054–63.
+
+------------------------------------------------------------------------
+
+1.  for this problem, the implementation using the sequential algorithms
+    of the STL library was more efficient than those using the
+    `RcppParallel` package

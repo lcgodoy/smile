@@ -1,0 +1,122 @@
+# smile
+
+## **S**patial **M**isalignment: **I**nterpolation, **L**inkage, and **E**stimation
+
+The `smile` package for R simplifies the analysis of spatial data. It
+offers tools to:
+
+- **Estimate and predicte**: Using a model-based approach, smile treats
+  areal data as averages derived from a continuous Gaussian random
+  field. It is possible to model point-referenced and areal data
+  jointly.
+
+- **Interpolate**: For straightforward interpolation, smile employs a
+  non-parametric method known as simple areal interpolation.
+
+- **Quantify uncertainty:** When dealing with simple areal interpolation
+  and knowing the variance of your observations, smile helps you
+  quantify the uncertainty associated with the interpolation.
+
+Essentially, smile provides a user-friendly way to explore, model, and
+interpolate spatial data with R, offering both model-based and
+non-parametric approaches.
+
+The package accompanies a web page (powered by
+[pkgdown](https://pkgdown.r-lib.org/)) and 5 vignettes.
+
+### Vignettes
+
+1.  [Converting `sf` to `spm`
+    objects](https://lcgodoy.me/smile/articles/sf-to-spm.html);
+2.  [Fitting models and making
+    predictions](https://lcgodoy.me/smile/articles/fit-and-pred.html);
+3.  [Areal Interpolation](https://lcgodoy.me/smile/articles/sai.html);
+4.  [Method](https://lcgodoy.me/smile/articles/theory.html);
+5.  [Spatial covariance
+    functions](https://lcgodoy.me/smile/articles/sp-cov-functions.html);
+
+### Installation
+
+To install the [CRAN](https://cran.r-project.org) version of the
+package, use
+
+``` r
+install.packages("smile")
+```
+
+The installation of the development version from GitHub can be done via
+
+``` r
+remotes::install_github("lcgodoy/smile")
+## or devtools::install_github("lcgodoy/smile")
+```
+
+# Package index
+
+## All functions
+
+- [`ai()`](https://lcgodoy.me/smile/reference/AI.md)
+  [`ai_var()`](https://lcgodoy.me/smile/reference/AI.md) : Areal
+  Interpolation
+
+- [`find_phi()`](https://lcgodoy.me/smile/reference/find_phi.md) : Find
+  phi parameter for the Exponential spatial auto-correlation function
+
+- [`fit_spm()`](https://lcgodoy.me/smile/reference/fit_spm.md)
+  [`fit_spm2()`](https://lcgodoy.me/smile/reference/fit_spm.md) :
+  Fitting an underlying continuous process to areal data
+
+- [`AIC(`*`<spm_fit>`*`)`](https://lcgodoy.me/smile/reference/goodness_of_fit.md)
+  [`BIC(`*`<spm_fit>`*`)`](https://lcgodoy.me/smile/reference/goodness_of_fit.md)
+  :
+
+  Akaike's (and Bayesian) An Information Criterion for `spm_fit`
+  objects.
+
+- [`liv_lsoa`](https://lcgodoy.me/smile/reference/liv_lsoa.md) :
+  Liverpool Lower Super Output Area.
+
+- [`liv_msoa`](https://lcgodoy.me/smile/reference/liv_msoa.md) :
+  Liverpool Middle Super Output Area.
+
+- [`nl_ct`](https://lcgodoy.me/smile/reference/nl_ct.md) : Nova Lima
+  census tracts
+
+- [`predict_spm()`](https://lcgodoy.me/smile/reference/predict_spm.md) :
+  Prediction over the same or a different set of regions (or points).
+
+- [`sev_pexp()`](https://lcgodoy.me/smile/reference/sev_pexp.md) :
+  Calculate Smallest Eigenvalue for Power Exponential Correlation
+  Matrices
+
+- [`single_sf_to_spm()`](https://lcgodoy.me/smile/reference/sf_to_spm.md)
+  [`sf_to_spm()`](https://lcgodoy.me/smile/reference/sf_to_spm.md) :
+
+  single `sf` to `spm`
+
+- [`smile`](https://lcgodoy.me/smile/reference/smile.md) : smile:
+  Spatial MIsaLignment Estimation
+
+- [`summary_spm_fit()`](https://lcgodoy.me/smile/reference/summary_spm_fit.md)
+  :
+
+  Summarizing `spm_fit`
+
+- [`vdl()`](https://lcgodoy.me/smile/reference/vdl.md) : Voronoi Data
+  Linkage
+
+- [`vdl_var()`](https://lcgodoy.me/smile/reference/vdl_var.md) : Voronoi
+  Data Linkage - Single variable and variance
+
+# Articles
+
+### All vignettes
+
+- [2. Fitting models and making
+  predictions](https://lcgodoy.me/smile/articles/fit-and-pred.md):
+- [3. Areal Interpolation](https://lcgodoy.me/smile/articles/sai.md):
+- [1. Converting sf objects to
+  spm](https://lcgodoy.me/smile/articles/sf-to-spm.md):
+- [5. Spatial covariance
+  functions](https://lcgodoy.me/smile/articles/sp-cov-functions.md):
+- [4. Method](https://lcgodoy.me/smile/articles/theory.md):
