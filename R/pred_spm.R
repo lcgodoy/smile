@@ -5,144 +5,125 @@ predict_spm <- function(x, ...) UseMethod("predict_spm")
 ##' @name predict_spm
 ##' @export
 predict_spm.spm_fit <- function(x, .aggregate = TRUE, ...) {
-    n_obs <- NROW(x$call_data$var)
-    ## ids_betas <- which(grepl("^beta", names(x$estimate)))
+  n_obs <- NROW(x$call_data$var)
+  ## ids_betas <- which(grepl("^beta", names(x$estimate)))
 
-    ## create the distance matrix of the predictive location
-    coords_pred <- sf::st_coordinates(x$call_data$grid)
-    ## u_pred      <- as.matrix(stats::dist(coords_pred))
-    u_pred      <- distmat(coords_pred)
-    n_pred      <- nrow(coords_pred)  # number of predicted location
+  ## create the distance matrix of the predictive location
+  coords_pred <- sf::st_coordinates(x$call_data$grid)
+  ## u_pred      <- as.matrix(stats::dist(coords_pred))
+  u_pred      <- distmat(coords_pred)
+  n_pred      <- nrow(coords_pred)  # number of predicted location
 
-    u_res_pred <- pred_cdist(get_grid_list(x_to_list = x$call_data$grid,
-                                           by = x$call_data$ids_var),
-                             coords_pred)
+  u_res_pred <- pred_cdist(get_grid_list(x_to_list = x$call_data$grid,
+                                         by = x$call_data$ids_var),
+                           coords_pred)
 
-    ## can be turned in to a function to make to code cleaner
-    switch(x$model,
-           "matern" = {
-               if(is.null(x$nu))
-                   x$nu <- .5
+  ## can be turned in to a function to make to code cleaner
+  switch(x$model,
+         "matern" = {
+           if(is.null(x$nu))
+             x$nu <- .5
 
-               sig_y <- comp_mat_cov(x$call_data$dists,
-                                     n = n_obs, n2 = n_obs,
-                                     phi   = x$estimate["phi"],
-                                     ## sigsq = x$estimate["sigsq"],
-                                     sigsq = 1,
-                                     nu = x$nu)
-               d_mat <- comp_mat_cov(cross_dists = u_res_pred,
-                                     n = n_obs, n2 = n_pred,
-                                     phi   = x$estimate["phi"],
-                                     sigsq = x$estimate["sigsq"],
-                                     nu = x$nu)
-               sig_pred <- mat_cov(dists = u_pred,
-                                   phi   = x$estimate["phi"],
-                                   ## sigsq = x$estimate["sigsq"],
-                                   sigsq = 1,
-                                   nu = x$nu)
-           },
-           "pexp" = {
-               if(is.null(x$nu))
-                   x$nu <- 1
+           sig_y <- comp_mat_cov(x$call_data$dists,
+                                 n = n_obs, n2 = n_obs,
+                                 phi   = x$estimate["phi"],
+                                 sigsq = 1,
+                                 nu = x$nu)
+           d_mat <- comp_mat_cov(cross_dists = u_res_pred,
+                                 n = n_obs, n2 = n_pred,
+                                 phi   = x$estimate["phi"],
+                                 sigsq = 1,
+                                 nu = x$nu)
+           sig_pred <- mat_cov(dists = u_pred,
+                               phi   = x$estimate["phi"],
+                               sigsq = 1,
+                               nu = x$nu)
+         },
+         "pexp" = {
+           if(is.null(x$nu))
+             x$nu <- 1
 
-               sig_y <- comp_pexp_cov(x$call_data$dists,
-                                      n = n_obs, n2 = n_obs,
-                                      phi   = x$estimate["phi"],
-                                      ## sigsq = x$estimate["sigsq"],
-                                      sigsq = 1,
-                                      nu = x$nu)
-               
-               d_mat <- comp_pexp_cov(cross_dists = u_res_pred,
-                                      n = n_obs, n2 = n_pred,
-                                      phi   = x$estimate["phi"],
-                                      sigsq = x$estimate["sigsq"],
-                                      nu = x$nu)
-               
-               sig_pred <- pexp_cov(dists = u_pred,
-                                    phi   = x$estimate["phi"],
-                                    ## sigsq = x$estimate["sigsq"],
-                                    sigsq = 1,
-                                    nu = x$nu)
-           })
+           sig_y <- comp_pexp_cov(x$call_data$dists,
+                                  n = n_obs, n2 = n_obs,
+                                  phi   = x$estimate["phi"],
+                                  sigsq = 1,
+                                  nu = x$nu)
+           
+           d_mat <- comp_pexp_cov(cross_dists = u_res_pred,
+                                  n = n_obs, n2 = n_pred,
+                                  phi   = x$estimate["phi"],
+                                  sigsq = 1,
+                                  nu = x$nu)
+           
+           sig_pred <- pexp_cov(dists = u_pred,
+                                phi   = x$estimate["phi"],
+                                sigsq = 1,
+                                nu = x$nu)
+         })
 
-    if(length(x$estimate) > 3) {
-        if("tausq" %in% names(x$estimate)) {
-            sig_y <- (x$estimate["sigsq"] * sig_y) +
-                diag(x$estimate["tausq"] / x$call_data$npix,
-                     nrow = n_obs, ncol = n_obs)
-            
-            sig_pred <- (x$estimate["sigsq"] * sig_pred) +
-                diag(x$estimate["tausq"],
-                     nrow = nrow(sig_pred),
-                     ncol = ncol(sig_pred))
-        } else if("nu" %in% names(x$estimate)) {
-            sig_y <- x$estimate["sigsq"] *
-                (sig_y +
-                 diag(x$estimate["nu"] / x$call_data$npix,
-                      nrow = n_obs, ncol = n_obs))
-            sig_pred <- x$estimate["sigsq"] *
-                (sig_pred +
-                 diag(x$estimate["nu"],
-                      nrow = nrow(sig_pred),
-                      ncol = ncol(sig_pred)))
-        } 
-    } else {
-        sig_y <- (x$estimate["sigsq"] * sig_y)
-        sig_pred <- (x$estimate["sigsq"] * sig_pred) 
-    }
+  al <- ifelse("al" %in% names(x$estimate), x$estimate["al"], 0)
+                                        # Backward compatibility
+  if ("tausq" %in% names(x$estimate)) al <- x$estimate["tausq"] / x$estimate["sigsq"]
+  if ("nu" %in% names(x$estimate)) al <- x$estimate["nu"]
+  if ("omega" %in% names(x$estimate)) al <- x$estimate["omega"] / x$estimate["sigsq"]
 
-    ## mean_y <- x$call_data$X %*% x$estimate[ids_betas]
-    ## mean_pred <- x$call_data$X0 %*% x$estimate[ids_betas]
+  sigsq <- x$estimate["sigsq"]
+  sig_y <- sigsq * (sig_y + diag(al / x$call_data$npix, nrow = n_obs, ncol = n_obs))
+  d_mat <- sigsq * d_mat
+  sig_pred <- sigsq * (sig_pred + diag(al, nrow = nrow(sig_pred), ncol = ncol(sig_pred)))
 
-    sig_y_inv <- chol2inv(chol(sig_y))
-    dt_yinv  <- crossprod(d_mat, sig_y_inv)
-    sig_pred_y <- sig_pred - (dt_yinv %*% d_mat)
+  ## mean_y <- x$call_data$X %*% x$estimate[ids_betas]
+  ## mean_pred <- x$call_data$X0 %*% x$estimate[ids_betas]
 
-    mean_pred_y <- x$estimate["mu"] +
-        dt_yinv %*% (x$call_data$var - x$estimate["mu"])
+  sig_y_inv <- chol2inv(chol(sig_y))
+  dt_yinv  <- crossprod(d_mat, sig_y_inv)
+  sig_pred_y <- sig_pred - (dt_yinv %*% d_mat)
 
-    if(any(diag(sig_pred_y) < 0)) {
-        warning("Negative variance for at least one predicted region. Taking absolute value.")
-        var_pred_y <- abs(diag(sig_pred_y))
-    } else {
-        var_pred_y <- diag(sig_pred_y)
-    }
+  mean_pred_y <- x$estimate["mu"] +
+    dt_yinv %*% (x$call_data$var - x$estimate["mu"])
+
+  if(any(diag(sig_pred_y) < 0)) {
+    warning("Negative variance for at least one predicted region. Taking absolute value.")
+    var_pred_y <- abs(diag(sig_pred_y))
+  } else {
+    var_pred_y <- diag(sig_pred_y)
+  }
+  
+  pred_grid <- transform(x$call_data$grid,
+                         mu_pred = as.numeric(mean_pred_y),
+                         se_pred = var_pred_y)
+
+  if(.aggregate) {
+    out_poly <- aggregate_aux(x = pred_grid[c("mu_pred", "se_pred")],
+                              by = x$call_data$sf_poly,
+                              FUN = mean,
+                              join = sf::st_intersects)
+
+    out_poly[["se_pred"]]  <- sqrt(out_poly[["se_pred"]])
+    pred_grid[["se_pred"]] <- sqrt(pred_grid[["se_pred"]])
     
-    pred_grid <- transform(x$call_data$grid,
-                           mu_pred = as.numeric(mean_pred_y),
-                           se_pred = var_pred_y)
+    output <-
+      list(
+          mu_pred   = mean_pred_y,
+          sig_pred  = sig_pred_y,
+          pred_grid = pred_grid,
+          pred_agg  = out_poly
+      )
+  } else {
+    pred_grid[["se_pred"]] <- sqrt(pred_grid[["se_pred"]])
 
-    if(.aggregate) {
-        out_poly <- aggregate_aux(x = pred_grid[c("mu_pred", "se_pred")],
-                                  by = x$call_data$sf_poly,
-                                  FUN = mean,
-                                  join = sf::st_intersects)
+    output <-
+      list(
+          mu_pred   = mean_pred_y,
+          sig_pred  = sig_pred_y,
+          pred_grid = pred_grid,
+          pred_agg  = NA
+      )
+  }
 
-        out_poly[["se_pred"]]  <- sqrt(out_poly[["se_pred"]])
-        pred_grid[["se_pred"]] <- sqrt(pred_grid[["se_pred"]])
-        
-        output <-
-            list(
-                mu_pred   = mean_pred_y,
-                sig_pred  = sig_pred_y,
-                pred_grid = pred_grid,
-                pred_agg  = out_poly
-            )
-    } else {
-        pred_grid[["se_pred"]] <- sqrt(pred_grid[["se_pred"]])
-
-        output <-
-            list(
-                mu_pred   = mean_pred_y,
-                sig_pred  = sig_pred_y,
-                pred_grid = pred_grid,
-                pred_agg  = NA
-            )
-    }
-
-    class(output) <- append(class(output), "spm_pred")
-    
-    return(output)
+  class(output) <- append(class(output), "spm_pred")
+  
+  return(output)
 }
 
 ##' @name predict_spm
@@ -205,240 +186,212 @@ predict_spm.sf <- function(x, spm_obj,
                            n_pts, type,
                            outer_poly = NULL,
                            id_var, ...) {
-    if(sf::st_crs(x) != sf::st_crs(spm_obj$call_data$sf_poly)) {
-        warning("`x` and the data on which the model was ajdusted are not in the same CRS. Reprojecting `x`")
-        x <- sf::st_transform(x, sf::st_crs(spm_obj$call_data$sf_poly))
-    }
+  if(sf::st_crs(x) != sf::st_crs(spm_obj$call_data$sf_poly)) {
+    warning("`x` and the data on which the model was ajdusted are not in the same CRS. Reprojecting `x`")
+    x <- sf::st_transform(x, sf::st_crs(spm_obj$call_data$sf_poly))
+  }
 
-    n_obs <- NROW(spm_obj$call_data$var)
+  n_obs <- NROW(spm_obj$call_data$var)
 
-    stopifnot(all(grepl("(POLYGON|POINT)", sf::st_geometry_type(x))))
+  stopifnot(all(grepl("(POLYGON|POINT)", sf::st_geometry_type(x))))
 
-    if( all(grepl("POINT", sf::st_geometry_type(x))) ) {
-        coords_pred <- sf::st_coordinates(x)
-        pred_grid   <- sf::st_geometry(x)
-        u_pred      <- distmat(coords_pred)
-        n_pred      <- nrow(coords_pred)  # number of locations to make
-                                          # predictions
-        if( ! missing(n_pts) | ! missing(type) )
-            warning("The arguments 'n_pts' and 'type' are ignored when the sf geometry type is POINT.")
+  if( all(grepl("POINT", sf::st_geometry_type(x))) ) {
+    coords_pred <- sf::st_coordinates(x)
+    pred_grid   <- sf::st_geometry(x)
+    u_pred      <- distmat(coords_pred)
+    n_pred      <- nrow(coords_pred)  # number of locations to make
+                                        # predictions
+    if( ! missing(n_pts) | ! missing(type) )
+      warning("The arguments 'n_pts' and 'type' are ignored when the sf geometry type is POINT.")
+  } else {
+    if( missing(n_pts) | missing(type) ) {
+      pred_grid <- spm_obj$call_data$grid["geometry"]
+      pred_grid <- sf::st_join(pred_grid, x, join = sf::st_within)
+    } else if(length(n_pts) == NROW(x)) {
+      pred_grid <-
+        Map(function(geom, .sz, .tp) {
+          sf::st_sample(x = geom,
+                        size = .sz,
+                        type = .tp)
+        },
+        geom = sf::st_geometry(x),
+        .sz  = n_pts,
+        .tp  = type)
+      pred_grid <- sf::st_set_crs(do.call("c", pred_grid),
+                                  sf::st_crs(x))
+      pred_grid <- sf::st_join(sf::st_as_sf(pred_grid), x,
+                               join = sf::st_within)
     } else {
-        if( missing(n_pts) | missing(type) ) {
-            pred_grid <- spm_obj$call_data$grid["geometry"]
-            pred_grid <- sf::st_join(pred_grid, x, join = sf::st_within)
-        } else if(length(n_pts) == NROW(x)) {
-            pred_grid <-
-                Map(function(geom, .sz, .tp) {
-                    sf::st_sample(x = geom,
-                                  size = .sz,
-                                  type = .tp)
-                },
-                geom = sf::st_geometry(x),
-                .sz  = n_pts,
-                .tp  = type)
-            pred_grid <- sf::st_set_crs(do.call("c", pred_grid),
-                                        sf::st_crs(x))
-            pred_grid <- sf::st_join(sf::st_as_sf(pred_grid), x,
-                                     join = sf::st_within)
-        } else {
-            if( is.null(outer_poly) ) {
-                outer_poly <- sf::st_union(spm_obj$call_data$sf_poly)
-            }
-            pred_grid <- sf::st_sample(x    = outer_poly,
-                                       size = n_pts, 
-                                       by_polygon = FALSE,
-                                       type = type)
-            pred_grid <- sf::st_join(sf::st_as_sf(pred_grid), x,
-                                     join = sf::st_within)
-        }
-        
-        if(any(! x[[id_var]] %in% unique(pred_grid[[id_var]]))) {
-            empty_polys <- which(! x[[id_var]] %in% pred_grid[[id_var]])
-            grid_aux <-
-                sf::st_centroid(x = x[empty_polys, id_var])
-            pred_grid <- rbind(pred_grid[, id_var], sf::st_sf(grid_aux))
-        }
-        pred_grid[["x"]] <- sf::st_coordinates(pred_grid[["geometry"]])[,1]
-        pred_grid[["y"]] <- sf::st_coordinates(pred_grid[["geometry"]])[,2]
-        ## pred_grid <- pred_grid[, c(3, 1, 2)]
-        pred_grid <- pred_grid[order(pred_grid[[id_var]]),]
-        rownames(pred_grid) <- NULL
-        u_pred <- dist_from_grids(pred_grid, id_var)
-        n_pred <- nrow(x)
-        coords_pred <- sf::st_coordinates(pred_grid)
-    }
-
-    if(all(grepl("POINT", sf::st_geometry_type(x)))) {
-        u_res_pred <- pred_cdist(
-            get_grid_list(
-                x_to_list = spm_obj$call_data$grid,
-                by = spm_obj$call_data$ids_var),
-            coords_pred
-        )
-    } else {
-        u_res_pred <- mult_dists(mat_list1 =
-                                     get_grid_list(
-                                         x_to_list = spm_obj$call_data$grid,
-                                         by = spm_obj$call_data$ids_var
-                                     ),
-                                 mat_list2 =
-                                     get_grid_list(
-                                         x_to_list = pred_grid,
-                                         by = id_var
-                                     ),
-                                 return_single = FALSE)
+      if( is.null(outer_poly) ) {
+        outer_poly <- sf::st_union(spm_obj$call_data$sf_poly)
+      }
+      pred_grid <- sf::st_sample(x    = outer_poly,
+                                 size = n_pts, 
+                                 by_polygon = FALSE,
+                                 type = type)
+      pred_grid <- sf::st_join(sf::st_as_sf(pred_grid), x,
+                               join = sf::st_within)
     }
     
-    switch(spm_obj$model,
-           "matern" = {
-               if(is.null(spm_obj$nu))
-                   spm_obj$nu <- .5
+    if(any(! x[[id_var]] %in% unique(pred_grid[[id_var]]))) {
+      empty_polys <- which(! x[[id_var]] %in% pred_grid[[id_var]])
+      grid_aux <-
+        sf::st_centroid(x = x[empty_polys, id_var])
+      pred_grid <- rbind(pred_grid[, id_var], sf::st_sf(grid_aux))
+    }
+    pred_grid[["x"]] <- sf::st_coordinates(pred_grid[["geometry"]])[,1]
+    pred_grid[["y"]] <- sf::st_coordinates(pred_grid[["geometry"]])[,2]
+    ## pred_grid <- pred_grid[, c(3, 1, 2)]
+    pred_grid <- pred_grid[order(pred_grid[[id_var]]),]
+    rownames(pred_grid) <- NULL
+    u_pred <- dist_from_grids(pred_grid, id_var)
+    n_pred <- nrow(x)
+    coords_pred <- sf::st_coordinates(pred_grid)
+  }
 
-               sig_y <- comp_mat_cov(spm_obj$call_data$dists,
-                                     n = n_obs, n2 = n_obs,
-                                     phi   = spm_obj$estimate["phi"],
-                                     ## sigsq = spm_obj$estimate["sigsq"],
-                                     sigsq = 1,
-                                     nu    = spm_obj$nu)
-               d_mat <- comp_mat_cov(cross_dists = u_res_pred,
-                                     n = n_obs, n2 = n_pred,
-                                     phi   = spm_obj$estimate["phi"],
-                                     sigsq = spm_obj$estimate["sigsq"],
-                                     nu    = spm_obj$nu)
-               if(all(grepl("POINT", sf::st_geometry_type(x)))) {
-                   sig_pred <-
-                       mat_cov(dists = u_pred,
-                               phi   = spm_obj$estimate["phi"],
-                               ## sigsq = spm_obj$estimate["sigsq"],
-                               sigsq = 1,
-                               nu   = spm_obj$nu)
-               } else {
-                   sig_pred <-
-                       comp_mat_cov(cross_dists = u_pred,
-                                    n = n_pred, n2 = n_pred,
-                                    phi   = spm_obj$estimate["phi"],
-                                    sigsq = 1,
-                                    nu    = spm_obj$nu)
-               }
-           },
-           "pexp" = {
-               if(is.null(spm_obj$nu))
-                   spm_obj$nu <- 1
+  if(all(grepl("POINT", sf::st_geometry_type(x)))) {
+    u_res_pred <- pred_cdist(
+        get_grid_list(
+            x_to_list = spm_obj$call_data$grid,
+            by = spm_obj$call_data$ids_var),
+        coords_pred
+    )
+  } else {
+    u_res_pred <- mult_dists(mat_list1 =
+                               get_grid_list(
+                                   x_to_list = spm_obj$call_data$grid,
+                                   by = spm_obj$call_data$ids_var
+                               ),
+                             mat_list2 =
+                               get_grid_list(
+                                   x_to_list = pred_grid,
+                                   by = id_var
+                               ),
+                             return_single = FALSE)
+  }
+  
+  switch(spm_obj$model,
+         "matern" = {
+           if(is.null(spm_obj$nu))
+             spm_obj$nu <- .5
 
-               sig_y <- comp_pexp_cov(spm_obj$call_data$dists,
-                                      n = n_obs, n2 = n_obs,
-                                      phi   = spm_obj$estimate["phi"],
-                                      sigsq = 1,
-                                      nu    = spm_obj$nu)
-               d_mat <-
-                   comp_pexp_cov(cross_dists = u_res_pred,
+           sig_y <- comp_mat_cov(spm_obj$call_data$dists,
+                                 n = n_obs, n2 = n_obs,
+                                 phi   = spm_obj$estimate["phi"],
+                                 sigsq = 1,
+                                 nu    = spm_obj$nu)
+           d_mat <- comp_mat_cov(cross_dists = u_res_pred,
                                  n = n_obs, n2 = n_pred,
                                  phi   = spm_obj$estimate["phi"],
-                                 sigsq = spm_obj$estimate["sigsq"],
+                                 sigsq = 1,
                                  nu    = spm_obj$nu)
-               if(all(grepl("POINT", sf::st_geometry_type(x)))) {
-                   sig_pred <-
-                       pexp_cov(dists = u_pred,
-                                phi   = spm_obj$estimate["phi"],
-                                sigsq = 1,
-                                nu    = spm_obj$nu)
-               } else {
-                   sig_pred <-
-                       comp_pexp_cov(cross_dists = u_pred,
-                                     n = n_pred, n2 = n_pred,
-                                     phi   = spm_obj$estimate["phi"],
-                                     sigsq = 1,
-                                     nu    = spm_obj$nu)
-               }
-           })
+           if(all(grepl("POINT", sf::st_geometry_type(x)))) {
+             sig_pred <-
+               mat_cov(dists = u_pred,
+                       phi   = spm_obj$estimate["phi"],
+                       sigsq = 1,
+                       nu   = spm_obj$nu)
+           } else {
+             sig_pred <-
+               comp_mat_cov(cross_dists = u_pred,
+                            n = n_pred, n2 = n_pred,
+                            phi   = spm_obj$estimate["phi"],
+                            sigsq = 1,
+                            nu    = spm_obj$nu)
+           }
+         },
+         "pexp" = {
+           if(is.null(spm_obj$nu))
+             spm_obj$nu <- 1
 
-    if(length(spm_obj$estimate) > 3) {
-        if("tausq" %in% names(spm_obj$estimate)) {
-            sig_y <- (spm_obj$estimate["sigsq"] * sig_y) +
-                diag(spm_obj$estimate["tausq"] / spm_obj$call_data$npix,
-                     nrow = n_obs, ncol = n_obs)
-            
-            sig_pred <- (spm_obj$estimate["sigsq"] * sig_pred) +
-                diag(spm_obj$estimate["tausq"],
-                     nrow = nrow(sig_pred),
-                     ncol = ncol(sig_pred))
-        } else if("nu" %in% names(spm_obj$estimate)) {
-            sig_y <- spm_obj$estimate["sigsq"] *
-                (sig_y +
-                 diag(spm_obj$estimate["nu"] / spm_obj$call_data$npix,
-                      nrow = n_obs, ncol = n_obs))
-            
-            sig_pred <- spm_obj$estimate["sigsq"] *
-                (sig_pred +
-                 diag(spm_obj$estimate["nu"],
-                      nrow = nrow(sig_pred),
-                      ncol = ncol(sig_pred)))
-        } else {
-            ## this part will be deleted soon
-            sig_y <- (spm_obj$estimate["sigsq"] * sig_y) +
-                diag(spm_obj$estimate["omega"] / spm_obj$call_data$npix,
-                     nrow = n_obs, ncol = n_obs)
-            
-            sig_pred <- (spm_obj$estimate["sigsq"] * sig_pred) +
-                diag(spm_obj$estimate["omega"],
-                     nrow = nrow(sig_pred),
-                     ncol = ncol(sig_pred))
-        }
-    } else {
-        sig_y <- spm_obj$estimate["sigsq"] * sig_y
-        
-        sig_pred <- spm_obj$estimate["sigsq"] * sig_pred
-    }
-    ## sig_y_inv <- solve(sig_y)
-    sig_y_inv <- chol2inv(chol(sig_y))
-    mean_y <- matrix(rep(spm_obj$estimate["mu"], n_obs),
-                     ncol = 1)
-    mean_pred <- matrix(rep(spm_obj$estimate["mu"], n_pred),
-                        ncol = 1)
-    dt_yinv <- crossprod(d_mat, sig_y_inv)
-    sig_pred_y <- sig_pred - (dt_yinv %*% d_mat)
-    mean_pred_y <- mean_pred +
-        dt_yinv %*% (spm_obj$call_data$var - mean_y)
+           sig_y <- comp_pexp_cov(spm_obj$call_data$dists,
+                                  n = n_obs, n2 = n_obs,
+                                  phi   = spm_obj$estimate["phi"],
+                                  sigsq = 1,
+                                  nu    = spm_obj$nu)
+           d_mat <-
+             comp_pexp_cov(cross_dists = u_res_pred,
+                           n = n_obs, n2 = n_pred,
+                           phi   = spm_obj$estimate["phi"],
+                           sigsq = 1,
+                           nu    = spm_obj$nu)
+           if(all(grepl("POINT", sf::st_geometry_type(x)))) {
+             sig_pred <-
+               pexp_cov(dists = u_pred,
+                        phi   = spm_obj$estimate["phi"],
+                        sigsq = 1,
+                        nu    = spm_obj$nu)
+           } else {
+             sig_pred <-
+               comp_pexp_cov(cross_dists = u_pred,
+                             n = n_pred, n2 = n_pred,
+                             phi   = spm_obj$estimate["phi"],
+                             sigsq = 1,
+                             nu    = spm_obj$nu)
+           }
+         })
 
-    if(any(diag(sig_pred_y) < 0)) {
-        warning("Negative variance for at least one predicted region. Taking absolute value.")
-        var_pred_y <- abs(diag(sig_pred_y))
-    } else {
-        var_pred_y <- diag(sig_pred_y)
-    }
-    
-    if(all(grepl("POINT", sf::st_geometry_type(x)))) {
-        if(inherits(pred_grid, "sfc"))
-            pred_grid <- transform(sf::st_sf(geometry = pred_grid),
-                                   mu_pred = as.numeric(mean_pred_y),
-                                   se_pred = var_pred_y)
-        else 
-            pred_grid <- transform(pred_grid,
-                                   mu_pred = as.numeric(mean_pred_y),
-                                   se_pred = var_pred_y)
-        pred_grid[["se_pred"]] <- sqrt(pred_grid[["se_pred"]])
-        output <-
-            list(
-                mu_pred   = mean_pred_y,
-                sig_pred  = sig_pred_y,
-                pred_grid = pred_grid,
-                pred_agg  = NA
-            )
-    }
-    else {
-        pred_grid <- transform(x[order(x[[id_var]]), ],
-                               mu_pred = as.numeric(mean_pred_y),
-                               se_pred = sqrt(var_pred_y))
-        output <-
-            list(
-                mu_pred   = mean_pred_y,
-                sig_pred  = sig_pred_y,
-                pred_grid = NA,
-                pred_agg  = pred_grid
-            )
-    }
-    class(output) <- append(class(output), "spm_pred")
-    return(output)
+  al <- ifelse("al" %in% names(spm_obj$estimate), spm_obj$estimate["al"], 0)
+
+  if ("tausq" %in% names(spm_obj$estimate)) al <- spm_obj$estimate["tausq"] / spm_obj$estimate["sigsq"]
+  if ("nu" %in% names(spm_obj$estimate)) al <- spm_obj$estimate["nu"]
+  if ("omega" %in% names(spm_obj$estimate)) al <- spm_obj$estimate["omega"] / spm_obj$estimate["sigsq"]
+
+  sigsq <- spm_obj$estimate["sigsq"]
+  sig_y <- sigsq * (sig_y + diag(al / spm_obj$call_data$npix, nrow = n_obs, ncol = n_obs))
+  d_mat <- sigsq * d_mat
+  sig_pred <- sigsq * (sig_pred + diag(al, nrow = nrow(sig_pred), ncol = ncol(sig_pred)))
+
+  ## sig_y_inv <- solve(sig_y)
+  sig_y_inv <- chol2inv(chol(sig_y))
+  mean_y <- matrix(rep(spm_obj$estimate["mu"], n_obs),
+                   ncol = 1)
+  mean_pred <- matrix(rep(spm_obj$estimate["mu"], n_pred),
+                      ncol = 1)
+  dt_yinv <- crossprod(d_mat, sig_y_inv)
+  sig_pred_y <- sig_pred - (dt_yinv %*% d_mat)
+  mean_pred_y <- mean_pred +
+    dt_yinv %*% (spm_obj$call_data$var - mean_y)
+
+  if(any(diag(sig_pred_y) < 0)) {
+    warning("Negative variance for at least one predicted region. Taking absolute value.")
+    var_pred_y <- abs(diag(sig_pred_y))
+  } else {
+    var_pred_y <- diag(sig_pred_y)
+  }
+  
+  if(all(grepl("POINT", sf::st_geometry_type(x)))) {
+    if(inherits(pred_grid, "sfc"))
+      pred_grid <- transform(sf::st_sf(geometry = pred_grid),
+                             mu_pred = as.numeric(mean_pred_y),
+                             se_pred = var_pred_y)
+    else 
+      pred_grid <- transform(pred_grid,
+                             mu_pred = as.numeric(mean_pred_y),
+                             se_pred = var_pred_y)
+    pred_grid[["se_pred"]] <- sqrt(pred_grid[["se_pred"]])
+    output <-
+      list(
+          mu_pred   = mean_pred_y,
+          sig_pred  = sig_pred_y,
+          pred_grid = pred_grid,
+          pred_agg  = NA
+      )
+  }
+  else {
+    pred_grid <- transform(x[order(x[[id_var]]), ],
+                           mu_pred = as.numeric(mean_pred_y),
+                           se_pred = sqrt(var_pred_y))
+    output <-
+      list(
+          mu_pred   = mean_pred_y,
+          sig_pred  = sig_pred_y,
+          pred_grid = NA,
+          pred_agg  = pred_grid
+      )
+  }
+  class(output) <- append(class(output), "spm_pred")
+  return(output)
 }
 
 ##' @title Internal use only

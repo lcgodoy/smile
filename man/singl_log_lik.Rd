@@ -2,39 +2,11 @@
 % Please edit documentation in R/log-lik.R
 \name{singl_log_lik}
 \alias{singl_log_lik}
-\title{Evaluate log-lik}
+\title{Backward compatibility wrapper for full log-likelihood}
 \usage{
 singl_log_lik(theta, .dt, dists, npix, model, nu = NULL, apply_exp = FALSE)
 }
-\arguments{
-\item{theta}{a \code{numeric} vector of size 4 (\eqn{\mu, \sigma^2, \alpha,
-\phi}) containing the parameters associated with the model.}
-
-\item{.dt}{a \code{numeric} vector containing the variable \eqn{Y}.}
-
-\item{dists}{a \code{list} of size distance matrices at the point level.}
-
-\item{npix}{a \code{integer vector} containing the number of pixels within
-each polygon. (Ordered by the id variables for the polygons).}
-
-\item{model}{a \code{character} indicating which covariance function to
-use. Possible values are \code{c("matern", "pexp", "gaussian",
-    "spherical", "cs", "gw")}.}
-
-\item{nu}{\eqn{\nu} parameter. Not necessary if \code{model} is
-\code{"gaussian"} or \code{"spherical"}}
-
-\item{apply_exp}{a \code{logical} indicating whether the exponential
-transformation should be applied to variance parameters. This
-facilitates the optimization process.}
-}
-\value{
-a scalar representing \code{-log.lik}.
-}
 \description{
-Evaluate the log-likelihood for a given set of parameters
-}
-\details{
-Internal use.
+Backward compatibility wrapper for full log-likelihood
 }
 \keyword{internal}

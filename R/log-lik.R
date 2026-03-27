@@ -1,394 +1,134 @@
-##' Evaluate the log-likelihood for a given set of parameters
+##' Unified function for log-likelihood evaluation
 ##'
 ##' Internal use.
 ##' @title Evaluate log-lik
-##' @param theta a \code{numeric} vector of size 4 (\eqn{\mu, \sigma^2, \alpha,
-##'     \phi}) containing the parameters associated with the model.
+##' @param theta a named \code{numeric} vector containing parameters (\eqn{\mu,
+##'   \sigma^2, \alpha, \phi}).
 ##' @param .dt a \code{numeric} vector containing the variable \eqn{Y}.
-##' @param dists a \code{list} of size distance matrices at the point level.
+##' @param dists a \code{list} of distance matrices.
 ##' @param npix a \code{integer vector} containing the number of pixels within
-##'     each polygon. (Ordered by the id variables for the polygons).
-##' @param model a \code{character} indicating which covariance function to
-##'     use. Possible values are \code{c("matern", "pexp", "gaussian",
-##'     "spherical", "cs", "gw")}.
-##' @param nu \eqn{\nu} parameter. Not necessary if \code{model} is
-##'     \code{"gaussian"} or \code{"spherical"}
-##' @param apply_exp a \code{logical} indicating whether the exponential
-##'     transformation should be applied to variance parameters. This
-##'     facilitates the optimization process.
-##'
+##'   each polygon.
+##' @param model a \code{character} indicating the covariance function family.
+##' @param nu \eqn{\nu} parameter for the Matern or Powered Exponential
+##'   covariance functions.
+##' @param apply_exp a \code{logical} indicating whether to exponentiate
+##'   non-negative parameters.
+##' @param type a \code{character} specifying the likelihood type: `"full"` or
+##'   `"profile"`.
+##' 
 ##' @return a scalar representing \code{-log.lik}.
 ##' @keywords internal
-singl_log_lik <- function(theta, .dt, dists, npix, model,
+log_lik_spm <- function(theta, .dt, dists, npix, model,
+                        nu = NULL,
+                        apply_exp = FALSE,
+                        type = c("full", "profile")) {
+  type <- match.arg(type)
+  
+  if (apply_exp) {
+    to_exp <- names(theta) %in% c("sigsq", "phi", "al")
+    theta[to_exp] <- exp(theta[to_exp])
+  }
+  
+  if (!apply_exp) {
+    if (any(theta[names(theta) %in% c("sigsq", "phi", "al")] < 0))
+      return(NA_real_)
+  }
+
+  phi   <- theta["phi"]
+  al    <- ifelse("al" %in% names(theta), theta["al"], 0)
+  .n    <- NROW(.dt)
+
+  V <- switch(model,
+              "matern" = comp_mat_cov(cross_dists = dists,
+                                      n = .n, n2 = .n,
+                                      phi = phi,
+                                      sigsq = 1,
+                                      nu = ifelse(is.null(nu), 0.5, nu)),
+              "pexp"   = comp_pexp_cov(cross_dists = dists,
+                                       n = .n, n2 = .n,
+                                       phi = phi,
+                                       sigsq = 1,
+                                       nu = ifelse(is.null(nu), 1.0, nu)),
+              stop("Model '", model, "' not supported."))
+
+  if (al > 0) {
+    V <- V + diag(al / npix, nrow = .n, ncol = .n)
+  }
+
+  if (type == "profile") {
+    chol_v <- try(chol(V), silent = TRUE)
+    if (inherits(chol_v, "try-error")) {
+      inv_v <- solve(V)
+      mles <- est_mle(.dt, inv_v)
+      log_lik_y <- .5 * (.n * log(2 * pi) + .n * log(mles["sigsq"]) + log(det(V)) + .n)
+    } else {
+      inv_v <- chol2inv(chol_v)
+      mles <- est_mle(.dt, inv_v)
+      log_lik_y <- .5 * (.n * log(2 * pi) + .n * log(mles["sigsq"]) + 2 * sum(log(diag(chol_v))) + .n)
+    }
+    return(as.numeric(log_lik_y))
+  } else {
+    mu <- theta["mu"]
+    sigsq <- theta["sigsq"]
+
+    log_lik_y <- mvtnorm::dmvnorm(x = matrix(.dt, nrow = 1),
+                                  mean = matrix(rep(mu, .n), ncol = 1),
+                                  sigma = sigsq * V,
+                                  log = TRUE,
+                                  checkSymmetry = FALSE)
+    return(-as.numeric(log_lik_y))
+  }
+}
+
+##' Backward compatibility wrapper for full log-likelihood
+##' @keywords internal
+singl_log_lik <- function(theta, .dt,
+                          dists, npix,
+                          model,
                           nu = NULL,
                           apply_exp = FALSE) {
-
-    if (! apply_exp && any(rev(theta)[1:2] < 0)) {
-        return(NA_real_)
-    }
-
-    mu    <- theta[1]
-    sigsq <- theta[2]
-
+  if (is.null(names(theta))) {
     if (length(theta) == 4) {
-        al  <- theta[3]
-        phi <- theta[4]
-    } else {
-        phi <- theta[3]
+      names(theta) <- c("mu", "sigsq", "al", "phi")
+    } else if (length(theta) == 3) {
+      names(theta) <- c("mu", "sigsq", "phi")
     }
-    ## tausq <- matrix(nrow = p, ncol = p)
-    ## tausq[upper.tri(tausq, diag = TRUE)] <-
-    ##     theta[(p + 1):((p + 1) + .5*(p * ( p  + 1 )) - 1)]
-    ## tausq[lower.tri(tausq)] <- tausq[upper.tri(tausq)]
-    ## sigsq <- theta[((p + 1) + .5*(p * ( p  + 1 )))]
-    ## phi   <- theta[((p + 1) + .5*(p * ( p  + 1 )) + 1)]
-
-    if (apply_exp) {
-        if (length(theta) == 4)
-            al <- exp(al)
-        sigsq <- exp(sigsq)
-        phi   <- exp(phi)
-    }
-
-    .n <- NROW(.dt)
-
-    switch(model,
-           "matern" = {
-               varcov_u1 <- comp_mat_cov(cross_dists = dists,
-                                         n = .n, n2 = .n,
-                                         phi = phi,
-                                         sigsq = 1,
-                                         nu = nu)
-           },
-           "pexp" = {
-               varcov_u1 <- comp_pexp_cov(cross_dists = dists,
-                                          n = .n, n2 = .n,
-                                          phi = phi,
-                                          sigsq = 1,
-                                          nu = nu)
-           })
-
-    varcov_y  <- varcov_u1 + diag(al / npix,
-                                  nrow = .n, ncol = .n)
-
-    log_lik_y <- mvtnorm::dmvnorm(x = matrix(.dt, nrow = 1),
-                                  mean  = matrix(rep(mu, .n),
-                                                 ncol = 1),
-                                  sigma = sigsq * varcov_y,
-                                  log = TRUE,
-                                  checkSymmetry = FALSE)
-
-    ## varcov_y  <- kronecker(tcrossprod(matrix(rep(1, p), ncol = 1)), varcov_u1) +
-    ##     kronecker(tausq, diag(1 / npix, nrow = .n, ncol = .n)) 
-    ## log_lik_y <- mvtnorm::dmvnorm(x = matrix(c(.dt), nrow = 1),
-    ##                               mean  = c(kronecker(mu,
-    ##                                                   matrix(rep(1, .n), ncol = 1))),
-    ##                               sigma = varcov_y,
-    ##                               log = TRUE,
-    ##                               checkSymmetry = FALSE)
-
-    return(- log_lik_y)
+  }
+  log_lik_spm(theta, .dt, dists, npix, model, nu, apply_exp, type = "full")
 }
 
-##' Evaluate the log-likelihood for a given set of parameters - New
-##' parametrization + profile likelihood
-##'
-##' Internal use.
-##' @title Evaluate log-lik
-##' @param theta a \code{vector} of size 2 containing the parameters associated
-##'     with the model. These parameters are \eqn{\nu} and \eqn{\phi},
-##'     respectively.
-##' @param .dt a \code{numeric} vector containing the variable \eqn{Y}.
-##' @param dists a \code{list} of size three. The first containing the distance
-##'     matrices associated with the regions where \eqn{Y} was measured, the
-##'     second for the distance matrices associated with \eqn{X}, and the last
-##'     containing the cross-distance matrices.
-##' @param npix a \code{integer vector} containing the number of pixels within
-##'     each polygon. (Ordered by the id variables for the polygons).
-##' @param model a \code{character} indicating which covariance function to
-##'     use. Possible values are \code{c("matern", "pexp", "gaussian",
-##'     "spherical", "cs", "gw", "tapmat")}.
-##' @param nu \eqn{\nu} parameter. Not necessary if \code{mode} is
-##'     \code{"gaussian"} or \code{"spherical"}
-##' @param apply_exp a \code{logical} indicating whether the exponential
-##'     transformation should be applied to variance parameters. This
-##'     facilitates the optimization process.
-##'
-##' @return a scalar representing \code{-log.lik}.
+##' Backward compatibility wrapper for profile log-likelihood
 ##' @keywords internal
-singl_log_plik <- function(theta, .dt, dists, npix, model,
-                           nu = NULL,
-                           apply_exp = FALSE) {
-
-    if (! apply_exp && any(theta < 0)) {
-        return(NA_real_)
+singl_log_plik <- function(theta, .dt, dists, npix, model, nu = NULL, apply_exp = FALSE) {
+  if (is.null(names(theta))) {
+    if (length(theta) == 2) {
+      names(theta) <- c("al", "phi")
+    } else if {
+      (length(theta) == 1) names(theta) <- c("phi")
     }
-
-    al  <- theta[1]
-    phi <- theta[2]
-    if (apply_exp) {
-        al  <- exp(al)
-        phi <- exp(phi)
-    }
-    .n <- NROW(.dt)
-    switch(model,
-           "matern" = {
-               varcov_u1 <- comp_mat_cov(cross_dists = dists,
-                                         n = .n, n2 = .n,
-                                         phi = phi,
-                                         sigsq = 1,
-                                         nu = nu)
-           },
-           "pexp" = {
-               varcov_u1 <- comp_pexp_cov(cross_dists = dists,
-                                          n = .n, n2 = .n,
-                                          phi = phi,
-                                          sigsq = 1,
-                                          nu = nu)
-           })
-
-    V <- varcov_u1 + diag(al / npix,
-                          nrow = .n, ncol = .n)
-    chol_v <- try(chol(V))
-    if (inherits(chol_v, "try-error")) {
-        inv_v <- solve(V)
-        mles   <- est_mle(.dt, inv_v)
-        log_lik_y <- .5 * (.n * log(2 * pi) + .n * log(mles[length(mles)]) +
-                           2 * log(det(V)) + .n)
-    } else {
-        inv_v  <- chol2inv(chol_v)
-        mles   <- est_mle(.dt, inv_v)
-        log_lik_y <- .5 * (.n * log(2 * pi) + .n * log(mles[length(mles)]) +
-                           2 * sum(log(diag(chol_v))) + .n)
-    }
-    return(log_lik_y)
+  }
+  log_lik_spm(theta, .dt, dists, npix, model, nu, apply_exp, type = "profile")
 }
 
-##' Evaluate the log-likelihood for a given set of parameters - No nugget +
-##' profile likelihood
-##'
-##' Internal use.
-##' @title Evaluate log-lik
-##' @param theta a scalar for the \eqn{\phi} parameter.
-##' @param .dt a \code{numeric} vector containing the variable \eqn{Y}.
-##' @param dists a \code{list} of size three. The first containing the distance
-##'     matrices associated with the regions where \eqn{Y} was measured, the
-##'     second for the distance matrices associated with \eqn{X}, and the last
-##'     containing the cross-distance matrices.
-##' @param npix a \code{integer vector} containing the number of pixels within
-##'     each polygon. (Ordered by the id variables for the polygons).
-##' @param model a \code{character} indicating which covariance function to
-##'     use. Possible values are \code{c("matern", "pexp", "gaussian",
-##'     "spherical", "cs", "gw", "tapmat")}.
-##' @param nu \eqn{\nu} parameter. Not necessary if \code{mode} is
-##'     \code{"gaussian"} or \code{"spherical"}
-##' @param apply_exp a \code{logical} indicating whether the exponential
-##'     transformation should be applied to variance parameters. This
-##'     facilitates the optimization process.
-##' 
-##' @return a scalar representing \code{-log.lik}.
+##' Backward compatibility wrapper for profile log-likelihood (no nugget)
 ##' @keywords internal
-singl_log_lik_nn <- function(theta, .dt, dists, npix, model,
-                             nu = NULL,
-                             apply_exp = FALSE) {
-
-    if (!apply_exp && theta < 0) {
-        return(NA_real_)
-    }
-
-    phi <- theta
-
-    if (apply_exp) {
-        phi <- exp(phi)
-    }
-
-    .n <- NROW(.dt)
-
-    switch(model,
-           "matern" = {
-               varcov_u1 <- comp_mat_cov(cross_dists = dists,
-                                         n = .n, n2 = .n,
-                                         phi = phi,
-                                         sigsq = 1,
-                                         nu = nu)
-           },
-           "pexp" = {
-               varcov_u1 <- comp_pexp_cov(cross_dists = dists,
-                                          n = .n, n2 = .n,
-                                          phi = phi,
-                                          sigsq = 1,
-                                          nu = nu)
-           })
-
-    V <- varcov_u1
-    chol_v <- try(chol(V))
-    if (inherits(chol_v, "try-error")) {
-        inv_v <- solve(V)
-        mles <- est_mle(.dt, inv_v)
-        log_lik_y <- .5 * (.n * log(2 * pi) + .n * log(mles[length(mles)]) +
-                           2 * log(det(V)) + .n)
-    } else {
-        inv_v <- chol2inv(chol_v)
-        mles <- est_mle(.dt, inv_v)
-        log_lik_y <- .5 * (.n * log(2 * pi) + .n * log(mles[length(mles)]) +
-                           2 * sum(log(diag(chol_v))) + .n)
-    }
-
-    return(log_lik_y)
+singl_log_lik_nn <- function(theta, .dt, dists, npix, model, nu = NULL, apply_exp = FALSE) {
+  if (is.null(names(theta))) {
+    names(theta) <- "phi"
+  }
+  log_lik_spm(theta, .dt, dists, npix, model, nu, apply_exp, type = "profile")
 }
 
-## ##' Evaluate the log-likelihood for a given set of parameters - New
-## ##' parametrization + restricted likelihood
-## ##'
-## ##' Internal use.
-## ##' @title Evaluate log-lik
-## ##' @param theta a \code{list} of size 3 containing the parameters associated
-## ##'     with the model. (Explain why)
-## ##' @param .dt a \code{numeric} vector containing the variable \eqn{Y}.
-## ##' @param X a \code{numeric} design matrix \eqn{X} of dimension \eqn{n \times
-## ##'     p}.
-## ##' @param dists a \code{list} of size three. The first containing the distance
-## ##'     matrices associated with the regions where \eqn{Y} was measured, the
-## ##'     second for the distance matrices associated with \eqn{X}, and the last
-## ##'     containing the cross-distance matrices.
-## ##' @param npix a \code{integer vector} containing the number of pixels within
-## ##'     each polygon. (Ordered by the id variables for the polygons).
-## ##' @param model a \code{character} indicating which covariance function to
-## ##'     use. Possible values are \code{c("matern", "pexp", "gaussian",
-## ##'     "spherical")}.
-## ##' @param nu \eqn{\nu} parameter. Not necessary if \code{mode} is
-## ##'     \code{"gaussian"} or \code{"spherical"}
-## ##' @param apply_exp a \code{logical} indicating whether the exponential
-## ##'     transformation should be applied to variance parameters. This
-## ##'     facilitates the optimization process.
-## ##' 
-## ##' @return a scalar representing \code{-log.lik}.
-## singl_log_rel <- function(theta, .dt, dists, npix, model,
-##                           nu = NULL, apply_exp = FALSE) {    
-##     if(! apply_exp & any(theta[(p + 1):length(theta)] < 0 )) {
-##         return(NA_real_)
-##     }
-##     nu    <- theta[1]
-##     sigsq <- theta[2]
-##     phi   <- theta[3]
-##     ## nu <- matrix(nrow = p, ncol = p)
-##     ## nu[upper.tri(nu, diag = TRUE)] <-
-##     ##     theta[1:(1 + .5*(p * ( p  + 1 )) - 1)]
-##     ## nu[lower.tri(nu)] <- nu[upper.tri(nu)]
-##     ## sigsq <- theta[( .5 * (p * ( p  + 1 )) + 1)]
-##     ## phi   <- theta[( .5 * (p * ( p  + 1 )) + 2)]
-##     if(apply_exp) {
-##         nu    <- exp(nu)
-##         sigsq <- exp(sigsq)
-##         phi   <- exp(phi)
-##     }
-##     .n <- NROW(.dt)
-##     switch(model,
-##            "matern" = {
-##                varcov_u1 <- comp_mat_cov(cross_dists = dists,
-##                                          n = .n, n2 = .n,
-##                                          phi = phi,
-##                                          sigsq = 1,
-##                                          nu = nu)
-##            },
-##            "pexp" = {
-##                varcov_u1 <- comp_pexp_cov(cross_dists = dists,
-##                                           n = .n, n2 = .n,
-##                                           phi = phi,
-##                                           sigsq = 1,
-##                                           nu = nu)
-##            },
-##            "gaussian" = {
-##                varcov_u1 <- comp_gauss_cov(cross_dists = dists,
-##                                            n = .n, n2 = .n,
-##                                            phi = phi,
-##                                            sigsq = 1)
-##            },
-##            "spherical" = {
-##                varcov_u1 <- comp_spher_cov(cross_dists = dists,
-##                                            n = .n, n2 = .n,
-##                                            phi = phi,
-##                                            sigsq = 1)
-##            })
-##     if(p == 1) {
-##         V <- varcov_u1 + diag(nu / npix,
-##                               nrow = .n, ncol = .n)
-##         chol_v <- chol(V)
-##         inv_v  <- chol2inv(chol_v)
-##         ones_n <- matrix(rep(1, .n), ncol = 1L)
-##         y <- matrix(.dt, ncol = 1L)
-##         mu_hat    <- as.numeric( crossprod(ones_n, inv_v) %*% y / (sum(inv_v)) )
-##         y_mu_hat  <- y - mu_hat
-##         log_lik_y <- .5 * (.n * log(2 * pi) + .n * log(sigsq) + 2 * sum(log(diag(chol_v))) +
-##                            (crossprod(y_mu_hat, inv_v) %*% y_mu_hat / sigsq) +
-##                            (sum(inv_v) / sigsq))
-##     } else {
-##         stop("to be implemented.")
-##     }
-##     return( log_lik_y )
-## }
-
-##' Evaluate the log-likelihood for a given set of parameters
-##'
-##' Internal use.
-##' @title Evaluate log-lik
-##' @param theta a \code{numeric} vector of size \eqn{3} containing the
-##'     parameters values associated with \eqn{\mu}, \eqn{\sigma^2}, and
-##'     \eqn{\phi}, respectively.
-##' @param .dt a \code{numeric} vector containing the variable \eqn{Y}.
-##' @param dists a \code{list} of size three. The first containing the distance
-##'     matrices associated with the regions where \eqn{Y} was measured, the
-##'     second for the distance matrices associated with \eqn{X}, and the last
-##'     containing the cross-distance matrices.
-##' @param npix a \code{integer vector} containing the number of pixels within
-##'     each polygon. (Ordered by the id variables for the polygons).
-##' @param model a \code{character} indicating which covariance function to
-##'     use. Possible values are \code{c("matern", "pexp")}.
-##' @param nu \eqn{\nu} parameter.
-##' @param apply_exp a \code{logical} indicating whether the exponential
-##'     transformation should be applied to variance parameters. This
-##'     facilitates the optimization process.
-##' 
-##' @return a scalar representing \code{-log.lik}.
+##' Backward compatibility wrapper for full log-likelihood (Hessian)
 ##' @keywords internal
-singl_ll_nn_hess <- function(theta, .dt, dists, npix, model,
-                             nu = NULL,
-                             apply_exp = FALSE) {
-    npar <- length(theta)
-
-    mu    <- theta[1]
-    sigsq <- theta[2]
-    phi   <- theta[3]
-    ## mu    <- matrix(theta[1:p], ncol = 1)
-    ## sigsq <- theta[p + 1]
-    ## phi   <- theta[p + 2]
-    if(apply_exp) {
-        sigsq <- exp(sigsq)
-        phi   <- exp(phi)
+singl_ll_nn_hess <- function(theta, .dt, dists, npix, model, nu = NULL, apply_exp = FALSE) {
+  if (is.null(names(theta))) {
+    if (length(theta) == 4) {
+      names(theta) <- c("mu", "sigsq", "al", "phi")
     }
-
-    .n <- NROW(.dt)
-
-    switch(model,
-           "matern" = {
-               varcov_u1 <- comp_mat_cov(cross_dists = dists,
-                                         n = .n, n2 = .n,
-                                         phi = phi,
-                                         sigsq = sigsq,
-                                         nu = nu)
-           },
-           "pexp" = {
-               varcov_u1 <- comp_pexp_cov(cross_dists = dists,
-                                          n = .n, n2 = .n,
-                                          phi = phi,
-                                          sigsq = sigsq,
-                                          nu = nu)
-           })
-    log_lik_y <- mvtnorm::dmvnorm(x = matrix(.dt, nrow = 1),
-                                  mean  = matrix(rep(mu, .n),
-                                                 ncol = 1),
-                                  sigma = varcov_u1,
-                                  log = TRUE,
-                                  checkSymmetry = FALSE)
-    return(- log_lik_y)
+    else if (length(theta) == 3) {
+      names(theta) <- c("mu", "sigsq", "phi")
+    }
+  }
+  log_lik_spm(theta, .dt, dists, npix, model, nu, apply_exp, type = "full")
 }

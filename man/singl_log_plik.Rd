@@ -2,44 +2,11 @@
 % Please edit documentation in R/log-lik.R
 \name{singl_log_plik}
 \alias{singl_log_plik}
-\title{Evaluate log-lik}
+\title{Backward compatibility wrapper for profile log-likelihood}
 \usage{
 singl_log_plik(theta, .dt, dists, npix, model, nu = NULL, apply_exp = FALSE)
 }
-\arguments{
-\item{theta}{a \code{vector} of size 2 containing the parameters associated
-with the model. These parameters are \eqn{\nu} and \eqn{\phi},
-respectively.}
-
-\item{.dt}{a \code{numeric} vector containing the variable \eqn{Y}.}
-
-\item{dists}{a \code{list} of size three. The first containing the distance
-matrices associated with the regions where \eqn{Y} was measured, the
-second for the distance matrices associated with \eqn{X}, and the last
-containing the cross-distance matrices.}
-
-\item{npix}{a \code{integer vector} containing the number of pixels within
-each polygon. (Ordered by the id variables for the polygons).}
-
-\item{model}{a \code{character} indicating which covariance function to
-use. Possible values are \code{c("matern", "pexp", "gaussian",
-    "spherical", "cs", "gw", "tapmat")}.}
-
-\item{nu}{\eqn{\nu} parameter. Not necessary if \code{mode} is
-\code{"gaussian"} or \code{"spherical"}}
-
-\item{apply_exp}{a \code{logical} indicating whether the exponential
-transformation should be applied to variance parameters. This
-facilitates the optimization process.}
-}
-\value{
-a scalar representing \code{-log.lik}.
-}
 \description{
-Evaluate the log-likelihood for a given set of parameters - New
-parametrization + profile likelihood
-}
-\details{
-Internal use.
+Backward compatibility wrapper for profile log-likelihood
 }
 \keyword{internal}

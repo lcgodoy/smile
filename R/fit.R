@@ -25,12 +25,11 @@ fit_spm <- function(x, ...) UseMethod("fit_spm")
 ##'   argument, a logical scalar, allows for exponentiation of non-negative
 ##'   parameters, enabling optimization over the entire real line.
 ##'
-##'   The underlying model assumes a point-level process:
-##'   \deqn{Y(\mathbf{s}) = \mu + S(\mathbf{s})} where
-##'   \eqn{S ~ GP(0, \sigma^2 C(\lVert \mathbf{s} - \mathbf{s}_2 \rVert; \theta))}.
-##'   The observed areal data is then assumed to behave as the average of the process
-##'   over each area:
-##'   \deqn{Y(B) = \lvert B \rvert^{-1} \int_{B} Y(\mathbf{s}) \, \textrm{d} \mathbf{s}}.
+##'   The underlying model assumes a point-level process: \deqn{Y(\mathbf{s}) =
+##'   \mu + S(\mathbf{s})} where \eqn{S ~ GP(0, \sigma^2 C(\lVert \mathbf{s} -
+##'   \mathbf{s}_2 \rVert; \theta))}.  The observed areal data is then assumed
+##'   to behave as the average of the process over each area: \deqn{Y(B) =
+##'   \lvert B \rvert^{-1} \int_{B} Y(\mathbf{s}) \, \textrm{d} \mathbf{s}}.
 ##'
 ##' @param x An object of type \code{spm}. The dimension of \code{theta_st}
 ##'   depends on the number of variables analyzed and whether the input is an
@@ -103,132 +102,83 @@ fit_spm.spm <- function(x, model, theta_st,
   if (! missing(nu))
     stopifnot(length(nu) == 1)
   stopifnot(model %in% c("matern", "pexp"))
-  npar <- length(theta_st)
-  p    <- npar + 2L
-  if (npar == 2) {
-    op_val <-
-      stats::optim(par = theta_st,
-                   fn  = singl_log_plik,
-                   method  = opt_method,
-                   control = control_opt,
-                   hessian = FALSE,
-                   .dt     = x$var,
-                   dists   = x$dists,
-                   npix    = x$npix,
-                   model   = model,
-                   nu = nu,
-                   apply_exp = apply_exp,
-                   ...)
-  } else if(npar == 1) {
-    op_val <-
-      stats::optim(par = theta_st,
-                   fn  = singl_log_lik_nn,
-                   method  = opt_method,
-                   control = control_opt,
-                   hessian = FALSE,
-                   .dt     = x$var,
-                   dists   = x$dists,
-                   npix    = x$npix,
-                   model   = model,
-                   nu = nu,
-                   apply_exp = apply_exp,
-                   ...)
-  }
+  
+  use_profile <- !all(c("mu", "sigsq") %in% names(theta_st))
+  
+  op_val <- stats::optim(
+                       par = theta_st,
+                       fn  = log_lik_spm,
+                       method  = opt_method,
+                       control = control_opt,
+                       hessian = FALSE,
+                       .dt     = x$var,
+                       dists   = x$dists,
+                       npix    = x$npix,
+                       model   = model,
+                       nu      = nu,
+                       apply_exp = apply_exp,
+                       type    = if (use_profile) "profile" else "full",
+                       ...
+                   )
 
   estimates <- op_val$par
-
   if (apply_exp) {
-    estimates <- exp(estimates)
-    ## Using Delta-Method
-    ## https://stats.idre.ucla.edu/r/faq/how-can-i-estimate-the-standard-error-of-transformed-regression-parameters-in-r-using-the-delta-method/
-    ## grad_mat <-
-    ##     diag(c(1, exp(estimates[2:npar])))
-    ## info_mat <- crossprod(grad_mat, info_mat) %*% grad_mat
+    to_exp <- names(estimates) %in% c("sigsq", "phi", "al")
+    estimates[to_exp] <- exp(estimates[to_exp])
   }
 
   .n <- NROW(x$var)
+  
+  phi_final <- estimates["phi"]
+  al_final  <- ifelse("al" %in% names(estimates),
+                      estimates["al"], 0)
+  V <- switch(model,
+              "matern" = comp_mat_cov(x$dists,
+                                      n = .n, n2 = .n,
+                                      phi = phi_final,
+                                      sigsq = 1,
+                                      nu = ifelse(is.null(nu), 0.5, nu)),
+              "pexp"   = comp_pexp_cov(x$dists,
+                                       n = .n, n2 = .n,
+                                       phi = phi_final,
+                                       sigsq = 1,
+                                       nu = ifelse(is.null(nu), 1.0, nu)))
+  
+  if (al_final > 0) {
+    V <- V + diag(al_final / x$npix, nrow = .n, ncol = .n)
+  }
 
-  ## can be turned in to a function to make to code cleaner
-  switch(model,
-         "matern" = {
-           if (is.null(nu))
-             nu <- .5
-           V <- comp_mat_cov(x$dists,
-                             n = .n, n2 = .n,
-                             phi   = estimates["phi"],
-                             sigsq = 1,
-                             nu = nu)
-         },
-         "pexp" = {
-           if (is.null(nu))
-             nu <- 1
-
-           V <- comp_pexp_cov(x$dists,
-                              n = .n, n2 = .n,
-                              phi   = estimates["phi"],
-                              sigsq = 1,
-                              nu = nu)
-         })
-
-  ones_n <- matrix(rep(1, .n), ncol = 1L)
-  y <- matrix(x$var, ncol = 1L)
-
-  if (npar == 2) {
-    V <- V + diag(estimates["al"] / x$npix,
-                  nrow = .n, ncol = .n)
-    inv_v <- chol2inv(chol(V))
-    mles <- est_mle(x$var, inv_v)
-    estimates <- c(mles,
-                   "al" = unname(estimates["al"]),
-                   "phi" = unname(estimates["phi"]))
-    if (comp_hess) {
-      info_mat <- solve(
-          numDeriv::hessian(func = singl_log_lik,
-                            x = estimates,
-                            .dt = x$var,
-                            dists = x$dists,
-                            npix = x$npix,
-                            model = model,
-                            nu = nu,
-                            apply_exp = FALSE)
-      )
-    } else {
-      info_mat <- matrix(NA_real_, ncol = p, nrow = p)
-    }
-  } else if (npar == 1) {
+  if (use_profile) {
     inv_v <- chol2inv(chol(V))
     mles  <- est_mle(x$var, inv_v)
-    estimates <- c(mles,
-                   "phi" = unname(estimates["phi"]))
-    if (comp_hess) {
-      ## stats::optimHess(par = estimates,
-      ##                  fn  = singl_log_lik,
-      info_mat <- solve(
-          numDeriv::hessian(func = singl_ll_nn_hess,
-                            x = estimates,
-                            .dt = x$var,
-                            dists = x$dists,
-                            npix = x$npix,
-                            model = model,
-                            nu = nu,
-                            apply_exp = FALSE)
-      )
-    } else {
-      info_mat <- matrix(NA_real_,
-                         ncol = length(estimates),
-                         nrow = length(estimates))
-    }
+    estimates <- c(mles, estimates)
+  }
+
+  if (comp_hess) {
+    info_mat <- solve(
+        numDeriv::hessian(func = log_lik_spm,
+                          x = estimates,
+                          .dt = x$var,
+                          dists = x$dists,
+                          npix = x$npix,
+                          model = model,
+                          nu = nu,
+                          apply_exp = FALSE,
+                          type = "full")
+    )
+  } else {
+    p <- length(estimates)
+    info_mat <- matrix(NA_real_, ncol = p, nrow = p)
   }
 
   output <- list(
       estimate  = estimates,
       info_mat  = info_mat,
-      converged = ifelse(op_val$convergence == 0,
-                         "yes", "no"),
+      converged = ifelse(op_val$convergence == 0, "yes", "no"),
       log_lik   = - op_val$value,
       call_data = x,
       model     = model,
-      nu        = nu
+      nu        = ifelse(is.null(nu), ifelse(model == "matern", 0.5, 1.0), nu)
   )
 
   class(output) <- append(class(output), "spm_fit")
@@ -389,7 +339,8 @@ summary_spm_fit <- function(x, sig = .05) {
 ##' @export
 fit_spm2 <- function(x, model, nu,
                      comp_hess = TRUE,
-                     phi_min, phi_max, nphi = 10,
+                     phi_min, phi_max,
+                     nphi = 10,
                      cores = getOption("mc.cores", 1L)) {
   stopifnot(NCOL(x$var) == 1)
   stopifnot(inherits(x, "spm"))
@@ -406,20 +357,21 @@ fit_spm2 <- function(x, model, nu,
   pl <- vector(mode = "numeric",
                length = 2 * length(my_phi))
   
+  prof_lik_phi <- function(p) {
+    log_lik_spm(theta = c("phi" = p), .dt = x$var,
+                dists = x$dists, npix = 1,
+                model = model, nu = nu, type = "profile")
+  }
+
   if(.Platform$OS.type != "unix") {
     for(i in seq_along(my_phi)) {
-      pl[i] <- singl_log_lik_nn(my_phi[i], .dt = x$var,
-                                dists = x$dists, npix = 1,
-                                model = model, nu = nu)
+      pl[i] <- prof_lik_phi(my_phi[i])
     }
   } else {
-    pl <- parallel::mclapply(my_phi,
-                             FUN = singl_log_lik_nn,
-                             .dt = x$var,
-                             dists = x$dists, npix = 1,
-                             model = model, nu = nu,
-                             mc.cores = cores)
-    pl <- unlist(pl)         
+    pl_list <- parallel::mclapply(my_phi,
+                                  FUN = prof_lik_phi,
+                                  mc.cores = cores)
+    pl[seq_along(my_phi)] <- unlist(pl_list)         
   }
 
   k <- which.min(pl[seq_len(nphi)])
@@ -436,74 +388,54 @@ fit_spm2 <- function(x, model, nu,
   }
 
   for( i in seq_along(my_phi2) ) {
-    pl[i + nphi] <- 
-      singl_log_lik_nn(my_phi2[i], .dt = x$var,
-                       dists = x$dists, npix = 1,
-                       model = model, nu = nu)
+    pl[i + nphi] <- prof_lik_phi(my_phi2[i])
   }
 
   phi_out <- c(my_phi, my_phi2)[which.min(pl)]
 
   .n <- NROW(x$var)
   
-  ## can be turned in to a function to make to code cleaner
-  switch(model,
-         "matern" = {
-           if(is.null(nu))
-             nu <- .5
-
-           V <- comp_mat_cov(x$dists,
-                             n = .n, n2 = .n,
-                             phi   = phi_out,
-                             sigsq = 1,
-                             nu = nu)
-         },
-         "pexp" = {
-           if(is.null(nu))
-             nu <- 1
-
-           V <- comp_pexp_cov(x$dists,
-                              n = .n, n2 = .n,
-                              phi   = phi_out,
-                              sigsq = 1,
-                              nu = nu)
-         })
+  V <- switch(model,
+              "matern" = comp_mat_cov(x$dists,
+                                      n = .n, n2 = .n,
+                                      phi = phi_out,
+                                      sigsq = 1,
+                                      nu = ifelse(is.null(nu), 0.5, nu)),
+              "pexp"   = comp_pexp_cov(x$dists,
+                                       n = .n, n2 = .n,
+                                       phi = phi_out,
+                                       sigsq = 1,
+                                       nu = ifelse(is.null(nu), 1.0, nu)))
   
-  ones_n <- matrix(rep(1, .n), ncol = 1L)
-  y <- matrix(x$var, ncol = 1L)
-
   inv_v <- chol2inv(chol(V))
   mles <- est_mle(x$var, inv_v)
-  estimates <- c(mles,
-                 "phi" = unname(phi_out))
+  estimates <- c(mles, "phi" = unname(phi_out))
 
   if(comp_hess) {
-    ## stats::optimHess(par = estimates,
-    ##                  fn  = singl_log_lik,
     info_mat <- solve(
-        numDeriv::hessian(func = singl_ll_nn_hess,
+        numDeriv::hessian(func = log_lik_spm,
                           x = estimates,
                           .dt = x$var,
                           dists = x$dists,
                           npix = x$npix,
                           model = model,
                           nu = nu,
-                          apply_exp = FALSE)
+                          apply_exp = FALSE,
+                          type = "full")
     )
   } else {
-    info_mat <- matrix(NA_real_,
-                       ncol = length(estimates),
-                       nrow = length(estimates))
+    p <- length(estimates)
+    info_mat <- matrix(NA_real_, ncol = p, nrow = p)
   }
 
   output <- list(
       estimate  = estimates,
       info_mat  = info_mat,
       converged = "yes",
-      log_lik   = - pl[which.min(pl)],
+      log_lik   = - min(pl),
       call_data = x,
       model     = model,
-      nu        = nu
+      nu        = ifelse(is.null(nu), ifelse(model == "matern", 0.5, 1.0), nu)
   )
   
   class(output) <- append(class(output), "spm_fit")
@@ -512,30 +444,23 @@ fit_spm2 <- function(x, model, nu,
 }
 
 ##' @name goodness_of_fit
-##'
-##' @title Akaike's (and Bayesian) An Information Criterion for \code{spm_fit}
-##'     objects.
-##' 
-##' @param object a \code{spm_fit} object.
-##' @param ... optionally more fitted model objects.
-##' @param k \code{numeric}, the _penalty_ per parameter to be used; the default
-##'     'k = 2' is the classical AIC. (for compatibility with \code{stats::AIC}.
-##'
-##' @importFrom stats AIC BIC
-##' 
-##' @return a \code{numeric} scalar corresponding to the goodness of fit
-##'     measure.
+##' @export
+logLik.spm_fit <- function(object, ...) {
+  val <- object$log_lik
+  attr(val, "df") <- length(object$estimate)
+  attr(val, "nobs") <- length(object$call_data$var)
+  class(val) <- "logLik"
+  return(val)
+}
+
+##' @name goodness_of_fit
 ##' @export
 AIC.spm_fit <- function(object, ..., k = 2) {
-  p <- length(object$estimates)
-  ll <- object$log_lik
-  k * (p - object$log_lik)
+  stats::AIC(logLik(object), k = k)
 }
 
 ##' @name goodness_of_fit
 ##' @export
 BIC.spm_fit <- function(object, ...) {
-  .n <- length(object$call_data$var)
-  ll <- object$log_lik
-  log(.n) - 2 * object$log_lik
+  stats::BIC(logLik(object))
 }
