@@ -1,5 +1,7 @@
 # smile 1.1.1
 
+* Simplified logic for the log-lik functions
+
 * Add CITATION file
 
 * Keeping only covariance functions valid on $R^n$ (as $n \to \infty$). This
