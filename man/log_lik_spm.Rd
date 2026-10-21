@@ -16,21 +16,26 @@ log_lik_spm(
 )
 }
 \arguments{
-\item{theta}{a named \code{numeric} vector containing parameters (\eqn{\mu, \sigma^2, \alpha, \phi}).}
+\item{theta}{a named \code{numeric} vector containing parameters (\eqn{\mu,
+\sigma^2, \alpha, \phi}).}
 
 \item{.dt}{a \code{numeric} vector containing the variable \eqn{Y}.}
 
 \item{dists}{a \code{list} of distance matrices.}
 
-\item{npix}{a \code{integer vector} containing the number of pixels within each polygon.}
+\item{npix}{a \code{integer vector} containing the number of pixels within
+each polygon.}
 
 \item{model}{a \code{character} indicating the covariance function family.}
 
-\item{nu}{\eqn{\nu} parameter for the Matern or Powered Exponential covariance functions.}
+\item{nu}{\eqn{\nu} parameter for the Matern or Powered Exponential
+covariance functions.}
 
-\item{apply_exp}{a \code{logical} indicating whether to exponentiate non-negative parameters.}
+\item{apply_exp}{a \code{logical} indicating whether to exponentiate
+non-negative parameters.}
 
-\item{type}{a \code{character} specifying the likelihood type: \code{"full"} or \code{"profile"}.}
+\item{type}{a \code{character} specifying the likelihood type: \code{"full"} or
+\code{"profile"}.}
 }
 \value{
 a scalar representing \code{-log.lik}.

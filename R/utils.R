@@ -2,7 +2,9 @@
 ##' @details internal use.
 ##' @param y response variable.
 ##' @param Vinv inverse of \eqn{V}
+##' @param U Cholesky of \eqn{V} (`chol(V)`)
 ##' @keywords internal
+##' @name est_mle
 est_mle <- function(y, Vinv) {
     n <- length(y)
     ones  <- matrix(1, nrow = n)
@@ -11,6 +13,20 @@ est_mle <- function(y, Vinv) {
     y     <- matrix(y - mu, ncol = 1)
     sigsq <- as.numeric((crossprod(y, Vinv) %*% y) / n)
     out   <- c("mu" = mu, "sigsq" = sigsq)
+    return(out)
+}
+
+##' @keywords internal
+##' @rdname est_mle
+est_mle2 <- function(y, U) {
+    n <- length(y)
+    ones <- matrix(1, nrow = n)
+    qaux <- backsolve(U, ones, transpose = TRUE)
+    qy <- backsolve(U, y, transpose = TRUE)
+    mu <- sum(qaux * qy) / sum(qaux * qaux)
+    res2 <- qy - mu * qaux
+    sigsq <- sum(res2 * res2) / n
+    out <- c("mu" = mu, "sigsq" = sigsq)
     return(out)
 }
 

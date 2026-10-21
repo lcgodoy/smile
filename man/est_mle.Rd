@@ -2,14 +2,19 @@
 % Please edit documentation in R/utils.R
 \name{est_mle}
 \alias{est_mle}
+\alias{est_mle2}
 \title{MLEs for fixed V.}
 \usage{
 est_mle(y, Vinv)
+
+est_mle2(y, U)
 }
 \arguments{
 \item{y}{response variable.}
 
 \item{Vinv}{inverse of \eqn{V}}
+
+\item{U}{Cholesky of \eqn{V} (\code{chol(V)})}
 }
 \description{
 MLEs for fixed V.

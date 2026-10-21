@@ -62,8 +62,5 @@ Gaussian covariance functions.
 \seealso{
 \code{\link{single_matern3}}, \code{\link{single_matern5}}
 \code{\link{single_exp}}, \code{\link{mat_cov}}
-
-\code{\link{single_matern3}}, \code{\link{single_matern5}}
-\code{\link{single_exp}}, \code{\link{mat_cov}}
 }
 \keyword{internal}

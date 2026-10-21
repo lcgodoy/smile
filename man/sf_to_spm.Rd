@@ -34,7 +34,7 @@ points for each polygon in \code{sf_obj}.}
 
 \item{type}{a \code{character} indicating the type of grid to be
 generated. The options are \code{c("random", "regular",
-    "hexagonal")}. For more details, see \code{st_sample} in the \code{sf}
+"hexagonal")}. For more details, see \code{st_sample} in the \code{sf}
 package.}
 
 \item{by_polygon}{a \code{logical} indicating whether we should generate

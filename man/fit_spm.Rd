@@ -98,12 +98,11 @@ including Matern, Exponential, and Powered Exponential. The \code{apply_exp}
 argument, a logical scalar, allows for exponentiation of non-negative
 parameters, enabling optimization over the entire real line.
 
-The underlying model assumes a point-level process:
-\deqn{Y(\mathbf{s}) = \mu + S(\mathbf{s})} where
-\eqn{S ~ GP(0, \sigma^2 C(\lVert \mathbf{s} - \mathbf{s}_2 \rVert; \theta))}.
-The observed areal data is then assumed to behave as the average of the process
-over each area:
-\deqn{Y(B) = \lvert B \rvert^{-1} \int_{B} Y(\mathbf{s}) \, \textrm{d} \mathbf{s}}.
+The underlying model assumes a point-level process: \deqn{Y(\mathbf{s}) =
+  \mu + S(\mathbf{s})} where \eqn{S ~ GP(0, \sigma^2 C(\lVert \mathbf{s} -
+  \mathbf{s}_2 \rVert; \theta))}.  The observed areal data is then assumed
+to behave as the average of the process over each area: \deqn{Y(B) =
+  \lvert B \rvert^{-1} \int_{B} Y(\mathbf{s}) \, \textrm{d} \mathbf{s}}.
 }
 \examples{
 data(liv_lsoa) ## loading the LSOA data

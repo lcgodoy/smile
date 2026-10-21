@@ -34,9 +34,9 @@ log_lik_spm <- function(theta, .dt, dists, npix, model,
       return(NA_real_)
   }
 
-  phi   <- theta["phi"]
-  al    <- ifelse("al" %in% names(theta), theta["al"], 0)
-  .n    <- NROW(.dt)
+  phi <- theta["phi"]
+  al  <- ifelse("al" %in% names(theta), theta["al"], 0)
+  .n  <- NROW(.dt)
 
   V <- switch(model,
               "matern" = comp_mat_cov(cross_dists = dists,
@@ -62,9 +62,9 @@ log_lik_spm <- function(theta, .dt, dists, npix, model,
       mles <- est_mle(.dt, inv_v)
       log_lik_y <- .5 * (.n * log(2 * pi) + .n * log(mles["sigsq"]) + log(det(V)) + .n)
     } else {
-      inv_v <- chol2inv(chol_v)
-      mles <- est_mle(.dt, inv_v)
-      log_lik_y <- .5 * (.n * log(2 * pi) + .n * log(mles["sigsq"]) + 2 * sum(log(diag(chol_v))) + .n)
+      mles <- est_mle2(.dt, chol_v)
+      log_lik_y <- .5 * (.n * log(2 * pi) + .n * log(mles["sigsq"]) +
+                         2 * sum(log(diag(chol_v))) + .n)
     }
     return(as.numeric(log_lik_y))
   } else {
@@ -103,8 +103,8 @@ singl_log_plik <- function(theta, .dt, dists, npix, model, nu = NULL, apply_exp 
   if (is.null(names(theta))) {
     if (length(theta) == 2) {
       names(theta) <- c("al", "phi")
-    } else if {
-      (length(theta) == 1) names(theta) <- c("phi")
+    } else if(length(theta) == 1) {
+      names(theta) <- c("phi")
     }
   }
   log_lik_spm(theta, .dt, dists, npix, model, nu, apply_exp, type = "profile")

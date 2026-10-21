@@ -27,7 +27,7 @@ be \code{grid_len^2}. Default is 50.}
 locations.  The distances should be non-negative.}
 }
 \value{
-A \link[dplyr:reexports]{tibble} with three columns:
+A \link[dplyr:tibble]{tibble} with three columns:
 \item{rho}{The practical range parameter value.}
 \item{nu}{The power parameter value.}
 \item{lambda}{The smallest eigenvalue of the power exponential correlation
