@@ -162,6 +162,54 @@ comp_pexp_cov <- function(cross_dists, n, n2, sigsq, phi, nu) {
     .Call(`_smile_comp_pexp_cov`, cross_dists, n, n2, sigsq, phi, nu)
 }
 
+#' @title Planar Chebyshev centers and radii (internal)
+#' @noRd
+mbc_planar_cpp <- function(x, y, feature_id, n_features) {
+    .Call(`_smile_mbc_planar_cpp`, x, y, feature_id, n_features)
+}
+
+#' @title Spherical Chebyshev centers and radii (internal)
+#' @noRd
+mbc_sphere_cpp <- function(lon, lat, feature_id, n_features, earth_radius = 6371010.0) {
+    .Call(`_smile_mbc_sphere_cpp`, lon, lat, feature_id, n_features, earth_radius)
+}
+
+#' @title Planar CR distance matrix (internal)
+#' @noRd
+cr_planar_cpp <- function(x, y, feature_id, n_features) {
+    .Call(`_smile_cr_planar_cpp`, x, y, feature_id, n_features)
+}
+
+#' @title Planar CR cross-distance matrix (internal)
+#' @noRd
+cr_cross_planar_cpp <- function(x1, y1, fid1, n1, x2, y2, fid2, n2) {
+    .Call(`_smile_cr_cross_planar_cpp`, x1, y1, fid1, n1, x2, y2, fid2, n2)
+}
+
+#' @title Spherical CR distance matrix (internal)
+#' @noRd
+cr_sphere_cpp <- function(lon, lat, feature_id, n_features, earth_radius = 6371010.0) {
+    .Call(`_smile_cr_sphere_cpp`, lon, lat, feature_id, n_features, earth_radius)
+}
+
+#' @title Spherical CR cross-distance matrix (internal)
+#' @noRd
+cr_cross_sphere_cpp <- function(lon1, lat1, fid1, n1, lon2, lat2, fid2, n2, earth_radius = 6371010.0) {
+    .Call(`_smile_cr_cross_sphere_cpp`, lon1, lat1, fid1, n1, lon2, lat2, fid2, n2, earth_radius)
+}
+
+#' @title Spherical CR distance with the exceedance bound (internal)
+#' @noRd
+cr_sphere_meb_cpp <- function(lon, lat, feature_id, n_features, exceedance = FALSE, earth_radius = 6371010.0) {
+    .Call(`_smile_cr_sphere_meb_cpp`, lon, lat, feature_id, n_features, exceedance, earth_radius)
+}
+
+#' @title Spherical CR upper bound, exceedance bound, and CR (internal)
+#' @noRd
+cr_all_cpp <- function(lon, lat, feature_id, n_features, earth_radius = 6371010.0) {
+    .Call(`_smile_cr_all_cpp`, lon, lat, feature_id, n_features, earth_radius)
+}
+
 #' @title Creating a symmetric distance matrix (Eigen version)
 #' @description Computes the Euclidean distance between all pairs of rows in a
 #'   matrix.
@@ -208,5 +256,68 @@ mult_dists <- function(mat_list1, mat_list2, return_single) {
 #' @keywords internal
 pred_cdist <- function(mat_list, pred_mat) {
     .Call(`_smile_pred_cdist`, mat_list, pred_mat)
+}
+
+#' @title Planar Hausdorff distance between two units (internal)
+#' @param x,y matrices with the columns x, y, and optionally a part id.
+#' @noRd
+haus_r2_aux_continuous <- function(x, y) {
+    .Call(`_smile_haus_r2_aux_continuous`, x, y)
+}
+
+#' @title Planar Hausdorff distance matrix (internal)
+#' @param poly_list list of matrices from .to_list_mat().
+#' @noRd
+dist_haus_r2 <- function(poly_list) {
+    .Call(`_smile_dist_haus_r2`, poly_list)
+}
+
+#' @title Planar Hausdorff distances from units to points (internal)
+#' @param poly_list list of matrices from .to_list_mat().
+#' @param pred_mat matrix with one point (x, y) for each row.
+#' @noRd
+cdist_haus_r2_mp <- function(poly_list, pred_mat) {
+    .Call(`_smile_cdist_haus_r2_mp`, poly_list, pred_mat)
+}
+
+#' @title Planar Hausdorff cross-distance matrix (internal)
+#' @param poly_list,poly_pred lists of matrices from .to_list_mat().
+#' @noRd
+cdist_haus_r2_lists <- function(poly_list, poly_pred) {
+    .Call(`_smile_cdist_haus_r2_lists`, poly_list, poly_pred)
+}
+
+#' @title Spherical Hausdorff distance between two units (internal)
+#' @param x,y matrices with the columns longitude, latitude (degrees), and
+#'   optionally a part id.
+#' @param earth_radius radius of the sphere, in meters.
+#' @noRd
+haus_s2_aux_continuous <- function(x, y, earth_radius = 6371010.0) {
+    .Call(`_smile_haus_s2_aux_continuous`, x, y, earth_radius)
+}
+
+#' @title Spherical Hausdorff distance matrix (internal)
+#' @param poly_list list of matrices from .to_list_mat().
+#' @param earth_radius radius of the sphere, in meters.
+#' @noRd
+dist_haus_s2 <- function(poly_list, earth_radius = 6371010.0) {
+    .Call(`_smile_dist_haus_s2`, poly_list, earth_radius)
+}
+
+#' @title Spherical Hausdorff distances from units to points (internal)
+#' @param poly_list list of matrices from .to_list_mat().
+#' @param pred_mat matrix with one point (longitude, latitude) for each row.
+#' @param earth_radius radius of the sphere, in meters.
+#' @noRd
+cdist_haus_s2_mp <- function(poly_list, pred_mat, earth_radius = 6371010.0) {
+    .Call(`_smile_cdist_haus_s2_mp`, poly_list, pred_mat, earth_radius)
+}
+
+#' @title Spherical Hausdorff cross-distance matrix (internal)
+#' @param poly_list,poly_pred lists of matrices from .to_list_mat().
+#' @param earth_radius radius of the sphere, in meters.
+#' @noRd
+cdist_haus_s2_lists <- function(poly_list, poly_pred, earth_radius = 6371010.0) {
+    .Call(`_smile_cdist_haus_s2_lists`, poly_list, poly_pred, earth_radius)
 }
 

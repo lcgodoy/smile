@@ -152,6 +152,132 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// mbc_planar_cpp
+Rcpp::List mbc_planar_cpp(const Rcpp::NumericVector& x, const Rcpp::NumericVector& y, const Rcpp::IntegerVector& feature_id, int n_features);
+RcppExport SEXP _smile_mbc_planar_cpp(SEXP xSEXP, SEXP ySEXP, SEXP feature_idSEXP, SEXP n_featuresSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type x(xSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type y(ySEXP);
+    Rcpp::traits::input_parameter< const Rcpp::IntegerVector& >::type feature_id(feature_idSEXP);
+    Rcpp::traits::input_parameter< int >::type n_features(n_featuresSEXP);
+    rcpp_result_gen = Rcpp::wrap(mbc_planar_cpp(x, y, feature_id, n_features));
+    return rcpp_result_gen;
+END_RCPP
+}
+// mbc_sphere_cpp
+Rcpp::List mbc_sphere_cpp(const Rcpp::NumericVector& lon, const Rcpp::NumericVector& lat, const Rcpp::IntegerVector& feature_id, int n_features, double earth_radius);
+RcppExport SEXP _smile_mbc_sphere_cpp(SEXP lonSEXP, SEXP latSEXP, SEXP feature_idSEXP, SEXP n_featuresSEXP, SEXP earth_radiusSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type lon(lonSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type lat(latSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::IntegerVector& >::type feature_id(feature_idSEXP);
+    Rcpp::traits::input_parameter< int >::type n_features(n_featuresSEXP);
+    Rcpp::traits::input_parameter< double >::type earth_radius(earth_radiusSEXP);
+    rcpp_result_gen = Rcpp::wrap(mbc_sphere_cpp(lon, lat, feature_id, n_features, earth_radius));
+    return rcpp_result_gen;
+END_RCPP
+}
+// cr_planar_cpp
+Eigen::MatrixXd cr_planar_cpp(const Rcpp::NumericVector& x, const Rcpp::NumericVector& y, const Rcpp::IntegerVector& feature_id, int n_features);
+RcppExport SEXP _smile_cr_planar_cpp(SEXP xSEXP, SEXP ySEXP, SEXP feature_idSEXP, SEXP n_featuresSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type x(xSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type y(ySEXP);
+    Rcpp::traits::input_parameter< const Rcpp::IntegerVector& >::type feature_id(feature_idSEXP);
+    Rcpp::traits::input_parameter< int >::type n_features(n_featuresSEXP);
+    rcpp_result_gen = Rcpp::wrap(cr_planar_cpp(x, y, feature_id, n_features));
+    return rcpp_result_gen;
+END_RCPP
+}
+// cr_cross_planar_cpp
+Eigen::MatrixXd cr_cross_planar_cpp(const Rcpp::NumericVector& x1, const Rcpp::NumericVector& y1, const Rcpp::IntegerVector& fid1, int n1, const Rcpp::NumericVector& x2, const Rcpp::NumericVector& y2, const Rcpp::IntegerVector& fid2, int n2);
+RcppExport SEXP _smile_cr_cross_planar_cpp(SEXP x1SEXP, SEXP y1SEXP, SEXP fid1SEXP, SEXP n1SEXP, SEXP x2SEXP, SEXP y2SEXP, SEXP fid2SEXP, SEXP n2SEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type x1(x1SEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type y1(y1SEXP);
+    Rcpp::traits::input_parameter< const Rcpp::IntegerVector& >::type fid1(fid1SEXP);
+    Rcpp::traits::input_parameter< int >::type n1(n1SEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type x2(x2SEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type y2(y2SEXP);
+    Rcpp::traits::input_parameter< const Rcpp::IntegerVector& >::type fid2(fid2SEXP);
+    Rcpp::traits::input_parameter< int >::type n2(n2SEXP);
+    rcpp_result_gen = Rcpp::wrap(cr_cross_planar_cpp(x1, y1, fid1, n1, x2, y2, fid2, n2));
+    return rcpp_result_gen;
+END_RCPP
+}
+// cr_sphere_cpp
+Eigen::MatrixXd cr_sphere_cpp(const Rcpp::NumericVector& lon, const Rcpp::NumericVector& lat, const Rcpp::IntegerVector& feature_id, int n_features, double earth_radius);
+RcppExport SEXP _smile_cr_sphere_cpp(SEXP lonSEXP, SEXP latSEXP, SEXP feature_idSEXP, SEXP n_featuresSEXP, SEXP earth_radiusSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type lon(lonSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type lat(latSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::IntegerVector& >::type feature_id(feature_idSEXP);
+    Rcpp::traits::input_parameter< int >::type n_features(n_featuresSEXP);
+    Rcpp::traits::input_parameter< double >::type earth_radius(earth_radiusSEXP);
+    rcpp_result_gen = Rcpp::wrap(cr_sphere_cpp(lon, lat, feature_id, n_features, earth_radius));
+    return rcpp_result_gen;
+END_RCPP
+}
+// cr_cross_sphere_cpp
+Eigen::MatrixXd cr_cross_sphere_cpp(const Rcpp::NumericVector& lon1, const Rcpp::NumericVector& lat1, const Rcpp::IntegerVector& fid1, int n1, const Rcpp::NumericVector& lon2, const Rcpp::NumericVector& lat2, const Rcpp::IntegerVector& fid2, int n2, double earth_radius);
+RcppExport SEXP _smile_cr_cross_sphere_cpp(SEXP lon1SEXP, SEXP lat1SEXP, SEXP fid1SEXP, SEXP n1SEXP, SEXP lon2SEXP, SEXP lat2SEXP, SEXP fid2SEXP, SEXP n2SEXP, SEXP earth_radiusSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type lon1(lon1SEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type lat1(lat1SEXP);
+    Rcpp::traits::input_parameter< const Rcpp::IntegerVector& >::type fid1(fid1SEXP);
+    Rcpp::traits::input_parameter< int >::type n1(n1SEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type lon2(lon2SEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type lat2(lat2SEXP);
+    Rcpp::traits::input_parameter< const Rcpp::IntegerVector& >::type fid2(fid2SEXP);
+    Rcpp::traits::input_parameter< int >::type n2(n2SEXP);
+    Rcpp::traits::input_parameter< double >::type earth_radius(earth_radiusSEXP);
+    rcpp_result_gen = Rcpp::wrap(cr_cross_sphere_cpp(lon1, lat1, fid1, n1, lon2, lat2, fid2, n2, earth_radius));
+    return rcpp_result_gen;
+END_RCPP
+}
+// cr_sphere_meb_cpp
+Eigen::MatrixXd cr_sphere_meb_cpp(const Rcpp::NumericVector& lon, const Rcpp::NumericVector& lat, const Rcpp::IntegerVector& feature_id, int n_features, bool exceedance, double earth_radius);
+RcppExport SEXP _smile_cr_sphere_meb_cpp(SEXP lonSEXP, SEXP latSEXP, SEXP feature_idSEXP, SEXP n_featuresSEXP, SEXP exceedanceSEXP, SEXP earth_radiusSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type lon(lonSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type lat(latSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::IntegerVector& >::type feature_id(feature_idSEXP);
+    Rcpp::traits::input_parameter< int >::type n_features(n_featuresSEXP);
+    Rcpp::traits::input_parameter< bool >::type exceedance(exceedanceSEXP);
+    Rcpp::traits::input_parameter< double >::type earth_radius(earth_radiusSEXP);
+    rcpp_result_gen = Rcpp::wrap(cr_sphere_meb_cpp(lon, lat, feature_id, n_features, exceedance, earth_radius));
+    return rcpp_result_gen;
+END_RCPP
+}
+// cr_all_cpp
+Rcpp::List cr_all_cpp(const Rcpp::NumericVector& lon, const Rcpp::NumericVector& lat, const Rcpp::IntegerVector& feature_id, int n_features, double earth_radius);
+RcppExport SEXP _smile_cr_all_cpp(SEXP lonSEXP, SEXP latSEXP, SEXP feature_idSEXP, SEXP n_featuresSEXP, SEXP earth_radiusSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type lon(lonSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::NumericVector& >::type lat(latSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::IntegerVector& >::type feature_id(feature_idSEXP);
+    Rcpp::traits::input_parameter< int >::type n_features(n_featuresSEXP);
+    Rcpp::traits::input_parameter< double >::type earth_radius(earth_radiusSEXP);
+    rcpp_result_gen = Rcpp::wrap(cr_all_cpp(lon, lat, feature_id, n_features, earth_radius));
+    return rcpp_result_gen;
+END_RCPP
+}
 // distmat
 Eigen::MatrixXd distmat(const Eigen::MatrixXd& my_mat);
 RcppExport SEXP _smile_distmat(SEXP my_matSEXP) {
@@ -211,6 +337,104 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// haus_r2_aux_continuous
+double haus_r2_aux_continuous(SEXP x, SEXP y);
+RcppExport SEXP _smile_haus_r2_aux_continuous(SEXP xSEXP, SEXP ySEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< SEXP >::type x(xSEXP);
+    Rcpp::traits::input_parameter< SEXP >::type y(ySEXP);
+    rcpp_result_gen = Rcpp::wrap(haus_r2_aux_continuous(x, y));
+    return rcpp_result_gen;
+END_RCPP
+}
+// dist_haus_r2
+Eigen::MatrixXd dist_haus_r2(const Rcpp::List& poly_list);
+RcppExport SEXP _smile_dist_haus_r2(SEXP poly_listSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type poly_list(poly_listSEXP);
+    rcpp_result_gen = Rcpp::wrap(dist_haus_r2(poly_list));
+    return rcpp_result_gen;
+END_RCPP
+}
+// cdist_haus_r2_mp
+Eigen::MatrixXd cdist_haus_r2_mp(const Rcpp::List& poly_list, SEXP pred_mat);
+RcppExport SEXP _smile_cdist_haus_r2_mp(SEXP poly_listSEXP, SEXP pred_matSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type poly_list(poly_listSEXP);
+    Rcpp::traits::input_parameter< SEXP >::type pred_mat(pred_matSEXP);
+    rcpp_result_gen = Rcpp::wrap(cdist_haus_r2_mp(poly_list, pred_mat));
+    return rcpp_result_gen;
+END_RCPP
+}
+// cdist_haus_r2_lists
+Eigen::MatrixXd cdist_haus_r2_lists(const Rcpp::List& poly_list, const Rcpp::List& poly_pred);
+RcppExport SEXP _smile_cdist_haus_r2_lists(SEXP poly_listSEXP, SEXP poly_predSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type poly_list(poly_listSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type poly_pred(poly_predSEXP);
+    rcpp_result_gen = Rcpp::wrap(cdist_haus_r2_lists(poly_list, poly_pred));
+    return rcpp_result_gen;
+END_RCPP
+}
+// haus_s2_aux_continuous
+double haus_s2_aux_continuous(SEXP x, SEXP y, double earth_radius);
+RcppExport SEXP _smile_haus_s2_aux_continuous(SEXP xSEXP, SEXP ySEXP, SEXP earth_radiusSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< SEXP >::type x(xSEXP);
+    Rcpp::traits::input_parameter< SEXP >::type y(ySEXP);
+    Rcpp::traits::input_parameter< double >::type earth_radius(earth_radiusSEXP);
+    rcpp_result_gen = Rcpp::wrap(haus_s2_aux_continuous(x, y, earth_radius));
+    return rcpp_result_gen;
+END_RCPP
+}
+// dist_haus_s2
+Eigen::MatrixXd dist_haus_s2(const Rcpp::List& poly_list, double earth_radius);
+RcppExport SEXP _smile_dist_haus_s2(SEXP poly_listSEXP, SEXP earth_radiusSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type poly_list(poly_listSEXP);
+    Rcpp::traits::input_parameter< double >::type earth_radius(earth_radiusSEXP);
+    rcpp_result_gen = Rcpp::wrap(dist_haus_s2(poly_list, earth_radius));
+    return rcpp_result_gen;
+END_RCPP
+}
+// cdist_haus_s2_mp
+Eigen::MatrixXd cdist_haus_s2_mp(const Rcpp::List& poly_list, SEXP pred_mat, double earth_radius);
+RcppExport SEXP _smile_cdist_haus_s2_mp(SEXP poly_listSEXP, SEXP pred_matSEXP, SEXP earth_radiusSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type poly_list(poly_listSEXP);
+    Rcpp::traits::input_parameter< SEXP >::type pred_mat(pred_matSEXP);
+    Rcpp::traits::input_parameter< double >::type earth_radius(earth_radiusSEXP);
+    rcpp_result_gen = Rcpp::wrap(cdist_haus_s2_mp(poly_list, pred_mat, earth_radius));
+    return rcpp_result_gen;
+END_RCPP
+}
+// cdist_haus_s2_lists
+Eigen::MatrixXd cdist_haus_s2_lists(const Rcpp::List& poly_list, const Rcpp::List& poly_pred, double earth_radius);
+RcppExport SEXP _smile_cdist_haus_s2_lists(SEXP poly_listSEXP, SEXP poly_predSEXP, SEXP earth_radiusSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type poly_list(poly_listSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type poly_pred(poly_predSEXP);
+    Rcpp::traits::input_parameter< double >::type earth_radius(earth_radiusSEXP);
+    rcpp_result_gen = Rcpp::wrap(cdist_haus_s2_lists(poly_list, poly_pred, earth_radius));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_smile_single_exp", (DL_FUNC) &_smile_single_exp, 3},
@@ -223,11 +447,27 @@ static const R_CallMethodDef CallEntries[] = {
     {"_smile_comp_mat_cov", (DL_FUNC) &_smile_comp_mat_cov, 6},
     {"_smile_pexp_cov", (DL_FUNC) &_smile_pexp_cov, 4},
     {"_smile_comp_pexp_cov", (DL_FUNC) &_smile_comp_pexp_cov, 6},
+    {"_smile_mbc_planar_cpp", (DL_FUNC) &_smile_mbc_planar_cpp, 4},
+    {"_smile_mbc_sphere_cpp", (DL_FUNC) &_smile_mbc_sphere_cpp, 5},
+    {"_smile_cr_planar_cpp", (DL_FUNC) &_smile_cr_planar_cpp, 4},
+    {"_smile_cr_cross_planar_cpp", (DL_FUNC) &_smile_cr_cross_planar_cpp, 8},
+    {"_smile_cr_sphere_cpp", (DL_FUNC) &_smile_cr_sphere_cpp, 5},
+    {"_smile_cr_cross_sphere_cpp", (DL_FUNC) &_smile_cr_cross_sphere_cpp, 9},
+    {"_smile_cr_sphere_meb_cpp", (DL_FUNC) &_smile_cr_sphere_meb_cpp, 6},
+    {"_smile_cr_all_cpp", (DL_FUNC) &_smile_cr_all_cpp, 5},
     {"_smile_distmat", (DL_FUNC) &_smile_distmat, 1},
     {"_smile_crossdist", (DL_FUNC) &_smile_crossdist, 2},
     {"_smile_single_dists", (DL_FUNC) &_smile_single_dists, 1},
     {"_smile_mult_dists", (DL_FUNC) &_smile_mult_dists, 3},
     {"_smile_pred_cdist", (DL_FUNC) &_smile_pred_cdist, 2},
+    {"_smile_haus_r2_aux_continuous", (DL_FUNC) &_smile_haus_r2_aux_continuous, 2},
+    {"_smile_dist_haus_r2", (DL_FUNC) &_smile_dist_haus_r2, 1},
+    {"_smile_cdist_haus_r2_mp", (DL_FUNC) &_smile_cdist_haus_r2_mp, 2},
+    {"_smile_cdist_haus_r2_lists", (DL_FUNC) &_smile_cdist_haus_r2_lists, 2},
+    {"_smile_haus_s2_aux_continuous", (DL_FUNC) &_smile_haus_s2_aux_continuous, 3},
+    {"_smile_dist_haus_s2", (DL_FUNC) &_smile_dist_haus_s2, 2},
+    {"_smile_cdist_haus_s2_mp", (DL_FUNC) &_smile_cdist_haus_s2_mp, 3},
+    {"_smile_cdist_haus_s2_lists", (DL_FUNC) &_smile_cdist_haus_s2_lists, 3},
     {NULL, NULL, 0}
 };
 

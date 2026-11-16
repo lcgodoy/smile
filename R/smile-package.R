@@ -8,5 +8,6 @@ NULL
 
 ## usethis namespace: start
 #' @importFrom Rcpp sourceCpp
+#' @importFrom stats AIC BIC logLik
 ## usethis namespace: end
 NULL
