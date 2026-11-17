@@ -13,7 +13,7 @@
 * Add CITATION file
 
 * Keeping only covariance functions valid on $R^n$ (as $n \to \infty$). This
-  keeps the code easier to mantain and extend and, in addition, allows us to fit
+  keeps the code easier to mantain and extend. In addition, allows us to fit
   models on different domains (on the square-root scale).
 
 * Function for empirical validation of the Matern Covariance function

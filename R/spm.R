@@ -35,7 +35,8 @@
 ##'                       poly_ids = "msoa11cd",
 ##'                       var_ids = "leb_est")
 single_sf_to_spm <- function(sf_obj,
-                             n_pts, type = "regular",
+                             n_pts,
+                             type = "regular",
                              by_polygon = FALSE,
                              poly_ids = NULL,
                              var_ids  = NULL) {
@@ -74,8 +75,6 @@ single_sf_to_spm <- function(sf_obj,
       .tp = type)
   } else {
     out_grid <-
-      ## sf::st_sample(x = sf::st_cast(sf::st_geometry(sf_obj),
-      ##                               "POLYGON"),
       sf::st_sample(x = sf::st_geometry(sf_obj),
                     size = n_pts,
                     type = type,
@@ -85,8 +84,6 @@ single_sf_to_spm <- function(sf_obj,
   if (by_polygon) {
     out_grid <- sf::st_set_crs(do.call("c", out_grid),
                                sf::st_crs(sf_obj))
-    ## out_grid <- sf::st_set_crs(do.call("rbind", out_grid),
-    ##                            sf::st_crs(sf_obj))
   }
   out_grid_pt <-
     sf::st_join(x = sf::st_sf(geometry = out_grid),
