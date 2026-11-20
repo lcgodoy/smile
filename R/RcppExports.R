@@ -287,6 +287,25 @@ cdist_haus_r2_lists <- function(poly_list, poly_pred) {
     .Call(`_smile_cdist_haus_r2_lists`, poly_list, poly_pred)
 }
 
+#' @title Planar Hausdorff distance matrix with method selection (internal)
+#' @param poly_list list of matrices from .to_list_mat() or .to_polygon_list().
+#' @param method one of "discrete", "boundary", or "polygon".
+#' @param tol convergence tolerance for continuous methods.
+#' @noRd
+dist_haus_r2_method <- function(poly_list, method = "discrete", tol = 1e-8) {
+    .Call(`_smile_dist_haus_r2_method`, poly_list, method, tol)
+}
+
+#' @title Planar Hausdorff cross-distance matrix with method selection (internal)
+#' @param poly_list,poly_pred lists of matrices from .to_list_mat() or
+#'   .to_polygon_list().
+#' @param method one of "discrete", "boundary", or "polygon".
+#' @param tol convergence tolerance for continuous methods.
+#' @noRd
+cdist_haus_r2_lists_method <- function(poly_list, poly_pred, method = "discrete", tol = 1e-8) {
+    .Call(`_smile_cdist_haus_r2_lists_method`, poly_list, poly_pred, method, tol)
+}
+
 #' @title Spherical Hausdorff distance between two units (internal)
 #' @param x,y matrices with the columns longitude, latitude (degrees), and
 #'   optionally a part id.
@@ -319,5 +338,26 @@ cdist_haus_s2_mp <- function(poly_list, pred_mat, earth_radius = 6371010.0) {
 #' @noRd
 cdist_haus_s2_lists <- function(poly_list, poly_pred, earth_radius = 6371010.0) {
     .Call(`_smile_cdist_haus_s2_lists`, poly_list, poly_pred, earth_radius)
+}
+
+#' @title Spherical Hausdorff distance matrix with method selection (internal)
+#' @param poly_list list of matrices from .to_list_mat() or .to_polygon_list().
+#' @param method one of "discrete", "boundary", or "polygon".
+#' @param tol convergence tolerance for continuous methods.
+#' @param earth_radius radius of the sphere, in meters.
+#' @noRd
+dist_haus_s2_method <- function(poly_list, method = "discrete", tol = 1e-8, earth_radius = 6371010.0) {
+    .Call(`_smile_dist_haus_s2_method`, poly_list, method, tol, earth_radius)
+}
+
+#' @title Spherical Hausdorff cross-distance matrix with method selection (internal)
+#' @param poly_list,poly_pred lists of matrices from .to_list_mat() or
+#'   .to_polygon_list().
+#' @param method one of "discrete", "boundary", or "polygon".
+#' @param tol convergence tolerance for continuous methods.
+#' @param earth_radius radius of the sphere, in meters.
+#' @noRd
+cdist_haus_s2_lists_method <- function(poly_list, poly_pred, method = "discrete", tol = 1e-8, earth_radius = 6371010.0) {
+    .Call(`_smile_cdist_haus_s2_lists_method`, poly_list, poly_pred, method, tol, earth_radius)
 }
 

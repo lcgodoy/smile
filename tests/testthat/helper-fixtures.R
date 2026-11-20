@@ -186,6 +186,175 @@ haus_ref_s2 <- function(x, y = NULL) {
   out
 }
 
+## ---- Spherical continuous Hausdorff references (s2) -------------------------
+
+## Samples points densely along every great-circle edge (or point) of single
+## geometry `g` (an sfc of length 1 in EPSG:4326).
+densified_vertices_s2 <- function(g, max_deg = 0.05) {
+  crd <- wk::wk_coords(g)
+  if (nrow(crd) == 0L) return(sf::st_sfc(crs = sf::st_crs(g)))
+  xyz <- .ll_to_xyz_r(crd$x, crd$y)
+  part <- cumsum(c(TRUE, diff(crd$part_id) != 0 | diff(crd$ring_id) != 0))
+  pts <- list()
+  idx <- 1L
+  max_rad <- max_deg * pi / 180
+  for (p in unique(part)) {
+    rows <- which(part == p)
+    if (length(rows) == 1L) {
+      pts[[idx]] <- sf::st_point(c(crd$x[rows], crd$y[rows]))
+      idx <- idx + 1L
+      next
+    }
+    for (k in seq_len(length(rows) - 1L)) {
+      u <- xyz[rows[k], ]
+      v <- xyz[rows[k + 1L], ]
+      ang <- atan2(sqrt(sum(.cross3_r(u, v)^2)), sum(u * v))
+      nseg <- max(1L, ceiling(ang / max_rad))
+      ts <- seq(0, 1, length.out = nseg + 1L)
+      if (k < length(rows) - 1L) ts <- ts[-length(ts)]
+      for (t in ts) {
+        w <- (1 - t) * u + t * v
+        w <- w / sqrt(sum(w^2))
+        pts[[idx]] <- sf::st_point(.xyz_to_ll_r(w))
+        idx <- idx + 1L
+      }
+    }
+  }
+  sf::st_sfc(pts, crs = sf::st_crs(g))
+}
+
+haus_ref_boundary_s2 <- function(x, y = NULL, max_deg = 0.05) {
+  x <- sf::st_geometry(x)
+  yy <- if (is.null(y)) x else sf::st_geometry(y)
+  vx <- lapply(seq_along(x), function(i) {
+    if (sf::st_is_empty(x[i])) NULL else densified_vertices_s2(x[i], max_deg)
+  })
+  vy <- if (is.null(y)) vx else lapply(seq_along(yy), function(j) {
+    if (sf::st_is_empty(yy[j])) NULL else densified_vertices_s2(yy[j], max_deg)
+  })
+  lx <- lapply(seq_along(x), function(i) linework_sfc(x[i]))
+  ly <- if (is.null(y)) lx else lapply(seq_along(yy), function(j) linework_sfc(yy[j]))
+
+  out <- matrix(NA_real_, length(x), length(yy))
+  for (i in seq_along(x)) {
+    if (is.null(vx[[i]])) next
+    for (j in seq_along(yy)) {
+      if (is.null(vy[[j]])) next
+      if (is.null(y) && i == j) {
+        out[i, j] <- 0
+        next
+      }
+      d_xy <- max(drop_u(sf::st_distance(vx[[i]], ly[[j]])))
+      d_yx <- max(drop_u(sf::st_distance(vy[[j]], lx[[i]])))
+      out[i, j] <- max(d_xy, d_yx)
+    }
+  }
+  out
+}
+
+haus_ref_polygon_s2 <- function(x, y = NULL, max_deg = 0.05, grid_deg = 0.05) {
+  x <- sf::st_geometry(x)
+  yy <- if (is.null(y)) x else sf::st_geometry(y)
+  sample_poly <- function(g) {
+    pts <- densified_vertices_s2(g, max_deg = max_deg)
+    if (any(sf::st_is(g, c("POLYGON", "MULTIPOLYGON", "GEOMETRYCOLLECTION")))) {
+      grid <- sf::st_make_grid(g, cellsize = grid_deg, what = "centers")
+      if (length(grid) > 0L) {
+        gs2 <- sf::st_as_s2(g)
+        hit <- s2::s2_contains(gs2, sf::st_as_s2(grid))
+        if (any(hit)) pts <- c(pts, grid[hit])
+      }
+    }
+    sf::st_as_s2(pts)
+  }
+  sx <- lapply(seq_along(x), function(i) {
+    if (sf::st_is_empty(x[i])) NULL else sample_poly(x[i])
+  })
+  sy <- if (is.null(y)) sx else lapply(seq_along(yy), function(j) {
+    if (sf::st_is_empty(yy[j])) NULL else sample_poly(yy[j])
+  })
+  gx <- sf::st_as_s2(x)
+  gy <- if (is.null(y)) gx else sf::st_as_s2(yy)
+
+  out <- matrix(NA_real_, length(x), length(yy))
+  for (i in seq_along(x)) {
+    if (is.null(sx[[i]])) next
+    for (j in seq_along(yy)) {
+      if (is.null(sy[[j]])) next
+      if (is.null(y) && i == j) {
+        out[i, j] <- 0
+        next
+      }
+      d_xy <- max(s2::s2_distance(sx[[i]], gy[j]))
+      d_yx <- max(s2::s2_distance(sy[[j]], gx[i]))
+      out[i, j] <- max(d_xy, d_yx)
+    }
+  }
+  out
+}
+
+## ---- Planar continuous Hausdorff references (densified GEOS / sf) ----------
+
+## Approximates continuous boundary Hausdorff by densifying edges with
+## sf::st_segmentize() and calling GEOS discrete Hausdorff.
+haus_ref_boundary_r2 <- function(x, y = NULL, step = 0.05) {
+  x_d <- sf::st_segmentize(sf::st_geometry(x), dfMaxLength = step)
+  if (is.null(y)) {
+    return(drop_u(sf::st_distance(x_d, which = "Hausdorff")))
+  }
+  y_d <- sf::st_segmentize(sf::st_geometry(y), dfMaxLength = step)
+  drop_u(sf::st_distance(x_d, y_d, which = "Hausdorff"))
+}
+
+## Samples vertices along densified boundaries plus interior grid centers of
+## a single geometry `g` (an sfc of length 1).
+polygon_samples_r2 <- function(g, step = 0.1) {
+  g_d <- sf::st_segmentize(g, dfMaxLength = step)
+  pts <- vertices_sfc(g_d)
+  if (any(sf::st_is(g, c("POLYGON", "MULTIPOLYGON", "GEOMETRYCOLLECTION")))) {
+    grid <- sf::st_make_grid(g, cellsize = step, what = "centers")
+    if (length(grid) > 0L) {
+      hit <- lengths(sf::st_intersects(grid, g)) > 0L
+      if (any(hit)) {
+        pts <- c(pts, grid[hit])
+      }
+    }
+  }
+  pts
+}
+
+## Approximates continuous filled-polygon Hausdorff using sampled points inside
+## and along the boundary of each unit and sf::st_distance() to the other unit.
+haus_ref_polygon_r2 <- function(x, y = NULL, step = 0.1) {
+  x <- sf::st_geometry(x)
+  yy <- if (is.null(y)) x else sf::st_geometry(y)
+  sx <- lapply(seq_along(x), function(i) {
+    if (sf::st_is_empty(x[i])) NULL else polygon_samples_r2(x[i], step = step)
+  })
+  sy <- if (is.null(y)) {
+    sx
+  } else {
+    lapply(seq_along(yy), function(j) {
+      if (sf::st_is_empty(yy[j])) NULL else polygon_samples_r2(yy[j], step = step)
+    })
+  }
+  out <- matrix(NA_real_, length(x), length(yy))
+  for (i in seq_along(x)) {
+    if (is.null(sx[[i]])) next
+    for (j in seq_along(yy)) {
+      if (is.null(sy[[j]])) next
+      if (is.null(y) && i == j) {
+        out[i, j] <- 0
+        next
+      }
+      d_xy <- max(drop_u(sf::st_distance(sx[[i]], yy[j])))
+      d_yx <- max(drop_u(sf::st_distance(sy[[j]], x[i])))
+      out[i, j] <- max(d_xy, d_yx)
+    }
+  }
+  out
+}
+
 ## ---- Planar centers and radii reference (sf + GEOS) -------------------------
 
 ## sf::st_minimum_bounding_circle() returns a regular polygon, with its

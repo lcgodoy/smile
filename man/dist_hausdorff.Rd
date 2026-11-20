@@ -4,7 +4,13 @@
 \alias{dist_hausdorff}
 \title{Hausdorff distance between spatial units}
 \usage{
-dist_hausdorff(x, y = NULL, use_sphere = FALSE)
+dist_hausdorff(
+  x,
+  y = NULL,
+  use_sphere = FALSE,
+  method = c("discrete", "boundary", "polygon"),
+  tol = 1e-08
+)
 }
 \arguments{
 \item{x}{an \code{sf} or \code{sfc} object.}
@@ -18,6 +24,16 @@ coordinates are planar. If \code{TRUE}, the distances are on a sphere of
 radius \code{s2::s2_earth_radius_meters()}. Projected input is
 transformed to EPSG:4326. Input without a CRS is read as longitude and
 latitude, with a warning.}
+
+\item{method}{a character string selecting the Hausdorff distance
+definition: \code{"discrete"} (the default), \code{"boundary"}, or
+\code{"polygon"}.}
+
+\item{tol}{a positive numeric scalar giving the convergence tolerance for
+the continuous methods (\code{"boundary"} and \code{"polygon"}). The
+effective tolerance for each pair is \code{tol * max(1, scale)}, floored
+above floating-point rounding limits. Ignored when
+\code{method = "discrete"}.}
 }
 \value{
 A numeric matrix. Without \code{y}, it is a symmetric
@@ -35,28 +51,66 @@ units in \code{x}, or between each unit in \code{x} and each unit in
 \code{y}.
 }
 \details{
-The function computes the discrete Hausdorff distance, as GEOS
-and \code{sf::st_distance(which = "Hausdorff")} do. For each vertex of a
-unit, it finds the distance to the nearest edge of the other unit. The
-distance is the largest of these values, in both directions. Polygons
-keep all their parts, holes, and islands.
+The \code{method} argument selects how polygons, lines, and points
+are represented:
+\itemize{
+\item \code{"discrete"} (the default): computes the discrete
+vertex-to-edge Hausdorff distance, matching GEOS and
+\code{sf::st_distance(which = "Hausdorff")} in the plane. For each
+vertex of a unit, it finds the distance to the nearest edge or point
+of the other unit and takes the maximum across both directions. This
+matches continuous Hausdorff for point sets (\code{POINT} and
+\code{MULTIPOINT}) and for a single planar \code{POINT} against a
+\code{POLYGON}, but only approximates continuous Hausdorff for
+polygon-to-polygon or \code{MULTIPOINT}-to-polygon pairs because it
+does not sample edge interiors or polygon interiors. On the sphere,
+even a single \code{POINT} against a \code{POLYGON} can differ if the
+point's antipode enters or projects onto the polygon.
+\item \code{"boundary"}: computes the continuous Hausdorff distance
+between unit boundaries (all rings of polygons including holes and
+islands, linestrings, and points) using branch-and-bound segment or
+arc subdivision within tolerance \code{tol}.
+\item \code{"polygon"}: computes the continuous Hausdorff distance
+between spatial units treated as closed sets, where polygons include
+their 2D interiors (excluding holes) and points and linestrings retain
+their 0D and 1D geometry, within tolerance \code{tol}.
+}
 
-The C++ code uses the early break of Taha and Hanbury (2015). The result
-is exact.
+For \code{"discrete"}, the C++ code uses the early break of Taha and
+Hanbury (2015), and the result is exact for the discrete vertex-to-edge
+definition. Continuous methods (\code{"boundary"} and \code{"polygon"})
+stop when the branch-and-bound gap is at most \code{tol * max(1, scale)},
+where \code{scale} is the larger bounding-box diagonal of the two units
+in the plane or the larger bounding-cap diameter in meters on the sphere.
 
-On the sphere, edges are great-circle arcs, as in \code{s2}.
+On the sphere (\code{use_sphere = TRUE}), edges are great-circle arcs, as
+in \code{s2}. For \code{method = "polygon"}, each polygon unit must fit
+inside a spherical cap of radius below \eqn{0.45 \pi R}{0.45 pi R}
+(about 81 degrees); each ring encloses its smaller region (under
+\eqn{2\pi}{2 pi} steradians), matching \code{sf} and \code{s2}, and holes
+and islands compose by even-odd parity. Polygon units that exceed this
+cap limit return \code{NA} with a warning (use \code{method = "discrete"}
+or \code{"boundary"} for global-scale polygons). Continuous spherical
+methods also cap branch-and-bound iterations per pair so degenerate
+inputs cannot stall; if any pair does not reach \code{tol}, the function
+returns the best lower bound found and issues a warning.
 }
 \examples{
 nc <- sf::st_read(system.file("shape/nc.shp", package = "sf"),
                   quiet = TRUE)
 nc <- sf::st_transform(nc[1:5, ], 32119)
 
-## Planar distances, in meters (the unit of EPSG:32119)
+## Planar discrete vertex-to-edge distances, in meters
 dist_hausdorff(nc)
 dist_hausdorff(nc[1:2, ], nc[3:5, ])
 
+## Continuous boundary and filled-polygon distances, in meters
+dist_hausdorff(nc[1:3, ], method = "boundary")
+dist_hausdorff(nc[1:3, ], method = "polygon")
+
 ## Distances on the sphere, in meters
 dist_hausdorff(nc, use_sphere = TRUE)
+dist_hausdorff(nc[1:3, ], use_sphere = TRUE, method = "polygon")
 }
 \references{
 Taha, A. A., & Hanbury, A. (2015). An efficient algorithm for

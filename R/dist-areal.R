@@ -37,15 +37,17 @@
 
 ## Converts an sfc object to a list with one matrix per unit, for the
 ## Hausdorff distances in src/haus-r2.cpp and src/haus-s2.cpp. The columns are
-## x, y, and a part id. Each ring, line, and point is a separate part, so the
-## matrices keep every polygon, hole, and island of a unit. An empty unit
-## gives a matrix with no rows.
-.to_list_mat <- function(x) {
+## x, y, and a part id (plus an `is_poly` column when `include_poly = TRUE`).
+## Each ring, line, and point is a separate part, so the matrices keep every
+## polygon, hole, and island of a unit. An empty unit gives a matrix with no
+## rows.
+.to_coord_list <- function(x, include_poly = FALSE) {
   n <- length(x)
+  ncols <- if (include_poly) 4L else 3L
   if (n == 0L) return(list())
   crd <- wk::wk_coords(x)
   if (nrow(crd) == 0L) {
-    return(replicate(n, matrix(numeric(0), nrow = 0L, ncol = 3L),
+    return(replicate(n, matrix(numeric(0), nrow = 0L, ncol = ncols),
                      simplify = FALSE))
   }
   new_part <- c(TRUE, diff(crd$feature_id) != 0 | diff(crd$part_id) != 0 |
@@ -53,7 +55,27 @@
   part <- as.numeric(cumsum(new_part))
   rows <- split(seq_len(nrow(crd)),
                 factor(crd$feature_id, levels = seq_len(n)))
-  unname(lapply(rows, function(i) cbind(crd$x[i], crd$y[i], part[i])))
+  if (!include_poly) {
+    return(unname(lapply(rows, function(i) {
+      cbind(crd$x[i], crd$y[i], part[i])
+    })))
+  }
+  ## wk::wk_coords() increments ring_id whenever entering a polygon ring and
+  ## leaves ring_id unchanged across points and linestrings.
+  part_start <- which(new_part)
+  is_poly_part <- c(crd$ring_id[1L] > 0L, diff(crd$ring_id) > 0L)[part_start]
+  is_poly <- as.numeric(is_poly_part[part])
+  unname(lapply(rows, function(i) {
+    cbind(crd$x[i], crd$y[i], part[i], is_poly[i])
+  }))
+}
+
+.to_list_mat <- function(x) {
+  .to_coord_list(x, include_poly = FALSE)
+}
+
+.to_polygon_list <- function(x) {
+  .to_coord_list(x, include_poly = TRUE)
 }
 
 ## `bad` holds the indices of the units of argument `arg`.
@@ -85,16 +107,49 @@
 ##'   units in \code{x}, or between each unit in \code{x} and each unit in
 ##'   \code{y}.
 ##'
-##' @details The function computes the discrete Hausdorff distance, as GEOS
-##'   and \code{sf::st_distance(which = "Hausdorff")} do. For each vertex of a
-##'   unit, it finds the distance to the nearest edge of the other unit. The
-##'   distance is the largest of these values, in both directions. Polygons
-##'   keep all their parts, holes, and islands.
+##' @details The \code{method} argument selects how polygons, lines, and points
+##'   are represented:
+##'   \itemize{
+##'     \item \code{"discrete"} (the default): computes the discrete
+##'       vertex-to-edge Hausdorff distance, matching GEOS and
+##'       \code{sf::st_distance(which = "Hausdorff")} in the plane. For each
+##'       vertex of a unit, it finds the distance to the nearest edge or point
+##'       of the other unit and takes the maximum across both directions. This
+##'       matches continuous Hausdorff for point sets (\code{POINT} and
+##'       \code{MULTIPOINT}) and for a single planar \code{POINT} against a
+##'       \code{POLYGON}, but only approximates continuous Hausdorff for
+##'       polygon-to-polygon or \code{MULTIPOINT}-to-polygon pairs because it
+##'       does not sample edge interiors or polygon interiors. On the sphere,
+##'       even a single \code{POINT} against a \code{POLYGON} can differ if the
+##'       point's antipode enters or projects onto the polygon.
+##'     \item \code{"boundary"}: computes the continuous Hausdorff distance
+##'       between unit boundaries (all rings of polygons including holes and
+##'       islands, linestrings, and points) using branch-and-bound segment or
+##'       arc subdivision within tolerance \code{tol}.
+##'     \item \code{"polygon"}: computes the continuous Hausdorff distance
+##'       between spatial units treated as closed sets, where polygons include
+##'       their 2D interiors (excluding holes) and points and linestrings retain
+##'       their 0D and 1D geometry, within tolerance \code{tol}.
+##'   }
 ##'
-##'   The C++ code uses the early break of Taha and Hanbury (2015). The result
-##'   is exact.
+##'   For \code{"discrete"}, the C++ code uses the early break of Taha and
+##'   Hanbury (2015), and the result is exact for the discrete vertex-to-edge
+##'   definition. Continuous methods (\code{"boundary"} and \code{"polygon"})
+##'   stop when the branch-and-bound gap is at most \code{tol * max(1, scale)},
+##'   where \code{scale} is the larger bounding-box diagonal of the two units
+##'   in the plane or the larger bounding-cap diameter in meters on the sphere.
 ##'
-##'   On the sphere, edges are great-circle arcs, as in \code{s2}.
+##'   On the sphere (\code{use_sphere = TRUE}), edges are great-circle arcs, as
+##'   in \code{s2}. For \code{method = "polygon"}, each polygon unit must fit
+##'   inside a spherical cap of radius below \eqn{0.45 \pi R}{0.45 pi R}
+##'   (about 81 degrees); each ring encloses its smaller region (under
+##'   \eqn{2\pi}{2 pi} steradians), matching \code{sf} and \code{s2}, and holes
+##'   and islands compose by even-odd parity. Polygon units that exceed this
+##'   cap limit return \code{NA} with a warning (use \code{method = "discrete"}
+##'   or \code{"boundary"} for global-scale polygons). Continuous spherical
+##'   methods also cap branch-and-bound iterations per pair so degenerate
+##'   inputs cannot stall; if any pair does not reach \code{tol}, the function
+##'   returns the best lower bound found and issues a warning.
 ##'
 ##' @param x an \code{sf} or \code{sfc} object.
 ##' @param y an optional \code{sf} or \code{sfc} object with the same CRS as
@@ -105,6 +160,14 @@
 ##'   radius \code{s2::s2_earth_radius_meters()}. Projected input is
 ##'   transformed to EPSG:4326. Input without a CRS is read as longitude and
 ##'   latitude, with a warning.
+##' @param method a character string selecting the Hausdorff distance
+##'   definition: \code{"discrete"} (the default), \code{"boundary"}, or
+##'   \code{"polygon"}.
+##' @param tol a positive numeric scalar giving the convergence tolerance for
+##'   the continuous methods (\code{"boundary"} and \code{"polygon"}). The
+##'   effective tolerance for each pair is \code{tol * max(1, scale)}, floored
+##'   above floating-point rounding limits. Ignored when
+##'   \code{method = "discrete"}.
 ##'
 ##' @return A numeric matrix. Without \code{y}, it is a symmetric
 ##'   \eqn{n \times n}{n x n} matrix, where \eqn{n} is the number of units in
@@ -127,29 +190,58 @@
 ##'                   quiet = TRUE)
 ##' nc <- sf::st_transform(nc[1:5, ], 32119)
 ##'
-##' ## Planar distances, in meters (the unit of EPSG:32119)
+##' ## Planar discrete vertex-to-edge distances, in meters
 ##' dist_hausdorff(nc)
 ##' dist_hausdorff(nc[1:2, ], nc[3:5, ])
 ##'
+##' ## Continuous boundary and filled-polygon distances, in meters
+##' dist_hausdorff(nc[1:3, ], method = "boundary")
+##' dist_hausdorff(nc[1:3, ], method = "polygon")
+##'
 ##' ## Distances on the sphere, in meters
 ##' dist_hausdorff(nc, use_sphere = TRUE)
+##' dist_hausdorff(nc[1:3, ], use_sphere = TRUE, method = "polygon")
 ##' @export
-dist_hausdorff <- function(x, y = NULL, use_sphere = FALSE) {
+dist_hausdorff <- function(x, y = NULL, use_sphere = FALSE,
+                           method = c("discrete", "boundary", "polygon"),
+                           tol = 1e-8) {
+  method <- match.arg(method)
+  if (!is.numeric(tol) || length(tol) != 1L || is.na(tol) ||
+      !is.finite(tol) || tol <= 0) {
+    stop("tol must be a single finite positive number.", call. = FALSE)
+  }
   if (!is.null(y)) .check_same_crs(x, y)
   x <- .prep_geom(x, use_sphere = use_sphere, arg = "x")
   if (!is.null(y)) y <- .prep_geom(y, use_sphere = use_sphere, arg = "y")
+  to_mats <- if (method == "polygon") .to_polygon_list else .to_list_mat
   if (use_sphere) {
     radius <- s2::s2_earth_radius_meters()
-    if (is.null(y)) {
-      return(dist_haus_s2(.to_list_mat(x), earth_radius = radius))
+    if (method == "discrete") {
+      if (is.null(y)) {
+        return(dist_haus_s2(to_mats(x), earth_radius = radius))
+      }
+      return(cdist_haus_s2_lists(to_mats(x), to_mats(y),
+                                 earth_radius = radius))
     }
-    return(cdist_haus_s2_lists(.to_list_mat(x), .to_list_mat(y),
-                               earth_radius = radius))
+    if (is.null(y)) {
+      return(dist_haus_s2_method(to_mats(x), method = method, tol = tol,
+                                 earth_radius = radius))
+    }
+    return(cdist_haus_s2_lists_method(to_mats(x), to_mats(y),
+                                      method = method, tol = tol,
+                                      earth_radius = radius))
+  }
+  if (method == "discrete") {
+    if (is.null(y)) {
+      return(dist_haus_r2(to_mats(x)))
+    }
+    return(cdist_haus_r2_lists(to_mats(x), to_mats(y)))
   }
   if (is.null(y)) {
-    return(dist_haus_r2(.to_list_mat(x)))
+    return(dist_haus_r2_method(to_mats(x), method = method, tol = tol))
   }
-  cdist_haus_r2_lists(.to_list_mat(x), .to_list_mat(y))
+  cdist_haus_r2_lists_method(to_mats(x), to_mats(y),
+                             method = method, tol = tol)
 }
 
 ## ---- Chebyshev centers and radii ---------------------------------------------
