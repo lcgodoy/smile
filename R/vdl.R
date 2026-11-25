@@ -143,29 +143,3 @@ vdl_var <- function(coords_sf, areal_sf,
                      var_method = var_method)
     return(output)
 }
-
-##' @title Transform method for \code{sf} objects
-##'
-##' @description Internal usage.
-##'
-##' @param _data a \code{sf} object
-##' @param ... additional options
-##'
-##' @return an \code{sf} object.
-##' @keywords internal
-transform.sf <- function (`_data`, ...) {
-    e <- eval(substitute(list(...)), `_data`, parent.frame())
-    tags <- names(e)
-    inx <- match(tags, names(`_data`))
-    matched <- !is.na(inx)
-    crs <- sf::st_crs(`_data`)
-    if (any(matched)) {
-        `_data`[inx[matched]] <- e[matched]
-        `_data` <- sf::st_sf(`_data`,
-                             crs = crs)
-    }
-    if (!all(matched))
-        sf::st_sf(do.call("data.frame", c(list(`_data`), e[!matched])),
-                  crs = crs)
-    else `_data`
-}

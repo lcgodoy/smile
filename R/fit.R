@@ -444,6 +444,19 @@ fit_spm2 <- function(x, model, nu,
 }
 
 ##' @name goodness_of_fit
+##' @title Log-likelihood and information criteria for \code{spm_fit} objects
+##'
+##' @description Extracts the maximized log-likelihood or computes the AIC or
+##'   BIC for a fitted \code{spm_fit} model.
+##'
+##' @param object a \code{spm_fit} object.
+##' @param ... additional arguments passed to or from other methods.
+##' @param k a numeric scalar giving the penalty per parameter in \code{AIC}.
+##'   The default is \code{2}.
+##'
+##' @return \code{logLik} returns a \code{"logLik"} object with attributes
+##'   \code{"df"} and \code{"nobs"}. \code{AIC} and \code{BIC} return a numeric
+##'   scalar.
 ##' @export
 logLik.spm_fit <- function(object, ...) {
   val <- object$log_lik
@@ -453,13 +466,13 @@ logLik.spm_fit <- function(object, ...) {
   return(val)
 }
 
-##' @name goodness_of_fit
+##' @rdname goodness_of_fit
 ##' @export
 AIC.spm_fit <- function(object, ..., k = 2) {
   stats::AIC(logLik(object), k = k)
 }
 
-##' @name goodness_of_fit
+##' @rdname goodness_of_fit
 ##' @export
 BIC.spm_fit <- function(object, ...) {
   stats::BIC(logLik(object))
