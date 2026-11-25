@@ -3,8 +3,7 @@
 * New distances between spatial units, in the plane and on the sphere, with
   fast C++ code: `dist_hausdorff()` (Hausdorff distance) and `dist_cr()`
   (center-radii distance). `get_mbc_params()` returns the Chebyshev centers
-  and radii. `dist_cr_sphere()` and `dist_cr_all()` add the exceedance bound
-  on the sphere. Unit tests compare the results with `sf`.
+  and radii. Unit tests compare the results with `sf`.
 
 # smile 1.1.0
 

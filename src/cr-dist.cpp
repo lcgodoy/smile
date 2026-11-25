@@ -1,9 +1,5 @@
-#include <RcppEigen.h>
-#include <algorithm>
-#include <cmath>
+#include "geom-common.h"
 #include <cstdint>
-#include <utility>
-#include <vector>
 
 // [[Rcpp::depends(RcppEigen)]]
 
@@ -12,53 +8,102 @@
 // The CR distance between units i and j is d(c_i, c_j) + |r_i - r_j|, where
 // c and r are the center and radius of the minimum enclosing ball (the
 // Chebyshev center and radius) of the vertices of a unit. Welzl's algorithm
-// computes the exact ball. In the plane, d is the Euclidean distance, in the
-// units of the coordinates. On the sphere, d is the great-circle distance, in
-// meters, on a sphere of radius `earth_radius`.
+// computes the exact ball. In the plane, d is the Euclidean distance in the
+// units of the coordinates. On the sphere, d is the great-circle distance in
+// meters on a sphere of radius `earth_radius`.
 //
 // Input: the coordinates of all units (x and y, or longitude and latitude in
-// degrees), with `feature_id` (1-based) as the unit of each row, as from
-// wk::wk_coords().
+// degrees), with `feature_id` (1-based) identifying the unit of each row, as
+// returned by wk::wk_coords().
 
 namespace {
 
-const double kPi = 3.14159265358979323846;
-const double GOLDEN_RATIO = 0.6180339887498949;
+using smile_geom::Pt2;
+using smile_geom::Vec3;
+using smile_geom::chord_dist;
+using smile_geom::cross3;
+using smile_geom::cross_dist_matrix;
+using smile_geom::dist2_2d;
+using smile_geom::dot3;
+using smile_geom::gc_angle;
+using smile_geom::golden_scramble;
+using smile_geom::is_invalid_scalar;
+using smile_geom::kPi;
+using smile_geom::ll_to_xyz;
+using smile_geom::norm3;
+using smile_geom::sym_dist_matrix;
+using smile_geom::tangent_basis;
+using smile_geom::xyz_to_ll;
 
-inline bool is_invalid_scalar(double v) {
-  return R_IsNA(v) || std::isnan(v) || !std::isfinite(v);
-}
+// 1. Generic Welzl minimum enclosing ball solver and feature grouping.
 
-inline double deg2rad(double degrees) {
-  return degrees * kPi / 180.0;
-}
-
-inline double rad2deg(double radians) {
-  return radians * 180.0 / kPi;
-}
-
-// Deterministic golden-ratio permutation used by Welzl routines.
-template <typename T>
-void golden_scramble(std::vector<T>& pts) {
-  const size_t n = pts.size();
-  if (n <= 1) return;
-  std::vector<std::pair<double, size_t> > key(n);
-  for (size_t i = 0; i < n; i++) {
-    key[i] = std::make_pair(std::fmod(static_cast<double>(i + 1) * GOLDEN_RATIO, 1.0), i);
+template <typename PtT, typename BallT,
+          typename Ball1Fn, typename Ball2Fn, typename Ball3Fn,
+          typename OutsideFn>
+BallT welzl_ball(const std::vector<PtT>& pts,
+                 Ball1Fn ball1, Ball2Fn ball2, Ball3Fn ball3,
+                 OutsideFn is_outside) {
+  const int n = static_cast<int>(pts.size());
+  auto with_2 = [&](int m, const PtT& p, const PtT& q) -> BallT {
+    BallT b = ball2(p, q);
+    for (int k = 0; k < m; k++) {
+      if (is_outside(pts[k], b)) b = ball3(p, q, pts[k]);
+    }
+    return b;
+  };
+  auto with_1 = [&](int m, const PtT& p) -> BallT {
+    BallT b = ball1(p);
+    for (int j = 0; j < m; j++) {
+      if (is_outside(pts[j], b)) b = with_2(j, p, pts[j]);
+    }
+    return b;
+  };
+  BallT b = ball1(pts[0]);
+  for (int i = 1; i < n; i++) {
+    if (is_outside(pts[i], b)) b = with_1(i, pts[i]);
   }
-  std::sort(key.begin(), key.end());
-  std::vector<T> out;
-  out.reserve(n);
-  for (size_t i = 0; i < n; i++) out.push_back(pts[key[i].second]);
-  pts.swap(out);
+  return b;
 }
 
-// ---- Planar (R^2) geometry & Welzl MEB -------------------------------------
+// Groups coordinate vectors by 1-based `feature_id`. Any feature with zero rows
+// or at least one non-finite coordinate produces an empty vector.
+template <typename PtT, typename MakePtFn>
+std::vector<std::vector<PtT> > group_feature_points(
+    const Rcpp::NumericVector& c1,
+    const Rcpp::NumericVector& c2,
+    const Rcpp::IntegerVector& feature_id,
+    int n_features,
+    MakePtFn make_pt) {
+  std::vector<std::vector<PtT> > grouped(n_features);
+  if (n_features == 0) return grouped;
 
-struct Pt2 {
-  double x;
-  double y;
-};
+  const R_xlen_t m = feature_id.size();
+  std::vector<int> counts(n_features, 0);
+  std::vector<uint8_t> has_na(n_features, 0);
+  for (R_xlen_t k = 0; k < m; k++) {
+    const int fid = feature_id[k];
+    if (fid == NA_INTEGER || fid < 1 || fid > n_features) {
+      Rcpp::stop("feature_id contains out-of-range indices.");
+    }
+    const int idx = fid - 1;
+    if (is_invalid_scalar(c1[k]) || is_invalid_scalar(c2[k])) {
+      has_na[idx] = 1;
+    } else {
+      counts[idx]++;
+    }
+  }
+
+  for (int i = 0; i < n_features; i++) {
+    if (!has_na[i] && counts[i] > 0) grouped[i].reserve(counts[i]);
+  }
+  for (R_xlen_t k = 0; k < m; k++) {
+    const int idx = feature_id[k] - 1;
+    if (!has_na[idx]) grouped[idx].push_back(make_pt(c1[k], c2[k]));
+  }
+  return grouped;
+}
+
+// 2. Planar (R^2) minimum enclosing disk.
 
 struct Disk2 {
   double cx;
@@ -66,18 +111,10 @@ struct Disk2 {
   double r2;
 };
 
-inline double dist2_2d(const Pt2& a, const Pt2& b) {
-  const double dx = a.x - b.x;
-  const double dy = a.y - b.y;
-  return dx * dx + dy * dy;
-}
-
 inline Disk2 disk2(const Pt2& a, const Pt2& b) {
   const double cx = 0.5 * (a.x + b.x);
   const double cy = 0.5 * (a.y + b.y);
-  const double dx = a.x - cx;
-  const double dy = a.y - cy;
-  return {cx, cy, dx * dx + dy * dy};
+  return {cx, cy, dist2_2d(a.x, a.y, cx, cy)};
 }
 
 inline Disk2 max_diametral_disk(const Pt2& a, const Pt2& b, const Pt2& c) {
@@ -107,40 +144,19 @@ inline Disk2 disk3(const Pt2& a, const Pt2& b, const Pt2& c) {
 }
 
 inline bool outside_disk(const Pt2& p, const Disk2& d, double tol) {
-  const double dx = p.x - d.cx;
-  const double dy = p.y - d.cy;
   const double r = std::sqrt(d.r2);
   const double lim = r + tol * (1.0 + r);
-  return (dx * dx + dy * dy) > (lim * lim);
+  return dist2_2d(p.x, p.y, d.cx, d.cy) > (lim * lim);
 }
 
 Disk2 welzl_disk(const std::vector<Pt2>& pts, double tol = 1e-12) {
-  const int n = static_cast<int>(pts.size());
-  auto with_2 = [&](int m, const Pt2& p, const Pt2& q) -> Disk2 {
-    Disk2 d = disk2(p, q);
-    for (int k = 0; k < m; k++) {
-      if (outside_disk(pts[k], d, tol)) {
-        d = disk3(p, q, pts[k]);
-      }
-    }
-    return d;
-  };
-  auto with_1 = [&](int m, const Pt2& p) -> Disk2 {
-    Disk2 d = {p.x, p.y, 0.0};
-    for (int j = 0; j < m; j++) {
-      if (outside_disk(pts[j], d, tol)) {
-        d = with_2(j, p, pts[j]);
-      }
-    }
-    return d;
-  };
-  Disk2 d = {pts[0].x, pts[0].y, 0.0};
-  for (int i = 1; i < n; i++) {
-    if (outside_disk(pts[i], d, tol)) {
-      d = with_1(i, pts[i]);
-    }
-  }
-  return d;
+  return welzl_ball<Pt2, Disk2>(
+    pts,
+    [](const Pt2& p) -> Disk2 { return {p.x, p.y, 0.0}; },
+    disk2,
+    disk3,
+    [tol](const Pt2& p, const Disk2& d) { return outside_disk(p, d, tol); }
+  );
 }
 
 struct Meb2Result {
@@ -159,38 +175,15 @@ Meb2Result compute_meb_planar(const Rcpp::NumericVector& x,
   res.cy.assign(n_features, NA_REAL);
   res.radius.assign(n_features, NA_REAL);
   res.valid.assign(n_features, 0);
-  if (n_features == 0) return res;
 
-  const R_xlen_t m = feature_id.size();
-  std::vector<int> counts(n_features, 0);
-  std::vector<uint8_t> has_na(n_features, 0);
-  for (R_xlen_t k = 0; k < m; k++) {
-    const int fid = feature_id[k];
-    if (fid == NA_INTEGER || fid < 1 || fid > n_features) {
-      Rcpp::stop("feature_id contains out-of-range indices.");
-    }
-    const int idx = fid - 1;
-    if (is_invalid_scalar(x[k]) || is_invalid_scalar(y[k])) {
-      has_na[idx] = 1;
-    } else {
-      counts[idx]++;
-    }
-  }
-
-  std::vector<std::vector<Pt2> > grouped(n_features);
-  for (int i = 0; i < n_features; i++) {
-    if (!has_na[i] && counts[i] > 0) grouped[i].reserve(counts[i]);
-  }
-  for (R_xlen_t k = 0; k < m; k++) {
-    const int idx = feature_id[k] - 1;
-    if (!has_na[idx]) {
-      grouped[idx].push_back({x[k], y[k]});
-    }
-  }
+  const std::vector<std::vector<Pt2> > grouped = group_feature_points<Pt2>(
+    x, y, feature_id, n_features,
+    [](double px, double py) -> Pt2 { return {px, py}; }
+  );
 
   for (int i = 0; i < n_features; i++) {
-    if (has_na[i] || grouped[i].empty()) continue;
-    const auto& raw = grouped[i];
+    const std::vector<Pt2>& raw = grouped[i];
+    if (raw.empty()) continue;
     if (raw.size() == 1) {
       res.cx[i] = raw[0].x;
       res.cy[i] = raw[0].y;
@@ -199,22 +192,20 @@ Meb2Result compute_meb_planar(const Rcpp::NumericVector& x,
       continue;
     }
 
-    // Shift by the first vertex to preserve floating-point precision on large
-    // projected coordinates (e.g., UTM / Web Mercator).
+    // Shift by the first vertex to preserve precision on large projected
+    // coordinates such as UTM or Web Mercator.
     const double ox = raw[0].x;
     const double oy = raw[0].y;
     std::vector<Pt2> shifted;
     shifted.reserve(raw.size());
-    for (const auto& p : raw) {
-      shifted.push_back({p.x - ox, p.y - oy});
-    }
+    for (const Pt2& p : raw) shifted.push_back({p.x - ox, p.y - oy});
     golden_scramble(shifted);
+
     const Disk2 d = welzl_disk(shifted);
-    double max_r2 = 0.0;
     const Pt2 center_s = {d.cx, d.cy};
-    for (const auto& p : shifted) {
-      const double d2 = dist2_2d(p, center_s);
-      if (d2 > max_r2) max_r2 = d2;
+    double max_r2 = 0.0;
+    for (const Pt2& p : shifted) {
+      max_r2 = std::max(max_r2, dist2_2d(p, center_s));
     }
     res.cx[i] = d.cx + ox;
     res.cy[i] = d.cy + oy;
@@ -224,65 +215,28 @@ Meb2Result compute_meb_planar(const Rcpp::NumericVector& x,
   return res;
 }
 
-// ---- Spherical (S^2) geometry & Welzl MEC ----------------------------------
+inline double planar_cr_pair(const Meb2Result& a, int i,
+                             const Meb2Result& b, int j) {
+  return std::sqrt(dist2_2d(a.cx[i], a.cy[i], b.cx[j], b.cy[j])) +
+         std::fabs(a.radius[i] - b.radius[j]);
+}
 
-struct Vec3 {
-  double x;
-  double y;
-  double z;
-};
+// 3. Spherical (S^2) minimum enclosing cap.
 
 struct Cap3 {
   Vec3 c;
-  double r;  // chord radius
+  double r;  // Chord radius
   bool ok;
 };
 
-inline Vec3 ll_to_xyz(double lon_deg, double lat_deg) {
-  const double lon = deg2rad(lon_deg);
-  const double lat = deg2rad(lat_deg);
-  const double clat = std::cos(lat);
-  return {clat * std::cos(lon), clat * std::sin(lon), std::sin(lat)};
-}
-
-inline void xyz_to_ll(const Vec3& u, double& lon_deg, double& lat_deg) {
-  lon_deg = rad2deg(std::atan2(u.y, u.x));
-  lat_deg = rad2deg(std::atan2(u.z, std::sqrt(u.x * u.x + u.y * u.y)));
-}
-
-inline double dot3(const Vec3& a, const Vec3& b) {
-  return a.x * b.x + a.y * b.y + a.z * b.z;
-}
-
-inline Vec3 cross3(const Vec3& a, const Vec3& b) {
-  return {
-    a.y * b.z - a.z * b.y,
-    a.z * b.x - a.x * b.z,
-    a.x * b.y - a.y * b.x
-  };
-}
-
-inline double chord_dist(const Vec3& p, const Vec3& u) {
-  const double dx = p.x - u.x;
-  const double dy = p.y - u.y;
-  const double dz = p.z - u.z;
-  return std::sqrt(dx * dx + dy * dy + dz * dz);
-}
-
-inline double gc_angle(const Vec3& u, const Vec3& v) {
-  const Vec3 c = cross3(u, v);
-  return std::atan2(std::sqrt(dot3(c, c)), dot3(u, v));
-}
-
 inline Cap3 cap2(const Vec3& a, const Vec3& b) {
   const Vec3 s = {a.x + b.x, a.y + b.y, a.z + b.z};
-  const double norm = std::sqrt(dot3(s, s));
-  if (norm < 1e-15) {
+  const double n = norm3(s);
+  if (n < 1e-15) {
     return {{0.0, 0.0, 0.0}, 2.0, false};
   }
-  const Vec3 u = {s.x / norm, s.y / norm, s.z / norm};
-  const double r = std::max(chord_dist(a, u), chord_dist(b, u));
-  return {u, r, true};
+  const Vec3 u = {s.x / n, s.y / n, s.z / n};
+  return {u, std::max(chord_dist(a, u), chord_dist(b, u)), true};
 }
 
 inline Cap3 max_chord_cap2(const Vec3& a, const Vec3& b, const Vec3& c) {
@@ -296,19 +250,12 @@ inline Cap3 max_chord_cap2(const Vec3& a, const Vec3& b, const Vec3& c) {
 
 inline Cap3 cap3(const Vec3& a, const Vec3& b, const Vec3& c) {
   const Vec3 sum = {a.x + b.x + c.x, a.y + b.y + c.y, a.z + b.z + c.z};
-  const double m_norm = std::sqrt(dot3(sum, sum));
-  if (m_norm < 1e-15) {
-    return max_chord_cap2(a, b, c);
-  }
+  const double m_norm = norm3(sum);
+  if (m_norm < 1e-15) return max_chord_cap2(a, b, c);
   const Vec3 m = {sum.x / m_norm, sum.y / m_norm, sum.z / m_norm};
-  const Vec3 ref = (std::fabs(m.z) < 0.9) ? Vec3{0.0, 0.0, 1.0} : Vec3{1.0, 0.0, 0.0};
-  Vec3 e1 = cross3(ref, m);
-  const double e1_norm = std::sqrt(dot3(e1, e1));
-  if (e1_norm < 1e-15) {
-    return max_chord_cap2(a, b, c);
-  }
-  e1 = {e1.x / e1_norm, e1.y / e1_norm, e1.z / e1_norm};
-  const Vec3 e2 = cross3(m, e1);
+
+  Vec3 e1, e2;
+  if (!tangent_basis(m, e1, e2)) return max_chord_cap2(a, b, c);
 
   const Vec3 ba = {b.x - a.x, b.y - a.y, b.z - a.z};
   const Vec3 ca = {c.x - a.x, c.y - a.y, c.z - a.z};
@@ -324,7 +271,7 @@ inline Cap3 cap3(const Vec3& a, const Vec3& b, const Vec3& c) {
   const double r1 = 0.5 * (dot3(bm, bm) - da);
   const double r2 = 0.5 * (dot3(cm, cm) - da);
   const double det = a11 * a22 - a12 * a21;
-  const double scale = (dot3(ba, ba) + dot3(ca, ca));
+  const double scale = dot3(ba, ba) + dot3(ca, ca);
 
   Vec3 u;
   if (scale > 0.0 && std::fabs(det) > 1e-14 * scale) {
@@ -337,47 +284,26 @@ inline Cap3 cap3(const Vec3& a, const Vec3& b, const Vec3& c) {
     u = cross3(ba, ca);
     if (dot3(u, m) < 0.0) u = {-u.x, -u.y, -u.z};
   }
-  const double u_norm = std::sqrt(dot3(u, u));
-  if (u_norm < 1e-15) {
-    return max_chord_cap2(a, b, c);
-  }
+  const double u_norm = norm3(u);
+  if (u_norm < 1e-15) return max_chord_cap2(a, b, c);
   u = {u.x / u_norm, u.y / u_norm, u.z / u_norm};
-  const double r = std::max(chord_dist(a, u), std::max(chord_dist(b, u), chord_dist(c, u)));
+  const double r =
+    std::max(chord_dist(a, u), std::max(chord_dist(b, u), chord_dist(c, u)));
   return {u, r, true};
 }
 
 inline bool outside_cap(const Vec3& p, const Cap3& cap, double tol) {
-  if (!cap.ok) return false;
-  return chord_dist(p, cap.c) > (cap.r + tol);
+  return cap.ok && chord_dist(p, cap.c) > (cap.r + tol);
 }
 
 Cap3 welzl_cap(const std::vector<Vec3>& pts, double tol = 1e-13) {
-  const int n = static_cast<int>(pts.size());
-  auto with_2 = [&](int m, const Vec3& p, const Vec3& q) -> Cap3 {
-    Cap3 cap = cap2(p, q);
-    for (int k = 0; k < m; k++) {
-      if (outside_cap(pts[k], cap, tol)) {
-        cap = cap3(p, q, pts[k]);
-      }
-    }
-    return cap;
-  };
-  auto with_1 = [&](int m, const Vec3& p) -> Cap3 {
-    Cap3 cap = {p, 0.0, true};
-    for (int j = 0; j < m; j++) {
-      if (outside_cap(pts[j], cap, tol)) {
-        cap = with_2(j, p, pts[j]);
-      }
-    }
-    return cap;
-  };
-  Cap3 cap = {pts[0], 0.0, true};
-  for (int i = 1; i < n; i++) {
-    if (outside_cap(pts[i], cap, tol)) {
-      cap = with_1(i, pts[i]);
-    }
-  }
-  return cap;
+  return welzl_ball<Vec3, Cap3>(
+    pts,
+    [](const Vec3& p) -> Cap3 { return {p, 0.0, true}; },
+    cap2,
+    cap3,
+    [tol](const Vec3& p, const Cap3& cap) { return outside_cap(p, cap, tol); }
+  );
 }
 
 struct Meb3Result {
@@ -401,63 +327,39 @@ Meb3Result compute_meb_sphere(const Rcpp::NumericVector& lon,
   res.radius.assign(n_features, NA_REAL);
   res.valid.assign(n_features, 0);
   res.non_empty.assign(n_features, 0);
-  if (n_features == 0) return res;
 
-  const R_xlen_t m = feature_id.size();
-  std::vector<int> counts(n_features, 0);
-  std::vector<uint8_t> has_na(n_features, 0);
-  for (R_xlen_t k = 0; k < m; k++) {
-    const int fid = feature_id[k];
-    if (fid == NA_INTEGER || fid < 1 || fid > n_features) {
-      Rcpp::stop("feature_id contains out-of-range indices.");
-    }
-    const int idx = fid - 1;
-    if (is_invalid_scalar(lon[k]) || is_invalid_scalar(lat[k])) {
-      has_na[idx] = 1;
-    } else {
-      counts[idx]++;
-    }
-  }
-
-  std::vector<std::vector<Vec3> > grouped(n_features);
-  for (int i = 0; i < n_features; i++) {
-    if (!has_na[i] && counts[i] > 0) {
-      grouped[i].reserve(counts[i]);
-      res.non_empty[i] = 1;
-    }
-  }
-  for (R_xlen_t k = 0; k < m; k++) {
-    const int idx = feature_id[k] - 1;
-    if (!has_na[idx]) {
-      grouped[idx].push_back(ll_to_xyz(lon[k], lat[k]));
-    }
-  }
+  std::vector<std::vector<Vec3> > grouped = group_feature_points<Vec3>(
+    lon, lat, feature_id, n_features, ll_to_xyz
+  );
 
   for (int i = 0; i < n_features; i++) {
-    if (has_na[i] || grouped[i].empty()) continue;
-    std::vector<Vec3> pts = grouped[i];
+    std::vector<Vec3>& pts = grouped[i];
+    if (pts.empty()) continue;
+    res.non_empty[i] = 1;
     golden_scramble(pts);
+
     const Cap3 cap = welzl_cap(pts);
     if (!cap.ok) continue;
 
     double max_angle = 0.0;
-    for (const auto& p : pts) {
-      const double ang = gc_angle(p, cap.c);
-      if (ang > max_angle) max_angle = ang;
+    for (const Vec3& p : pts) {
+      max_angle = std::max(max_angle, gc_angle(p, cap.c));
     }
-    if (!std::isfinite(max_angle) || max_angle >= 0.5 * kPi) {
-      continue;
-    }
+    if (!std::isfinite(max_angle) || max_angle >= 0.5 * kPi) continue;
 
-    double c_lon = NA_REAL, c_lat = NA_REAL;
-    xyz_to_ll(cap.c, c_lon, c_lat);
-    res.lon[i] = c_lon;
-    res.lat[i] = c_lat;
+    xyz_to_ll(cap.c, res.lon[i], res.lat[i]);
     res.u[i] = cap.c;
     res.radius[i] = max_angle * earth_radius;
     res.valid[i] = 1;
   }
   return res;
+}
+
+inline double sphere_cr_pair(const Meb3Result& a, int i,
+                             const Meb3Result& b, int j,
+                             double earth_radius) {
+  return gc_angle(a.u[i], b.u[j]) * earth_radius +
+         std::fabs(a.radius[i] - b.radius[j]);
 }
 
 }  // namespace
@@ -485,7 +387,8 @@ Rcpp::List mbc_sphere_cpp(const Rcpp::NumericVector& lon,
                           const Rcpp::IntegerVector& feature_id,
                           int n_features,
                           double earth_radius = 6371010.0) {
-  const Meb3Result res = compute_meb_sphere(lon, lat, feature_id, n_features, earth_radius);
+  const Meb3Result res =
+    compute_meb_sphere(lon, lat, feature_id, n_features, earth_radius);
   Rcpp::LogicalVector non_empty(n_features);
   for (int i = 0; i < n_features; i++) non_empty[i] = (res.non_empty[i] != 0);
   return Rcpp::List::create(
@@ -500,195 +403,73 @@ Rcpp::List mbc_sphere_cpp(const Rcpp::NumericVector& lon,
 //' @noRd
 // [[Rcpp::export]]
 Eigen::MatrixXd cr_planar_cpp(const Rcpp::NumericVector& x,
-                        const Rcpp::NumericVector& y,
-                        const Rcpp::IntegerVector& feature_id,
-                        int n_features) {
+                              const Rcpp::NumericVector& y,
+                              const Rcpp::IntegerVector& feature_id,
+                              int n_features) {
   const Meb2Result res = compute_meb_planar(x, y, feature_id, n_features);
-  Eigen::MatrixXd out = Eigen::MatrixXd::Zero(n_features, n_features);
-  for (int i = 0; i < n_features; i++) {
-    for (int j = i + 1; j < n_features; j++) {
-      if (!res.valid[i] || !res.valid[j]) {
-        out(i, j) = NA_REAL;
-        out(j, i) = NA_REAL;
-      } else {
-        const double dx = res.cx[i] - res.cx[j];
-        const double dy = res.cy[i] - res.cy[j];
-        const double d = std::sqrt(dx * dx + dy * dy) +
-          std::fabs(res.radius[i] - res.radius[j]);
-        out(i, j) = d;
-        out(j, i) = d;
-      }
-    }
-  }
-  return out;
+  return sym_dist_matrix(
+    n_features,
+    [&](int i) { return res.valid[i] != 0; },
+    [&](int i, int j) { return planar_cr_pair(res, i, res, j); }
+  );
 }
 
 //' @title Planar CR cross-distance matrix (internal)
 //' @noRd
 // [[Rcpp::export]]
 Eigen::MatrixXd cr_cross_planar_cpp(const Rcpp::NumericVector& x1,
-                              const Rcpp::NumericVector& y1,
-                              const Rcpp::IntegerVector& fid1,
-                              int n1,
-                              const Rcpp::NumericVector& x2,
-                              const Rcpp::NumericVector& y2,
-                              const Rcpp::IntegerVector& fid2,
-                              int n2) {
+                                    const Rcpp::NumericVector& y1,
+                                    const Rcpp::IntegerVector& fid1,
+                                    int n1,
+                                    const Rcpp::NumericVector& x2,
+                                    const Rcpp::NumericVector& y2,
+                                    const Rcpp::IntegerVector& fid2,
+                                    int n2) {
   const Meb2Result r1 = compute_meb_planar(x1, y1, fid1, n1);
   const Meb2Result r2 = compute_meb_planar(x2, y2, fid2, n2);
-  Eigen::MatrixXd out(n1, n2);
-  for (int i = 0; i < n1; i++) {
-    for (int j = 0; j < n2; j++) {
-      if (!r1.valid[i] || !r2.valid[j]) {
-        out(i, j) = NA_REAL;
-      } else {
-        const double dx = r1.cx[i] - r2.cx[j];
-        const double dy = r1.cy[i] - r2.cy[j];
-        out(i, j) = std::sqrt(dx * dx + dy * dy) +
-          std::fabs(r1.radius[i] - r2.radius[j]);
-      }
-    }
-  }
-  return out;
+  return cross_dist_matrix(
+    n1, n2,
+    [&](int i) { return r1.valid[i] != 0; },
+    [&](int j) { return r2.valid[j] != 0; },
+    [&](int i, int j) { return planar_cr_pair(r1, i, r2, j); }
+  );
 }
 
 //' @title Spherical CR distance matrix (internal)
 //' @noRd
 // [[Rcpp::export]]
 Eigen::MatrixXd cr_sphere_cpp(const Rcpp::NumericVector& lon,
-                        const Rcpp::NumericVector& lat,
-                        const Rcpp::IntegerVector& feature_id,
-                        int n_features,
-                        double earth_radius = 6371010.0) {
-  const Meb3Result res = compute_meb_sphere(lon, lat, feature_id, n_features, earth_radius);
-  Eigen::MatrixXd out = Eigen::MatrixXd::Zero(n_features, n_features);
-  for (int i = 0; i < n_features; i++) {
-    for (int j = i + 1; j < n_features; j++) {
-      if (!res.valid[i] || !res.valid[j]) {
-        out(i, j) = NA_REAL;
-        out(j, i) = NA_REAL;
-      } else {
-        const double d = gc_angle(res.u[i], res.u[j]) * earth_radius +
-          std::fabs(res.radius[i] - res.radius[j]);
-        out(i, j) = d;
-        out(j, i) = d;
-      }
-    }
-  }
-  return out;
+                              const Rcpp::NumericVector& lat,
+                              const Rcpp::IntegerVector& feature_id,
+                              int n_features,
+                              double earth_radius = 6371010.0) {
+  const Meb3Result res =
+    compute_meb_sphere(lon, lat, feature_id, n_features, earth_radius);
+  return sym_dist_matrix(
+    n_features,
+    [&](int i) { return res.valid[i] != 0; },
+    [&](int i, int j) { return sphere_cr_pair(res, i, res, j, earth_radius); }
+  );
 }
 
 //' @title Spherical CR cross-distance matrix (internal)
 //' @noRd
 // [[Rcpp::export]]
 Eigen::MatrixXd cr_cross_sphere_cpp(const Rcpp::NumericVector& lon1,
-                              const Rcpp::NumericVector& lat1,
-                              const Rcpp::IntegerVector& fid1,
-                              int n1,
-                              const Rcpp::NumericVector& lon2,
-                              const Rcpp::NumericVector& lat2,
-                              const Rcpp::IntegerVector& fid2,
-                              int n2,
-                              double earth_radius = 6371010.0) {
+                                    const Rcpp::NumericVector& lat1,
+                                    const Rcpp::IntegerVector& fid1,
+                                    int n1,
+                                    const Rcpp::NumericVector& lon2,
+                                    const Rcpp::NumericVector& lat2,
+                                    const Rcpp::IntegerVector& fid2,
+                                    int n2,
+                                    double earth_radius = 6371010.0) {
   const Meb3Result r1 = compute_meb_sphere(lon1, lat1, fid1, n1, earth_radius);
   const Meb3Result r2 = compute_meb_sphere(lon2, lat2, fid2, n2, earth_radius);
-  Eigen::MatrixXd out(n1, n2);
-  for (int i = 0; i < n1; i++) {
-    for (int j = 0; j < n2; j++) {
-      if (!r1.valid[i] || !r2.valid[j]) {
-        out(i, j) = NA_REAL;
-      } else {
-        out(i, j) = gc_angle(r1.u[i], r2.u[j]) * earth_radius +
-          std::fabs(r1.radius[i] - r2.radius[j]);
-      }
-    }
-  }
-  return out;
-}
-
-//' @title Spherical CR distance with the exceedance bound (internal)
-//' @noRd
-// [[Rcpp::export]]
-Eigen::MatrixXd cr_sphere_meb_cpp(const Rcpp::NumericVector& lon,
-                            const Rcpp::NumericVector& lat,
-                            const Rcpp::IntegerVector& feature_id,
-                            int n_features,
-                            bool exceedance = false,
-                            double earth_radius = 6371010.0) {
-  const Meb3Result res = compute_meb_sphere(lon, lat, feature_id, n_features, earth_radius);
-  const double half_circ = kPi * earth_radius;
-  Eigen::MatrixXd out = Eigen::MatrixXd::Zero(n_features, n_features);
-
-  for (int i = 0; i < n_features; i++) {
-    if (exceedance) {
-      out(i, i) = res.valid[i] ? (half_circ - res.radius[i]) : NA_REAL;
-    } else if (!res.valid[i]) {
-      out(i, i) = NA_REAL;
-    }
-    for (int j = i + 1; j < n_features; j++) {
-      if (!res.valid[i] || !res.valid[j]) {
-        out(i, j) = NA_REAL;
-        out(j, i) = NA_REAL;
-      } else {
-        const double exc = half_circ - std::min(res.radius[i], res.radius[j]);
-        double val = exc;
-        if (!exceedance) {
-          const double cr_val = gc_angle(res.u[i], res.u[j]) * earth_radius +
-            std::fabs(res.radius[i] - res.radius[j]);
-          val = std::min(exc, cr_val);
-        }
-        out(i, j) = val;
-        out(j, i) = val;
-      }
-    }
-  }
-  return out;
-}
-
-//' @title Spherical CR upper bound, exceedance bound, and CR (internal)
-//' @noRd
-// [[Rcpp::export]]
-Rcpp::List cr_all_cpp(const Rcpp::NumericVector& lon,
-                      const Rcpp::NumericVector& lat,
-                      const Rcpp::IntegerVector& feature_id,
-                      int n_features,
-                      double earth_radius = 6371010.0) {
-  const Meb3Result res = compute_meb_sphere(lon, lat, feature_id, n_features, earth_radius);
-  const double half_circ = kPi * earth_radius;
-  Eigen::MatrixXd upper = Eigen::MatrixXd::Zero(n_features, n_features);
-  Eigen::MatrixXd exc = Eigen::MatrixXd::Zero(n_features, n_features);
-  Eigen::MatrixXd cr_mat = Eigen::MatrixXd::Zero(n_features, n_features);
-
-  for (int i = 0; i < n_features; i++) {
-    exc(i, i) = res.valid[i] ? (half_circ - res.radius[i]) : NA_REAL;
-    if (!res.valid[i]) {
-      cr_mat(i, i) = NA_REAL;
-    }
-    for (int j = i + 1; j < n_features; j++) {
-      if (!res.valid[i] || !res.valid[j]) {
-        upper(i, j) = NA_REAL;
-        upper(j, i) = NA_REAL;
-        exc(i, j) = NA_REAL;
-        exc(j, i) = NA_REAL;
-        cr_mat(i, j) = NA_REAL;
-        cr_mat(j, i) = NA_REAL;
-      } else {
-        const double u_val = gc_angle(res.u[i], res.u[j]) * earth_radius +
-          std::fabs(res.radius[i] - res.radius[j]);
-        const double e_val = half_circ - std::min(res.radius[i], res.radius[j]);
-        const double c_val = std::min(e_val, u_val);
-        upper(i, j) = u_val;
-        upper(j, i) = u_val;
-        exc(i, j) = e_val;
-        exc(j, i) = e_val;
-        cr_mat(i, j) = c_val;
-        cr_mat(j, i) = c_val;
-      }
-    }
-  }
-  return Rcpp::List::create(
-    Rcpp::Named("upper") = upper,
-    Rcpp::Named("exceedance") = exc,
-    Rcpp::Named("cr") = cr_mat
+  return cross_dist_matrix(
+    n1, n2,
+    [&](int i) { return r1.valid[i] != 0; },
+    [&](int j) { return r2.valid[j] != 0; },
+    [&](int i, int j) { return sphere_cr_pair(r1, i, r2, j, earth_radius); }
   );
 }

@@ -21,13 +21,13 @@ latitude, with a warning.}
 }
 \value{
 A numeric matrix. Without \code{y}, it is a symmetric
-\eqn{n \times n}{n x n} matrix with a zero diagonal, where \eqn{n} is the
-number of units in \code{x}. With \code{y}, it is an
-\eqn{n \times m}{n x m} matrix, where \eqn{m} is the number of units in
-\code{y}. In the plane, the distances are in the units of the CRS. On the
-sphere, they are in meters. An empty unit, or a unit with a non-finite
-coordinate, gives \code{NA} off the diagonal. On the sphere, a unit that
-is not inside an open hemisphere also gives \code{NA}, with a warning.
+\eqn{n \times n}{n x n} matrix, where \eqn{n} is the number of units in
+\code{x}. With \code{y}, it is an \eqn{n \times m}{n x m} matrix, where
+\eqn{m} is the number of units in \code{y}. In the plane, the distances
+are in the units of the CRS. On the sphere, they are in meters. An empty
+unit, or a unit with a non-finite coordinate, gives \code{NA} in its row
+and column. On the sphere, a unit that is not inside an open hemisphere
+also gives \code{NA}, with a warning.
 }
 \description{
 Computes the center-radii (CR) distance between all pairs of
@@ -55,6 +55,5 @@ dist_cr(nc[1:2, ], nc[3:5, ])
 dist_cr(nc, use_sphere = TRUE)
 }
 \seealso{
-\code{\link{get_mbc_params}}, \code{\link{dist_cr_sphere}},
-\code{\link{dist_hausdorff}}
+\code{\link{get_mbc_params}}, \code{\link{dist_hausdorff}}
 }

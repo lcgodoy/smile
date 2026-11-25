@@ -1,6 +1,5 @@
 ## Shared fixtures and reference implementations for the tests of
-## dist_hausdorff(), dist_cr(), dist_cr_sphere(), dist_cr_all(), and
-## get_mbc_params().
+## dist_hausdorff(), dist_cr(), and get_mbc_params().
 ##
 ## The references use sf wherever sf has an equivalent:
 ## - Planar Hausdorff: sf::st_distance(which = "Hausdorff") (GEOS).
@@ -515,21 +514,13 @@ mbc_ref_welzl_s2 <- function(x) {
 
 ## CR distance from the reference centers and radii, with sf::st_distance()
 ## between the centers (Euclidean in the plane, s2 on the sphere). Without
-## `y`, the diagonal is zero.
+## `y`, valid units have zero on the diagonal and invalid units have NA.
 cr_ref <- function(x, y = NULL, use_sphere = FALSE) {
   mbc <- if (use_sphere) mbc_ref_welzl_s2 else mbc_ref_planar
   m1 <- mbc(x)
   m2 <- if (is.null(y)) m1 else mbc(y)
   out <- drop_u(sf::st_distance(m1$center, m2$center)) +
     abs(outer(m1$radius, m2$radius, "-"))
-  if (is.null(y)) diag(out) <- 0
+  if (is.null(y)) diag(out) <- ifelse(is.na(m1$radius), NA_real_, 0)
   out
-}
-
-## Spherical CR distance with the exceedance bound, from the references.
-cr_all_ref <- function(x) {
-  r <- mbc_ref_welzl_s2(x)$radius
-  upper <- cr_ref(x, use_sphere = TRUE)
-  exceedance <- pi * s2::s2_earth_radius_meters() - outer(r, r, pmin)
-  list(upper = upper, exceedance = exceedance, cr = pmin(exceedance, upper))
 }

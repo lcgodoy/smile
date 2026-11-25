@@ -198,18 +198,6 @@ cr_cross_sphere_cpp <- function(lon1, lat1, fid1, n1, lon2, lat2, fid2, n2, eart
     .Call(`_smile_cr_cross_sphere_cpp`, lon1, lat1, fid1, n1, lon2, lat2, fid2, n2, earth_radius)
 }
 
-#' @title Spherical CR distance with the exceedance bound (internal)
-#' @noRd
-cr_sphere_meb_cpp <- function(lon, lat, feature_id, n_features, exceedance = FALSE, earth_radius = 6371010.0) {
-    .Call(`_smile_cr_sphere_meb_cpp`, lon, lat, feature_id, n_features, exceedance, earth_radius)
-}
-
-#' @title Spherical CR upper bound, exceedance bound, and CR (internal)
-#' @noRd
-cr_all_cpp <- function(lon, lat, feature_id, n_features, earth_radius = 6371010.0) {
-    .Call(`_smile_cr_all_cpp`, lon, lat, feature_id, n_features, earth_radius)
-}
-
 #' @title Creating a symmetric distance matrix (Eigen version)
 #' @description Computes the Euclidean distance between all pairs of rows in a
 #'   matrix.
@@ -258,106 +246,43 @@ pred_cdist <- function(mat_list, pred_mat) {
     .Call(`_smile_pred_cdist`, mat_list, pred_mat)
 }
 
-#' @title Planar Hausdorff distance between two units (internal)
-#' @param x,y matrices with the columns x, y, and optionally a part id.
-#' @noRd
-haus_r2_aux_continuous <- function(x, y) {
-    .Call(`_smile_haus_r2_aux_continuous`, x, y)
-}
-
 #' @title Planar Hausdorff distance matrix (internal)
-#' @param poly_list list of matrices from .to_list_mat().
+#' @param poly_list list of matrices from .to_list_mat() or .to_polygon_list().
+#' @param method one of "discrete", "boundary", or "polygon".
+#' @param tol convergence tolerance for continuous methods.
 #' @noRd
-dist_haus_r2 <- function(poly_list) {
-    .Call(`_smile_dist_haus_r2`, poly_list)
-}
-
-#' @title Planar Hausdorff distances from units to points (internal)
-#' @param poly_list list of matrices from .to_list_mat().
-#' @param pred_mat matrix with one point (x, y) for each row.
-#' @noRd
-cdist_haus_r2_mp <- function(poly_list, pred_mat) {
-    .Call(`_smile_cdist_haus_r2_mp`, poly_list, pred_mat)
+dist_haus_r2 <- function(poly_list, method = "discrete", tol = 1e-8) {
+    .Call(`_smile_dist_haus_r2`, poly_list, method, tol)
 }
 
 #' @title Planar Hausdorff cross-distance matrix (internal)
-#' @param poly_list,poly_pred lists of matrices from .to_list_mat().
-#' @noRd
-cdist_haus_r2_lists <- function(poly_list, poly_pred) {
-    .Call(`_smile_cdist_haus_r2_lists`, poly_list, poly_pred)
-}
-
-#' @title Planar Hausdorff distance matrix with method selection (internal)
-#' @param poly_list list of matrices from .to_list_mat() or .to_polygon_list().
-#' @param method one of "discrete", "boundary", or "polygon".
-#' @param tol convergence tolerance for continuous methods.
-#' @noRd
-dist_haus_r2_method <- function(poly_list, method = "discrete", tol = 1e-8) {
-    .Call(`_smile_dist_haus_r2_method`, poly_list, method, tol)
-}
-
-#' @title Planar Hausdorff cross-distance matrix with method selection (internal)
 #' @param poly_list,poly_pred lists of matrices from .to_list_mat() or
 #'   .to_polygon_list().
 #' @param method one of "discrete", "boundary", or "polygon".
 #' @param tol convergence tolerance for continuous methods.
 #' @noRd
-cdist_haus_r2_lists_method <- function(poly_list, poly_pred, method = "discrete", tol = 1e-8) {
-    .Call(`_smile_cdist_haus_r2_lists_method`, poly_list, poly_pred, method, tol)
-}
-
-#' @title Spherical Hausdorff distance between two units (internal)
-#' @param x,y matrices with the columns longitude, latitude (degrees), and
-#'   optionally a part id.
-#' @param earth_radius radius of the sphere, in meters.
-#' @noRd
-haus_s2_aux_continuous <- function(x, y, earth_radius = 6371010.0) {
-    .Call(`_smile_haus_s2_aux_continuous`, x, y, earth_radius)
+cdist_haus_r2 <- function(poly_list, poly_pred, method = "discrete", tol = 1e-8) {
+    .Call(`_smile_cdist_haus_r2`, poly_list, poly_pred, method, tol)
 }
 
 #' @title Spherical Hausdorff distance matrix (internal)
-#' @param poly_list list of matrices from .to_list_mat().
-#' @param earth_radius radius of the sphere, in meters.
-#' @noRd
-dist_haus_s2 <- function(poly_list, earth_radius = 6371010.0) {
-    .Call(`_smile_dist_haus_s2`, poly_list, earth_radius)
-}
-
-#' @title Spherical Hausdorff distances from units to points (internal)
-#' @param poly_list list of matrices from .to_list_mat().
-#' @param pred_mat matrix with one point (longitude, latitude) for each row.
-#' @param earth_radius radius of the sphere, in meters.
-#' @noRd
-cdist_haus_s2_mp <- function(poly_list, pred_mat, earth_radius = 6371010.0) {
-    .Call(`_smile_cdist_haus_s2_mp`, poly_list, pred_mat, earth_radius)
-}
-
-#' @title Spherical Hausdorff cross-distance matrix (internal)
-#' @param poly_list,poly_pred lists of matrices from .to_list_mat().
-#' @param earth_radius radius of the sphere, in meters.
-#' @noRd
-cdist_haus_s2_lists <- function(poly_list, poly_pred, earth_radius = 6371010.0) {
-    .Call(`_smile_cdist_haus_s2_lists`, poly_list, poly_pred, earth_radius)
-}
-
-#' @title Spherical Hausdorff distance matrix with method selection (internal)
 #' @param poly_list list of matrices from .to_list_mat() or .to_polygon_list().
 #' @param method one of "discrete", "boundary", or "polygon".
 #' @param tol convergence tolerance for continuous methods.
 #' @param earth_radius radius of the sphere, in meters.
 #' @noRd
-dist_haus_s2_method <- function(poly_list, method = "discrete", tol = 1e-8, earth_radius = 6371010.0) {
-    .Call(`_smile_dist_haus_s2_method`, poly_list, method, tol, earth_radius)
+dist_haus_s2 <- function(poly_list, method = "discrete", tol = 1e-8, earth_radius = 6371010.0) {
+    .Call(`_smile_dist_haus_s2`, poly_list, method, tol, earth_radius)
 }
 
-#' @title Spherical Hausdorff cross-distance matrix with method selection (internal)
+#' @title Spherical Hausdorff cross-distance matrix (internal)
 #' @param poly_list,poly_pred lists of matrices from .to_list_mat() or
 #'   .to_polygon_list().
 #' @param method one of "discrete", "boundary", or "polygon".
 #' @param tol convergence tolerance for continuous methods.
 #' @param earth_radius radius of the sphere, in meters.
 #' @noRd
-cdist_haus_s2_lists_method <- function(poly_list, poly_pred, method = "discrete", tol = 1e-8, earth_radius = 6371010.0) {
-    .Call(`_smile_cdist_haus_s2_lists_method`, poly_list, poly_pred, method, tol, earth_radius)
+cdist_haus_s2 <- function(poly_list, poly_pred, method = "discrete", tol = 1e-8, earth_radius = 6371010.0) {
+    .Call(`_smile_cdist_haus_s2`, poly_list, poly_pred, method, tol, earth_radius)
 }
 

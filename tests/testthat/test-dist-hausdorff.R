@@ -181,26 +181,34 @@ test_that("dist_hausdorff() warns about longitude/latitude or missing CRS", {
 
 ## ---- Internal C++ functions ---------------------------------------------------
 
-test_that("the point and single-pair C++ functions agree with the list functions", {
+test_that("the internal C++ functions match dist_hausdorff() and close raw rings", {
   fix <- make_planar_fixtures()
   mats <- .to_list_mat(fix$polygons)
+  pts_m <- .to_list_mat(fix$points)
 
-  expect_equal(cdist_haus_r2_mp(mats, sf::st_coordinates(fix$points)),
+  expect_equal(dist_haus_r2(mats), dist_hausdorff(fix$polygons))
+  expect_equal(cdist_haus_r2(mats, pts_m),
                dist_hausdorff(fix$polygons, fix$points))
-  expect_equal(haus_r2_aux_continuous(mats[[1L]], mats[[2L]]),
-               dist_hausdorff(fix$polygons)[1L, 2L])
 
+  ## A 2-column matrix without a part id is closed automatically.
+  raw_open <- rbind(c(0, 0), c(1, 0), c(1, 1), c(0, 1))
+  raw_closed <- rbind(raw_open, c(0, 0))
+  expect_equal(dist_haus_r2(list(raw_open, raw_closed), method = "boundary")[1L, 2L],
+               0)
+
+  skip_if_no_s2()
   sph <- make_sphere_fixtures()
   radius <- s2::s2_earth_radius_meters()
   pts <- sph$targets[c(2L, 4L)]
   mats_s <- .to_list_mat(sph$mixed)
 
-  expect_equal(cdist_haus_s2_mp(mats_s, sf::st_coordinates(pts),
-                                earth_radius = radius),
+  expect_equal(dist_haus_s2(mats_s, earth_radius = radius),
+               dist_hausdorff(sph$mixed, use_sphere = TRUE))
+  expect_equal(cdist_haus_s2(mats_s, .to_list_mat(pts), earth_radius = radius),
                dist_hausdorff(sph$mixed, pts, use_sphere = TRUE))
-  expect_equal(haus_s2_aux_continuous(mats_s[[1L]], mats_s[[3L]],
-                                      earth_radius = radius),
-               dist_hausdorff(sph$mixed, use_sphere = TRUE)[1L, 3L])
+  expect_equal(dist_haus_s2(list(raw_open, raw_closed), method = "boundary",
+                            earth_radius = radius)[1L, 2L],
+               0)
 })
 
 test_that("the C++ functions check and convert their matrix input", {
@@ -210,21 +218,25 @@ test_that("the C++ functions check and convert their matrix input", {
   radius <- s2::s2_earth_radius_meters()
 
   ## Integer storage gives the same result as double storage.
-  expect_equal(cdist_haus_r2_mp(list(sq), pts_i),
-               cdist_haus_r2_mp(list(sq), pts_d))
-  expect_equal(cdist_haus_s2_mp(list(sq), pts_i, earth_radius = radius),
-               cdist_haus_s2_mp(list(sq), pts_d, earth_radius = radius))
   expect_equal(dist_haus_r2(list(sq, pts_i)), dist_haus_r2(list(sq, pts_d)))
+  expect_equal(cdist_haus_r2(list(sq), list(pts_i)),
+               cdist_haus_r2(list(sq), list(pts_d)))
+  expect_equal(dist_haus_s2(list(sq, pts_i), earth_radius = radius),
+               dist_haus_s2(list(sq, pts_d), earth_radius = radius))
+  expect_equal(cdist_haus_s2(list(sq), list(pts_i), earth_radius = radius),
+               cdist_haus_s2(list(sq), list(pts_d), earth_radius = radius))
 
-  ## A vector, or a matrix with one column, gives an error.
-  expect_error(haus_r2_aux_continuous(c(0, 0), c(3, 4)), "matrix")
-  expect_error(haus_s2_aux_continuous(c(0, 0), c(3, 4)), "matrix")
-  expect_error(cdist_haus_r2_mp(list(sq), matrix(c(5, 6), ncol = 1L)),
-               "at least 2 columns")
-  expect_error(cdist_haus_s2_mp(list(sq), matrix(c(5, 6), ncol = 1L)),
-               "at least 2 columns")
+  ## Invalid matrix inputs, methods, or tolerances stop with clear errors.
   expect_error(dist_haus_r2(list(sq, c(0, 0, 1))), "matrix")
   expect_error(dist_haus_s2(list(sq, c(0, 0, 1))), "matrix")
+  expect_error(cdist_haus_r2(list(sq), list(matrix(c(5, 6), ncol = 1L))),
+               "at least 2 columns")
+  expect_error(cdist_haus_s2(list(sq), list(matrix(c(5, 6), ncol = 1L))),
+               "at least 2 columns")
+  expect_error(dist_haus_r2(list(sq), method = "bad"), "Unknown method")
+  expect_error(dist_haus_s2(list(sq), method = "bad"), "Unknown method")
+  expect_error(dist_haus_r2(list(sq), method = "boundary", tol = 0), "tol")
+  expect_error(dist_haus_s2(list(sq), method = "boundary", tol = 0), "tol")
 })
 
 test_that(".to_list_mat() keeps each part and handles empty units", {

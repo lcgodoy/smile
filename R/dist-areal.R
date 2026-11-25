@@ -214,34 +214,20 @@ dist_hausdorff <- function(x, y = NULL, use_sphere = FALSE,
   x <- .prep_geom(x, use_sphere = use_sphere, arg = "x")
   if (!is.null(y)) y <- .prep_geom(y, use_sphere = use_sphere, arg = "y")
   to_mats <- if (method == "polygon") .to_polygon_list else .to_list_mat
+  mats_x <- to_mats(x)
   if (use_sphere) {
     radius <- s2::s2_earth_radius_meters()
-    if (method == "discrete") {
-      if (is.null(y)) {
-        return(dist_haus_s2(to_mats(x), earth_radius = radius))
-      }
-      return(cdist_haus_s2_lists(to_mats(x), to_mats(y),
-                                 earth_radius = radius))
-    }
     if (is.null(y)) {
-      return(dist_haus_s2_method(to_mats(x), method = method, tol = tol,
-                                 earth_radius = radius))
+      return(dist_haus_s2(mats_x, method = method, tol = tol,
+                          earth_radius = radius))
     }
-    return(cdist_haus_s2_lists_method(to_mats(x), to_mats(y),
-                                      method = method, tol = tol,
-                                      earth_radius = radius))
-  }
-  if (method == "discrete") {
-    if (is.null(y)) {
-      return(dist_haus_r2(to_mats(x)))
-    }
-    return(cdist_haus_r2_lists(to_mats(x), to_mats(y)))
+    return(cdist_haus_s2(mats_x, to_mats(y), method = method, tol = tol,
+                         earth_radius = radius))
   }
   if (is.null(y)) {
-    return(dist_haus_r2_method(to_mats(x), method = method, tol = tol))
+    return(dist_haus_r2(mats_x, method = method, tol = tol))
   }
-  cdist_haus_r2_lists_method(to_mats(x), to_mats(y),
-                             method = method, tol = tol)
+  cdist_haus_r2(mats_x, to_mats(y), method = method, tol = tol)
 }
 
 ## ---- Chebyshev centers and radii ---------------------------------------------
@@ -326,16 +312,15 @@ get_mbc_params <- function(x, use_sphere = FALSE) {
 ##' @inheritParams dist_hausdorff
 ##'
 ##' @return A numeric matrix. Without \code{y}, it is a symmetric
-##'   \eqn{n \times n}{n x n} matrix with a zero diagonal, where \eqn{n} is the
-##'   number of units in \code{x}. With \code{y}, it is an
-##'   \eqn{n \times m}{n x m} matrix, where \eqn{m} is the number of units in
-##'   \code{y}. In the plane, the distances are in the units of the CRS. On the
-##'   sphere, they are in meters. An empty unit, or a unit with a non-finite
-##'   coordinate, gives \code{NA} off the diagonal. On the sphere, a unit that
-##'   is not inside an open hemisphere also gives \code{NA}, with a warning.
+##'   \eqn{n \times n}{n x n} matrix, where \eqn{n} is the number of units in
+##'   \code{x}. With \code{y}, it is an \eqn{n \times m}{n x m} matrix, where
+##'   \eqn{m} is the number of units in \code{y}. In the plane, the distances
+##'   are in the units of the CRS. On the sphere, they are in meters. An empty
+##'   unit, or a unit with a non-finite coordinate, gives \code{NA} in its row
+##'   and column. On the sphere, a unit that is not inside an open hemisphere
+##'   also gives \code{NA}, with a warning.
 ##'
-##' @seealso \code{\link{get_mbc_params}}, \code{\link{dist_cr_sphere}},
-##'   \code{\link{dist_hausdorff}}
+##' @seealso \code{\link{get_mbc_params}}, \code{\link{dist_hausdorff}}
 ##'
 ##' @examples
 ##' nc <- sf::st_read(system.file("shape/nc.shp", package = "sf"),
@@ -360,7 +345,7 @@ dist_cr <- function(x, y = NULL, use_sphere = FALSE) {
     }
     out <- cr_sphere_cpp(crd1$x, crd1$y, crd1$feature_id, n1,
                          earth_radius = s2::s2_earth_radius_meters())
-    .warn_cr_sphere_if_needed(crd1, n1, anyNA(out) || n1 == 1L)
+    .warn_cr_sphere_if_needed(crd1, n1, anyNA(out))
     return(out)
   }
   y <- .prep_geom(y, use_sphere = use_sphere, arg = "y")
@@ -376,79 +361,5 @@ dist_cr <- function(x, y = NULL, use_sphere = FALSE) {
   check <- anyNA(out) || n1 == 0L || n2 == 0L
   .warn_cr_sphere_if_needed(crd1, n1, check, "x")
   .warn_cr_sphere_if_needed(crd2, n2, check, "y")
-  out
-}
-
-##' @title Spherical CR distance with the exceedance bound
-##'
-##' @description Computes the center-radii (CR) distance on the sphere,
-##'   bounded by the exceedance bound, for all pairs of spatial units in
-##'   \code{x}.
-##'
-##' @details On a sphere of radius \eqn{R}, the exceedance bound for units
-##'   \eqn{i} and \eqn{j} is
-##'   \deqn{e_{ij} = \pi R - \min(r_i, r_j),}{e_ij = pi R - min(r_i, r_j),}
-##'   where \eqn{r} is the Chebyshev radius of a unit (see
-##'   \code{\link{get_mbc_params}}). Let \eqn{u_{ij}}{u_ij} be the spherical
-##'   CR distance from \code{\link{dist_cr}}. Then:
-##'   \itemize{
-##'     \item \code{dist_cr_sphere(x)} returns
-##'       \eqn{\min(e_{ij}, u_{ij})}{min(e_ij, u_ij)}.
-##'     \item \code{dist_cr_sphere(x, exceedance = TRUE)} returns
-##'       \eqn{e_{ij}}{e_ij}.
-##'     \item \code{dist_cr_all(x)} returns the three matrices from one
-##'       computation of the centers and radii.
-##'   }
-##'   The coordinates are always on the sphere, with the same rules as
-##'   \code{use_sphere = TRUE} in \code{\link{dist_cr}}.
-##'
-##' @param x an \code{sf} or \code{sfc} object.
-##' @param exceedance a logical. If \code{TRUE}, the function returns only the
-##'   exceedance bound. The default is \code{FALSE}.
-##'
-##' @return \code{dist_cr_sphere()} returns a symmetric
-##'   \eqn{n \times n}{n x n} numeric matrix, in meters, where \eqn{n} is the
-##'   number of units in \code{x}. With \code{exceedance = TRUE}, the diagonal
-##'   is \eqn{\pi R - r_i}{pi R - r_i}. Otherwise, the diagonal is zero.
-##'
-##'   \code{dist_cr_all()} returns a list with three such matrices:
-##'   \item{upper}{the spherical CR distance \eqn{u_{ij}}{u_ij}.}
-##'   \item{exceedance}{the exceedance bound \eqn{e_{ij}}{e_ij}.}
-##'   \item{cr}{\eqn{\min(e_{ij}, u_{ij})}{min(e_ij, u_ij)}.}
-##'
-##'   An empty unit, a unit with a non-finite coordinate, or a unit that is not
-##'   inside an open hemisphere gives \code{NA}. The last case also gives a
-##'   warning.
-##'
-##' @seealso \code{\link{dist_cr}}, \code{\link{get_mbc_params}}
-##'
-##' @examples
-##' nc <- sf::st_read(system.file("shape/nc.shp", package = "sf"),
-##'                   quiet = TRUE)
-##' nc <- nc[1:5, ]
-##' dist_cr_sphere(nc)
-##' dist_cr_sphere(nc, exceedance = TRUE)
-##' str(dist_cr_all(nc))
-##' @export
-dist_cr_sphere <- function(x, exceedance = FALSE) {
-  x <- .prep_geom(x, use_sphere = TRUE, arg = "x")
-  n <- length(x)
-  crd <- wk::wk_coords(x)
-  out <- cr_sphere_meb_cpp(crd$x, crd$y, crd$feature_id, n,
-                           exceedance = exceedance,
-                           earth_radius = s2::s2_earth_radius_meters())
-  .warn_cr_sphere_if_needed(crd, n, anyNA(out))
-  out
-}
-
-##' @rdname dist_cr_sphere
-##' @export
-dist_cr_all <- function(x) {
-  x <- .prep_geom(x, use_sphere = TRUE, arg = "x")
-  n <- length(x)
-  crd <- wk::wk_coords(x)
-  out <- cr_all_cpp(crd$x, crd$y, crd$feature_id, n,
-                    earth_radius = s2::s2_earth_radius_meters())
-  .warn_cr_sphere_if_needed(crd, n, anyNA(out$exceedance))
   out
 }
