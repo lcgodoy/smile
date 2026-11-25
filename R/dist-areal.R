@@ -78,27 +78,6 @@
   .to_coord_list(x, include_poly = TRUE)
 }
 
-## `bad` holds the indices of the units of argument `arg`.
-.warn_non_hemisphere <- function(bad, arg = "x") {
-  if (length(bad)) {
-    warning("These units of ", arg, " are not inside an open hemisphere: ",
-            paste(bad, collapse = ", "), ". Their Chebyshev radius is at ",
-            "least pi * R / 2. The algorithm needs a radius below ",
-            "pi * R / 2, so the function returns NA for them.", call. = FALSE)
-  }
-}
-
-## Warns about the units of argument `arg` that are not inside an open
-## hemisphere. `crd` is the output of wk::wk_coords() for `n` units. The check
-## runs only if `has_na` is TRUE, because only these units give NA for a
-## non-empty unit.
-.warn_cr_sphere_if_needed <- function(crd, n, has_na, arg = "x") {
-  if (!has_na || n == 0L) return(invisible(NULL))
-  check <- mbc_sphere_cpp(crd$x, crd$y, crd$feature_id, n,
-                          earth_radius = s2::s2_earth_radius_meters())
-  .warn_non_hemisphere(which(is.na(check$radius) & check$non_empty), arg)
-}
-
 ## ---- Hausdorff distance -----------------------------------------------------
 
 ##' @title Hausdorff distance between spatial units
@@ -279,7 +258,6 @@ get_mbc_params <- function(x, use_sphere = FALSE) {
   if (use_sphere) {
     res <- mbc_sphere_cpp(crd$x, crd$y, crd$feature_id, n,
                           earth_radius = s2::s2_earth_radius_meters())
-    .warn_non_hemisphere(which(is.na(res$radius) & res$non_empty), "x")
     cx <- res$lon
     cy <- res$lat
   } else {
@@ -343,10 +321,8 @@ dist_cr <- function(x, y = NULL, use_sphere = FALSE) {
     if (!use_sphere) {
       return(cr_planar_cpp(crd1$x, crd1$y, crd1$feature_id, n1))
     }
-    out <- cr_sphere_cpp(crd1$x, crd1$y, crd1$feature_id, n1,
-                         earth_radius = s2::s2_earth_radius_meters())
-    .warn_cr_sphere_if_needed(crd1, n1, anyNA(out))
-    return(out)
+    return(cr_sphere_cpp(crd1$x, crd1$y, crd1$feature_id, n1,
+                         earth_radius = s2::s2_earth_radius_meters()))
   }
   y <- .prep_geom(y, use_sphere = use_sphere, arg = "y")
   n2 <- length(y)
@@ -355,11 +331,7 @@ dist_cr <- function(x, y = NULL, use_sphere = FALSE) {
     return(cr_cross_planar_cpp(crd1$x, crd1$y, crd1$feature_id, n1,
                                crd2$x, crd2$y, crd2$feature_id, n2))
   }
-  out <- cr_cross_sphere_cpp(crd1$x, crd1$y, crd1$feature_id, n1,
-                             crd2$x, crd2$y, crd2$feature_id, n2,
-                             earth_radius = s2::s2_earth_radius_meters())
-  check <- anyNA(out) || n1 == 0L || n2 == 0L
-  .warn_cr_sphere_if_needed(crd1, n1, check, "x")
-  .warn_cr_sphere_if_needed(crd2, n2, check, "y")
-  out
+  cr_cross_sphere_cpp(crd1$x, crd1$y, crd1$feature_id, n1,
+                      crd2$x, crd2$y, crd2$feature_id, n2,
+                      earth_radius = s2::s2_earth_radius_meters())
 }

@@ -82,8 +82,9 @@ test_that("spherical get_mbc_params() matches the pure-R Welzl reference", {
   got_p <- get_mbc_params(polar, use_sphere = TRUE)
   ref_p <- mbc_ref_welzl_s2(polar)
   expect_equal(got_p$radius, ref_p$radius, tolerance = 1e-6)
-  expect_equal(sf::st_coordinates(got_p$center),
-               sf::st_coordinates(ref_p$center), tolerance = 1e-9)
+  ## Longitude is arbitrary at the pole, so compare distance between centers.
+  expect_equal(drop_u(sf::st_distance(got_p$center, ref_p$center))[1L, 1L],
+               0, tolerance = 1e-6)
 
   nc_ll <- sf::st_transform(read_nc()[1:25], "EPSG:4326")
   got_nc <- get_mbc_params(nc_ll, use_sphere = TRUE)

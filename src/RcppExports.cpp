@@ -182,7 +182,7 @@ BEGIN_RCPP
 END_RCPP
 }
 // cr_planar_cpp
-Eigen::MatrixXd cr_planar_cpp(const Rcpp::NumericVector& x, const Rcpp::NumericVector& y, const Rcpp::IntegerVector& feature_id, int n_features);
+Rcpp::NumericMatrix cr_planar_cpp(const Rcpp::NumericVector& x, const Rcpp::NumericVector& y, const Rcpp::IntegerVector& feature_id, int n_features);
 RcppExport SEXP _smile_cr_planar_cpp(SEXP xSEXP, SEXP ySEXP, SEXP feature_idSEXP, SEXP n_featuresSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
@@ -196,7 +196,7 @@ BEGIN_RCPP
 END_RCPP
 }
 // cr_cross_planar_cpp
-Eigen::MatrixXd cr_cross_planar_cpp(const Rcpp::NumericVector& x1, const Rcpp::NumericVector& y1, const Rcpp::IntegerVector& fid1, int n1, const Rcpp::NumericVector& x2, const Rcpp::NumericVector& y2, const Rcpp::IntegerVector& fid2, int n2);
+Rcpp::NumericMatrix cr_cross_planar_cpp(const Rcpp::NumericVector& x1, const Rcpp::NumericVector& y1, const Rcpp::IntegerVector& fid1, int n1, const Rcpp::NumericVector& x2, const Rcpp::NumericVector& y2, const Rcpp::IntegerVector& fid2, int n2);
 RcppExport SEXP _smile_cr_cross_planar_cpp(SEXP x1SEXP, SEXP y1SEXP, SEXP fid1SEXP, SEXP n1SEXP, SEXP x2SEXP, SEXP y2SEXP, SEXP fid2SEXP, SEXP n2SEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
@@ -214,7 +214,7 @@ BEGIN_RCPP
 END_RCPP
 }
 // cr_sphere_cpp
-Eigen::MatrixXd cr_sphere_cpp(const Rcpp::NumericVector& lon, const Rcpp::NumericVector& lat, const Rcpp::IntegerVector& feature_id, int n_features, double earth_radius);
+Rcpp::NumericMatrix cr_sphere_cpp(const Rcpp::NumericVector& lon, const Rcpp::NumericVector& lat, const Rcpp::IntegerVector& feature_id, int n_features, double earth_radius);
 RcppExport SEXP _smile_cr_sphere_cpp(SEXP lonSEXP, SEXP latSEXP, SEXP feature_idSEXP, SEXP n_featuresSEXP, SEXP earth_radiusSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
@@ -229,7 +229,7 @@ BEGIN_RCPP
 END_RCPP
 }
 // cr_cross_sphere_cpp
-Eigen::MatrixXd cr_cross_sphere_cpp(const Rcpp::NumericVector& lon1, const Rcpp::NumericVector& lat1, const Rcpp::IntegerVector& fid1, int n1, const Rcpp::NumericVector& lon2, const Rcpp::NumericVector& lat2, const Rcpp::IntegerVector& fid2, int n2, double earth_radius);
+Rcpp::NumericMatrix cr_cross_sphere_cpp(const Rcpp::NumericVector& lon1, const Rcpp::NumericVector& lat1, const Rcpp::IntegerVector& fid1, int n1, const Rcpp::NumericVector& lon2, const Rcpp::NumericVector& lat2, const Rcpp::IntegerVector& fid2, int n2, double earth_radius);
 RcppExport SEXP _smile_cr_cross_sphere_cpp(SEXP lon1SEXP, SEXP lat1SEXP, SEXP fid1SEXP, SEXP n1SEXP, SEXP lon2SEXP, SEXP lat2SEXP, SEXP fid2SEXP, SEXP n2SEXP, SEXP earth_radiusSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
